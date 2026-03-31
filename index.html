@@ -208,55 +208,34 @@
       gap: 20px;
     }
 
-    .editable-area {
-      width: 100%;
-      min-height: 160px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 14px;
-      line-height: 1.8;
-      font-family: inherit;
-      outline: none;
-      white-space: pre-wrap;
+    .token-area {
+      font-size: 15px;
+      line-height: 2.2;
       word-break: break-all;
-      cursor: text;
+      min-height: 60px;
     }
 
-    .editable-area:focus { border-color: #FEE500; }
-
-    .editable-area .var-chip {
+    .token {
       display: inline;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 2px 0;
+      transition: background 0.15s;
+    }
+
+    .token:hover { background: #FFF9C4; }
+
+    .token.var-chip {
       background: #EEF4FF;
       color: #3A8AFF;
       font-weight: 700;
-      border-radius: 4px;
-      padding: 1px 4px;
-    }
-
-    .action-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .action-bar .hint {
-      font-size: 13px;
-      color: #aaa;
-      flex: 1;
-    }
-
-    .reset-btn {
-      padding: 10px 16px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: #fff;
-      color: #888;
-      font-size: 14px;
+      padding: 2px 6px;
+      border-radius: 6px;
       cursor: pointer;
+      border: 1px dashed #3A8AFF;
     }
+
+    .token.var-chip:hover { background: #dce9ff; }
 
     .result-box {
       background: #f9f9f9;
@@ -374,24 +353,20 @@
 <div id="tab-make" class="tab-content">
   <div class="make-wrap">
     <div class="card">
-      <h2>실제 메시지 붙여넣기</h2>
-      <p class="desc">실제 발송된 메시지를 붙여넣고, 변수로 바꿀 부분을 <strong>마우스로 드래그</strong>해서 선택하세요.</p>
-      <div
-        id="editable"
-        class="editable-area"
-        contenteditable="true"
-        onmouseup="onSelect()"
-        oninput="syncResult()"
-      ></div>
-      <div class="action-bar">
-        <span class="hint" id="select-hint">👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.</span>
-        <button class="reset-btn" onclick="resetMake()">초기화</button>
-      </div>
+      <h2>① 실제 메시지 붙여넣기</h2>
+      <p class="desc">실제 발송된 메시지를 아래에 붙여넣으세요.</p>
+      <textarea id="raw-message" placeholder="예시)&#10;홍길동님, 안녕하세요!&#10;ORD-12345 주문이 배송중 처리되었습니다." oninput="renderTokens()"></textarea>
     </div>
 
-    <div class="card">
-      <h2>생성된 템플릿</h2>
-      <div id="result-box" class="result-box">메시지를 입력하면 여기에 템플릿이 생성됩니다.</div>
+    <div class="card" id="token-card" style="display:none">
+      <h2>② 변수로 바꿀 단어 클릭</h2>
+      <p class="desc">단어를 클릭하면 변수로 변환됩니다. 변수 칩을 다시 클릭하면 원래 텍스트로 돌아갑니다.</p>
+      <div id="token-area" class="token-area"></div>
+    </div>
+
+    <div class="card" id="result-card" style="display:none">
+      <h2>③ 생성된 템플릿</h2>
+      <div id="result-box" class="result-box"></div>
       <button class="yellow-btn" id="copy-template-btn" onclick="copyTemplate()">템플릿 복사하기</button>
     </div>
   </div>
@@ -401,7 +376,7 @@
 <div class="popup-overlay" id="popup">
   <div class="popup">
     <h3>변수명 입력</h3>
-    <p>선택한 텍스트를 어떤 변수명으로 바꿀까요?</p>
+    <p id="popup-desc">선택한 텍스트를 어떤 변수명으로 바꿀까요?</p>
     <input type="text" id="popup-input" placeholder="예: 이름, 주문번호" />
     <div class="popup-btns">
       <button class="cancel" onclick="closePopup()">취소</button>
@@ -491,28 +466,70 @@
   }
 
   // ════════ 탭2: 템플릿 만들기 ════════
-  let savedRange = null;
+  // tokens: [{type:'text'|'var', value:'원문', varName:'변수명'(var일때)}]
+  let tokens = [];
+  let clickedTokenIdx = null;
 
-  function onSelect() {
-    const sel = window.getSelection();
-    if (!sel || sel.isCollapsed || !sel.toString().trim()) {
+  function renderTokens() {
+    const raw = document.getElementById('raw-message').value;
+    const tokenCard = document.getElementById('token-card');
+    const resultCard = document.getElementById('result-card');
+
+    if (!raw.trim()) {
+      tokenCard.style.display = 'none';
+      resultCard.style.display = 'none';
+      tokens = [];
       return;
     }
 
-    // editable 영역 안에서만 동작
-    const editable = document.getElementById('editable');
-    if (!editable.contains(sel.anchorNode)) return;
+    // 기존 토큰이 없으면 새로 파싱 (이미 있으면 유지)
+    if (tokens.length === 0) {
+      // 공백/줄바꿈을 구분자로 분리하되 구분자도 토큰으로 유지
+      const parts = raw.split(/(\s+)/);
+      tokens = parts.map(p => ({ type: 'text', value: p, varName: '' }));
+    }
 
-    savedRange = sel.getRangeAt(0).cloneRange();
-    const selected = sel.toString().trim();
-    document.getElementById('select-hint').textContent = `"${selected}" 선택됨`;
-    openPopup();
+    tokenCard.style.display = 'block';
+    resultCard.style.display = 'block';
+    drawTokens();
   }
 
-  function openPopup() {
-    document.getElementById('popup').classList.add('show');
+  function drawTokens() {
+    const area = document.getElementById('token-area');
+    area.innerHTML = '';
+
+    tokens.forEach((tok, idx) => {
+      const span = document.createElement('span');
+
+      if (/^\s+$/.test(tok.value)) {
+        // 공백/줄바꿈은 그대로
+        span.style.whiteSpace = 'pre';
+        span.textContent = tok.value;
+      } else if (tok.type === 'var') {
+        span.className = 'token var-chip';
+        span.textContent = `#{${tok.varName}}`;
+        span.title = `클릭하면 "${tok.value}"로 되돌립니다`;
+        span.onclick = () => revertToken(idx);
+      } else {
+        span.className = 'token';
+        span.textContent = tok.value;
+        span.title = '클릭하면 변수로 변환';
+        span.onclick = () => clickToken(idx);
+      }
+
+      area.appendChild(span);
+    });
+
+    syncResult();
+  }
+
+  function clickToken(idx) {
+    clickedTokenIdx = idx;
     const input = document.getElementById('popup-input');
     input.value = '';
+    document.getElementById('popup-desc').textContent =
+      `"${tokens[idx].value}"를 어떤 변수명으로 바꿀까요?`;
+    document.getElementById('popup').classList.add('show');
     setTimeout(() => input.focus(), 100);
     input.onkeydown = e => {
       if (e.key === 'Enter') confirmVar();
@@ -520,92 +537,63 @@
     };
   }
 
+  function revertToken(idx) {
+    tokens[idx].type = 'text';
+    tokens[idx].varName = '';
+    drawTokens();
+  }
+
+  function openPopup() {}  // 탭1용 (미사용)
+
   function closePopup() {
     document.getElementById('popup').classList.remove('show');
-    savedRange = null;
-    document.getElementById('select-hint').textContent = '👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.';
+    clickedTokenIdx = null;
   }
 
   function confirmVar() {
     const name = document.getElementById('popup-input').value.trim();
-    if (!name || !savedRange) { closePopup(); return; }
+    if (!name) { closePopup(); return; }
 
-    const varText = `#{${name}}`;
-    savedRange.deleteContents();
-
-    const chip = document.createElement('span');
-    chip.className = 'var-chip';
-    chip.contentEditable = 'false';
-    chip.dataset.var = varText;
-    chip.textContent = varText;
-    savedRange.insertNode(chip);
-
-    // 커서를 칩 뒤로
-    const range = document.createRange();
-    range.setStartAfter(chip);
-    range.collapse(true);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-
-    closePopup();
-    syncResult();
+    if (clickedTokenIdx !== null) {
+      tokens[clickedTokenIdx].type = 'var';
+      tokens[clickedTokenIdx].varName = name;
+      closePopup();
+      drawTokens();
+    }
   }
 
   function syncResult() {
-    const editable = document.getElementById('editable');
     const resultBox = document.getElementById('result-box');
+    let html = '';
+    let plain = '';
 
-    let hasContent = editable.textContent.trim() || editable.querySelector('.var-chip');
-    if (!hasContent) {
-      resultBox.textContent = '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
-      return;
-    }
-
-    let resultHtml = '';
-    editable.childNodes.forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        resultHtml += escapeHtml(node.textContent);
-      } else if (node.classList && node.classList.contains('var-chip')) {
-        resultHtml += `<span class="var-chip">${escapeHtml(node.dataset.var)}</span>`;
+    tokens.forEach(tok => {
+      if (/^\s+$/.test(tok.value)) {
+        html += escapeHtml(tok.value).replace(/\n/g, '<br>');
+        plain += tok.value;
+      } else if (tok.type === 'var') {
+        const v = `#{${tok.varName}}`;
+        html += `<span class="var-chip">${escapeHtml(v)}</span>`;
+        plain += v;
       } else {
-        resultHtml += escapeHtml(node.textContent);
+        html += escapeHtml(tok.value);
+        plain += tok.value;
       }
     });
 
-    resultBox.innerHTML = resultHtml || '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
-  }
-
-  function getPlainTemplate() {
-    const editable = document.getElementById('editable');
-    let text = '';
-    editable.childNodes.forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        text += node.textContent;
-      } else if (node.classList && node.classList.contains('var-chip')) {
-        text += node.dataset.var;
-      } else {
-        text += node.textContent;
-      }
-    });
-    return text;
+    resultBox.innerHTML = html || '';
+    resultBox.dataset.plain = plain;
   }
 
   function copyTemplate() {
-    const text = getPlainTemplate().trim();
-    if (!text) return;
+    const text = document.getElementById('result-box').dataset.plain || '';
+    if (!text.trim()) return;
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('copy-template-btn');
       btn.textContent = '복사 완료!';
       btn.classList.add('copied');
       setTimeout(() => { btn.textContent = '템플릿 복사하기'; btn.classList.remove('copied'); }, 2000);
     });
-  }
-
-  function resetMake() {
-    document.getElementById('editable').innerHTML = '';
-    document.getElementById('result-box').textContent = '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
-    document.getElementById('select-hint').textContent = '👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.';
   }
 
   function escapeHtml(str) {
