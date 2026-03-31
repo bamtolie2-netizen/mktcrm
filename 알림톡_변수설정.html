@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>알림톡 변수 미리보기</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 32px 16px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #555;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.7;
+      resize: vertical;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus { border-color: #FEE500; }
+
+    .variables-section {
+      margin-top: 20px;
+    }
+
+    .var-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .var-label {
+      flex: 0 0 120px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3A8AFF;
+      background: #EEF4FF;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .var-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .var-input:focus { border-color: #FEE500; }
+
+    .empty-msg {
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* 카카오톡 말풍선 스타일 */
+    .preview-wrap {
+      background: #B2C7D9;
+      border-radius: 8px;
+      padding: 20px 16px;
+      min-height: 180px;
+    }
+
+    .kakao-bubble {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-all;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      position: relative;
+    }
+
+    .kakao-bubble .highlight {
+      color: #3A8AFF;
+      font-weight: 600;
+    }
+
+    .no-preview {
+      font-size: 13px;
+      color: #789;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .copy-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #FEE500;
+      color: #3C1E1E;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover { background: #f0d800; }
+    .copy-btn:active { background: #e0c800; }
+
+    .copy-btn.copied {
+      background: #4CAF50;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📢 알림톡 변수 미리보기</h1>
+
+<div class="container">
+
+  <!-- 왼쪽: 템플릿 입력 + 변수 입력 -->
+  <div>
+    <div class="card">
+      <h2>템플릿 입력</h2>
+      <textarea id="template" placeholder="예시)&#10;#{이름}님, 안녕하세요!&#10;#{주문번호} 주문이 #{상태} 처리되었습니다.&#10;배송 예정일: #{배송일}"></textarea>
+    </div>
+
+    <div class="card variables-section">
+      <h2>변수 값 입력</h2>
+      <div id="var-list">
+        <p class="empty-msg">위에 템플릿을 입력하면<br>변수가 자동으로 나타납니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 미리보기 -->
+  <div>
+    <div class="card">
+      <h2>미리보기</h2>
+      <div class="preview-wrap">
+        <div id="preview" class="no-preview">템플릿을 입력해 주세요.</div>
+      </div>
+      <button class="copy-btn" id="copy-btn" onclick="copyText()">복사하기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const templateEl = document.getElementById('template');
+  const varListEl = document.getElementById('var-list');
+  const previewEl = document.getElementById('preview');
+
+  let varValues = {};
+
+  templateEl.addEventListener('input', parseTemplate);
+
+  function parseTemplate() {
+    const text = templateEl.value;
+    const matches = [...new Set(text.match(/#\{[^}]+\}/g) || [])];
+
+    // 기존 값 보존
+    const prevValues = { ...varValues };
+    varValues = {};
+
+    if (matches.length === 0) {
+      varListEl.innerHTML = '<p class="empty-msg">변수가 없습니다.<br>#{변수명} 형식으로 입력해 주세요.</p>';
+      updatePreview();
+      return;
+    }
+
+    varListEl.innerHTML = '';
+    matches.forEach(match => {
+      const key = match; // #{이름} 그대로 키로 사용
+      varValues[key] = prevValues[key] || '';
+
+      const row = document.createElement('div');
+      row.className = 'var-row';
+      row.innerHTML = `
+        <span class="var-label">${match}</span>
+        <input class="var-input" type="text" placeholder="값 입력" value="${escapeHtml(varValues[key])}">
+      `;
+      row.querySelector('input').addEventListener('input', e => {
+        varValues[key] = e.target.value;
+        updatePreview();
+      });
+      varListEl.appendChild(row);
+    });
+
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const text = templateEl.value;
+    if (!text.trim()) {
+      previewEl.className = 'no-preview';
+      previewEl.textContent = '템플릿을 입력해 주세요.';
+      return;
+    }
+
+    previewEl.className = 'kakao-bubble';
+
+    let result = text;
+    for (const [key, val] of Object.entries(varValues)) {
+      const display = val
+        ? `<span class="highlight">${escapeHtml(val)}</span>`
+        : `<span style="color:#f00;font-weight:600">${escapeHtml(key)}</span>`;
+      result = result.split(key).join(display);
+    }
+
+    previewEl.innerHTML = result;
+  }
+
+  function copyText() {
+    const text = templateEl.value;
+    if (!text.trim()) return;
+
+    let result = text;
+    for (const [key, val] of Object.entries(varValues)) {
+      result = result.split(key).join(val || key);
+    }
+
+    navigator.clipboard.writeText(result).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '복사 완료!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '복사하기';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+
+</body>
+</html>
