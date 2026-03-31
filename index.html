@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>알림톡 변수 미리보기</title>
+  <title>알림톡 변수 도구</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,10 +17,51 @@
     h1 {
       font-size: 22px;
       font-weight: 700;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
       text-align: center;
     }
 
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    /* 탭 */
+    .tabs {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #888;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: #222;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* 공통 카드 */
     .container {
       max-width: 900px;
       margin: 0 auto;
@@ -47,6 +88,12 @@
       color: #555;
     }
 
+    .card .desc {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
     textarea {
       width: 100%;
       min-height: 180px;
@@ -63,9 +110,8 @@
 
     textarea:focus { border-color: #FEE500; }
 
-    .variables-section {
-      margin-top: 20px;
-    }
+    /* 변수 입력 */
+    .variables-section { margin-top: 20px; }
 
     .var-row {
       display: flex;
@@ -107,7 +153,7 @@
       padding: 20px 0;
     }
 
-    /* 카카오톡 말풍선 스타일 */
+    /* 카카오 말풍선 */
     .preview-wrap {
       background: #B2C7D9;
       border-radius: 8px;
@@ -124,13 +170,9 @@
       white-space: pre-wrap;
       word-break: break-all;
       box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-      position: relative;
     }
 
-    .kakao-bubble .highlight {
-      color: #3A8AFF;
-      font-weight: 600;
-    }
+    .kakao-bubble .highlight { color: #3A8AFF; font-weight: 600; }
 
     .no-preview {
       font-size: 13px;
@@ -139,8 +181,8 @@
       padding: 40px 0;
     }
 
-    .copy-btn {
-      margin-top: 12px;
+    /* 버튼 */
+    .yellow-btn {
       width: 100%;
       padding: 10px;
       border: none;
@@ -151,56 +193,236 @@
       font-weight: 700;
       cursor: pointer;
       transition: background 0.2s;
+      margin-top: 12px;
     }
 
-    .copy-btn:hover { background: #f0d800; }
-    .copy-btn:active { background: #e0c800; }
+    .yellow-btn:hover { background: #f0d800; }
+    .yellow-btn.copied { background: #4CAF50; color: #fff; }
 
-    .copy-btn.copied {
-      background: #4CAF50;
-      color: #fff;
+    /* ── 탭2: 템플릿 만들기 ── */
+    .make-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
+
+    .editable-area {
+      width: 100%;
+      min-height: 160px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.8;
+      font-family: inherit;
+      outline: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+      cursor: text;
+    }
+
+    .editable-area:focus { border-color: #FEE500; }
+
+    .editable-area .var-chip {
+      display: inline;
+      background: #EEF4FF;
+      color: #3A8AFF;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .action-bar .hint {
+      font-size: 13px;
+      color: #aaa;
+      flex: 1;
+    }
+
+    .reset-btn {
+      padding: 10px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      color: #888;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .result-box {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-all;
+      min-height: 60px;
+      color: #333;
+    }
+
+    .result-box .var-chip {
+      color: #3A8AFF;
+      font-weight: 700;
+    }
+
+    /* 팝업 */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-overlay.show { display: flex; }
+
+    .popup {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 24px;
+      width: 300px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    .popup h3 { font-size: 16px; margin-bottom: 8px; }
+    .popup p { font-size: 13px; color: #888; margin-bottom: 16px; }
+
+    .popup input {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .popup input:focus { border-color: #3A8AFF; }
+
+    .popup-btns { display: flex; gap: 8px; }
+
+    .popup-btns button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .popup-btns .confirm { background: #FEE500; color: #3C1E1E; }
+    .popup-btns .cancel { background: #f0f0f0; color: #888; }
   </style>
 </head>
 <body>
 
-<h1>📢 알림톡 변수 미리보기</h1>
+<h1>📢 알림톡 변수 도구</h1>
+<p class="subtitle">변수 미리보기 · 템플릿 만들기</p>
 
-<div class="container">
+<!-- 탭 -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('preview', this)">✅ 변수 미리보기</button>
+  <button class="tab-btn" onclick="switchTab('make', this)">✏️ 템플릿 만들기</button>
+</div>
 
-  <!-- 왼쪽: 템플릿 입력 + 변수 입력 -->
-  <div>
-    <div class="card">
-      <h2>템플릿 입력</h2>
-      <textarea id="template" placeholder="예시)&#10;#{이름}님, 안녕하세요!&#10;#{주문번호} 주문이 #{상태} 처리되었습니다.&#10;배송 예정일: #{배송일}"></textarea>
+<!-- ══════════════ 탭1: 변수 미리보기 ══════════════ -->
+<div id="tab-preview" class="tab-content active">
+  <div class="container">
+    <div>
+      <div class="card">
+        <h2>템플릿 입력</h2>
+        <p class="desc">#{변수명} 형식으로 변수를 입력하세요.</p>
+        <textarea id="template" placeholder="예시)&#10;#{이름}님, 안녕하세요!&#10;#{주문번호} 주문이 #{상태} 처리되었습니다.&#10;배송 예정일: #{배송일}"></textarea>
+      </div>
+
+      <div class="card variables-section">
+        <h2>변수 값 입력</h2>
+        <div id="var-list">
+          <p class="empty-msg">위에 템플릿을 입력하면<br>변수가 자동으로 나타납니다.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="card variables-section">
-      <h2>변수 값 입력</h2>
-      <div id="var-list">
-        <p class="empty-msg">위에 템플릿을 입력하면<br>변수가 자동으로 나타납니다.</p>
+    <div>
+      <div class="card">
+        <h2>미리보기</h2>
+        <div class="preview-wrap">
+          <div id="preview" class="no-preview">템플릿을 입력해 주세요.</div>
+        </div>
+        <button class="yellow-btn" id="copy-btn" onclick="copyPreview()">복사하기</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 오른쪽: 미리보기 -->
-  <div>
+<!-- ══════════════ 탭2: 템플릿 만들기 ══════════════ -->
+<div id="tab-make" class="tab-content">
+  <div class="make-wrap">
     <div class="card">
-      <h2>미리보기</h2>
-      <div class="preview-wrap">
-        <div id="preview" class="no-preview">템플릿을 입력해 주세요.</div>
+      <h2>실제 메시지 붙여넣기</h2>
+      <p class="desc">실제 발송된 메시지를 붙여넣고, 변수로 바꿀 부분을 <strong>마우스로 드래그</strong>해서 선택하세요.</p>
+      <div
+        id="editable"
+        class="editable-area"
+        contenteditable="true"
+        onmouseup="onSelect()"
+        oninput="syncResult()"
+      ></div>
+      <div class="action-bar">
+        <span class="hint" id="select-hint">👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.</span>
+        <button class="reset-btn" onclick="resetMake()">초기화</button>
       </div>
-      <button class="copy-btn" id="copy-btn" onclick="copyText()">복사하기</button>
+    </div>
+
+    <div class="card">
+      <h2>생성된 템플릿</h2>
+      <div id="result-box" class="result-box">메시지를 입력하면 여기에 템플릿이 생성됩니다.</div>
+      <button class="yellow-btn" id="copy-template-btn" onclick="copyTemplate()">템플릿 복사하기</button>
     </div>
   </div>
+</div>
 
+<!-- 팝업: 변수명 입력 -->
+<div class="popup-overlay" id="popup">
+  <div class="popup">
+    <h3>변수명 입력</h3>
+    <p>선택한 텍스트를 어떤 변수명으로 바꿀까요?</p>
+    <input type="text" id="popup-input" placeholder="예: 이름, 주문번호" />
+    <div class="popup-btns">
+      <button class="cancel" onclick="closePopup()">취소</button>
+      <button class="confirm" onclick="confirmVar()">확인</button>
+    </div>
+  </div>
 </div>
 
 <script>
+  // ── 탭 전환 ──
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ════════ 탭1: 변수 미리보기 ════════
   const templateEl = document.getElementById('template');
   const varListEl = document.getElementById('var-list');
   const previewEl = document.getElementById('preview');
-
   let varValues = {};
 
   templateEl.addEventListener('input', parseTemplate);
@@ -208,8 +430,6 @@
   function parseTemplate() {
     const text = templateEl.value;
     const matches = [...new Set(text.match(/#\{[^}]+\}/g) || [])];
-
-    // 기존 값 보존
     const prevValues = { ...varValues };
     varValues = {};
 
@@ -221,22 +441,19 @@
 
     varListEl.innerHTML = '';
     matches.forEach(match => {
-      const key = match; // #{이름} 그대로 키로 사용
-      varValues[key] = prevValues[key] || '';
-
+      varValues[match] = prevValues[match] || '';
       const row = document.createElement('div');
       row.className = 'var-row';
       row.innerHTML = `
         <span class="var-label">${match}</span>
-        <input class="var-input" type="text" placeholder="값 입력" value="${escapeHtml(varValues[key])}">
+        <input class="var-input" type="text" placeholder="값 입력" value="${escapeHtml(varValues[match])}">
       `;
       row.querySelector('input').addEventListener('input', e => {
-        varValues[key] = e.target.value;
+        varValues[match] = e.target.value;
         updatePreview();
       });
       varListEl.appendChild(row);
     });
-
     updatePreview();
   }
 
@@ -247,9 +464,7 @@
       previewEl.textContent = '템플릿을 입력해 주세요.';
       return;
     }
-
     previewEl.className = 'kakao-bubble';
-
     let result = text;
     for (const [key, val] of Object.entries(varValues)) {
       const display = val
@@ -257,32 +472,148 @@
         : `<span style="color:#f00;font-weight:600">${escapeHtml(key)}</span>`;
       result = result.split(key).join(display);
     }
-
     previewEl.innerHTML = result;
   }
 
-  function copyText() {
+  function copyPreview() {
     const text = templateEl.value;
     if (!text.trim()) return;
-
     let result = text;
     for (const [key, val] of Object.entries(varValues)) {
       result = result.split(key).join(val || key);
     }
-
     navigator.clipboard.writeText(result).then(() => {
       const btn = document.getElementById('copy-btn');
       btn.textContent = '복사 완료!';
       btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = '복사하기';
-        btn.classList.remove('copied');
-      }, 2000);
+      setTimeout(() => { btn.textContent = '복사하기'; btn.classList.remove('copied'); }, 2000);
     });
   }
 
+  // ════════ 탭2: 템플릿 만들기 ════════
+  let savedRange = null;
+
+  function onSelect() {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !sel.toString().trim()) {
+      return;
+    }
+
+    // editable 영역 안에서만 동작
+    const editable = document.getElementById('editable');
+    if (!editable.contains(sel.anchorNode)) return;
+
+    savedRange = sel.getRangeAt(0).cloneRange();
+    const selected = sel.toString().trim();
+    document.getElementById('select-hint').textContent = `"${selected}" 선택됨`;
+    openPopup();
+  }
+
+  function openPopup() {
+    document.getElementById('popup').classList.add('show');
+    const input = document.getElementById('popup-input');
+    input.value = '';
+    setTimeout(() => input.focus(), 100);
+    input.onkeydown = e => {
+      if (e.key === 'Enter') confirmVar();
+      if (e.key === 'Escape') closePopup();
+    };
+  }
+
+  function closePopup() {
+    document.getElementById('popup').classList.remove('show');
+    savedRange = null;
+    document.getElementById('select-hint').textContent = '👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.';
+  }
+
+  function confirmVar() {
+    const name = document.getElementById('popup-input').value.trim();
+    if (!name || !savedRange) { closePopup(); return; }
+
+    const varText = `#{${name}}`;
+    savedRange.deleteContents();
+
+    const chip = document.createElement('span');
+    chip.className = 'var-chip';
+    chip.contentEditable = 'false';
+    chip.dataset.var = varText;
+    chip.textContent = varText;
+    savedRange.insertNode(chip);
+
+    // 커서를 칩 뒤로
+    const range = document.createRange();
+    range.setStartAfter(chip);
+    range.collapse(true);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    closePopup();
+    syncResult();
+  }
+
+  function syncResult() {
+    const editable = document.getElementById('editable');
+    const resultBox = document.getElementById('result-box');
+
+    let hasContent = editable.textContent.trim() || editable.querySelector('.var-chip');
+    if (!hasContent) {
+      resultBox.textContent = '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
+      return;
+    }
+
+    let resultHtml = '';
+    editable.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        resultHtml += escapeHtml(node.textContent);
+      } else if (node.classList && node.classList.contains('var-chip')) {
+        resultHtml += `<span class="var-chip">${escapeHtml(node.dataset.var)}</span>`;
+      } else {
+        resultHtml += escapeHtml(node.textContent);
+      }
+    });
+
+    resultBox.innerHTML = resultHtml || '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
+  }
+
+  function getPlainTemplate() {
+    const editable = document.getElementById('editable');
+    let text = '';
+    editable.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += node.textContent;
+      } else if (node.classList && node.classList.contains('var-chip')) {
+        text += node.dataset.var;
+      } else {
+        text += node.textContent;
+      }
+    });
+    return text;
+  }
+
+  function copyTemplate() {
+    const text = getPlainTemplate().trim();
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-template-btn');
+      btn.textContent = '복사 완료!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '템플릿 복사하기'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function resetMake() {
+    document.getElementById('editable').innerHTML = '';
+    document.getElementById('result-box').textContent = '메시지를 입력하면 여기에 템플릿이 생성됩니다.';
+    document.getElementById('select-hint').textContent = '👆 텍스트를 드래그해서 선택하면 변수로 변환할 수 있습니다.';
+  }
+
   function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 </script>
 
