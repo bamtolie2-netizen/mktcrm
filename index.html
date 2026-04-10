@@ -6,137 +6,161 @@
 <title>메일 초안 CRM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-/* ── reset ── */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f3;color:#1a1a18;min-height:100vh}
-
-/* ── tokens ── */
 :root{
-  --bg:#ffffff;--bg2:#f5f5f3;--bg3:#ebebea;
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#ebebea;--bg4:#e0e0de;
   --text:#1a1a18;--text2:#6b6b67;--text3:#a0a09a;
-  --border:rgba(0,0,0,.1);--border2:rgba(0,0,0,.18);
-  --radius:8px;--radius-lg:12px;
-  --green:#1D9E75;--amber:#854F0B;--amber-bg:#FAEEDA;
+  --bd:rgba(0,0,0,.1);--bd2:rgba(0,0,0,.18);
+  --r:8px;--rl:12px;
+  --green:#1D9E75;--red:#d04040;--blue:#185FA5;--amber:#854F0B;--amber-bg:#FAEEDA;
 }
 @media(prefers-color-scheme:dark){:root{
-  --bg:#1c1c1a;--bg2:#242422;--bg3:#2e2e2b;
+  --bg:#1c1c1a;--bg2:#242422;--bg3:#2e2e2b;--bg4:#383835;
   --text:#e8e8e4;--text2:#9a9a94;--text3:#5a5a56;
-  --border:rgba(255,255,255,.1);--border2:rgba(255,255,255,.18);
+  --bd:rgba(255,255,255,.1);--bd2:rgba(255,255,255,.18);
   --amber-bg:#3a2e10;--amber:#FAC775;
 }}
 
 /* ── auth ── */
 .auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.auth-card{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:320px}
-.auth-logo{font-size:17px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.auth-card{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:2rem;width:100%;max-width:320px}
+.auth-logo{font-size:17px;font-weight:600;margin-bottom:6px}
 .auth-sub{font-size:12px;color:var(--text2);margin-bottom:1.5rem}
-.fl{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
-.fl label{font-size:11px;color:var(--text2)}
-.fl input,.fl select,.fl textarea{font-size:13px;padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);font-family:inherit;width:100%;outline:none}
-.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--text3)}
-.fl textarea{resize:vertical;min-height:130px;line-height:1.75}
-.btn-primary{width:100%;font-size:13px;padding:10px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer;font-weight:500}
-.btn-primary:hover{opacity:.85}
-.auth-hint{font-size:11px;color:var(--text3);margin-top:10px;text-align:center}
-.err{font-size:12px;color:#d04040;min-height:16px;margin-bottom:6px}
+.err{font-size:12px;color:var(--red);min-height:16px;margin-bottom:6px}
 
-/* ── layout ── */
+/* ── forms ── */
+.fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fl label{font-size:11px;color:var(--text2)}
+.fl input,.fl select,.fl textarea{font-size:13px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);font-family:inherit;width:100%;outline:none}
+.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--text2)}
+.fl textarea{resize:vertical;min-height:130px;line-height:1.75}
+
+/* ── buttons ── */
+.btn{font-size:13px;padding:8px 16px;border-radius:var(--r);border:0.5px solid var(--bd2);background:transparent;color:var(--text);cursor:pointer}
+.btn:hover{background:var(--bg3)}
+.btn-primary{background:var(--text);color:var(--bg);border:none;font-weight:500}
+.btn-primary:hover{opacity:.85}
+.btn-danger{color:var(--red);border-color:rgba(208,64,64,.3)}
+.btn-danger:hover{background:rgba(208,64,64,.08)}
+.btn-sm{font-size:12px;padding:5px 12px}
+.btn-icon{padding:5px 8px;border-radius:var(--r);border:none;background:transparent;cursor:pointer;color:var(--text2);font-size:13px}
+.btn-icon:hover{background:var(--bg3);color:var(--text)}
+.btn-full{width:100%}
+
+/* ── app layout ── */
 .app{display:none;height:100vh;overflow:hidden}
-.layout{display:grid;grid-template-columns:240px 1fr;height:100%}
+.layout{display:grid;grid-template-columns:260px 1fr;height:100%}
 
 /* ── sidebar ── */
-.sidebar{background:var(--bg2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.sb-top{padding:10px 12px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sidebar{background:var(--bg2);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
+.sb-top{padding:10px 12px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:8px;flex-shrink:0}
 .av{width:30px;height:30px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
 .uinfo{flex:1;min-width:0}
-.uname{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.uname{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .urole{font-size:10px;color:var(--text3)}
-.lout{font-size:11px;color:var(--text3);cursor:pointer;padding:2px 6px;border-radius:4px;flex-shrink:0}
-.lout:hover{background:var(--bg3);color:var(--text2)}
-.sb-act{padding:10px 12px;border-bottom:0.5px solid var(--border);flex-shrink:0}
-.btn-new{width:100%;font-size:12px;padding:7px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);cursor:pointer}
-.btn-new:hover{background:var(--bg3)}
-.sb-scroll{flex:1;overflow-y:auto;padding:8px}
-.cat-head{display:flex;align-items:center;gap:5px;padding:4px 6px;cursor:pointer;border-radius:6px;margin-top:4px;user-select:none}
+.sb-actions{padding:8px 12px;border-bottom:0.5px solid var(--bd);display:flex;gap:6px;flex-shrink:0}
+.sb-scroll{flex:1;overflow-y:auto;padding:6px 8px}
+
+/* ── sidebar top toolbar ── */
+.sb-toolbar{display:flex;align-items:center;gap:4px;padding:6px 4px;border-bottom:0.5px solid var(--bd);margin-bottom:4px}
+.sb-toolbar span{font-size:11px;color:var(--text3);flex:1}
+.sel-bar{display:none;background:var(--bg3);border-bottom:0.5px solid var(--bd);padding:6px 12px;flex-shrink:0;gap:6px;align-items:center}
+.sel-bar.show{display:flex}
+.sel-count{font-size:12px;color:var(--text2);flex:1}
+
+/* ── template item ── */
+.cat-head{display:flex;align-items:center;gap:5px;padding:5px 6px;cursor:pointer;border-radius:6px;margin-top:2px;user-select:none}
 .cat-head:hover{background:var(--bg3)}
-.cat-arr{font-size:9px;color:var(--text3);transition:transform .15s}
+.cat-arr{font-size:9px;color:var(--text3);transition:transform .15s;flex-shrink:0}
 .cat-arr.o{transform:rotate(90deg)}
-.cat-lbl{font-size:11px;font-weight:500;color:var(--text2);flex:1}
+.cat-lbl{font-size:11px;font-weight:600;color:var(--text2);flex:1;letter-spacing:.02em}
 .cat-n{font-size:10px;color:var(--text3)}
-.tpl-item{display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:6px;cursor:pointer;border:0.5px solid transparent;margin-bottom:1px;user-select:none}
+.tpl-item{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;cursor:pointer;border:0.5px solid transparent;margin-bottom:1px;user-select:none}
 .tpl-item:hover{background:var(--bg3)}
-.tpl-item.sel{background:var(--bg);border-color:var(--border)}
+.tpl-item.sel{background:var(--bg);border-color:var(--bd)}
+.tpl-item.checked{background:rgba(24,95,165,.06);border-color:rgba(24,95,165,.2)}
 .tpl-item.dragging{opacity:.35}
-.tpl-item.drag-over{border-color:var(--text3)}
+.tpl-item.drag-over{border-color:var(--text2)}
+.tpl-cb{width:14px;height:14px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
 .dh{color:var(--text3);font-size:10px;cursor:grab;opacity:.4;flex-shrink:0}
 .tn{font-size:13px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tx{font-size:12px;color:var(--text3);opacity:0;cursor:pointer;padding:0 2px;flex-shrink:0}
-.tpl-item:hover .tx{opacity:1}
+.tpl-menu-btn{font-size:14px;color:var(--text3);opacity:0;cursor:pointer;padding:0 3px;line-height:1;flex-shrink:0}
+.tpl-item:hover .tpl-menu-btn{opacity:1}
 .loading-row{font-size:12px;color:var(--text3);padding:8px 10px}
+
+/* ── context menu ── */
+.ctx-menu{position:fixed;background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--r);padding:4px;z-index:500;min-width:150px;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.ctx-item{font-size:13px;padding:7px 12px;border-radius:6px;cursor:pointer;color:var(--text)}
+.ctx-item:hover{background:var(--bg3)}
+.ctx-item.danger{color:var(--red)}
+.ctx-sep{height:0.5px;background:var(--bd);margin:4px 0}
 
 /* ── content ── */
 .content{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-.mode-bar{display:flex;border-bottom:0.5px solid var(--border);padding:0 16px;flex-shrink:0}
+.mode-bar{display:flex;border-bottom:0.5px solid var(--bd);padding:0 16px;flex-shrink:0}
 .mtab{font-size:13px;padding:11px 14px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
 .mtab.on{color:var(--text);border-bottom-color:var(--text)}
 .mtab:hover:not(.on){color:var(--text)}
 .panel{flex:1;padding:16px;display:flex;flex-direction:column;gap:11px;overflow-y:auto}
-.empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);font-size:13px;gap:8px}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .vtags{display:flex;flex-wrap:wrap;gap:5px}
-.vtag{display:inline-flex;align-items:center;gap:3px;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
+.vtag{display:inline-flex;align-items:center;gap:3px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
 .vtag .vx{cursor:pointer;color:var(--text3);font-size:12px;line-height:1}
 .vadd{display:flex;gap:6px;margin-top:4px}
 .vadd input{flex:1;font-size:12px;padding:5px 8px}
-.vadd button{font-size:12px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer}
-.vadd button:hover{background:var(--bg2)}
 .hint{font-size:11px;color:var(--text3)}
-.btn-save{font-size:13px;padding:8px 20px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer}
-.btn-save:hover{opacity:.85}
 .ok{font-size:12px;color:var(--green)}
-.file-zone{border:0.5px dashed var(--border2);border-radius:var(--radius);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg2)}
-.file-zone:hover{border-color:var(--text3)}
+.file-zone{border:0.5px dashed var(--bd2);border-radius:var(--r);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.file-zone:hover{border-color:var(--text2)}
 .fz-text{font-size:12px;color:var(--text2)}
 .fz-hint{font-size:11px;color:var(--text3)}
 .flist{display:flex;flex-direction:column;gap:4px;margin-top:6px}
-.fchip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 10px}
-.fchip-name{font-size:12px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fchip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 10px}
+.fchip-name{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fchip-size{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
 .fchip-x{font-size:12px;color:var(--text3);cursor:pointer;flex-shrink:0}
-.fchip-x:hover{color:var(--text)}
-.psubj{font-size:12px;color:var(--text2);padding-bottom:10px;border-bottom:0.5px solid var(--border)}
+.psubj{font-size:12px;color:var(--text2);padding-bottom:10px;border-bottom:0.5px solid var(--bd)}
 .psubj b{font-weight:500;color:var(--text)}
-.pbody{font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;min-height:120px}
+.pbody{font-size:13px;line-height:1.8;white-space:pre-wrap;min-height:120px}
 .hi{background:var(--amber-bg);color:var(--amber);border-radius:3px;padding:0 2px}
 .pfiles{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
-.pfchip{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text2)}
-.btn-copy{font-size:13px;padding:8px 20px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;align-self:flex-start}
-.btn-copy:hover{background:var(--bg2)}
-.btn-copy.done{border-color:var(--green);color:var(--green)}
+.pfchip{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text2)}
+
+/* ── header bar ── */
+.top-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--bd);flex-shrink:0}
+.top-bar-title{font-size:13px;font-weight:500;flex:1}
+.top-bar-sub{font-size:11px;color:var(--text3)}
 
 /* ── modal ── */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center}
 .mbg.open{display:flex}
-.modal{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:1.25rem;width:90%;max-width:340px}
-.modal h3{font-size:15px;font-weight:500;margin-bottom:12px;color:var(--text)}
-.modal input,.modal select{width:100%;font-size:13px;padding:7px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);margin-bottom:8px;outline:none;font-family:inherit}
-.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
-.mok{font-size:13px;padding:8px 18px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer}
-.mno{font-size:13px;padding:8px 14px;border-radius:var(--radius);border:0.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer}
+.modal{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:1.25rem;width:90%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-lg{max-width:540px}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:14px}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
 
-/* ── spinner ── */
-.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+/* ── settings ── */
+.settings-page{display:none;flex-direction:column;height:100%;background:var(--bg)}
+.settings-nav{display:flex;border-bottom:0.5px solid var(--bd);padding:0 16px;flex-shrink:0}
+.cat-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2);margin:0 4px 8px 0}
+.cat-tag .cx{cursor:pointer;color:var(--text3);font-size:14px;line-height:1}
+.cat-tag .cx:hover{color:var(--red)}
+.cat-color{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* ── spin ── */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--bd2);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-@media(max-width:600px){
-  .layout{grid-template-columns:1fr}
-  .sidebar{display:none}
-}
+/* ── badge ── */
+.badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.badge-blue{background:#E6F1FB;color:#0C447C}
 </style>
 </head>
 <body>
 
-<!-- ── AUTH ── -->
+<!-- AUTH -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">메일 초안 CRM</div>
@@ -144,19 +168,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <div class="err" id="authErr"></div>
     <div class="fl">
       <label>이름</label>
-      <input id="nameInput" placeholder="예) 홍길동" autocomplete="off"
-             onkeydown="if(event.key==='Enter')doLogin()"/>
+      <input id="nameInput" placeholder="예) 홍길동" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="btn-primary" onclick="doLogin()">
-      <span id="loginSpinner" style="display:none" class="spin"></span>시작하기
+    <button class="btn btn-primary btn-full" onclick="doLogin()">
+      <span id="loginSpin" style="display:none" class="spin"></span>시작하기
     </button>
-    <div class="auth-hint">별도 회원가입 없이 이름만으로 입장합니다</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;text-align:center">별도 회원가입 없이 이름만으로 입장합니다</div>
   </div>
 </div>
 
-<!-- ── APP ── -->
+<!-- APP -->
 <div class="app" id="appScreen">
   <div class="layout">
+
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sb-top">
         <div class="av" id="userAv">?</div>
@@ -164,175 +189,286 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
           <div class="uname" id="userName">-</div>
           <div class="urole">접속 중</div>
         </div>
-        <div class="lout" onclick="doLogout()">나가기</div>
+        <button class="btn-icon" onclick="openSettings()" title="설정">⚙</button>
+        <button class="btn-icon" onclick="doLogout()" title="나가기" style="font-size:11px">나가기</button>
       </div>
-      <div class="sb-act">
-        <button class="btn-new" onclick="openNew()">+ 새 템플릿</button>
+
+      <!-- 선택 액션 바 -->
+      <div class="sel-bar" id="selBar">
+        <span class="sel-count" id="selCount">0개 선택</span>
+        <button class="btn btn-sm" onclick="moveSelected()">이동</button>
+        <button class="btn btn-sm" onclick="copySelected()">복사</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteSelected()">삭제</button>
+        <button class="btn btn-sm" onclick="clearSelection()">취소</button>
       </div>
+
+      <div class="sb-actions">
+        <button class="btn btn-sm btn-primary" style="flex:1" onclick="openNewTpl()">+ 새 템플릿</button>
+        <button class="btn btn-sm" onclick="toggleSelectMode()" id="btnSelMode">선택</button>
+        <button class="btn btn-sm" onclick="deleteAllConfirm()" title="일괄삭제">전체삭제</button>
+      </div>
+
       <div class="sb-scroll" id="sbScroll">
         <div class="loading-row"><span class="spin"></span>불러오는 중…</div>
       </div>
     </div>
 
-    <div class="content">
-      <div class="mode-bar" id="modeBar" style="display:none">
-        <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
-        <div class="mtab" id="tabUse"  onclick="switchMode('use')">작성 · 미리보기</div>
+    <!-- CONTENT -->
+    <div class="content" id="contentArea">
+      <!-- 기본: 선택 안 된 상태 -->
+      <div class="empty" id="emptyState">
+        <div>← 템플릿을 선택하거나 새로 만들어 보세요</div>
       </div>
-      <div class="panel" id="panel">
-        <div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>
+
+      <!-- 편집/작성 영역 -->
+      <div style="display:none;flex-direction:column;height:100%" id="editArea">
+        <div class="mode-bar">
+          <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
+          <div class="mtab" id="tabUse" onclick="switchMode('use')">작성 · 미리보기</div>
+        </div>
+        <div class="panel" id="panel"></div>
       </div>
+
+      <!-- 설정 페이지 -->
+      <div class="settings-page" id="settingsPage">
+        <div class="top-bar">
+          <span class="top-bar-title">설정</span>
+          <button class="btn btn-sm" onclick="closeSettings()">닫기</button>
+        </div>
+        <div class="panel" style="gap:20px">
+          <!-- 카테고리 관리 -->
+          <div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:10px">카테고리 관리</div>
+            <div class="fl">
+              <label>새 카테고리 이름</label>
+              <div style="display:flex;gap:6px">
+                <input id="newCatInput" placeholder="예) 외부 영업" style="flex:1" onkeydown="if(event.key==='Enter')addCategory()"/>
+                <button class="btn btn-sm btn-primary" onclick="addCategory()">추가</button>
+              </div>
+            </div>
+            <div id="catTagList" style="display:flex;flex-wrap:wrap;margin-top:8px"></div>
+          </div>
+          <div style="height:0.5px;background:var(--bd)"></div>
+          <!-- 계정 -->
+          <div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:10px">계정</div>
+            <div style="font-size:13px;color:var(--text2)" id="settingsUserInfo">-</div>
+            <button class="btn btn-sm btn-danger" style="margin-top:10px" onclick="doLogout()">로그아웃</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 새 템플릿 모달 -->
+<div class="mbg" id="modalNew">
+  <div class="modal">
+    <h3>새 템플릿</h3>
+    <div class="fl"><label>템플릿 이름 *</label><input id="nName" placeholder="예) 미팅 요청"/></div>
+    <div class="fl">
+      <label>카테고리</label>
+      <select id="nCat"><option value="">카테고리 없음</option></select>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalNew')">취소</button>
+      <button class="btn btn-primary" onclick="confirmNew()">만들기</button>
     </div>
   </div>
 </div>
 
-<!-- ── MODAL ── -->
-<div class="mbg" id="modal">
+<!-- 이동 모달 -->
+<div class="mbg" id="modalMove">
   <div class="modal">
-    <h3>새 템플릿</h3>
-    <input id="mName" placeholder="템플릿 이름"/>
-    <select id="mCat"><option value="">카테고리 선택</option></select>
-    <input id="mCatNew" placeholder="새 카테고리 직접 입력 (선택 사항)"/>
+    <h3 id="moveTitle">템플릿 이동</h3>
+    <div class="fl">
+      <label>이동할 카테고리</label>
+      <select id="moveCat"><option value="">카테고리 없음</option></select>
+    </div>
     <div class="mbtns">
-      <button class="mno" onclick="closeNew()">취소</button>
-      <button class="mok" onclick="confirmNew()">만들기</button>
+      <button class="btn" onclick="closeModal('modalMove')">취소</button>
+      <button class="btn btn-primary" onclick="confirmMove()">이동</button>
     </div>
   </div>
+</div>
+
+<!-- 복사 모달 -->
+<div class="mbg" id="modalCopy">
+  <div class="modal">
+    <h3 id="copyTitle">템플릿 복사</h3>
+    <div class="fl"><label>복사본 이름</label><input id="copyName" placeholder="복사본 이름"/></div>
+    <div class="fl">
+      <label>카테고리</label>
+      <select id="copyCat"><option value="">카테고리 없음</option></select>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalCopy')">취소</button>
+      <button class="btn btn-primary" onclick="confirmCopy()">복사</button>
+    </div>
+  </div>
+</div>
+
+<!-- 컨텍스트 메뉴 -->
+<div class="ctx-menu" id="ctxMenu" style="display:none">
+  <div class="ctx-item" onclick="ctxEdit()">편집</div>
+  <div class="ctx-item" onclick="ctxMove()">이동</div>
+  <div class="ctx-item" onclick="ctxCopy()">복사</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" onclick="ctxDelete()">삭제</div>
 </div>
 
 <input type="file" id="fileInput" multiple style="display:none" onchange="onFiles(this)"/>
 
 <script>
-// ──────────────────────────────────────────
-// ★ 여기만 본인 Supabase 값으로 교체하세요 ★
-const SUPABASE_URL = 'https://mathhyygiyvczzcemepm.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hdGhoeXlnaXl2Y3p6Y2VtZXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTY1MDEsImV4cCI6MjA5MTM3MjUwMX0.DdJkLOtczQpabJlZOScXV3OaeWk6Moy1oOMpoTKgpk4'
-// ──────────────────────────────────────────
+// ── CONFIG ──────────────────────────────────────────────────
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'
+const SUPABASE_KEY = 'YOUR_ANON_KEY'
+// ───────────────────────────────────────────────────────────
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let currentUser = null
-let tpls = []
-let sel = null, mode = 'edit', openCats = {}, dragSrc = null, vals = {}, files = []
-let nid = Date.now()
+let tpls = []       // [{id, name, category, subject, vars, body, sort_order}]
+let cats = []       // ['외부', '내부', ...]  — user categories
+let sel = null      // 현재 선택된 tpl id
+let mode = 'edit'
+let openCats = {}
+let dragSrc = null
+let vals = {}, files = []
+let selectMode = false
+let selectedIds = new Set()
+let ctxTargetId = null
+let moveTargetIds = []  // 이동/복사 대상 ids
+let copyMode = false
 
-// ── Auth ────────────────────────────────────────────────────────
+// ── AUTH ─────────────────────────────────────────────────────
 async function doLogin() {
   const name = document.getElementById('nameInput').value.trim()
   if (!name) return
-  setLoading(true)
+  document.getElementById('loginSpin').style.display = 'inline-block'
+  document.getElementById('authErr').textContent = ''
   try {
-    // 이름으로 기존 유저 조회
-    let { data: user } = await sb.from('users').select('id,name').eq('name', name).maybeSingle()
+    let { data: user } = await sb.from('users').select('id,name,categories').eq('name', name).maybeSingle()
     if (!user) {
-      // 없으면 생성
-      const { data, error } = await sb.from('users').insert({ name }).select().single()
+      const { data, error } = await sb.from('users').insert({ name, categories: [] }).select().single()
       if (error) throw error
       user = data
     }
     currentUser = user
+    cats = Array.isArray(user.categories) ? user.categories : []
     document.getElementById('authScreen').style.display = 'none'
     document.getElementById('appScreen').style.display = 'block'
-    document.getElementById('userAv').textContent = name.slice(0, 2)
+    document.getElementById('userAv').textContent = name.slice(0,2)
     document.getElementById('userName').textContent = name + '님'
+    document.getElementById('settingsUserInfo').textContent = name
     await loadTemplates()
-  } catch (e) {
-    document.getElementById('authErr').textContent = '오류가 발생했어요: ' + e.message
+  } catch(e) {
+    document.getElementById('authErr').textContent = '오류: ' + e.message
   } finally {
-    setLoading(false)
+    document.getElementById('loginSpin').style.display = 'none'
   }
 }
 
-function setLoading(on) {
-  document.getElementById('loginSpinner').style.display = on ? 'inline-block' : 'none'
-}
-
 function doLogout() {
-  currentUser = null; tpls = []; sel = null; vals = {}; files = []; mode = 'edit'
+  currentUser = null; tpls = []; cats = []; sel = null; vals = {}; files = []
+  selectMode = false; selectedIds = new Set()
   document.getElementById('appScreen').style.display = 'none'
   document.getElementById('authScreen').style.display = 'flex'
   document.getElementById('nameInput').value = ''
-  document.getElementById('authErr').textContent = ''
-  document.getElementById('modeBar').style.display = 'none'
-  document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>'
+  showEmpty()
 }
 
-// ── DB ──────────────────────────────────────────────────────────
+// ── DB ────────────────────────────────────────────────────────
 async function loadTemplates() {
   document.getElementById('sbScroll').innerHTML = '<div class="loading-row"><span class="spin"></span>불러오는 중…</div>'
-  const { data, error } = await sb.from('templates')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .order('sort_order', { ascending: true })
+  const { data, error } = await sb.from('templates').select('*').eq('user_id', currentUser.id).order('sort_order')
   if (error) { console.error(error); return }
-  tpls = (data || []).map(t => ({ ...t, vars: Array.isArray(t.vars) ? t.vars : JSON.parse(t.vars || '[]') }))
+  tpls = (data||[]).map(t => ({...t, vars: Array.isArray(t.vars)?t.vars:JSON.parse(t.vars||'[]')}))
   renderSb()
 }
 
-async function dbCreate(tpl) {
-  const { data, error } = await sb.from('templates')
-    .insert({ ...tpl, user_id: currentUser.id, vars: tpl.vars })
-    .select().single()
+async function dbCreate(t) {
+  const { data, error } = await sb.from('templates').insert({...t, user_id: currentUser.id}).select().single()
   if (error) throw error
-  return { ...data, vars: Array.isArray(data.vars) ? data.vars : JSON.parse(data.vars || '[]') }
+  return {...data, vars: Array.isArray(data.vars)?data.vars:JSON.parse(data.vars||'[]')}
 }
 
-async function dbUpdate(id, changes) {
-  const { error } = await sb.from('templates').update(changes).eq('id', id)
+async function dbUpdate(id, ch) {
+  const { error } = await sb.from('templates').update(ch).eq('id', id)
   if (error) throw error
 }
 
-async function dbDelete(id) {
-  const { error } = await sb.from('templates').delete().eq('id', id)
+async function dbDelete(ids) {
+  const { error } = await sb.from('templates').delete().in('id', ids)
   if (error) throw error
 }
 
 async function dbSaveOrder(ids) {
-  await Promise.all(ids.map((id, i) => sb.from('templates').update({ sort_order: i }).eq('id', id)))
+  await Promise.all(ids.map((id,i) => sb.from('templates').update({sort_order:i}).eq('id',id)))
 }
 
-// ── Sidebar ─────────────────────────────────────────────────────
-function cats() {
+async function saveCats() {
+  await sb.from('users').update({categories: cats}).eq('id', currentUser.id)
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────
+function groupByCat() {
   const m = {}
-  tpls.forEach(t => { if (!m[t.category]) m[t.category] = []; m[t.category].push(t) })
-  return m
+  const order = [...cats, '미분류']
+  tpls.forEach(t => {
+    const c = t.category || '미분류'
+    if (!m[c]) m[c] = []
+    m[c].push(t)
+  })
+  const result = []
+  order.forEach(c => { if (m[c]) result.push([c, m[c]]) })
+  Object.keys(m).forEach(c => { if (!order.includes(c)) result.push([c, m[c]]) })
+  return result
 }
 
 function renderSb() {
-  const c = cats(), el = document.getElementById('sbScroll')
+  const el = document.getElementById('sbScroll')
   el.innerHTML = ''
-  if (!tpls.length) {
+  const groups = groupByCat()
+  if (!groups.length) {
     el.innerHTML = '<div class="loading-row" style="color:var(--text3)">템플릿이 없어요</div>'
     return
   }
-  Object.entries(c).forEach(([cat, items]) => {
+  groups.forEach(([cat, items]) => {
     if (openCats[cat] === undefined) openCats[cat] = true
     const open = openCats[cat]
     const ch = document.createElement('div'); ch.className = 'cat-head'
-    ch.innerHTML = `<span class="cat-arr ${open ? 'o' : ''}">&#9658;</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
+    ch.innerHTML = `<span class="cat-arr ${open?'o':''}">\u25B6</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
     ch.onclick = () => { openCats[cat] = !openCats[cat]; renderSb() }
     el.appendChild(ch)
     if (open) {
       const ci = document.createElement('div')
       items.forEach(t => {
         const row = document.createElement('div')
-        row.className = 'tpl-item' + (sel === t.id ? ' sel' : '')
-        row.draggable = true
-        row.innerHTML = `<span class="dh">&#10271;</span><span class="tn">${e(t.name)}</span><span class="tx" data-id="${t.id}">✕</span>`
-        row.querySelector('.tx').onclick = ev => { ev.stopPropagation(); delT(t.id) }
-        row.onclick = () => selT(t.id)
-        row.ondragstart = () => { dragSrc = t.id; row.classList.add('dragging') }
-        row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.tpl-item').forEach(r => r.classList.remove('drag-over')) }
-        row.ondragover = ev => { ev.preventDefault(); row.classList.add('drag-over') }
-        row.ondragleave = () => row.classList.remove('drag-over')
-        row.ondrop = async ev => {
-          ev.preventDefault(); row.classList.remove('drag-over')
-          if (dragSrc && dragSrc !== t.id) {
-            const fi = tpls.findIndex(x => x.id === dragSrc), ti = tpls.findIndex(x => x.id === t.id)
-            if (fi >= 0 && ti >= 0) {
-              const [item] = tpls.splice(fi, 1); tpls.splice(ti, 0, item)
-              renderSb()
-              await dbSaveOrder(tpls.map(x => x.id))
+        const checked = selectedIds.has(t.id)
+        row.className = 'tpl-item' + (sel===t.id?' sel':'') + (checked?' checked':'')
+        row.draggable = !selectMode
+        row.innerHTML = `
+          ${selectMode ? `<input type="checkbox" class="tpl-cb" ${checked?'checked':''} onclick="toggleCheck(event,'${t.id}')"/>` : `<span class="dh">\u283F</span>`}
+          <span class="tn">${e(t.name)}</span>
+          ${!selectMode ? `<span class="tpl-menu-btn" onclick="openCtx(event,'${t.id}')">•••</span>` : ''}
+        `
+        row.onclick = ev => {
+          if (ev.target.classList.contains('tpl-cb') || ev.target.classList.contains('tpl-menu-btn')) return
+          if (selectMode) { toggleCheck(ev, t.id); return }
+          selT(t.id)
+        }
+        if (!selectMode) {
+          row.ondragstart = () => { dragSrc = t.id; row.classList.add('dragging') }
+          row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.tpl-item').forEach(r=>r.classList.remove('drag-over')) }
+          row.ondragover = ev => { ev.preventDefault(); row.classList.add('drag-over') }
+          row.ondragleave = () => row.classList.remove('drag-over')
+          row.ondrop = async ev => {
+            ev.preventDefault(); row.classList.remove('drag-over')
+            if (dragSrc && dragSrc !== t.id) {
+              const fi = tpls.findIndex(x=>x.id===dragSrc), ti = tpls.findIndex(x=>x.id===t.id)
+              if (fi>=0&&ti>=0) { const [item]=tpls.splice(fi,1); tpls.splice(ti,0,item); renderSb(); await dbSaveOrder(tpls.map(x=>x.id)) }
             }
           }
         }
@@ -343,49 +479,197 @@ function renderSb() {
   })
 }
 
-// ── Select & Mode ────────────────────────────────────────────────
-function selT(id) { sel = id; vals = {}; files = []; mode = 'edit'; renderSb(); renderContent() }
+// ── SELECT MODE ───────────────────────────────────────────────
+function toggleSelectMode() {
+  selectMode = !selectMode
+  selectedIds = new Set()
+  document.getElementById('btnSelMode').textContent = selectMode ? '선택 끄기' : '선택'
+  document.getElementById('selBar').classList.toggle('show', selectMode)
+  updateSelCount()
+  renderSb()
+}
+
+function toggleCheck(ev, id) {
+  if (typeof ev !== 'string') ev.stopPropagation()
+  const tid = typeof ev === 'string' ? ev : id
+  if (selectedIds.has(tid)) selectedIds.delete(tid)
+  else selectedIds.add(tid)
+  updateSelCount()
+  renderSb()
+}
+
+function updateSelCount() {
+  document.getElementById('selCount').textContent = selectedIds.size + '개 선택'
+}
+
+function clearSelection() {
+  selectMode = false; selectedIds = new Set()
+  document.getElementById('btnSelMode').textContent = '선택'
+  document.getElementById('selBar').classList.remove('show')
+  renderSb()
+}
+
+// ── DELETE ────────────────────────────────────────────────────
+async function deleteSelected() {
+  if (!selectedIds.size) return
+  if (!confirm(selectedIds.size + '개 템플릿을 삭제할까요?')) return
+  const ids = [...selectedIds]
+  await dbDelete(ids)
+  tpls = tpls.filter(t => !ids.includes(t.id))
+  if (ids.includes(sel)) { sel = null; showEmpty() }
+  clearSelection()
+}
+
+async function deleteAllConfirm() {
+  if (!tpls.length) return
+  if (!confirm('모든 템플릿(' + tpls.length + '개)을 삭제할까요?')) return
+  await dbDelete(tpls.map(t=>t.id))
+  tpls = []; sel = null; showEmpty(); renderSb()
+}
+
+async function ctxDelete() {
+  hideCtx()
+  if (!ctxTargetId) return
+  if (!confirm('이 템플릿을 삭제할까요?')) return
+  await dbDelete([ctxTargetId])
+  tpls = tpls.filter(t=>t.id!==ctxTargetId)
+  if (sel===ctxTargetId) { sel=null; showEmpty() }
+  renderSb()
+}
+
+// ── MOVE / COPY ───────────────────────────────────────────────
+function fillCatSelect(selId, currentCat) {
+  const el = document.getElementById(selId)
+  el.innerHTML = '<option value="">카테고리 없음</option>' + cats.map(c=>`<option value="${e(c)}" ${currentCat===c?'selected':''}>${e(c)}</option>`).join('')
+}
+
+function moveSelected() {
+  if (!selectedIds.size) return
+  moveTargetIds = [...selectedIds]; copyMode = false
+  document.getElementById('moveTitle').textContent = moveTargetIds.length + '개 템플릿 이동'
+  fillCatSelect('moveCat', '')
+  openModal('modalMove')
+}
+
+async function confirmMove() {
+  const cat = document.getElementById('moveCat').value
+  for (const id of moveTargetIds) {
+    const t = tpls.find(x=>x.id===id); if (!t) continue
+    t.category = cat
+    await dbUpdate(id, {category: cat})
+  }
+  closeModal('modalMove'); clearSelection()
+}
+
+function copySelected() {
+  if (!selectedIds.size) return
+  moveTargetIds = [...selectedIds]; copyMode = true
+  document.getElementById('copyTitle').textContent = moveTargetIds.length + '개 템플릿 복사'
+  document.getElementById('copyName').value = moveTargetIds.length === 1 ? (tpls.find(t=>t.id===moveTargetIds[0])?.name||'') + ' (복사)' : ''
+  fillCatSelect('copyCat', '')
+  openModal('modalCopy')
+}
+
+async function confirmCopy() {
+  const cat = document.getElementById('copyCat').value
+  const nameOverride = document.getElementById('copyName').value.trim()
+  for (const id of moveTargetIds) {
+    const t = tpls.find(x=>x.id===id); if (!t) continue
+    const newName = moveTargetIds.length === 1 ? (nameOverride || t.name + ' (복사)') : t.name + ' (복사)'
+    const created = await dbCreate({name:newName, category:cat||t.category, subject:t.subject, vars:t.vars, body:t.body, sort_order:tpls.length})
+    tpls.push(created)
+  }
+  closeModal('modalCopy'); clearSelection()
+}
+
+// ── CTX MENU ─────────────────────────────────────────────────
+function openCtx(ev, id) {
+  ev.stopPropagation()
+  ctxTargetId = id
+  const m = document.getElementById('ctxMenu')
+  m.style.display = 'block'
+  m.style.left = Math.min(ev.clientX, window.innerWidth-170) + 'px'
+  m.style.top = Math.min(ev.clientY, window.innerHeight-170) + 'px'
+}
+function hideCtx() { document.getElementById('ctxMenu').style.display = 'none' }
+document.addEventListener('click', hideCtx)
+
+function ctxEdit() { hideCtx(); if (ctxTargetId) selT(ctxTargetId) }
+
+function ctxMove() {
+  hideCtx()
+  if (!ctxTargetId) return
+  moveTargetIds = [ctxTargetId]; copyMode = false
+  document.getElementById('moveTitle').textContent = '템플릿 이동'
+  const t = tpls.find(x=>x.id===ctxTargetId)
+  fillCatSelect('moveCat', t?.category||'')
+  openModal('modalMove')
+}
+
+function ctxCopy() {
+  hideCtx()
+  if (!ctxTargetId) return
+  moveTargetIds = [ctxTargetId]; copyMode = true
+  const t = tpls.find(x=>x.id===ctxTargetId)
+  document.getElementById('copyTitle').textContent = '템플릿 복사'
+  document.getElementById('copyName').value = (t?.name||'') + ' (복사)'
+  fillCatSelect('copyCat', t?.category||'')
+  openModal('modalCopy')
+}
+
+// ── SELECT & EDIT ─────────────────────────────────────────────
+function selT(id) { sel=id; vals={}; files=[]; mode='edit'; renderSb(); showEditArea(); renderPanel() }
+
+function showEmpty() {
+  document.getElementById('emptyState').style.display = 'flex'
+  document.getElementById('editArea').style.display = 'none'
+  document.getElementById('settingsPage').style.display = 'none'
+}
+
+function showEditArea() {
+  document.getElementById('emptyState').style.display = 'none'
+  document.getElementById('editArea').style.display = 'flex'
+  document.getElementById('settingsPage').style.display = 'none'
+}
 
 function switchMode(m) {
   mode = m
-  document.getElementById('tabEdit').className = 'mtab' + (m === 'edit' ? ' on' : '')
-  document.getElementById('tabUse').className  = 'mtab' + (m === 'use'  ? ' on' : '')
+  document.getElementById('tabEdit').className = 'mtab' + (m==='edit'?' on':'')
+  document.getElementById('tabUse').className  = 'mtab' + (m==='use'?' on':'')
   renderPanel()
 }
 
-function renderContent() {
-  const mb = document.getElementById('modeBar')
-  if (!sel) { mb.style.display = 'none'; document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>'; return }
-  mb.style.display = 'flex'; renderPanel()
-}
-
-// ── Edit panel ───────────────────────────────────────────────────
 function renderPanel() {
   if (!sel) return
-  const t = tpls.find(x => x.id === sel); if (!t) return
+  const t = tpls.find(x=>x.id===sel); if(!t) return
   const p = document.getElementById('panel')
-  if (mode === 'edit') {
+  if (mode==='edit') {
     p.innerHTML = `
       <div class="r2">
-        <div class="fl"><label>템플릿 이름</label><input id="fN" value="${e(t.name)}" oninput="patchLocal('name',this.value)"/></div>
-        <div class="fl"><label>카테고리</label><input id="fC" value="${e(t.category)}" oninput="patchLocal('category',this.value)"/></div>
+        <div class="fl"><label>템플릿 이름</label><input id="fN" value="${e(t.name)}" oninput="pL('name',this.value)"/></div>
+        <div class="fl"><label>카테고리</label>
+          <select id="fCat" onchange="pL('category',this.value)">
+            <option value="">카테고리 없음</option>
+            ${cats.map(c=>`<option value="${e(c)}" ${t.category===c?'selected':''}>${e(c)}</option>`).join('')}
+          </select>
+        </div>
       </div>
-      <div class="fl"><label>제목 (변수는 {중괄호} 형식)</label><input id="fS" value="${e(t.subject)}" oninput="patchLocal('subject',this.value)"/></div>
+      <div class="fl"><label>제목 (변수 = {중괄호})</label><input id="fS" value="${e(t.subject)}" oninput="pL('subject',this.value)"/></div>
       <div class="fl">
         <label>변수 목록</label>
         <div class="vtags" id="vtags"></div>
-        <div class="vadd"><input id="vi" placeholder="변수명 입력 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button onclick="addV()">+ 추가</button></div>
+        <div class="vadd"><input id="vi" placeholder="변수명 입력 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button class="btn btn-sm" onclick="addV()">+ 추가</button></div>
         <span class="hint">본문에서 {변수명} 형태로 사용하세요</span>
       </div>
-      <div class="fl"><label>본문 템플릿</label><textarea id="fB" oninput="patchLocal('body',this.value)">${e(t.body)}</textarea></div>
+      <div class="fl"><label>본문 템플릿</label><textarea id="fB" oninput="pL('body',this.value)">${e(t.body)}</textarea></div>
       <div style="display:flex;align-items:center;gap:10px">
-        <button class="btn-save" onclick="saveT()">저장</button>
+        <button class="btn btn-primary" onclick="saveT()">저장</button>
         <span class="ok" id="okMsg" style="display:none">저장됐어요</span>
       </div>`
     renderVtags(t)
   } else {
     p.innerHTML = `
-      <div class="r2">${t.vars.map(v => `<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v] || '')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
+      <div class="r2">${t.vars.map(v=>`<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v]||'')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
       <div class="fl">
         <label>파일 첨부</label>
         <div class="file-zone" onclick="document.getElementById('fileInput').click()">
@@ -396,125 +680,111 @@ function renderPanel() {
       <div class="psubj">제목: <b id="pSubj"></b></div>
       <div class="pbody" id="pBody"></div>
       <div class="pfiles" id="pFiles"></div>
-      <button class="btn-copy" id="btnCopy" onclick="copyAll()">복사하기</button>`
+      <button class="btn" id="btnCopy" onclick="copyAll()" style="margin-top:4px;align-self:flex-start">복사하기</button>`
     renderFlist(); updatePreview(t)
   }
 }
 
-function patchLocal(k, v) {
-  const t = tpls.find(x => x.id === sel); if (!t) return
-  t[k] = v
-  if (k === 'name' || k === 'category') renderSb()
-}
+function pL(k,v) { const t=tpls.find(x=>x.id===sel); if(!t)return; t[k]=v; if(k==='name'||k==='category')renderSb() }
 
 async function saveT() {
-  const t = tpls.find(x => x.id === sel); if (!t) return
-  t.name     = document.getElementById('fN').value
-  t.category = document.getElementById('fC').value
-  t.subject  = document.getElementById('fS').value
-  t.body     = document.getElementById('fB').value
-  await dbUpdate(t.id, { name: t.name, category: t.category, subject: t.subject, body: t.body, vars: t.vars })
+  const t=tpls.find(x=>x.id===sel); if(!t)return
+  t.name=document.getElementById('fN').value
+  t.category=document.getElementById('fCat').value
+  t.subject=document.getElementById('fS').value
+  t.body=document.getElementById('fB').value
+  await dbUpdate(t.id,{name:t.name,category:t.category,subject:t.subject,body:t.body,vars:t.vars})
   renderSb()
-  const m = document.getElementById('okMsg'); m.style.display = 'inline'
-  setTimeout(() => m.style.display = 'none', 2000)
+  const m=document.getElementById('okMsg'); m.style.display='inline'; setTimeout(()=>m.style.display='none',2000)
 }
 
 function renderVtags(t) {
-  const el = document.getElementById('vtags'); if (!el) return
-  el.innerHTML = t.vars.map(v => `<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">×</span></span>`).join('')
+  const el=document.getElementById('vtags'); if(!el)return
+  el.innerHTML=t.vars.map(v=>`<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">×</span></span>`).join('')
 }
+function addV(){const inp=document.getElementById('vi'),v=inp.value.trim().replace(/[{}]/g,'');if(!v)return;const t=tpls.find(x=>x.id===sel);if(!t||t.vars.includes(v)){inp.value='';return}t.vars.push(v);inp.value='';renderVtags(t)}
+function rmV(v){const t=tpls.find(x=>x.id===sel);if(!t)return;t.vars=t.vars.filter(x=>x!==v);renderVtags(t)}
 
-function addV() {
-  const inp = document.getElementById('vi'), v = inp.value.trim().replace(/[{}]/g, ''); if (!v) return
-  const t = tpls.find(x => x.id === sel); if (!t || t.vars.includes(v)) { inp.value = ''; return }
-  t.vars.push(v); inp.value = ''; renderVtags(t)
+function setVal(k,v){vals[k]=v;const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function updatePreview(t){
+  let s=t.subject,b=t.body
+  t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)})
+  const ps=document.getElementById('pSubj'),pb=document.getElementById('pBody'),pf=document.getElementById('pFiles')
+  if(ps)ps.textContent=s
+  if(pb)pb.innerHTML=b.replace(/\{[^}]+\}/g,m=>`<span class="hi">${m}</span>`).replace(/\n/g,'<br>')
+  if(pf)pf.innerHTML=files.map(f=>`<span class="pfchip">${e(f.name)}</span>`).join('')
 }
-
-function rmV(v) {
-  const t = tpls.find(x => x.id === sel); if (!t) return
-  t.vars = t.vars.filter(x => x !== v); renderVtags(t)
-}
-
-// ── Use panel ────────────────────────────────────────────────────
-function setVal(k, v) { vals[k] = v; const t = tpls.find(x => x.id === sel); if (t) updatePreview(t) }
-
-function updatePreview(t) {
-  let s = t.subject, b = t.body
-  t.vars.forEach(v => {
-    const rx = new RegExp('\\{' + v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\}', 'g')
-    s = s.replace(rx, vals[v] || `{${v}}`); b = b.replace(rx, vals[v] || `{${v}}`)
-  })
-  const ps = document.getElementById('pSubj'), pb = document.getElementById('pBody'), pf = document.getElementById('pFiles')
-  if (ps) ps.textContent = s
-  if (pb) pb.innerHTML = b.replace(/\{[^}]+\}/g, m => `<span class="hi">${m}</span>`).replace(/\n/g, '<br>')
-  if (pf) pf.innerHTML = files.map(f => `<span class="pfchip">${e(f.name)}</span>`).join('')
-}
-
-function onFiles(inp) {
-  Array.from(inp.files).forEach(f => { if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f) })
-  inp.value = ''; renderFlist(); const t = tpls.find(x => x.id === sel); if (t) updatePreview(t)
-}
-
-function renderFlist() {
-  const el = document.getElementById('flist'); if (!el) return
-  el.innerHTML = files.map((f, i) => `
-    <div class="fchip">
-      <span class="fchip-name">${e(f.name)}</span>
-      <span class="fchip-size">${fmt(f.size)}</span>
-      <span class="fchip-x" onclick="rmFile(${i})">✕</span>
-    </div>`).join('')
-}
-
-function rmFile(i) { files.splice(i, 1); renderFlist(); const t = tpls.find(x => x.id === sel); if (t) updatePreview(t) }
-function fmt(b) { if (b < 1024) return b + 'B'; if (b < 1048576) return Math.round(b / 1024) + 'KB'; return (b / 1048576).toFixed(1) + 'MB' }
-
-function copyAll() {
-  const t = tpls.find(x => x.id === sel); if (!t) return
-  let s = t.subject, b = t.body
-  t.vars.forEach(v => { const rx = new RegExp('\\{' + v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\}', 'g'); s = s.replace(rx, vals[v] || `{${v}}`); b = b.replace(rx, vals[v] || `{${v}}`) })
-  if (files.length) b += '\n\n첨부파일: ' + files.map(f => f.name).join(', ')
-  navigator.clipboard.writeText(`제목: ${s}\n\n${b}`).then(() => {
-    const btn = document.getElementById('btnCopy')
-    btn.textContent = '복사 완료!'; btn.classList.add('done')
-    setTimeout(() => { btn.textContent = '복사하기'; btn.classList.remove('done') }, 2000)
+function onFiles(inp){Array.from(inp.files).forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size))files.push(f)});inp.value='';renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function renderFlist(){const el=document.getElementById('flist');if(!el)return;el.innerHTML=files.map((f,i)=>`<div class="fchip"><span class="fchip-name">${e(f.name)}</span><span class="fchip-size">${fmt(f.size)}</span><span class="fchip-x" onclick="rmFile(${i})">✕</span></div>`).join('')}
+function rmFile(i){files.splice(i,1);renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function fmt(b){if(b<1024)return b+'B';if(b<1048576)return Math.round(b/1024)+'KB';return(b/1048576).toFixed(1)+'MB'}
+function copyAll(){
+  const t=tpls.find(x=>x.id===sel);if(!t)return
+  let s=t.subject,b=t.body
+  t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)})
+  if(files.length)b+='\n\n첨부파일: '+files.map(f=>f.name).join(', ')
+  navigator.clipboard.writeText(`제목: ${s}\n\n${b}`).then(()=>{
+    const btn=document.getElementById('btnCopy');btn.textContent='복사 완료!';btn.style.color='var(--green)'
+    setTimeout(()=>{btn.textContent='복사하기';btn.style.color=''},2000)
   })
 }
 
-// ── New template modal ───────────────────────────────────────────
-function openNew() {
-  const s = document.getElementById('mCat')
-  s.innerHTML = '<option value="">카테고리 선택</option>' + Object.keys(cats()).map(c => `<option value="${c}">${c}</option>`).join('')
-  document.getElementById('mName').value = ''; document.getElementById('mCatNew').value = ''
-  document.getElementById('modal').classList.add('open')
+// ── NEW TEMPLATE ──────────────────────────────────────────────
+function openNewTpl() {
+  document.getElementById('nName').value = ''
+  const s = document.getElementById('nCat')
+  s.innerHTML = '<option value="">카테고리 없음</option>' + cats.map(c=>`<option value="${e(c)}">${e(c)}</option>`).join('')
+  openModal('modalNew')
 }
-function closeNew() { document.getElementById('modal').classList.remove('open') }
-
 async function confirmNew() {
-  const name = document.getElementById('mName').value.trim(); if (!name) { alert('이름을 입력하세요'); return }
-  const cat = document.getElementById('mCatNew').value.trim() || document.getElementById('mCat').value || '기타'
-  const newTpl = {
-    name, category: cat,
-    subject: `[${name}] {주제}`,
-    vars: ['수신자', '발신자', '주제'],
-    body: '안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',
-    sort_order: tpls.length
-  }
+  const name=document.getElementById('nName').value.trim(); if(!name){alert('이름을 입력하세요');return}
+  const cat=document.getElementById('nCat').value
   try {
-    const created = await dbCreate(newTpl)
-    tpls.push(created)
-    openCats[cat] = true; closeNew(); renderSb(); selT(created.id)
-  } catch (e) { alert('생성 실패: ' + e.message) }
+    const created=await dbCreate({name,category:cat,subject:`[${name}] {주제}`,vars:['수신자','발신자','주제'],body:'안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',sort_order:tpls.length})
+    tpls.push(created); closeModal('modalNew'); renderSb(); selT(created.id)
+  } catch(err){alert('생성 실패: '+err.message)}
 }
 
-async function delT(id) {
-  if (!confirm('이 템플릿을 삭제할까요?')) return
-  await dbDelete(id)
-  tpls = tpls.filter(t => t.id !== id)
-  if (sel === id) { sel = null; document.getElementById('modeBar').style.display = 'none'; document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>' }
-  renderSb()
+// ── SETTINGS ─────────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('emptyState').style.display = 'none'
+  document.getElementById('editArea').style.display = 'none'
+  document.getElementById('settingsPage').style.display = 'flex'
+  sel = null; renderSb()
+  renderCatTags()
+}
+function closeSettings() { showEmpty() }
+
+function renderCatTags() {
+  const el = document.getElementById('catTagList')
+  el.innerHTML = cats.length ? cats.map((c,i)=>`
+    <span class="cat-tag">
+      ${e(c)}
+      <span class="cx" onclick="removeCategory(${i})">×</span>
+    </span>`).join('') : '<span style="font-size:12px;color:var(--text3)">카테고리가 없어요. 추가해 보세요.</span>'
 }
 
-function e(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') }
+async function addCategory() {
+  const inp = document.getElementById('newCatInput')
+  const name = inp.value.trim()
+  if (!name || cats.includes(name)) { inp.value=''; return }
+  cats.push(name); inp.value=''
+  await saveCats(); renderCatTags()
+}
+
+async function removeCategory(i) {
+  if (!confirm(`'${cats[i]}' 카테고리를 삭제할까요?\n(템플릿은 삭제되지 않아요)`)) return
+  cats.splice(i,1)
+  await saveCats(); renderCatTags()
+}
+
+// ── MODAL HELPERS ─────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open') }
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+document.querySelectorAll('.mbg').forEach(m => m.addEventListener('click', ev => { if(ev.target===m) m.classList.remove('open') }))
+
+// ── UTIL ──────────────────────────────────────────────────────
+function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 </script>
 </body>
 </html>
