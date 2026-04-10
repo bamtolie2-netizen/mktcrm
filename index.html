@@ -1,609 +1,520 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>알림톡 변수 도구</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>메일 초안 CRM</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* ── reset ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f3;color:#1a1a18;min-height:100vh}
 
-    body {
-      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-      background: #f5f5f5;
-      color: #222;
-      padding: 32px 16px;
-    }
+/* ── tokens ── */
+:root{
+  --bg:#ffffff;--bg2:#f5f5f3;--bg3:#ebebea;
+  --text:#1a1a18;--text2:#6b6b67;--text3:#a0a09a;
+  --border:rgba(0,0,0,.1);--border2:rgba(0,0,0,.18);
+  --radius:8px;--radius-lg:12px;
+  --green:#1D9E75;--amber:#854F0B;--amber-bg:#FAEEDA;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#242422;--bg3:#2e2e2b;
+  --text:#e8e8e4;--text2:#9a9a94;--text3:#5a5a56;
+  --border:rgba(255,255,255,.1);--border2:rgba(255,255,255,.18);
+  --amber-bg:#3a2e10;--amber:#FAC775;
+}}
 
-    h1 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-align: center;
-    }
+/* ── auth ── */
+.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.auth-card{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:320px}
+.auth-logo{font-size:17px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.auth-sub{font-size:12px;color:var(--text2);margin-bottom:1.5rem}
+.fl{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.fl label{font-size:11px;color:var(--text2)}
+.fl input,.fl select,.fl textarea{font-size:13px;padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);font-family:inherit;width:100%;outline:none}
+.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--text3)}
+.fl textarea{resize:vertical;min-height:130px;line-height:1.75}
+.btn-primary{width:100%;font-size:13px;padding:10px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer;font-weight:500}
+.btn-primary:hover{opacity:.85}
+.auth-hint{font-size:11px;color:var(--text3);margin-top:10px;text-align:center}
+.err{font-size:12px;color:#d04040;min-height:16px;margin-bottom:6px}
 
-    .subtitle {
-      text-align: center;
-      color: #888;
-      font-size: 13px;
-      margin-bottom: 28px;
-    }
+/* ── layout ── */
+.app{display:none;height:100vh;overflow:hidden}
+.layout{display:grid;grid-template-columns:240px 1fr;height:100%}
 
-    /* 탭 */
-    .tabs {
-      display: flex;
-      max-width: 900px;
-      margin: 0 auto 20px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      padding: 4px;
-      gap: 4px;
-    }
+/* ── sidebar ── */
+.sidebar{background:var(--bg2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-top{padding:10px 12px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.av{width:30px;height:30px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.urole{font-size:10px;color:var(--text3)}
+.lout{font-size:11px;color:var(--text3);cursor:pointer;padding:2px 6px;border-radius:4px;flex-shrink:0}
+.lout:hover{background:var(--bg3);color:var(--text2)}
+.sb-act{padding:10px 12px;border-bottom:0.5px solid var(--border);flex-shrink:0}
+.btn-new{width:100%;font-size:12px;padding:7px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);cursor:pointer}
+.btn-new:hover{background:var(--bg3)}
+.sb-scroll{flex:1;overflow-y:auto;padding:8px}
+.cat-head{display:flex;align-items:center;gap:5px;padding:4px 6px;cursor:pointer;border-radius:6px;margin-top:4px;user-select:none}
+.cat-head:hover{background:var(--bg3)}
+.cat-arr{font-size:9px;color:var(--text3);transition:transform .15s}
+.cat-arr.o{transform:rotate(90deg)}
+.cat-lbl{font-size:11px;font-weight:500;color:var(--text2);flex:1}
+.cat-n{font-size:10px;color:var(--text3)}
+.tpl-item{display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:6px;cursor:pointer;border:0.5px solid transparent;margin-bottom:1px;user-select:none}
+.tpl-item:hover{background:var(--bg3)}
+.tpl-item.sel{background:var(--bg);border-color:var(--border)}
+.tpl-item.dragging{opacity:.35}
+.tpl-item.drag-over{border-color:var(--text3)}
+.dh{color:var(--text3);font-size:10px;cursor:grab;opacity:.4;flex-shrink:0}
+.tn{font-size:13px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx{font-size:12px;color:var(--text3);opacity:0;cursor:pointer;padding:0 2px;flex-shrink:0}
+.tpl-item:hover .tx{opacity:1}
+.loading-row{font-size:12px;color:var(--text3);padding:8px 10px}
 
-    .tab-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      background: transparent;
-      color: #888;
-      transition: all 0.2s;
-    }
+/* ── content ── */
+.content{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.mode-bar{display:flex;border-bottom:0.5px solid var(--border);padding:0 16px;flex-shrink:0}
+.mtab{font-size:13px;padding:11px 14px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.mtab.on{color:var(--text);border-bottom-color:var(--text)}
+.mtab:hover:not(.on){color:var(--text)}
+.panel{flex:1;padding:16px;display:flex;flex-direction:column;gap:11px;overflow-y:auto}
+.empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vtags{display:flex;flex-wrap:wrap;gap:5px}
+.vtag{display:inline-flex;align-items:center;gap:3px;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
+.vtag .vx{cursor:pointer;color:var(--text3);font-size:12px;line-height:1}
+.vadd{display:flex;gap:6px;margin-top:4px}
+.vadd input{flex:1;font-size:12px;padding:5px 8px}
+.vadd button{font-size:12px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer}
+.vadd button:hover{background:var(--bg2)}
+.hint{font-size:11px;color:var(--text3)}
+.btn-save{font-size:13px;padding:8px 20px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer}
+.btn-save:hover{opacity:.85}
+.ok{font-size:12px;color:var(--green)}
+.file-zone{border:0.5px dashed var(--border2);border-radius:var(--radius);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.file-zone:hover{border-color:var(--text3)}
+.fz-text{font-size:12px;color:var(--text2)}
+.fz-hint{font-size:11px;color:var(--text3)}
+.flist{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.fchip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 10px}
+.fchip-name{font-size:12px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fchip-size{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
+.fchip-x{font-size:12px;color:var(--text3);cursor:pointer;flex-shrink:0}
+.fchip-x:hover{color:var(--text)}
+.psubj{font-size:12px;color:var(--text2);padding-bottom:10px;border-bottom:0.5px solid var(--border)}
+.psubj b{font-weight:500;color:var(--text)}
+.pbody{font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;min-height:120px}
+.hi{background:var(--amber-bg);color:var(--amber);border-radius:3px;padding:0 2px}
+.pfiles{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.pfchip{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text2)}
+.btn-copy{font-size:13px;padding:8px 20px;border-radius:var(--radius);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;align-self:flex-start}
+.btn-copy:hover{background:var(--bg2)}
+.btn-copy.done{border-color:var(--green);color:var(--green)}
 
-    .tab-btn.active {
-      background: #fff;
-      color: #222;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
+/* ── modal ── */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center}
+.mbg.open{display:flex}
+.modal{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:1.25rem;width:90%;max-width:340px}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:12px;color:var(--text)}
+.modal input,.modal select{width:100%;font-size:13px;padding:7px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);margin-bottom:8px;outline:none;font-family:inherit}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.mok{font-size:13px;padding:8px 18px;border-radius:var(--radius);border:none;background:var(--text);color:var(--bg);cursor:pointer}
+.mno{font-size:13px;padding:8px 14px;border-radius:var(--radius);border:0.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer}
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+/* ── spinner ── */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-    /* 공통 카드 */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 640px) {
-      .container { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .card h2 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #555;
-    }
-
-    .card .desc {
-      font-size: 12px;
-      color: #aaa;
-      margin-bottom: 10px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 180px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 14px;
-      line-height: 1.7;
-      resize: vertical;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    textarea:focus { border-color: #FEE500; }
-
-    /* 변수 입력 */
-    .variables-section { margin-top: 20px; }
-
-    .var-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .var-label {
-      flex: 0 0 120px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #3A8AFF;
-      background: #EEF4FF;
-      padding: 6px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .var-input {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .var-input:focus { border-color: #FEE500; }
-
-    .empty-msg {
-      font-size: 13px;
-      color: #aaa;
-      text-align: center;
-      padding: 20px 0;
-    }
-
-    /* 카카오 말풍선 */
-    .preview-wrap {
-      background: #B2C7D9;
-      border-radius: 8px;
-      padding: 20px 16px;
-      min-height: 180px;
-    }
-
-    .kakao-bubble {
-      background: #fff;
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 14px;
-      line-height: 1.8;
-      white-space: pre-wrap;
-      word-break: break-all;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-    }
-
-    .kakao-bubble .highlight { color: #3A8AFF; font-weight: 600; }
-
-    .no-preview {
-      font-size: 13px;
-      color: #789;
-      text-align: center;
-      padding: 40px 0;
-    }
-
-    /* 버튼 */
-    .yellow-btn {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #FEE500;
-      color: #3C1E1E;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 12px;
-    }
-
-    .yellow-btn:hover { background: #f0d800; }
-    .yellow-btn.copied { background: #4CAF50; color: #fff; }
-
-    /* ── 탭2: 템플릿 만들기 ── */
-    .make-wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .token-area {
-      font-size: 15px;
-      line-height: 2.2;
-      word-break: break-all;
-      min-height: 60px;
-    }
-
-    .token {
-      display: inline;
-      cursor: pointer;
-      border-radius: 4px;
-      padding: 2px 0;
-      transition: background 0.15s;
-    }
-
-    .token:hover { background: #FFF9C4; }
-
-    .token.var-chip {
-      background: #EEF4FF;
-      color: #3A8AFF;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 6px;
-      cursor: pointer;
-      border: 1px dashed #3A8AFF;
-    }
-
-    .token.var-chip:hover { background: #dce9ff; }
-
-    .result-box {
-      background: #f9f9f9;
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 16px;
-      font-size: 14px;
-      line-height: 1.8;
-      white-space: pre-wrap;
-      word-break: break-all;
-      min-height: 60px;
-      color: #333;
-    }
-
-    .result-box .var-chip {
-      color: #3A8AFF;
-      font-weight: 700;
-    }
-
-    /* 팝업 */
-    .popup-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup-overlay.show { display: flex; }
-
-    .popup {
-      background: #fff;
-      border-radius: 14px;
-      padding: 28px 24px;
-      width: 300px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    }
-
-    .popup h3 { font-size: 16px; margin-bottom: 8px; }
-    .popup p { font-size: 13px; color: #888; margin-bottom: 16px; }
-
-    .popup input {
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      margin-bottom: 16px;
-    }
-
-    .popup input:focus { border-color: #3A8AFF; }
-
-    .popup-btns { display: flex; gap: 8px; }
-
-    .popup-btns button {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .popup-btns .confirm { background: #FEE500; color: #3C1E1E; }
-    .popup-btns .cancel { background: #f0f0f0; color: #888; }
-  </style>
+@media(max-width:600px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+</style>
 </head>
 <body>
 
-<h1>📢 알림톡 변수 도구</h1>
-<p class="subtitle">변수 미리보기 · 템플릿 만들기</p>
-
-<!-- 탭 -->
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('preview', this)">✅ 변수 미리보기</button>
-  <button class="tab-btn" onclick="switchTab('make', this)">✏️ 템플릿 만들기</button>
+<!-- ── AUTH ── -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">메일 초안 CRM</div>
+    <div class="auth-sub">이름을 입력하고 바로 시작하세요</div>
+    <div class="err" id="authErr"></div>
+    <div class="fl">
+      <label>이름</label>
+      <input id="nameInput" placeholder="예) 홍길동" autocomplete="off"
+             onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn-primary" onclick="doLogin()">
+      <span id="loginSpinner" style="display:none" class="spin"></span>시작하기
+    </button>
+    <div class="auth-hint">별도 회원가입 없이 이름만으로 입장합니다</div>
+  </div>
 </div>
 
-<!-- ══════════════ 탭1: 변수 미리보기 ══════════════ -->
-<div id="tab-preview" class="tab-content active">
-  <div class="container">
-    <div>
-      <div class="card">
-        <h2>템플릿 입력</h2>
-        <p class="desc">#{변수명} 형식으로 변수를 입력하세요.</p>
-        <textarea id="template" placeholder="예시)&#10;#{이름}님, 안녕하세요!&#10;#{주문번호} 주문이 #{상태} 처리되었습니다.&#10;배송 예정일: #{배송일}"></textarea>
-      </div>
-
-      <div class="card variables-section">
-        <h2>변수 값 입력</h2>
-        <div id="var-list">
-          <p class="empty-msg">위에 템플릿을 입력하면<br>변수가 자동으로 나타납니다.</p>
+<!-- ── APP ── -->
+<div class="app" id="appScreen">
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-top">
+        <div class="av" id="userAv">?</div>
+        <div class="uinfo">
+          <div class="uname" id="userName">-</div>
+          <div class="urole">접속 중</div>
         </div>
+        <div class="lout" onclick="doLogout()">나가기</div>
+      </div>
+      <div class="sb-act">
+        <button class="btn-new" onclick="openNew()">+ 새 템플릿</button>
+      </div>
+      <div class="sb-scroll" id="sbScroll">
+        <div class="loading-row"><span class="spin"></span>불러오는 중…</div>
       </div>
     </div>
 
-    <div>
-      <div class="card">
-        <h2>미리보기</h2>
-        <div class="preview-wrap">
-          <div id="preview" class="no-preview">템플릿을 입력해 주세요.</div>
-        </div>
-        <button class="yellow-btn" id="copy-btn" onclick="copyPreview()">복사하기</button>
+    <div class="content">
+      <div class="mode-bar" id="modeBar" style="display:none">
+        <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
+        <div class="mtab" id="tabUse"  onclick="switchMode('use')">작성 · 미리보기</div>
+      </div>
+      <div class="panel" id="panel">
+        <div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ 탭2: 템플릿 만들기 ══════════════ -->
-<div id="tab-make" class="tab-content">
-  <div class="make-wrap">
-    <div class="card">
-      <h2>① 실제 메시지 붙여넣기</h2>
-      <p class="desc">실제 발송된 메시지를 아래에 붙여넣으세요.</p>
-      <textarea id="raw-message" placeholder="예시)&#10;홍길동님, 안녕하세요!&#10;ORD-12345 주문이 배송중 처리되었습니다." oninput="renderTokens()"></textarea>
-    </div>
-
-    <div class="card" id="token-card" style="display:none">
-      <h2>② 변수로 바꿀 단어 클릭</h2>
-      <p class="desc">단어를 클릭하면 변수로 변환됩니다. 변수 칩을 다시 클릭하면 원래 텍스트로 돌아갑니다.</p>
-      <div id="token-area" class="token-area"></div>
-    </div>
-
-    <div class="card" id="result-card" style="display:none">
-      <h2>③ 생성된 템플릿</h2>
-      <div id="result-box" class="result-box"></div>
-      <button class="yellow-btn" id="copy-template-btn" onclick="copyTemplate()">템플릿 복사하기</button>
+<!-- ── MODAL ── -->
+<div class="mbg" id="modal">
+  <div class="modal">
+    <h3>새 템플릿</h3>
+    <input id="mName" placeholder="템플릿 이름"/>
+    <select id="mCat"><option value="">카테고리 선택</option></select>
+    <input id="mCatNew" placeholder="새 카테고리 직접 입력 (선택 사항)"/>
+    <div class="mbtns">
+      <button class="mno" onclick="closeNew()">취소</button>
+      <button class="mok" onclick="confirmNew()">만들기</button>
     </div>
   </div>
 </div>
 
-<!-- 팝업: 변수명 입력 -->
-<div class="popup-overlay" id="popup">
-  <div class="popup">
-    <h3>변수명 입력</h3>
-    <p id="popup-desc">선택한 텍스트를 어떤 변수명으로 바꿀까요?</p>
-    <input type="text" id="popup-input" placeholder="예: 이름, 주문번호" />
-    <div class="popup-btns">
-      <button class="cancel" onclick="closePopup()">취소</button>
-      <button class="confirm" onclick="confirmVar()">확인</button>
-    </div>
-  </div>
-</div>
+<input type="file" id="fileInput" multiple style="display:none" onchange="onFiles(this)"/>
 
 <script>
-  // ── 탭 전환 ──
-  function switchTab(name, btn) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    btn.classList.add('active');
-  }
+// ──────────────────────────────────────────
+// ★ 여기만 본인 Supabase 값으로 교체하세요 ★
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'
+const SUPABASE_KEY = 'YOUR_ANON_KEY'
+// ──────────────────────────────────────────
 
-  // ════════ 탭1: 변수 미리보기 ════════
-  const templateEl = document.getElementById('template');
-  const varListEl = document.getElementById('var-list');
-  const previewEl = document.getElementById('preview');
-  let varValues = {};
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-  templateEl.addEventListener('input', parseTemplate);
+let currentUser = null
+let tpls = []
+let sel = null, mode = 'edit', openCats = {}, dragSrc = null, vals = {}, files = []
+let nid = Date.now()
 
-  function parseTemplate() {
-    const text = templateEl.value;
-    const matches = [...new Set(text.match(/#\{[^}]+\}/g) || [])];
-    const prevValues = { ...varValues };
-    varValues = {};
-
-    if (matches.length === 0) {
-      varListEl.innerHTML = '<p class="empty-msg">변수가 없습니다.<br>#{변수명} 형식으로 입력해 주세요.</p>';
-      updatePreview();
-      return;
+// ── Auth ────────────────────────────────────────────────────────
+async function doLogin() {
+  const name = document.getElementById('nameInput').value.trim()
+  if (!name) return
+  setLoading(true)
+  try {
+    // 이름으로 기존 유저 조회
+    let { data: user } = await sb.from('users').select('id,name').eq('name', name).maybeSingle()
+    if (!user) {
+      // 없으면 생성
+      const { data, error } = await sb.from('users').insert({ name }).select().single()
+      if (error) throw error
+      user = data
     }
-
-    varListEl.innerHTML = '';
-    matches.forEach(match => {
-      varValues[match] = prevValues[match] || '';
-      const row = document.createElement('div');
-      row.className = 'var-row';
-      row.innerHTML = `
-        <span class="var-label">${match}</span>
-        <input class="var-input" type="text" placeholder="값 입력" value="${escapeHtml(varValues[match])}">
-      `;
-      row.querySelector('input').addEventListener('input', e => {
-        varValues[match] = e.target.value;
-        updatePreview();
-      });
-      varListEl.appendChild(row);
-    });
-    updatePreview();
+    currentUser = user
+    document.getElementById('authScreen').style.display = 'none'
+    document.getElementById('appScreen').style.display = 'block'
+    document.getElementById('userAv').textContent = name.slice(0, 2)
+    document.getElementById('userName').textContent = name + '님'
+    await loadTemplates()
+  } catch (e) {
+    document.getElementById('authErr').textContent = '오류가 발생했어요: ' + e.message
+  } finally {
+    setLoading(false)
   }
+}
 
-  function updatePreview() {
-    const text = templateEl.value;
-    if (!text.trim()) {
-      previewEl.className = 'no-preview';
-      previewEl.textContent = '템플릿을 입력해 주세요.';
-      return;
+function setLoading(on) {
+  document.getElementById('loginSpinner').style.display = on ? 'inline-block' : 'none'
+}
+
+function doLogout() {
+  currentUser = null; tpls = []; sel = null; vals = {}; files = []; mode = 'edit'
+  document.getElementById('appScreen').style.display = 'none'
+  document.getElementById('authScreen').style.display = 'flex'
+  document.getElementById('nameInput').value = ''
+  document.getElementById('authErr').textContent = ''
+  document.getElementById('modeBar').style.display = 'none'
+  document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>'
+}
+
+// ── DB ──────────────────────────────────────────────────────────
+async function loadTemplates() {
+  document.getElementById('sbScroll').innerHTML = '<div class="loading-row"><span class="spin"></span>불러오는 중…</div>'
+  const { data, error } = await sb.from('templates')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('sort_order', { ascending: true })
+  if (error) { console.error(error); return }
+  tpls = (data || []).map(t => ({ ...t, vars: Array.isArray(t.vars) ? t.vars : JSON.parse(t.vars || '[]') }))
+  renderSb()
+}
+
+async function dbCreate(tpl) {
+  const { data, error } = await sb.from('templates')
+    .insert({ ...tpl, user_id: currentUser.id, vars: tpl.vars })
+    .select().single()
+  if (error) throw error
+  return { ...data, vars: Array.isArray(data.vars) ? data.vars : JSON.parse(data.vars || '[]') }
+}
+
+async function dbUpdate(id, changes) {
+  const { error } = await sb.from('templates').update(changes).eq('id', id)
+  if (error) throw error
+}
+
+async function dbDelete(id) {
+  const { error } = await sb.from('templates').delete().eq('id', id)
+  if (error) throw error
+}
+
+async function dbSaveOrder(ids) {
+  await Promise.all(ids.map((id, i) => sb.from('templates').update({ sort_order: i }).eq('id', id)))
+}
+
+// ── Sidebar ─────────────────────────────────────────────────────
+function cats() {
+  const m = {}
+  tpls.forEach(t => { if (!m[t.category]) m[t.category] = []; m[t.category].push(t) })
+  return m
+}
+
+function renderSb() {
+  const c = cats(), el = document.getElementById('sbScroll')
+  el.innerHTML = ''
+  if (!tpls.length) {
+    el.innerHTML = '<div class="loading-row" style="color:var(--text3)">템플릿이 없어요</div>'
+    return
+  }
+  Object.entries(c).forEach(([cat, items]) => {
+    if (openCats[cat] === undefined) openCats[cat] = true
+    const open = openCats[cat]
+    const ch = document.createElement('div'); ch.className = 'cat-head'
+    ch.innerHTML = `<span class="cat-arr ${open ? 'o' : ''}">&#9658;</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
+    ch.onclick = () => { openCats[cat] = !openCats[cat]; renderSb() }
+    el.appendChild(ch)
+    if (open) {
+      const ci = document.createElement('div')
+      items.forEach(t => {
+        const row = document.createElement('div')
+        row.className = 'tpl-item' + (sel === t.id ? ' sel' : '')
+        row.draggable = true
+        row.innerHTML = `<span class="dh">&#10271;</span><span class="tn">${e(t.name)}</span><span class="tx" data-id="${t.id}">✕</span>`
+        row.querySelector('.tx').onclick = ev => { ev.stopPropagation(); delT(t.id) }
+        row.onclick = () => selT(t.id)
+        row.ondragstart = () => { dragSrc = t.id; row.classList.add('dragging') }
+        row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.tpl-item').forEach(r => r.classList.remove('drag-over')) }
+        row.ondragover = ev => { ev.preventDefault(); row.classList.add('drag-over') }
+        row.ondragleave = () => row.classList.remove('drag-over')
+        row.ondrop = async ev => {
+          ev.preventDefault(); row.classList.remove('drag-over')
+          if (dragSrc && dragSrc !== t.id) {
+            const fi = tpls.findIndex(x => x.id === dragSrc), ti = tpls.findIndex(x => x.id === t.id)
+            if (fi >= 0 && ti >= 0) {
+              const [item] = tpls.splice(fi, 1); tpls.splice(ti, 0, item)
+              renderSb()
+              await dbSaveOrder(tpls.map(x => x.id))
+            }
+          }
+        }
+        ci.appendChild(row)
+      })
+      el.appendChild(ci)
     }
-    previewEl.className = 'kakao-bubble';
-    let result = text;
-    for (const [key, val] of Object.entries(varValues)) {
-      const display = val
-        ? `<span class="highlight">${escapeHtml(val)}</span>`
-        : `<span style="color:#f00;font-weight:600">${escapeHtml(key)}</span>`;
-      result = result.split(key).join(display);
-    }
-    previewEl.innerHTML = result;
+  })
+}
+
+// ── Select & Mode ────────────────────────────────────────────────
+function selT(id) { sel = id; vals = {}; files = []; mode = 'edit'; renderSb(); renderContent() }
+
+function switchMode(m) {
+  mode = m
+  document.getElementById('tabEdit').className = 'mtab' + (m === 'edit' ? ' on' : '')
+  document.getElementById('tabUse').className  = 'mtab' + (m === 'use'  ? ' on' : '')
+  renderPanel()
+}
+
+function renderContent() {
+  const mb = document.getElementById('modeBar')
+  if (!sel) { mb.style.display = 'none'; document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>'; return }
+  mb.style.display = 'flex'; renderPanel()
+}
+
+// ── Edit panel ───────────────────────────────────────────────────
+function renderPanel() {
+  if (!sel) return
+  const t = tpls.find(x => x.id === sel); if (!t) return
+  const p = document.getElementById('panel')
+  if (mode === 'edit') {
+    p.innerHTML = `
+      <div class="r2">
+        <div class="fl"><label>템플릿 이름</label><input id="fN" value="${e(t.name)}" oninput="patchLocal('name',this.value)"/></div>
+        <div class="fl"><label>카테고리</label><input id="fC" value="${e(t.category)}" oninput="patchLocal('category',this.value)"/></div>
+      </div>
+      <div class="fl"><label>제목 (변수는 {중괄호} 형식)</label><input id="fS" value="${e(t.subject)}" oninput="patchLocal('subject',this.value)"/></div>
+      <div class="fl">
+        <label>변수 목록</label>
+        <div class="vtags" id="vtags"></div>
+        <div class="vadd"><input id="vi" placeholder="변수명 입력 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button onclick="addV()">+ 추가</button></div>
+        <span class="hint">본문에서 {변수명} 형태로 사용하세요</span>
+      </div>
+      <div class="fl"><label>본문 템플릿</label><textarea id="fB" oninput="patchLocal('body',this.value)">${e(t.body)}</textarea></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="btn-save" onclick="saveT()">저장</button>
+        <span class="ok" id="okMsg" style="display:none">저장됐어요</span>
+      </div>`
+    renderVtags(t)
+  } else {
+    p.innerHTML = `
+      <div class="r2">${t.vars.map(v => `<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v] || '')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
+      <div class="fl">
+        <label>파일 첨부</label>
+        <div class="file-zone" onclick="document.getElementById('fileInput').click()">
+          <div><div class="fz-text">클릭하여 파일 선택</div><div class="fz-hint">여러 파일 동시 선택 가능</div></div>
+        </div>
+        <div class="flist" id="flist"></div>
+      </div>
+      <div class="psubj">제목: <b id="pSubj"></b></div>
+      <div class="pbody" id="pBody"></div>
+      <div class="pfiles" id="pFiles"></div>
+      <button class="btn-copy" id="btnCopy" onclick="copyAll()">복사하기</button>`
+    renderFlist(); updatePreview(t)
   }
+}
 
-  function copyPreview() {
-    const text = templateEl.value;
-    if (!text.trim()) return;
-    let result = text;
-    for (const [key, val] of Object.entries(varValues)) {
-      result = result.split(key).join(val || key);
-    }
-    navigator.clipboard.writeText(result).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = '복사 완료!';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = '복사하기'; btn.classList.remove('copied'); }, 2000);
-    });
+function patchLocal(k, v) {
+  const t = tpls.find(x => x.id === sel); if (!t) return
+  t[k] = v
+  if (k === 'name' || k === 'category') renderSb()
+}
+
+async function saveT() {
+  const t = tpls.find(x => x.id === sel); if (!t) return
+  t.name     = document.getElementById('fN').value
+  t.category = document.getElementById('fC').value
+  t.subject  = document.getElementById('fS').value
+  t.body     = document.getElementById('fB').value
+  await dbUpdate(t.id, { name: t.name, category: t.category, subject: t.subject, body: t.body, vars: t.vars })
+  renderSb()
+  const m = document.getElementById('okMsg'); m.style.display = 'inline'
+  setTimeout(() => m.style.display = 'none', 2000)
+}
+
+function renderVtags(t) {
+  const el = document.getElementById('vtags'); if (!el) return
+  el.innerHTML = t.vars.map(v => `<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">×</span></span>`).join('')
+}
+
+function addV() {
+  const inp = document.getElementById('vi'), v = inp.value.trim().replace(/[{}]/g, ''); if (!v) return
+  const t = tpls.find(x => x.id === sel); if (!t || t.vars.includes(v)) { inp.value = ''; return }
+  t.vars.push(v); inp.value = ''; renderVtags(t)
+}
+
+function rmV(v) {
+  const t = tpls.find(x => x.id === sel); if (!t) return
+  t.vars = t.vars.filter(x => x !== v); renderVtags(t)
+}
+
+// ── Use panel ────────────────────────────────────────────────────
+function setVal(k, v) { vals[k] = v; const t = tpls.find(x => x.id === sel); if (t) updatePreview(t) }
+
+function updatePreview(t) {
+  let s = t.subject, b = t.body
+  t.vars.forEach(v => {
+    const rx = new RegExp('\\{' + v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\}', 'g')
+    s = s.replace(rx, vals[v] || `{${v}}`); b = b.replace(rx, vals[v] || `{${v}}`)
+  })
+  const ps = document.getElementById('pSubj'), pb = document.getElementById('pBody'), pf = document.getElementById('pFiles')
+  if (ps) ps.textContent = s
+  if (pb) pb.innerHTML = b.replace(/\{[^}]+\}/g, m => `<span class="hi">${m}</span>`).replace(/\n/g, '<br>')
+  if (pf) pf.innerHTML = files.map(f => `<span class="pfchip">${e(f.name)}</span>`).join('')
+}
+
+function onFiles(inp) {
+  Array.from(inp.files).forEach(f => { if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f) })
+  inp.value = ''; renderFlist(); const t = tpls.find(x => x.id === sel); if (t) updatePreview(t)
+}
+
+function renderFlist() {
+  const el = document.getElementById('flist'); if (!el) return
+  el.innerHTML = files.map((f, i) => `
+    <div class="fchip">
+      <span class="fchip-name">${e(f.name)}</span>
+      <span class="fchip-size">${fmt(f.size)}</span>
+      <span class="fchip-x" onclick="rmFile(${i})">✕</span>
+    </div>`).join('')
+}
+
+function rmFile(i) { files.splice(i, 1); renderFlist(); const t = tpls.find(x => x.id === sel); if (t) updatePreview(t) }
+function fmt(b) { if (b < 1024) return b + 'B'; if (b < 1048576) return Math.round(b / 1024) + 'KB'; return (b / 1048576).toFixed(1) + 'MB' }
+
+function copyAll() {
+  const t = tpls.find(x => x.id === sel); if (!t) return
+  let s = t.subject, b = t.body
+  t.vars.forEach(v => { const rx = new RegExp('\\{' + v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\}', 'g'); s = s.replace(rx, vals[v] || `{${v}}`); b = b.replace(rx, vals[v] || `{${v}}`) })
+  if (files.length) b += '\n\n첨부파일: ' + files.map(f => f.name).join(', ')
+  navigator.clipboard.writeText(`제목: ${s}\n\n${b}`).then(() => {
+    const btn = document.getElementById('btnCopy')
+    btn.textContent = '복사 완료!'; btn.classList.add('done')
+    setTimeout(() => { btn.textContent = '복사하기'; btn.classList.remove('done') }, 2000)
+  })
+}
+
+// ── New template modal ───────────────────────────────────────────
+function openNew() {
+  const s = document.getElementById('mCat')
+  s.innerHTML = '<option value="">카테고리 선택</option>' + Object.keys(cats()).map(c => `<option value="${c}">${c}</option>`).join('')
+  document.getElementById('mName').value = ''; document.getElementById('mCatNew').value = ''
+  document.getElementById('modal').classList.add('open')
+}
+function closeNew() { document.getElementById('modal').classList.remove('open') }
+
+async function confirmNew() {
+  const name = document.getElementById('mName').value.trim(); if (!name) { alert('이름을 입력하세요'); return }
+  const cat = document.getElementById('mCatNew').value.trim() || document.getElementById('mCat').value || '기타'
+  const newTpl = {
+    name, category: cat,
+    subject: `[${name}] {주제}`,
+    vars: ['수신자', '발신자', '주제'],
+    body: '안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',
+    sort_order: tpls.length
   }
+  try {
+    const created = await dbCreate(newTpl)
+    tpls.push(created)
+    openCats[cat] = true; closeNew(); renderSb(); selT(created.id)
+  } catch (e) { alert('생성 실패: ' + e.message) }
+}
 
-  // ════════ 탭2: 템플릿 만들기 ════════
-  // tokens: [{type:'text'|'var', value:'원문', varName:'변수명'(var일때)}]
-  let tokens = [];
-  let clickedTokenIdx = null;
+async function delT(id) {
+  if (!confirm('이 템플릿을 삭제할까요?')) return
+  await dbDelete(id)
+  tpls = tpls.filter(t => t.id !== id)
+  if (sel === id) { sel = null; document.getElementById('modeBar').style.display = 'none'; document.getElementById('panel').innerHTML = '<div class="empty">← 템플릿을 선택하거나 새로 만들어 보세요</div>' }
+  renderSb()
+}
 
-  function renderTokens() {
-    const raw = document.getElementById('raw-message').value;
-    const tokenCard = document.getElementById('token-card');
-    const resultCard = document.getElementById('result-card');
-
-    if (!raw.trim()) {
-      tokenCard.style.display = 'none';
-      resultCard.style.display = 'none';
-      tokens = [];
-      return;
-    }
-
-    // 기존 토큰이 없으면 새로 파싱 (이미 있으면 유지)
-    if (tokens.length === 0) {
-      // 공백/줄바꿈을 구분자로 분리하되 구분자도 토큰으로 유지
-      const parts = raw.split(/(\s+)/);
-      tokens = parts.map(p => ({ type: 'text', value: p, varName: '' }));
-    }
-
-    tokenCard.style.display = 'block';
-    resultCard.style.display = 'block';
-    drawTokens();
-  }
-
-  function drawTokens() {
-    const area = document.getElementById('token-area');
-    area.innerHTML = '';
-
-    tokens.forEach((tok, idx) => {
-      const span = document.createElement('span');
-
-      if (/^\s+$/.test(tok.value)) {
-        // 공백/줄바꿈은 그대로
-        span.style.whiteSpace = 'pre';
-        span.textContent = tok.value;
-      } else if (tok.type === 'var') {
-        span.className = 'token var-chip';
-        span.textContent = `#{${tok.varName}}`;
-        span.title = `클릭하면 "${tok.value}"로 되돌립니다`;
-        span.onclick = () => revertToken(idx);
-      } else {
-        span.className = 'token';
-        span.textContent = tok.value;
-        span.title = '클릭하면 변수로 변환';
-        span.onclick = () => clickToken(idx);
-      }
-
-      area.appendChild(span);
-    });
-
-    syncResult();
-  }
-
-  function clickToken(idx) {
-    clickedTokenIdx = idx;
-    const input = document.getElementById('popup-input');
-    input.value = '';
-    document.getElementById('popup-desc').textContent =
-      `"${tokens[idx].value}"를 어떤 변수명으로 바꿀까요?`;
-    document.getElementById('popup').classList.add('show');
-    setTimeout(() => input.focus(), 100);
-    input.onkeydown = e => {
-      if (e.key === 'Enter') confirmVar();
-      if (e.key === 'Escape') closePopup();
-    };
-  }
-
-  function revertToken(idx) {
-    tokens[idx].type = 'text';
-    tokens[idx].varName = '';
-    drawTokens();
-  }
-
-  function openPopup() {}  // 탭1용 (미사용)
-
-  function closePopup() {
-    document.getElementById('popup').classList.remove('show');
-    clickedTokenIdx = null;
-  }
-
-  function confirmVar() {
-    const name = document.getElementById('popup-input').value.trim();
-    if (!name) { closePopup(); return; }
-
-    if (clickedTokenIdx !== null) {
-      tokens[clickedTokenIdx].type = 'var';
-      tokens[clickedTokenIdx].varName = name;
-      closePopup();
-      drawTokens();
-    }
-  }
-
-  function syncResult() {
-    const resultBox = document.getElementById('result-box');
-    let html = '';
-    let plain = '';
-
-    tokens.forEach(tok => {
-      if (/^\s+$/.test(tok.value)) {
-        html += escapeHtml(tok.value).replace(/\n/g, '<br>');
-        plain += tok.value;
-      } else if (tok.type === 'var') {
-        const v = `#{${tok.varName}}`;
-        html += `<span class="var-chip">${escapeHtml(v)}</span>`;
-        plain += v;
-      } else {
-        html += escapeHtml(tok.value);
-        plain += tok.value;
-      }
-    });
-
-    resultBox.innerHTML = html || '';
-    resultBox.dataset.plain = plain;
-  }
-
-  function copyTemplate() {
-    const text = document.getElementById('result-box').dataset.plain || '';
-    if (!text.trim()) return;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById('copy-template-btn');
-      btn.textContent = '복사 완료!';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = '템플릿 복사하기'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+function e(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') }
 </script>
-
 </body>
 </html>
