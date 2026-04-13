@@ -314,7 +314,7 @@ tr:hover .td-act{opacity:1}
   <div class="page" id="page-msg">
     <div class="inner-tabs">
       <div class="inner-tab on" id="msgtab-input"   onclick="showMsgTab('input')">일별 입력</div>
-      <div class="inner-tab"   id="msgtab-history"  onclick="showMsgTab('history')">전체 내역</div>
+      <div class="inner-tab"   id="msgtab-history" onclick="showMsgTab('history')">전체 내역</div>
     </div>
     <div id="msgview-input" class="pscroll">
       <div class="card">
@@ -346,13 +346,12 @@ tr:hover .td-act{opacity:1}
       <div class="card">
         <div class="sec-hd"><span class="sec-title">발송 내역</span>
           <div style="display:flex;gap:7px;align-items:center">
-            <select id="historyUser" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgHistory()"><option value="">전체 팀원</option></select>
             <input type="month" id="historyMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgHistory()"/>
           </div>
         </div>
         <div class="tbl-wrap">
           <table class="htbl">
-            <thead><tr><th style="text-align:left">날짜</th><th style="text-align:left">팀원</th><th>SMS</th><th>LMS</th><th>MMS</th><th>알림톡</th><th>브랜드</th><th>RCS</th><th>합계</th><th></th></tr></thead>
+            <thead><tr><th style="text-align:left">날짜</th><th>SMS</th><th>LMS</th><th>MMS</th><th>알림톡</th><th>브랜드</th><th>RCS</th><th>합계</th><th></th></tr></thead>
             <tbody id="historyBody"></tbody>
             <tfoot id="historyFoot"></tfoot>
           </table>
@@ -673,7 +672,8 @@ tr:hover .td-act{opacity:1}
 
 <script>
 const SUPABASE_URL = 'https://mathhyygiyvczzcemepm.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hdGhoeXlnaXl2Y3p6Y2VtZXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTY1MDEsImV4cCI6MjA5MTM3MjUwMX0.DdJkLOtczQpabJlZOScXV3OaeWk6Moy1oOMpoTKgpk4'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hdGhoeXlnaXl2Y3p6Y2VtZXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTY1MDEsImV4cCI6MjA5MTM3MjUwMX0.DdJkLOtczQpabJlZOScXV3OaeWk6Moy1oOMpoTKgpk4
+'
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let currentUser=null, allUsers=[]
@@ -752,6 +752,7 @@ function showPage(p) {
   if (p==='dash') renderDashboard()
   if (p==='outbound') { renderCampTable(); renderOutboundList() }
   if (p==='improve') renderImproveTable()
+  if (p==='msg') { showMsgTab('input') }
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
   if (p==='settings') { renderCatTags(); renderMemberManage() }
@@ -759,7 +760,7 @@ function showPage(p) {
 
 function showMsgTab(t) {
   ['input','history'].forEach(id => {
-    document.getElementById('msgview-'+id).style.display = id===t ? 'flex' : 'none'
+    document.getElementById('msgview-'+id).style.display = id===t ? 'block' : 'none'
     document.getElementById('msgtab-'+id).classList.toggle('on', id===t)
   })
   if (t==='history') renderMsgHistory()
@@ -856,15 +857,16 @@ function getDaysInMonth(ym){const[y,m]=ym.split('-').map(Number),days=[],d=new D
 function getMsgLogs(ym,uid){return msgLogs.filter(l=>l.log_date&&l.log_date.startsWith(ym)&&(uid?l.user_id===uid:true))}
 
 function renderMsgInputTable(){
-  if(!currentUser)return
   const ym=document.getElementById('inputMonth').value||new Date().toISOString().slice(0,7)
   const days=getDaysInMonth(ym)
   document.getElementById('msgInputBody').innerHTML=days.map(d=>{
-    const ex=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)||{}
+    // 날짜별 전체 합산
+    const dayLogs=msgLogs.filter(l=>l.log_date===d)
+    const ex={}; MSG_TYPES.forEach(t=>ex[t]=dayLogs.reduce((s,l)=>s+(l[t]||0),0))
     const tot=MSG_TYPES.reduce((s,t)=>s+(ex[t]||0),0)
-    return`<tr><td style="font-weight:500;text-align:left;white-space:nowrap">${d.slice(5)}</td>
-      ${MSG_TYPES.map(t=>`<td><input type="number" min="0" id="inp-${d}-${t}" value="${ex[t]||''}" placeholder="0" oninput="updateRowTotal('${d}')"/></td>`).join('')}
-      <td class="row-total" id="rowtotal-${d}">${tot>0?tot.toLocaleString():'-'}</td></tr>`
+    return'<tr><td style="font-weight:500;text-align:left;white-space:nowrap">'+d.slice(5)+'</td>'+
+      MSG_TYPES.map(t=>'<td><input type="number" min="0" id="inp-'+d+'-'+t+'" value="'+(ex[t]||'')+'" placeholder="0" oninput="updateRowTotal(\''+d+'\')"/></td>').join('')+
+      '<td class="row-total" id="rowtotal-'+d+'">'+(tot>0?tot.toLocaleString():'-')+'</td></tr>'
   }).join('')
 }
 
@@ -878,7 +880,9 @@ async function saveMsgBatch(){
     const rv={};let has=false
     MSG_TYPES.forEach(t=>{const v=parseInt(document.getElementById('inp-'+d+'-'+t)?.value)||0;rv[t]=v;if(v>0)has=true})
     if(!has)continue
-    const ex=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)
+    // 날짜 기존 row: 현재 사용자 row 우선, 없으면 아무 row
+    let ex=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)
+    if(!ex)ex=msgLogs.find(l=>l.log_date===d)
     if(ex){await sb.from('message_logs').update(rv).eq('id',ex.id);Object.assign(ex,rv)}
     else{const{data}=await sb.from('message_logs').insert({user_id:currentUser.id,log_date:d,...rv}).select().single();if(data)msgLogs.push(data)}
     saved++
@@ -888,16 +892,25 @@ async function saveMsgBatch(){
 
 function renderMsgHistory(){
   const ym=document.getElementById('historyMonth').value||new Date().toISOString().slice(0,7)
-  const uid=document.getElementById('historyUser').value
-  const logs=getMsgLogs(ym,uid).sort((a,b)=>a.log_date>b.log_date?-1:1)
+  const logs=getMsgLogs(ym,'')
+  const byDate={}
+  logs.forEach(l=>{const d=l.log_date;if(!byDate[d]){byDate[d]={log_date:d};MSG_TYPES.forEach(t=>byDate[d][t]=0)}MSG_TYPES.forEach(t=>byDate[d][t]+=(l[t]||0))})
+  const rows=Object.values(byDate).sort((a,b)=>a.log_date>b.log_date?-1:1)
   const tbody=document.getElementById('historyBody'),tfoot=document.getElementById('historyFoot')
-  if(!logs.length){tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>`;tfoot.innerHTML='';return}
-  tbody.innerHTML=logs.map(l=>{const u=allUsers.find(x=>x.id===l.user_id),tot=MSG_TYPES.reduce((s,t)=>s+(l[t]||0),0);return`<tr><td>${l.log_date}</td><td>${u?e(u.name):'-'}</td>${MSG_TYPES.map(t=>`<td>${(l[t]||0).toLocaleString()}</td>`).join('')}<td style="font-weight:700">${tot.toLocaleString()}</td><td><button class="btn btn-xs btn-danger" onclick="deleteMsgLog('${l.id}')">삭제</button></td></tr>`}).join('')
-  const foot={};let fTot=0;MSG_TYPES.forEach(t=>{foot[t]=logs.reduce((s,l)=>s+(l[t]||0),0);fTot+=foot[t]})
-  tfoot.innerHTML=`<tr><td colspan="2">합계</td>${MSG_TYPES.map(t=>`<td>${(foot[t]||0).toLocaleString()}</td>`).join('')}<td>${fTot.toLocaleString()}</td><td></td></tr>`
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>';tfoot.innerHTML='';return}
+  tbody.innerHTML=rows.map(r=>{const tot=MSG_TYPES.reduce((s,t)=>s+(r[t]||0),0);return'<tr><td>'+r.log_date+'</td>'+MSG_TYPES.map(t=>'<td>'+(r[t]||0).toLocaleString()+'</td>').join('')+'<td style="font-weight:700">'+tot.toLocaleString()+'</td><td><button class="btn btn-xs btn-danger" onclick="deleteMsgByDate(\''+r.log_date+'\')">삭제</button></td></tr>'}).join('')
+  const foot={};let fTot=0;MSG_TYPES.forEach(t=>{foot[t]=rows.reduce((s,r)=>s+(r[t]||0),0);fTot+=foot[t]})
+  tfoot.innerHTML='<tr><td>합계</td>'+MSG_TYPES.map(t=>'<td>'+foot[t].toLocaleString()+'</td>').join('')+'<td>'+fTot.toLocaleString()+'</td><td></td></tr>'
 }
 
-async function deleteMsgLog(id){if(!confirm('삭제할까요?'))return;await sb.from('message_logs').delete().eq('id',id);msgLogs=msgLogs.filter(l=>l.id!==id);renderMsgHistory()}
+async function deleteMsgByDate(date){
+  if(!confirm(date+' 데이터를 삭제할까요?'))return
+  const ids=msgLogs.filter(l=>l.log_date===date).map(l=>l.id)
+  if(!ids.length)return
+  await sb.from('message_logs').delete().in('id',ids)
+  msgLogs=msgLogs.filter(l=>l.log_date!==date)
+  renderMsgHistory();renderDashboard()
+}
 
 // -- SALES --
 async function loadSalesData(){
