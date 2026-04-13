@@ -208,6 +208,8 @@ tr:hover .td-act{opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dash-leads{display:flex;flex-direction:column;gap:6px}
 .dash-lead-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg2);border-radius:var(--r);font-size:12px}
+.chart-mode-btn{font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid var(--bd2)}
+.chart-mode-btn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
 .response-bar{display:flex;height:8px;border-radius:20px;overflow:hidden;margin-top:6px;gap:1px}
 .response-seg{height:100%;transition:width .3s}
 .tdl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--r);border:0.5px solid var(--bd);margin-bottom:6px;background:var(--bg)}
@@ -278,16 +280,21 @@ tr:hover .td-act{opacity:1}
         </div>
         <div class="metric-grid" id="dashMsgMetrics"></div>
       </div>
-      <!-- 메시지 차트 + 영업 파이프 -->
-      <div class="grid2">
-        <div class="card">
-          <div class="sec-hd"><span class="sec-title">일별 발송 추이</span></div>
-          <div class="chart-wrap"><canvas id="dashChartDaily"></canvas></div>
+      <!-- 메시지 차트 -->
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title" id="dashChartTitle">발송 추이</span>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-xs chart-mode-btn on" id="cmbtn-daily"   onclick="setChartMode('daily')">일별</button>
+            <button class="btn btn-xs chart-mode-btn"   id="cmbtn-monthly" onclick="setChartMode('monthly')">월별</button>
+            <button class="btn btn-xs chart-mode-btn"   id="cmbtn-type"    onclick="setChartMode('type')">타입별</button>
+            <div style="width:1px;background:var(--bd);margin:0 4px"></div>
+            <button class="btn btn-xs chart-mode-btn"   id="cmbtn-bar"     onclick="setChartShape('bar')" title="막대">&#9646;&#9646;</button>
+            <button class="btn btn-xs chart-mode-btn on" id="cmbtn-line"   onclick="setChartShape('line')" title="선">&#8764;</button>
+            <button class="btn btn-xs chart-mode-btn"   id="cmbtn-pie"     onclick="setChartShape('pie')" title="도넛">&#9711;</button>
+          </div>
         </div>
-        <div class="card">
-          <div class="sec-hd"><span class="sec-title">타입별 비중</span></div>
-          <div class="chart-wrap"><canvas id="dashChartPie"></canvas></div>
-        </div>
+        <div style="position:relative;height:260px"><canvas id="dashChartMain"></canvas></div>
       </div>
       <!-- 영업 리드 요약 + 고객개선 요약 -->
       <div class="grid3">
@@ -719,6 +726,7 @@ let sel=null, tplMode='edit', openCats={}, dragSrc=null, vals={}, files=[]
 let selectMode=false, selectedIds=new Set(), ctxTargetId=null, moveTargetIds=[]
 let editingLeadId=null, editingCampId=null, editingObId=null, editingImpId=null
 let dashChart1=null, dashChart2=null
+let chartMode='daily', chartShape='line'
 
 const MSG_TYPES  = ['sms','lms','mms','alimtalk','brand_msg','rcs']
 const MSG_LABELS = ['SMS','LMS','MMS','알림톡','브랜드','RCS']
@@ -794,6 +802,7 @@ function switchUser() {
   sel=null;vals={};files=[];selectMode=false;selectedIds=new Set()
   if(dashChart1){dashChart1.destroy();dashChart1=null}
   if(dashChart2){dashChart2.destroy();dashChart2=null}
+  chartMode='daily'; chartShape='line'
   document.getElementById('appScreen').style.display='none'
   document.getElementById('pickScreen').style.display='flex'
   showPage('dash')
@@ -832,6 +841,85 @@ function showObTab(t) {
 }
 
 // -- DASHBOARD --
+function setChartMode(m){
+  chartMode=m
+  ;['daily','monthly','type'].forEach(id=>{
+    document.getElementById('cmbtn-'+id).classList.toggle('on',id===m)
+  })
+  renderDashChart()
+}
+
+function setChartShape(s){
+  chartShape=s
+  ;['bar','line','pie'].forEach(id=>{
+    document.getElementById('cmbtn-'+id).classList.toggle('on',id===s)
+  })
+  renderDashChart()
+}
+
+function renderDashChart(){
+  const ym=document.getElementById('dashMonth')?.value||new Date().toISOString().slice(0,7)
+  const allLogs=getMsgLogs('','')
+  const titles={daily:'일별 발송 추이',monthly:'월별 발송 추이',type:'타입별 비중'}
+  document.getElementById('dashChartTitle').textContent=titles[chartMode]||'발송 현황'
+
+  let labels=[], datasets=[]
+
+  if(chartMode==='daily'){
+    const logs=getMsgLogs(ym,'')
+    const days=getDaysInMonth(ym)
+    // 날짜별 합산
+    const byDate={}
+    logs.forEach(l=>{const d=l.log_date;if(!byDate[d]){byDate[d]={};MSG_TYPES.forEach(t=>byDate[d][t]=0)}MSG_TYPES.forEach(t=>byDate[d][t]+=(l[t]||0))})
+    labels=days.map(d=>d.slice(5))
+    if(chartShape==='pie'){
+      const totals={};MSG_TYPES.forEach(t=>totals[t]=logs.reduce((s,l)=>s+(l[t]||0),0))
+      labels=MSG_LABELS
+      datasets=[{data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderWidth:2}]
+    }else{
+      datasets=MSG_TYPES.map((t,i)=>({label:MSG_LABELS[i],data:days.map(d=>byDate[d]?byDate[d][t]||0:0),backgroundColor:MSG_COLORS[i]+'99',borderColor:MSG_COLORS[i],borderWidth:2,tension:.3,pointRadius:2,fill:false}))
+    }
+  }else if(chartMode==='monthly'){
+    // 최근 12개월
+    const months=[]
+    for(let i=11;i>=0;i--){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);months.push(d.toISOString().slice(0,7))}
+    if(chartShape==='pie'){
+      const totals={};MSG_TYPES.forEach(t=>totals[t]=allLogs.reduce((s,l)=>s+(l[t]||0),0))
+      labels=MSG_LABELS
+      datasets=[{data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderWidth:2}]
+    }else{
+      labels=months.map(m=>m.slice(2))
+      const byMonth={}
+      allLogs.forEach(l=>{const m=l.log_date?.slice(0,7);if(!m||!months.includes(m))return;if(!byMonth[m]){byMonth[m]={};MSG_TYPES.forEach(t=>byMonth[m][t]=0)}MSG_TYPES.forEach(t=>byMonth[m][t]+=(l[t]||0))})
+      datasets=MSG_TYPES.map((t,i)=>({label:MSG_LABELS[i],data:months.map(m=>byMonth[m]?byMonth[m][t]||0:0),backgroundColor:MSG_COLORS[i]+'99',borderColor:MSG_COLORS[i],borderWidth:2,tension:.3,pointRadius:2,fill:false}))
+    }
+  }else if(chartMode==='type'){
+    const logs=getMsgLogs(ym,'')
+    const totals={};MSG_TYPES.forEach(t=>totals[t]=logs.reduce((s,l)=>s+(l[t]||0),0))
+    labels=MSG_LABELS
+    if(chartShape==='pie'){
+      datasets=[{data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderWidth:2}]
+    }else{
+      datasets=[{label:'발송 건수',data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderColor:MSG_COLORS,borderWidth:1}]
+    }
+  }
+
+  // 차트 타입 결정
+  const isPie=chartShape==='pie'||(chartMode==='type'&&chartShape==='pie')
+  const chartType=isPie?'doughnut':chartShape==='bar'?'bar':'line'
+
+  if(dashChart1)dashChart1.destroy()
+  dashChart1=new Chart(document.getElementById('dashChartMain').getContext('2d'),{
+    type:chartType,
+    data:{labels,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:10},padding:10}}},
+      scales:isPie?{}:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}
+    }
+  })
+}
+
 function renderDashboard() {
   if (!currentUser) return
   const ym = new Date().toISOString().slice(0,7)
@@ -841,17 +929,12 @@ function renderDashboard() {
   const logs = getMsgLogs(ym, '')
   const totals = {}; MSG_TYPES.forEach(t => totals[t]=logs.reduce((s,l)=>s+(l[t]||0),0))
   const grand = Object.values(totals).reduce((a,b)=>a+b,0)
-  document.getElementById('dashMsgMetrics').innerHTML = `
-    <div class="metric"><div class="metric-label">전체 발송</div><div class="metric-value">${grand.toLocaleString()}</div><div class="metric-sub">건</div></div>
-    ${MSG_TYPES.map((t,i)=>`<div class="metric"><div class="metric-label"><span class="metric-dot" style="background:${MSG_COLORS[i]}"></span>${MSG_LABELS[i]}</div><div class="metric-value" style="font-size:16px">${(totals[t]||0).toLocaleString()}</div><div class="metric-sub">${grand>0?Math.round((totals[t]||0)/grand*100)+'%':'-'}</div></div>`).join('')}`
+  document.getElementById('dashMsgMetrics').innerHTML =
+    '<div class="metric"><div class="metric-label">전체 발송</div><div class="metric-value">'+grand.toLocaleString()+'</div><div class="metric-sub">건</div></div>'+
+    MSG_TYPES.map((t,i)=>'<div class="metric"><div class="metric-label"><span class="metric-dot" style="background:'+MSG_COLORS[i]+'"></span>'+MSG_LABELS[i]+'</div><div class="metric-value" style="font-size:16px">'+(totals[t]||0).toLocaleString()+'</div><div class="metric-sub">'+(grand>0?Math.round((totals[t]||0)/grand*100)+'%':'-')+'</div></div>').join('')
 
-  // 차트
-  const days = getDaysInMonth(ym)
-  const ds = MSG_TYPES.map((t,i) => ({ label:MSG_LABELS[i], data:days.map(d=>{const l=logs.find(x=>x.log_date===d);return l?l[t]||0:0}), borderColor:MSG_COLORS[i], borderWidth:2, tension:.3, pointRadius:2, fill:false }))
-  if (dashChart1) dashChart1.destroy()
-  dashChart1 = new Chart(document.getElementById('dashChartDaily').getContext('2d'), { type:'line', data:{labels:days.map(d=>d.slice(8)),datasets:ds}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}} })
-  if (dashChart2) dashChart2.destroy()
-  dashChart2 = new Chart(document.getElementById('dashChartPie').getContext('2d'), { type:'doughnut', data:{labels:MSG_LABELS,datasets:[{data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderWidth:2}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:10}}}}} })
+  // 차트 렌더
+  renderDashChart()
 
   // 영업 리드 현황
   const leadCounts = {}; S_ORDER.forEach(s=>leadCounts[s]=leads.filter(l=>l.status===s).length)
