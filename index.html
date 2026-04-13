@@ -701,15 +701,32 @@ async function init() {
   const ym = new Date().toISOString().slice(0,7)
   document.getElementById('inputMonth').value = ym
   document.getElementById('historyMonth').value = ym
-  const { data } = await sb.from('users').select('id,name,categories').order('created_at')
-  allUsers = data || []
-  renderPickScreen()
+
+  // 1. 캐시된 팀원 목록 즉시 표시
+  const cached = localStorage.getItem('crm_users')
+  if (cached) {
+    try { allUsers = JSON.parse(cached); renderPickScreen() } catch(e) {}
+  }
+
+  // 2. DB에서 최신 목록 백그라운드 갱신
+  try {
+    const { data } = await sb.from('users').select('id,name,categories').order('created_at')
+    if (data) {
+      allUsers = data
+      localStorage.setItem('crm_users', JSON.stringify(data))
+      renderPickScreen()
+    }
+  } catch(e) {
+    if (!allUsers.length) {
+      document.getElementById('memberList').innerHTML = '<div style="font-size:12px;color:var(--red)">연결 실패. Supabase URL/Key를 확인하세요.</div>'
+    }
+  }
 }
 
 function renderPickScreen() {
   const el = document.getElementById('memberList')
   if (!allUsers.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3)">아직 팀원이 없어요. 아래에서 추가하세요.</div>'; return }
-  el.innerHTML = allUsers.map(u => `<button class="member-btn" onclick="selectUser('${u.id}')"><div class="member-av">${u.name.slice(0,2)}</div><div><div class="member-name">${e(u.name)}</div></div></button>`).join('')
+  el.innerHTML = allUsers.map(u => '<button class="member-btn" onclick="selectUser(\''+u.id+'\')"><div class="member-av">'+u.name.slice(0,2)+'</div><div><div class="member-name">'+e(u.name)+'</div></div></button>').join('')
 }
 
 async function addMember() {
@@ -718,7 +735,9 @@ async function addMember() {
   if (allUsers.find(u => u.name===name)) { alert('이미 있는 이름이에요'); return }
   const { data, error } = await sb.from('users').insert({ name, categories: [] }).select().single()
   if (error) { alert('추가 실패: '+error.message); return }
-  allUsers.push(data); inp.value = ''
+  allUsers.push(data)
+  localStorage.setItem('crm_users', JSON.stringify(allUsers))
+  inp.value = ''
   renderPickScreen(); selectUser(data.id)
 }
 
@@ -729,9 +748,11 @@ async function selectUser(id) {
   document.getElementById('appScreen').style.display = 'flex'
   document.getElementById('userAv').textContent = user.name.slice(0,2)
   document.getElementById('userName').textContent = user.name
-  document.getElementById('historyUser').innerHTML = '<option value="">전체 팀원</option>' + allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
-  await Promise.all([loadSalesData(), loadMsgLogs(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr()])
-  renderDashboard(); renderCatTags(); renderMemberManage()
+
+  // 화면 먼저 표시 후 데이터 병렬 로딩
+  renderDashboard()
+  Promise.all([loadSalesData(), loadMsgLogs(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr()])
+    .then(() => { renderDashboard(); renderCatTags(); renderMemberManage() })
 }
 
 function switchUser() {
