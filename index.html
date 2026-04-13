@@ -1,3 +1,4 @@
+<!-- v1776066511 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,6 +7,7 @@
 <title>마케팅 CRM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f3;color:#1a1a18;min-height:100vh}
@@ -414,16 +416,17 @@ tr:hover .td-act{opacity:1}
     <div id="obview-list" class="pscroll" style="display:none">
       <div class="card">
         <div class="sec-hd"><span class="sec-title">업체 리스트</span>
-          <div style="display:flex;gap:7px;align-items:center">
+          <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
             <select id="filterCamp" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderOutboundList()"><option value="">전체 캠페인</option></select>
             <select id="filterResp" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderOutboundList()">
               <option value="">전체 반응</option><option>미응답</option><option>긍정</option><option>부정</option><option>콜백요청</option><option>완료</option>
             </select>
+            <button class="btn btn-sm" onclick="openUploadModal()">엑셀/CSV 업로드</button>
             <button class="btn btn-sm btn-primary" onclick="openOutboundModal()">+ 업체 추가</button>
           </div>
         </div>
         <div class="tbl-wrap">
-          <table class="ltbl"><thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>캠페인</th><th>반응</th><th>담당</th><th>메모</th><th></th></tr></thead>
+          <table class="ltbl"><thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>URL</th><th>캠페인</th><th>반응</th><th>담당</th><th>메모</th><th></th></tr></thead>
           <tbody id="outboundTbody"></tbody></table>
         </div>
       </div>
@@ -598,6 +601,7 @@ tr:hover .td-act{opacity:1}
   <h3 id="obModalTitle">업체 추가</h3>
   <div class="r2"><div class="fl"><label>업체명 *</label><input id="obCompany"/></div><div class="fl"><label>전화번호</label><input id="obPhone"/></div></div>
   <div class="fl"><label>주소</label><input id="obAddress"/></div>
+  <div class="fl"><label>URL</label><input id="obUrl" placeholder="https://"/></div>
   <div class="r2">
     <div class="fl"><label>캠페인</label><select id="obCamp"><option value="">없음</option></select></div>
     <div class="fl"><label>반응</label><select id="obResponse"><option>미응답</option><option>긍정</option><option>부정</option><option>콜백요청</option><option>완료</option></select></div>
@@ -608,6 +612,37 @@ tr:hover .td-act{opacity:1}
   </div>
   <div class="fl"><label>메모</label><textarea id="obMemo"></textarea></div>
   <div class="mbtns"><button class="btn" onclick="closeModal('modalOutbound')">취소</button><button class="btn btn-primary" onclick="saveOutbound()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalUpload"><div class="modal" style="max-width:560px">
+  <h3>엑셀 / CSV 업로드</h3>
+  <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.7">
+    엑셀(.xlsx) 또는 CSV 파일을 업로드하세요.<br>
+    컬럼 순서: <b>순번, 업체명, 전화번호, 주소, URL</b><br>
+    <span style="color:var(--text3)">첫 번째 행은 헤더로 자동 인식됩니다.</span>
+  </div>
+  <div class="fl">
+    <label>캠페인 지정 (선택)</label>
+    <select id="uploadCamp"><option value="">없음</option></select>
+  </div>
+  <div style="border:0.5px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;background:var(--bg2);margin-bottom:10px" onclick="document.getElementById('uploadFileInput').click()">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:4px">클릭하여 파일 선택</div>
+    <div style="font-size:11px;color:var(--text3)">.xlsx, .xls, .csv 지원</div>
+    <input type="file" id="uploadFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="onUploadFile(this)"/>
+  </div>
+  <div id="uploadPreview" style="display:none">
+    <div style="font-size:12px;font-weight:500;margin-bottom:8px" id="uploadPreviewTitle"></div>
+    <div style="max-height:200px;overflow-y:auto;border:0.5px solid var(--bd);border-radius:var(--r)">
+      <table class="ltbl" id="uploadPreviewTable" style="font-size:11px">
+        <thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>URL</th></tr></thead>
+        <tbody id="uploadPreviewBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalUpload')">취소</button>
+    <button class="btn btn-primary" id="uploadConfirmBtn" onclick="confirmUpload()" style="display:none">업로드 확인</button>
+  </div>
 </div></div>
 
 <div class="mbg" id="modalImprove"><div class="modal">
@@ -1026,9 +1061,9 @@ function renderCampTable(){
 
 function renderOutboundList(){
   const cf=document.getElementById('filterCamp')?.value, rf=document.getElementById('filterResp')?.value
-  if(!cf&&!rf&&document.getElementById('filterCamp')){
-    const sel=document.getElementById('filterCamp')
-    sel.innerHTML='<option value="">전체 캠페인</option>'+campaigns.map(c=>`<option value="${c.id}">${e(c.name)}</option>`).join('')
+  if(document.getElementById('filterCamp')){
+    const cur=document.getElementById('filterCamp').value
+    document.getElementById('filterCamp').innerHTML='<option value="">전체 캠페인</option>'+campaigns.map(c=>'<option value="'+c.id+'"'+(cur===c.id?' selected':'')+'>'+e(c.name)+'</option>').join('')
   }
   let list=outbounds
   if(cf)list=list.filter(o=>o.campaign_id===cf)
@@ -1036,8 +1071,9 @@ function renderOutboundList(){
   const tbody=document.getElementById('outboundTbody');if(!tbody)return
   tbody.innerHTML=list.map(o=>{
     const u=allUsers.find(x=>x.id===o.assignee_id),camp=campaigns.find(x=>x.id===o.campaign_id)
-    return`<tr><td style="font-weight:500">${e(o.company)}</td><td style="font-size:11px">${e(o.phone||'-')}</td><td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(o.address||'-')}</td><td>${camp?e(camp.name):'-'}</td><td><span class="badge ${R_COLOR[o.response]||'b-gray'}">${o.response}</span></td><td>${u?e(u.name):'-'}</td><td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(o.memo||'')}</td><td><div class="td-act"><button class="btn btn-xs" onclick="openOutboundModal('${o.id}')">편집</button><button class="btn btn-xs btn-danger" onclick="deleteOutbound('${o.id}')">삭제</button></div></td></tr>`
-  }).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:16px">업체가 없어요</td></tr>'
+    const urlHtml=o.url?'<a href="'+e(o.url)+'" target="_blank" style="font-size:11px;color:var(--blue);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block">'+e(o.url.replace(/^https?:\/\//,''))+'</a>':'-'
+    return'<tr><td style="font-weight:500">'+e(o.company)+'</td><td style="font-size:11px">'+e(o.phone||'-')+'</td><td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(o.address||'-')+'</td><td>'+urlHtml+'</td><td>'+(camp?e(camp.name):'-')+'</td><td><span class="badge '+(R_COLOR[o.response]||'b-gray')+'">'+o.response+'</span></td><td>'+(u?e(u.name):'-')+'</td><td style="font-size:11px;color:var(--text2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(o.memo||'')+'</td><td><div class="td-act"><button class="btn btn-xs" onclick="openOutboundModal(\''+o.id+'\')">편집</button><button class="btn btn-xs btn-danger" onclick="deleteOutbound(\''+o.id+'\')">삭제</button></div></td></tr>'
+  }).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:16px">업체가 없어요</td></tr>'
 }
 
 function openCampModal(id){
@@ -1059,20 +1095,122 @@ async function deleteCamp(id){if(!confirm('캠페인을 삭제할까요?'))retur
 function openOutboundModal(id){
   editingObId=id||null
   document.getElementById('obModalTitle').textContent=id?'업체 수정':'업체 추가'
-  document.getElementById('obCamp').innerHTML='<option value="">없음</option>'+campaigns.map(c=>`<option value="${c.id}">${e(c.name)}</option>`).join('')
-  document.getElementById('obAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
-  if(id){const o=outbounds.find(x=>x.id===id);if(o){document.getElementById('obCompany').value=o.company||'';document.getElementById('obPhone').value=o.phone||'';document.getElementById('obAddress').value=o.address||'';document.getElementById('obCamp').value=o.campaign_id||'';document.getElementById('obResponse').value=o.response||'미응답';document.getElementById('obAssignee').value=o.assignee_id||'';document.getElementById('obDate').value=o.contacted_at?o.contacted_at.slice(0,16):'';document.getElementById('obMemo').value=o.memo||''}}
-  else{['obCompany','obPhone','obAddress','obMemo'].forEach(id=>document.getElementById(id).value='');document.getElementById('obResponse').value='미응답';document.getElementById('obDate').value=''}
+  document.getElementById('obCamp').innerHTML='<option value="">없음</option>'+campaigns.map(c=>'<option value="'+c.id+'">'+e(c.name)+'</option>').join('')
+  document.getElementById('obAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>'<option value="'+u.id+'">'+e(u.name)+'</option>').join('')
+  if(id){
+    const o=outbounds.find(x=>x.id===id)
+    if(o){
+      document.getElementById('obCompany').value=o.company||''
+      document.getElementById('obPhone').value=o.phone||''
+      document.getElementById('obAddress').value=o.address||''
+      document.getElementById('obUrl').value=o.url||''
+      document.getElementById('obCamp').value=o.campaign_id||''
+      document.getElementById('obResponse').value=o.response||'미응답'
+      document.getElementById('obAssignee').value=o.assignee_id||''
+      document.getElementById('obDate').value=o.contacted_at?o.contacted_at.slice(0,16):''
+      document.getElementById('obMemo').value=o.memo||''
+    }
+  }else{
+    ['obCompany','obPhone','obAddress','obUrl','obMemo'].forEach(id=>document.getElementById(id).value='')
+    document.getElementById('obResponse').value='미응답';document.getElementById('obDate').value=''
+  }
   openModal('modalOutbound')
 }
 async function saveOutbound(){
   const company=document.getElementById('obCompany').value.trim();if(!company){alert('업체명을 입력하세요');return}
-  const p={company,phone:document.getElementById('obPhone').value.trim(),address:document.getElementById('obAddress').value.trim(),campaign_id:document.getElementById('obCamp').value||null,response:document.getElementById('obResponse').value,assignee_id:document.getElementById('obAssignee').value||null,contacted_at:document.getElementById('obDate').value||null,memo:document.getElementById('obMemo').value.trim()}
+  const p={company,phone:document.getElementById('obPhone').value.trim(),address:document.getElementById('obAddress').value.trim(),url:document.getElementById('obUrl').value.trim(),campaign_id:document.getElementById('obCamp').value||null,response:document.getElementById('obResponse').value,assignee_id:document.getElementById('obAssignee').value||null,contacted_at:document.getElementById('obDate').value||null,memo:document.getElementById('obMemo').value.trim()}
   if(editingObId){await sb.from('outbound').update(p).eq('id',editingObId);const i=outbounds.findIndex(o=>o.id===editingObId);if(i>=0)outbounds[i]={...outbounds[i],...p}}
   else{const{data}=await sb.from('outbound').insert(p).select().single();if(data)outbounds.unshift(data)}
   closeModal('modalOutbound');renderOutboundList();renderCampTable();renderDashboard()
 }
 async function deleteOutbound(id){if(!confirm('삭제할까요?'))return;await sb.from('outbound').delete().eq('id',id);outbounds=outbounds.filter(o=>o.id!==id);renderOutboundList();renderCampTable();renderDashboard()}
+
+// -- UPLOAD --
+let uploadRows=[]
+
+function openUploadModal(){
+  uploadRows=[]
+  document.getElementById('uploadPreview').style.display='none'
+  document.getElementById('uploadConfirmBtn').style.display='none'
+  document.getElementById('uploadFileInput').value=''
+  document.getElementById('uploadCamp').innerHTML='<option value="">없음</option>'+campaigns.map(c=>'<option value="'+c.id+'">'+e(c.name)+'</option>').join('')
+  openModal('modalUpload')
+}
+
+function onUploadFile(inp){
+  const file=inp.files[0]; if(!file)return
+  const reader=new FileReader()
+  reader.onload=function(ev){
+    try{
+      let rows=[]
+      if(file.name.endsWith('.csv')){
+        // CSV 파싱
+        const text=ev.target.result
+        const lines=text.split('\n').map(l=>l.trim()).filter(l=>l)
+        const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase())
+        for(let i=1;i<lines.length;i++){
+          const cols=lines[i].split(',').map(c=>c.replace(/"/g,'').trim())
+          rows.push(cols)
+        }
+      }else{
+        // Excel 파싱
+        const data=new Uint8Array(ev.target.result)
+        const wb=XLSX.read(data,{type:'array'})
+        const ws=wb.Sheets[wb.SheetNames[0]]
+        const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''})
+        // 첫 행 헤더 제거
+        rows=json.slice(1).filter(r=>r.some(c=>c!==''))
+      }
+
+      // 컬럼 매핑: 순번, 업체명, 전화번호, 주소, URL
+      uploadRows=rows.map(r=>{
+        // 순번이 숫자면 제거하고 업체명부터 시작
+        let idx=0
+        if(r.length>=5&&!isNaN(r[0]))idx=1  // 순번 있음
+        return{
+          company: String(r[idx]||'').trim(),
+          phone:   String(r[idx+1]||'').trim(),
+          address: String(r[idx+2]||'').trim(),
+          url:     String(r[idx+3]||'').trim()
+        }
+      }).filter(r=>r.company)
+
+      // 미리보기
+      document.getElementById('uploadPreviewTitle').textContent='총 '+uploadRows.length+'개 업체가 인식됐어요'
+      document.getElementById('uploadPreviewBody').innerHTML=uploadRows.slice(0,10).map(r=>
+        '<tr><td>'+e(r.company)+'</td><td style="font-size:11px">'+e(r.phone)+'</td><td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(r.address)+'</td><td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(r.url)+'</td></tr>'
+      ).join('')+(uploadRows.length>10?'<tr><td colspan="4" style="text-align:center;color:var(--text3);font-size:11px">... 외 '+(uploadRows.length-10)+'개</td></tr>':'')
+      document.getElementById('uploadPreview').style.display='block'
+      document.getElementById('uploadConfirmBtn').style.display='inline-block'
+    }catch(err){
+      alert('파일 파싱 실패: '+err.message)
+    }
+  }
+  if(file.name.endsWith('.csv')) reader.readAsText(file,'utf-8')
+  else reader.readAsArrayBuffer(file)
+}
+
+async function confirmUpload(){
+  if(!uploadRows.length){alert('업로드할 데이터가 없어요');return}
+  const campId=document.getElementById('uploadCamp').value||null
+  const btn=document.getElementById('uploadConfirmBtn')
+  btn.textContent='업로드 중...';btn.disabled=true
+  let success=0
+  const batchSize=50
+  for(let i=0;i<uploadRows.length;i+=batchSize){
+    const batch=uploadRows.slice(i,i+batchSize).map(r=>({
+      company:r.company, phone:r.phone, address:r.address, url:r.url,
+      campaign_id:campId, response:'미응답'
+    }))
+    const{data,error}=await sb.from('outbound').insert(batch).select()
+    if(data){outbounds.unshift(...data);success+=data.length}
+    if(error)console.error(error)
+  }
+  btn.textContent='업로드 확인';btn.disabled=false
+  closeModal('modalUpload')
+  renderOutboundList();renderCampTable();renderDashboard()
+  alert(success+'개 업체가 업로드됐어요!')
+}
 
 // -- IMPROVEMENTS --
 async function loadImprovements(){const{data}=await sb.from('improvements').select('*').order('created_at',{ascending:false});improvements=data||[];renderImproveTable()}
