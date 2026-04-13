@@ -2,9 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>메일 초안 CRM</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>마케팅 CRM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f3;color:#1a1a18;min-height:100vh}
@@ -14,6 +15,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   --bd:rgba(0,0,0,.1);--bd2:rgba(0,0,0,.18);
   --r:8px;--rl:12px;
   --green:#1D9E75;--red:#d04040;--blue:#185FA5;--amber:#854F0B;--amber-bg:#FAEEDA;
+  --purple:#534AB7;--teal:#0F6E56;--coral:#993C1D;
+  --c-sms:#185FA5;--c-lms:#534AB7;--c-mms:#0F6E56;
+  --c-ali:#D85A30;--c-brand:#D4537E;--c-rcs:#BA7517;
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#1c1c1a;--bg2:#242422;--bg3:#2e2e2b;--bg4:#383835;
@@ -23,58 +27,157 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 }}
 
 /* ── auth ── */
-.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.auth-card{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:2rem;width:100%;max-width:320px}
-.auth-logo{font-size:17px;font-weight:600;margin-bottom:6px}
+.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.auth-card{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:2rem;width:320px}
+.auth-logo{font-size:18px;font-weight:700;margin-bottom:4px}
 .auth-sub{font-size:12px;color:var(--text2);margin-bottom:1.5rem}
 .err{font-size:12px;color:var(--red);min-height:16px;margin-bottom:6px}
 
-/* ── forms ── */
+/* ── form ── */
 .fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-.fl label{font-size:11px;color:var(--text2)}
+.fl label{font-size:11px;color:var(--text2);font-weight:500}
 .fl input,.fl select,.fl textarea{font-size:13px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);font-family:inherit;width:100%;outline:none}
 .fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--text2)}
-.fl textarea{resize:vertical;min-height:130px;line-height:1.75}
+.fl textarea{resize:vertical;min-height:80px;line-height:1.7}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
-/* ── buttons ── */
-.btn{font-size:13px;padding:8px 16px;border-radius:var(--r);border:0.5px solid var(--bd2);background:transparent;color:var(--text);cursor:pointer}
+/* ── btn ── */
+.btn{font-size:13px;padding:8px 16px;border-radius:var(--r);border:0.5px solid var(--bd2);background:transparent;color:var(--text);cursor:pointer;white-space:nowrap}
 .btn:hover{background:var(--bg3)}
 .btn-primary{background:var(--text);color:var(--bg);border:none;font-weight:500}
 .btn-primary:hover{opacity:.85}
 .btn-danger{color:var(--red);border-color:rgba(208,64,64,.3)}
 .btn-danger:hover{background:rgba(208,64,64,.08)}
 .btn-sm{font-size:12px;padding:5px 12px}
-.btn-icon{padding:5px 8px;border-radius:var(--r);border:none;background:transparent;cursor:pointer;color:var(--text2);font-size:13px}
+.btn-xs{font-size:11px;padding:3px 9px}
+.btn-icon{padding:5px 8px;border-radius:var(--r);border:none;background:transparent;cursor:pointer;color:var(--text2)}
 .btn-icon:hover{background:var(--bg3);color:var(--text)}
 .btn-full{width:100%}
 
-/* ── app layout ── */
-.app{display:none;height:100vh;overflow:hidden}
-.layout{display:grid;grid-template-columns:260px 1fr;height:100%}
+/* ── shell ── */
+.app{display:none;height:100vh;flex-direction:column;overflow:hidden}
+.top-nav{display:flex;align-items:center;border-bottom:0.5px solid var(--bd);background:var(--bg);flex-shrink:0;padding:0 16px;gap:0}
+.nav-logo{font-size:14px;font-weight:700;margin-right:20px;color:var(--text)}
+.nav-tab{font-size:13px;padding:13px 16px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.nav-tab.on{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.nav-tab:hover:not(.on){color:var(--text)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 
-/* ── sidebar ── */
+/* ── page ── */
+.page{display:none;flex:1;overflow:hidden}
+.page.on{display:flex;flex-direction:column}
+.pscroll{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+
+/* ── cards ── */
+.card{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);padding:16px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-size:14px;font-weight:600}
+
+/* ── metric ── */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.metric{background:var(--bg2);border-radius:var(--r);padding:14px 16px}
+.metric-label{font-size:11px;color:var(--text3);margin-bottom:5px}
+.metric-value{font-size:22px;font-weight:700;color:var(--text);line-height:1.1}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.metric-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+
+/* ── msg type badges ── */
+.mtype{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+.mt-sms  {background:#E6F1FB;color:#0C447C}
+.mt-lms  {background:#EEEDFE;color:#3C3489}
+.mt-mms  {background:#E1F5EE;color:#085041}
+.mt-ali  {background:#FAECE7;color:#712B13}
+.mt-brand{background:#FBEAF0;color:#72243E}
+.mt-rcs  {background:#FAEEDA;color:#633806}
+
+/* ── msg input table ── */
+.msg-input-table{width:100%;border-collapse:collapse}
+.msg-input-table th{font-size:11px;font-weight:600;color:var(--text2);padding:8px 10px;text-align:center;background:var(--bg2);border-bottom:0.5px solid var(--bd)}
+.msg-input-table td{padding:6px 8px;border-bottom:0.5px solid var(--bd);text-align:center}
+.msg-input-table tr:last-child td{border-bottom:none}
+.msg-input-table input[type=number]{width:90px;font-size:13px;padding:5px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);text-align:right;outline:none}
+.msg-input-table input[type=number]:focus{border-color:var(--text2)}
+.msg-input-table .row-total{font-size:13px;font-weight:600;color:var(--text)}
+
+/* ── history table ── */
+.tbl-wrap{overflow-x:auto}
+table.htbl{width:100%;border-collapse:collapse;font-size:13px}
+table.htbl th{font-size:11px;font-weight:600;color:var(--text2);padding:8px 12px;text-align:right;background:var(--bg2);border-bottom:0.5px solid var(--bd);white-space:nowrap}
+table.htbl th:first-child{text-align:left}
+table.htbl td{padding:9px 12px;border-bottom:0.5px solid var(--bd);text-align:right;color:var(--text)}
+table.htbl td:first-child{text-align:left;font-weight:500}
+table.htbl tr:hover td{background:var(--bg2)}
+table.htbl .td-total{font-weight:700;color:var(--text)}
+table.htbl tfoot td{font-weight:700;background:var(--bg2);border-top:0.5px solid var(--bd2)}
+
+/* ── chart ── */
+.chart-wrap{position:relative;height:240px}
+.chart-wrap-sm{position:relative;height:180px}
+
+/* ── pipeline ── */
+.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.pipe-col{background:var(--bg2);border-radius:var(--r);padding:10px}
+.pipe-head{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.pipe-count{background:var(--bg4);border-radius:20px;padding:1px 7px;font-size:10px;color:var(--text3)}
+.pipe-card{background:var(--bg);border:0.5px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:6px;cursor:pointer;font-size:12px}
+.pipe-card:hover{border-color:var(--bd2)}
+.pipe-company{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
+.pipe-val{font-size:11px;color:var(--text3)}
+
+/* ── table (leads) ── */
+table.ltbl{width:100%;border-collapse:collapse;font-size:13px}
+table.ltbl th{font-size:11px;font-weight:600;color:var(--text2);padding:8px 12px;text-align:left;background:var(--bg2);border-bottom:0.5px solid var(--bd);white-space:nowrap}
+table.ltbl td{padding:9px 12px;border-bottom:0.5px solid var(--bd);color:var(--text);vertical-align:middle}
+table.ltbl tr:hover td{background:var(--bg2)}
+.td-act{display:flex;gap:4px;opacity:0}
+tr:hover .td-act{opacity:1}
+
+/* ── badge ── */
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap;display:inline-block}
+.b-gray{background:var(--bg3);color:var(--text2)}
+.b-blue{background:#E6F1FB;color:#0C447C}
+.b-green{background:#E1F5EE;color:#0F6E56}
+.b-amber{background:#FAEEDA;color:#854F0B}
+.b-red{background:#FCEBEB;color:#A32D2D}
+.b-purple{background:#EEEDFE;color:#3C3489}
+
+/* ── prog ── */
+.prog-wrap{background:var(--bg3);border-radius:20px;height:5px;overflow:hidden;margin-top:5px}
+.prog-bar{height:100%;border-radius:20px;background:var(--green);transition:width .4s}
+
+/* ── act feed ── */
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--bd)}
+.act-item:last-child{border-bottom:none}
+.act-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.act-body{flex:1;min-width:0}
+.act-title{font-size:13px;margin-bottom:2px}
+.act-meta{font-size:11px;color:var(--text3)}
+
+/* ── team ── */
+.team-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--bd)}
+.team-row:last-child{border-bottom:none}
+.team-av{width:32px;height:32px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.team-info{flex:1;min-width:0}
+.team-name{font-size:13px;font-weight:500}
+.team-stat{font-size:11px;color:var(--text3)}
+.team-nums{display:flex;gap:16px;flex-shrink:0;text-align:right}
+.team-num-val{font-size:14px;font-weight:600}
+.team-num-lbl{font-size:10px;color:var(--text3)}
+
+/* ── mail layout ── */
+.mail-layout{display:grid;grid-template-columns:240px 1fr;height:100%;overflow:hidden}
 .sidebar{background:var(--bg2);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
-.sb-top{padding:10px 12px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:8px;flex-shrink:0}
-.av{width:30px;height:30px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
-.uinfo{flex:1;min-width:0}
-.uname{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.urole{font-size:10px;color:var(--text3)}
-.sb-actions{padding:8px 12px;border-bottom:0.5px solid var(--bd);display:flex;gap:6px;flex-shrink:0}
+.sb-acts{padding:8px 10px;border-bottom:0.5px solid var(--bd);display:flex;gap:6px;flex-shrink:0}
 .sb-scroll{flex:1;overflow-y:auto;padding:6px 8px}
-
-/* ── sidebar top toolbar ── */
-.sb-toolbar{display:flex;align-items:center;gap:4px;padding:6px 4px;border-bottom:0.5px solid var(--bd);margin-bottom:4px}
-.sb-toolbar span{font-size:11px;color:var(--text3);flex:1}
-.sel-bar{display:none;background:var(--bg3);border-bottom:0.5px solid var(--bd);padding:6px 12px;flex-shrink:0;gap:6px;align-items:center}
+.sel-bar{display:none;padding:6px 12px;gap:6px;align-items:center;border-bottom:0.5px solid var(--bd);flex-shrink:0;background:var(--bg3)}
 .sel-bar.show{display:flex}
-.sel-count{font-size:12px;color:var(--text2);flex:1}
-
-/* ── template item ── */
 .cat-head{display:flex;align-items:center;gap:5px;padding:5px 6px;cursor:pointer;border-radius:6px;margin-top:2px;user-select:none}
 .cat-head:hover{background:var(--bg3)}
-.cat-arr{font-size:9px;color:var(--text3);transition:transform .15s;flex-shrink:0}
+.cat-arr{font-size:9px;color:var(--text3);transition:transform .15s}
 .cat-arr.o{transform:rotate(90deg)}
-.cat-lbl{font-size:11px;font-weight:600;color:var(--text2);flex:1;letter-spacing:.02em}
+.cat-lbl{font-size:11px;font-weight:600;color:var(--text2);flex:1}
 .cat-n{font-size:10px;color:var(--text3)}
 .tpl-item{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;cursor:pointer;border:0.5px solid transparent;margin-bottom:1px;user-select:none}
 .tpl-item:hover{background:var(--bg3)}
@@ -84,90 +187,75 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .tpl-item.drag-over{border-color:var(--text2)}
 .tpl-cb{width:14px;height:14px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
 .dh{color:var(--text3);font-size:10px;cursor:grab;opacity:.4;flex-shrink:0}
-.tn{font-size:13px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tpl-menu-btn{font-size:14px;color:var(--text3);opacity:0;cursor:pointer;padding:0 3px;line-height:1;flex-shrink:0}
+.tn{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tpl-menu-btn{font-size:14px;color:var(--text3);opacity:0;cursor:pointer;padding:0 3px;flex-shrink:0}
 .tpl-item:hover .tpl-menu-btn{opacity:1}
-.loading-row{font-size:12px;color:var(--text3);padding:8px 10px}
+.mail-content{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.mode-bar{display:flex;border-bottom:0.5px solid var(--bd);padding:0 16px;flex-shrink:0}
+.mtab{font-size:13px;padding:11px 14px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.mtab.on{color:var(--text);border-bottom-color:var(--text)}
+.panel{flex:1;padding:16px;display:flex;flex-direction:column;gap:11px;overflow-y:auto}
+.empty-panel{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3)}
+.vtags{display:flex;flex-wrap:wrap;gap:5px}
+.vtag{display:inline-flex;align-items:center;gap:3px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
+.vtag .vx{cursor:pointer;color:var(--text3);font-size:12px}
+.vadd{display:flex;gap:6px;margin-top:4px}
+.vadd input{flex:1;font-size:12px;padding:5px 8px}
+.hint{font-size:11px;color:var(--text3)}
+.ok{font-size:12px;color:var(--green)}
+.pbody{font-size:13px;line-height:1.8;white-space:pre-wrap;min-height:100px}
+.hi{background:var(--amber-bg);color:var(--amber);border-radius:3px;padding:0 2px}
+.psubj{font-size:12px;color:var(--text2);padding-bottom:10px;border-bottom:0.5px solid var(--bd)}
+.psubj b{font-weight:500;color:var(--text)}
+.file-zone{border:0.5px dashed var(--bd2);border-radius:var(--r);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.file-zone:hover{border-color:var(--text2)}
+.fchip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 10px;margin-top:4px}
 
-/* ── context menu ── */
+/* ── ctx menu ── */
 .ctx-menu{position:fixed;background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--r);padding:4px;z-index:500;min-width:150px;box-shadow:0 4px 16px rgba(0,0,0,.12)}
 .ctx-item{font-size:13px;padding:7px 12px;border-radius:6px;cursor:pointer;color:var(--text)}
 .ctx-item:hover{background:var(--bg3)}
 .ctx-item.danger{color:var(--red)}
 .ctx-sep{height:0.5px;background:var(--bd);margin:4px 0}
 
-/* ── content ── */
-.content{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-.mode-bar{display:flex;border-bottom:0.5px solid var(--bd);padding:0 16px;flex-shrink:0}
-.mtab{font-size:13px;padding:11px 14px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
-.mtab.on{color:var(--text);border-bottom-color:var(--text)}
-.mtab:hover:not(.on){color:var(--text)}
-.panel{flex:1;padding:16px;display:flex;flex-direction:column;gap:11px;overflow-y:auto}
-.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);font-size:13px;gap:8px}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.vtags{display:flex;flex-wrap:wrap;gap:5px}
-.vtag{display:inline-flex;align-items:center;gap:3px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
-.vtag .vx{cursor:pointer;color:var(--text3);font-size:12px;line-height:1}
-.vadd{display:flex;gap:6px;margin-top:4px}
-.vadd input{flex:1;font-size:12px;padding:5px 8px}
-.hint{font-size:11px;color:var(--text3)}
-.ok{font-size:12px;color:var(--green)}
-.file-zone{border:0.5px dashed var(--bd2);border-radius:var(--r);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg2)}
-.file-zone:hover{border-color:var(--text2)}
-.fz-text{font-size:12px;color:var(--text2)}
-.fz-hint{font-size:11px;color:var(--text3)}
-.flist{display:flex;flex-direction:column;gap:4px;margin-top:6px}
-.fchip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 10px}
-.fchip-name{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fchip-size{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
-.fchip-x{font-size:12px;color:var(--text3);cursor:pointer;flex-shrink:0}
-.psubj{font-size:12px;color:var(--text2);padding-bottom:10px;border-bottom:0.5px solid var(--bd)}
-.psubj b{font-weight:500;color:var(--text)}
-.pbody{font-size:13px;line-height:1.8;white-space:pre-wrap;min-height:120px}
-.hi{background:var(--amber-bg);color:var(--amber);border-radius:3px;padding:0 2px}
-.pfiles{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
-.pfchip{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text2)}
-
-/* ── header bar ── */
-.top-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:0.5px solid var(--bd);flex-shrink:0}
-.top-bar-title{font-size:13px;font-weight:500;flex:1}
-.top-bar-sub{font-size:11px;color:var(--text3)}
-
 /* ── modal ── */
 .mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center}
 .mbg.open{display:flex}
-.modal{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:1.25rem;width:90%;max-width:400px;max-height:90vh;overflow-y:auto}
-.modal-lg{max-width:540px}
-.modal h3{font-size:15px;font-weight:500;margin-bottom:14px}
-.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.modal{background:var(--bg);border:0.5px solid var(--bd2);border-radius:var(--rl);padding:1.25rem;width:90%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
 
 /* ── settings ── */
-.settings-page{display:none;flex-direction:column;height:100%;background:var(--bg)}
-.settings-nav{display:flex;border-bottom:0.5px solid var(--bd);padding:0 16px;flex-shrink:0}
-.cat-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2);margin:0 4px 8px 0}
-.cat-tag .cx{cursor:pointer;color:var(--text3);font-size:14px;line-height:1}
+.settings-wrap{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;max-width:600px}
+.cat-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2);margin:0 6px 8px 0}
+.cat-tag .cx{cursor:pointer;color:var(--text3);font-size:14px}
 .cat-tag .cx:hover{color:var(--red)}
-.cat-color{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* ── grid helpers ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(3,1fr)}}
 
 /* ── spin ── */
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--bd2);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── badge ── */
-.badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
-.badge-blue{background:#E6F1FB;color:#0C447C}
+/* ── tab group (inside page) ── */
+.inner-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--bd);padding:0 0 0 0;flex-shrink:0;background:var(--bg)}
+.inner-tab{font-size:13px;padding:10px 18px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.inner-tab.on{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.inner-tab:hover:not(.on){color:var(--text)}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
+<!-- ── AUTH ── -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
-    <div class="auth-logo">메일 초안 CRM</div>
+    <div class="auth-logo">마케팅 CRM</div>
     <div class="auth-sub">이름을 입력하고 바로 시작하세요</div>
     <div class="err" id="authErr"></div>
-    <div class="fl">
-      <label>이름</label>
+    <div class="fl"><label>이름</label>
       <input id="nameInput" placeholder="예) 홍길동" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
     <button class="btn btn-primary btn-full" onclick="doLogin()">
@@ -177,98 +265,295 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 </div>
 
-<!-- APP -->
+<!-- ── APP ── -->
 <div class="app" id="appScreen">
-  <div class="layout">
+  <div class="top-nav">
+    <span class="nav-logo">마케팅 CRM</span>
+    <div class="nav-tab on"  id="nav-msg"    onclick="showPage('msg')">메시지 현황</div>
+    <div class="nav-tab"     id="nav-sales"  onclick="showPage('sales')">영업관리</div>
+    <div class="nav-tab"     id="nav-mail"   onclick="showPage('mail')">메일 초안</div>
+    <div class="nav-tab"     id="nav-settings" onclick="showPage('settings')">설정</div>
+    <div class="nav-right">
+      <div class="av" id="userAv">?</div>
+      <span style="font-size:12px;color:var(--text2)" id="userName">-</span>
+      <button class="btn btn-sm" onclick="doLogout()">나가기</button>
+    </div>
+  </div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sb-top">
-        <div class="av" id="userAv">?</div>
-        <div class="uinfo">
-          <div class="uname" id="userName">-</div>
-          <div class="urole">접속 중</div>
-        </div>
-        <button class="btn-icon" onclick="openSettings()" title="설정">⚙</button>
-        <button class="btn-icon" onclick="doLogout()" title="나가기" style="font-size:11px">나가기</button>
-      </div>
-
-      <!-- 선택 액션 바 -->
-      <div class="sel-bar" id="selBar">
-        <span class="sel-count" id="selCount">0개 선택</span>
-        <button class="btn btn-sm" onclick="moveSelected()">이동</button>
-        <button class="btn btn-sm" onclick="copySelected()">복사</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteSelected()">삭제</button>
-        <button class="btn btn-sm" onclick="clearSelection()">취소</button>
-      </div>
-
-      <div class="sb-actions">
-        <button class="btn btn-sm btn-primary" style="flex:1" onclick="openNewTpl()">+ 새 템플릿</button>
-        <button class="btn btn-sm" onclick="toggleSelectMode()" id="btnSelMode">선택</button>
-        <button class="btn btn-sm" onclick="deleteAllConfirm()" title="일괄삭제">전체삭제</button>
-      </div>
-
-      <div class="sb-scroll" id="sbScroll">
-        <div class="loading-row"><span class="spin"></span>불러오는 중…</div>
-      </div>
+  <!-- ══════ MESSAGE PAGE ══════ -->
+  <div class="page on" id="page-msg">
+    <div class="inner-tabs">
+      <div class="inner-tab on" id="msgtab-dash" onclick="showMsgTab('dash')">대시보드</div>
+      <div class="inner-tab" id="msgtab-input" onclick="showMsgTab('input')">일별 입력</div>
+      <div class="inner-tab" id="msgtab-history" onclick="showMsgTab('history')">입력 내역</div>
     </div>
 
-    <!-- CONTENT -->
-    <div class="content" id="contentArea">
-      <!-- 기본: 선택 안 된 상태 -->
-      <div class="empty" id="emptyState">
-        <div>← 템플릿을 선택하거나 새로 만들어 보세요</div>
-      </div>
-
-      <!-- 편집/작성 영역 -->
-      <div style="display:none;flex-direction:column;height:100%" id="editArea">
-        <div class="mode-bar">
-          <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
-          <div class="mtab" id="tabUse" onclick="switchMode('use')">작성 · 미리보기</div>
-        </div>
-        <div class="panel" id="panel"></div>
-      </div>
-
-      <!-- 설정 페이지 -->
-      <div class="settings-page" id="settingsPage">
-        <div class="top-bar">
-          <span class="top-bar-title">설정</span>
-          <button class="btn btn-sm" onclick="closeSettings()">닫기</button>
-        </div>
-        <div class="panel" style="gap:20px">
-          <!-- 카테고리 관리 -->
-          <div>
-            <div style="font-size:13px;font-weight:500;margin-bottom:10px">카테고리 관리</div>
-            <div class="fl">
-              <label>새 카테고리 이름</label>
-              <div style="display:flex;gap:6px">
-                <input id="newCatInput" placeholder="예) 외부 영업" style="flex:1" onkeydown="if(event.key==='Enter')addCategory()"/>
-                <button class="btn btn-sm btn-primary" onclick="addCategory()">추가</button>
-              </div>
-            </div>
-            <div id="catTagList" style="display:flex;flex-wrap:wrap;margin-top:8px"></div>
+    <!-- 대시보드 -->
+    <div id="msgview-dash" class="pscroll">
+      <!-- 합계 지표 -->
+      <div class="card">
+        <div class="sec-hd"><span class="sec-title">이번 달 발송 현황</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="month" id="dashMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgDash()"/>
           </div>
-          <div style="height:0.5px;background:var(--bd)"></div>
-          <!-- 계정 -->
-          <div>
-            <div style="font-size:13px;font-weight:500;margin-bottom:10px">계정</div>
-            <div style="font-size:13px;color:var(--text2)" id="settingsUserInfo">-</div>
-            <button class="btn btn-sm btn-danger" style="margin-top:10px" onclick="doLogout()">로그아웃</button>
-          </div>
+        </div>
+        <div class="metric-grid" id="msgMetrics"></div>
+      </div>
+      <!-- 일별 추이 차트 -->
+      <div class="grid2">
+        <div class="card">
+          <div class="sec-hd"><span class="sec-title">일별 발송 추이</span></div>
+          <div class="chart-wrap"><canvas id="chartDaily"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="sec-hd"><span class="sec-title">타입별 비중</span></div>
+          <div class="chart-wrap"><canvas id="chartPie"></canvas></div>
+        </div>
+      </div>
+      <!-- 팀원별 발송 -->
+      <div class="card">
+        <div class="sec-hd"><span class="sec-title">팀원별 발송 합계</span></div>
+        <div class="tbl-wrap">
+          <table class="htbl" id="teamMsgTable">
+            <thead><tr>
+              <th style="text-align:left">팀원</th>
+              <th>SMS</th><th>LMS</th><th>MMS</th><th>알림톡</th><th>브랜드메시지</th><th>RCS</th><th>합계</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </div>
     </div>
 
+    <!-- 일별 입력 -->
+    <div id="msgview-input" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">일별 발송 건수 입력</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="month" id="inputMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgInputTable()"/>
+            <button class="btn btn-sm btn-primary" onclick="saveMsgBatch()">전체 저장</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">입력 후 <b>전체 저장</b>을 눌러주세요. 날짜별로 한 번만 저장됩니다.</div>
+        <div class="tbl-wrap">
+          <table class="msg-input-table" id="msgInputTable">
+            <thead><tr>
+              <th>날짜</th>
+              <th><span class="mtype mt-sms">SMS</span></th>
+              <th><span class="mtype mt-lms">LMS</span></th>
+              <th><span class="mtype mt-mms">MMS</span></th>
+              <th><span class="mtype mt-ali">알림톡</span></th>
+              <th><span class="mtype mt-brand">브랜드메시지</span></th>
+              <th><span class="mtype mt-rcs">RCS</span></th>
+              <th>합계</th>
+            </tr></thead>
+            <tbody id="msgInputBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 입력 내역 -->
+    <div id="msgview-history" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">발송 내역</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="historyUser" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgHistory()">
+              <option value="">전체 팀원</option>
+            </select>
+            <input type="month" id="historyMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgHistory()"/>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="htbl">
+            <thead><tr>
+              <th style="text-align:left">날짜</th>
+              <th style="text-align:left">팀원</th>
+              <th>SMS</th><th>LMS</th><th>MMS</th><th>알림톡</th><th>브랜드메시지</th><th>RCS</th><th>합계</th>
+              <th></th>
+            </tr></thead>
+            <tbody id="historyBody"></tbody>
+            <tfoot id="historyFoot"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SALES PAGE ══════ -->
+  <div class="page" id="page-sales">
+    <div class="pscroll">
+      <div class="metric-grid" style="margin-bottom:0" id="metricGrid">
+        <div class="metric"><div class="metric-label">이번 달 목표</div><div class="metric-value" id="mTarget">-</div></div>
+        <div class="metric"><div class="metric-label">이번 달 실적</div><div class="metric-value" id="mActual">-</div></div>
+        <div class="metric"><div class="metric-label">달성률</div><div class="metric-value" id="mRate">-</div><div class="prog-wrap"><div class="prog-bar" id="mProg" style="width:0%"></div></div></div>
+        <div class="metric"><div class="metric-label">전체 리드</div><div class="metric-value" id="mLeads">-</div></div>
+        <div class="metric"><div class="metric-label">이번달 활동</div><div class="metric-value" id="mActs">-</div></div>
+      </div>
+      <div class="card">
+        <div class="sec-hd"><span class="sec-title">영업 파이프라인</span>
+          <button class="btn btn-sm btn-primary" onclick="openLeadModal()">+ 리드 추가</button>
+        </div>
+        <div class="pipeline" id="pipeline"></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="sec-hd"><span class="sec-title">팀원별 현황</span>
+            <button class="btn btn-sm btn-primary" onclick="openTargetModal()">목표 입력</button>
+          </div>
+          <div id="teamList"></div>
+        </div>
+        <div class="card">
+          <div class="sec-hd"><span class="sec-title">최근 활동</span>
+            <button class="btn btn-sm btn-primary" onclick="openActModal()">+ 기록</button>
+          </div>
+          <div id="actFeed"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-hd"><span class="sec-title">리드 목록</span>
+          <div style="display:flex;gap:8px">
+            <select id="filterStatus" class="btn btn-sm" onchange="renderLeadTable()" style="border:0.5px solid var(--bd2)">
+              <option value="">전체</option>
+              <option>잠재</option><option>접촉</option><option>제안</option>
+              <option>협상</option><option>완료</option><option>실패</option>
+            </select>
+            <button class="btn btn-sm btn-primary" onclick="openLeadModal()">+ 추가</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="ltbl"><thead><tr>
+            <th>회사명</th><th>담당자</th><th>연락처</th><th>상태</th>
+            <th>딜 금액</th><th>담당팀원</th><th>메모</th><th></th>
+          </tr></thead><tbody id="leadTbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ MAIL PAGE ══════ -->
+  <div class="page" id="page-mail">
+    <div class="mail-layout">
+      <div class="sidebar">
+        <div class="sel-bar" id="selBar">
+          <span style="font-size:12px;color:var(--text2);flex:1" id="selCount">0개 선택</span>
+          <button class="btn btn-sm" onclick="moveSelected()">이동</button>
+          <button class="btn btn-sm" onclick="copySelected()">복사</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteSelected()">삭제</button>
+          <button class="btn btn-sm" onclick="clearSelection()">취소</button>
+        </div>
+        <div class="sb-acts">
+          <button class="btn btn-sm btn-primary" style="flex:1" onclick="openNewTpl()">+ 새 템플릿</button>
+          <button class="btn btn-sm" id="btnSelMode" onclick="toggleSelectMode()">선택</button>
+          <button class="btn btn-sm" onclick="deleteAllConfirm()">전체삭제</button>
+        </div>
+        <div class="sb-scroll" id="sbScroll">
+          <div style="font-size:12px;color:var(--text3);padding:8px 10px"><span class="spin"></span>불러오는 중…</div>
+        </div>
+      </div>
+      <div class="mail-content">
+        <div class="empty-panel" id="emptyPanel">← 템플릿을 선택하거나 새로 만들어 보세요</div>
+        <div style="display:none;flex-direction:column;height:100%" id="editArea">
+          <div class="mode-bar">
+            <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
+            <div class="mtab" id="tabUse" onclick="switchMode('use')">작성 · 미리보기</div>
+          </div>
+          <div class="panel" id="panel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SETTINGS PAGE ══════ -->
+  <div class="page" id="page-settings">
+    <div class="settings-wrap">
+      <div style="font-size:15px;font-weight:600">설정</div>
+      <div class="card">
+        <div class="sec-hd" style="margin-bottom:10px"><span class="sec-title">카테고리 관리</span></div>
+        <div class="fl">
+          <label>새 카테고리</label>
+          <div style="display:flex;gap:6px">
+            <input id="newCatInput" placeholder="예) 외부 영업" style="flex:1" onkeydown="if(event.key==='Enter')addCategory()"/>
+            <button class="btn btn-sm btn-primary" onclick="addCategory()">추가</button>
+          </div>
+        </div>
+        <div id="catTagList" style="display:flex;flex-wrap:wrap;margin-top:8px"></div>
+      </div>
+      <div class="card">
+        <div class="sec-hd" style="margin-bottom:10px"><span class="sec-title">계정</span></div>
+        <div style="font-size:13px;color:var(--text2)" id="settingsUserInfo">-</div>
+        <button class="btn btn-sm btn-danger" style="margin-top:10px" onclick="doLogout()">로그아웃</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- 새 템플릿 모달 -->
+<!-- ── MODALS ── -->
+<div class="mbg" id="modalLead">
+  <div class="modal">
+    <h3 id="leadModalTitle">리드 추가</h3>
+    <div class="r2">
+      <div class="fl"><label>회사명 *</label><input id="lCompany" placeholder="(주)ABC"/></div>
+      <div class="fl"><label>담당자</label><input id="lContact" placeholder="김철수"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>이메일</label><input id="lEmail"/></div>
+      <div class="fl"><label>전화번호</label><input id="lPhone"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>상태</label>
+        <select id="lStatus"><option>잠재</option><option>접촉</option><option>제안</option><option>협상</option><option>완료</option><option>실패</option></select>
+      </div>
+      <div class="fl"><label>딜 금액 (만원)</label><input id="lValue" type="number" placeholder="0"/></div>
+    </div>
+    <div class="fl"><label>담당 팀원</label><select id="lAssignee"><option value="">미배정</option></select></div>
+    <div class="fl"><label>메모</label><textarea id="lNote"></textarea></div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalLead')">취소</button>
+      <button class="btn btn-primary" onclick="saveLead()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="modalAct">
+  <div class="modal">
+    <h3>활동 기록</h3>
+    <div class="r2">
+      <div class="fl"><label>유형</label>
+        <select id="aType"><option>전화</option><option>미팅</option><option>메일</option><option>기타</option></select>
+      </div>
+      <div class="fl"><label>관련 리드</label><select id="aLead"><option value="">없음</option></select></div>
+    </div>
+    <div class="fl"><label>제목 *</label><input id="aTitle" placeholder="예) 초기 미팅 완료"/></div>
+    <div class="fl"><label>일시</label><input id="aDate" type="datetime-local"/></div>
+    <div class="fl"><label>메모</label><textarea id="aMemo"></textarea></div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalAct')">취소</button>
+      <button class="btn btn-primary" onclick="saveAct()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="modalTarget">
+  <div class="modal">
+    <h3>이번 달 목표 입력</h3>
+    <div class="fl"><label>연월</label><input id="tMonth" type="month"/></div>
+    <div class="fl"><label>목표 금액 (만원)</label><input id="tTarget" type="number" placeholder="0"/></div>
+    <div class="fl"><label>실적 금액 (만원)</label><input id="tActual" type="number" placeholder="0"/></div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalTarget')">취소</button>
+      <button class="btn btn-primary" onclick="saveTarget()">저장</button>
+    </div>
+  </div>
+</div>
+
 <div class="mbg" id="modalNew">
   <div class="modal">
     <h3>새 템플릿</h3>
-    <div class="fl"><label>템플릿 이름 *</label><input id="nName" placeholder="예) 미팅 요청"/></div>
-    <div class="fl">
-      <label>카테고리</label>
+    <div class="fl"><label>이름 *</label><input id="nName" placeholder="예) 미팅 요청"/></div>
+    <div class="fl"><label>카테고리</label>
       <select id="nCat"><option value="">카테고리 없음</option></select>
     </div>
     <div class="mbtns">
@@ -278,12 +563,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 </div>
 
-<!-- 이동 모달 -->
 <div class="mbg" id="modalMove">
-  <div class="modal">
-    <h3 id="moveTitle">템플릿 이동</h3>
-    <div class="fl">
-      <label>이동할 카테고리</label>
+  <div class="modal"><h3 id="moveTitle">이동</h3>
+    <div class="fl"><label>이동할 카테고리</label>
       <select id="moveCat"><option value="">카테고리 없음</option></select>
     </div>
     <div class="mbtns">
@@ -293,13 +575,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 </div>
 
-<!-- 복사 모달 -->
 <div class="mbg" id="modalCopy">
-  <div class="modal">
-    <h3 id="copyTitle">템플릿 복사</h3>
-    <div class="fl"><label>복사본 이름</label><input id="copyName" placeholder="복사본 이름"/></div>
-    <div class="fl">
-      <label>카테고리</label>
+  <div class="modal"><h3 id="copyTitle">복사</h3>
+    <div class="fl"><label>복사본 이름</label><input id="copyName"/></div>
+    <div class="fl"><label>카테고리</label>
       <select id="copyCat"><option value="">카테고리 없음</option></select>
     </div>
     <div class="mbtns">
@@ -309,7 +588,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 </div>
 
-<!-- 컨텍스트 메뉴 -->
 <div class="ctx-menu" id="ctxMenu" style="display:none">
   <div class="ctx-item" onclick="ctxEdit()">편집</div>
   <div class="ctx-item" onclick="ctxMove()">이동</div>
@@ -321,469 +599,547 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <input type="file" id="fileInput" multiple style="display:none" onchange="onFiles(this)"/>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────
-const SUPABASE_URL = 'https://mathhyygiyvczzcemepm.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hdGhoeXlnaXl2Y3p6Y2VtZXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTY1MDEsImV4cCI6MjA5MTM3MjUwMX0.DdJkLOtczQpabJlZOScXV3OaeWk6Moy1oOMpoTKgpk4'
-// ───────────────────────────────────────────────────────────
-
+// ── CONFIG ────────────────────────────────────────────
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'
+const SUPABASE_KEY = 'YOUR_ANON_KEY'
+// ─────────────────────────────────────────────────────
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-let currentUser = null
-let tpls = []       // [{id, name, category, subject, vars, body, sort_order}]
-let cats = []       // ['외부', '내부', ...]  — user categories
-let sel = null      // 현재 선택된 tpl id
-let mode = 'edit'
-let openCats = {}
-let dragSrc = null
-let vals = {}, files = []
-let selectMode = false
-let selectedIds = new Set()
-let ctxTargetId = null
-let moveTargetIds = []  // 이동/복사 대상 ids
-let copyMode = false
+// ── STATE ─────────────────────────────────────────────
+let currentUser=null, allUsers=[]
+let tpls=[], cats=[], leads=[], activities=[], targets=[], msgLogs=[]
+let sel=null, tplMode='edit', openCats={}, dragSrc=null, vals={}, files=[]
+let selectMode=false, selectedIds=new Set(), ctxTargetId=null, moveTargetIds=[]
+let editingLeadId=null
+let chartDaily=null, chartPie=null
 
-// ── AUTH ─────────────────────────────────────────────────────
-async function doLogin() {
-  const name = document.getElementById('nameInput').value.trim()
-  if (!name) return
-  document.getElementById('loginSpin').style.display = 'inline-block'
-  document.getElementById('authErr').textContent = ''
-  try {
-    let { data: user } = await sb.from('users').select('id,name,categories').eq('name', name).maybeSingle()
-    if (!user) {
-      const { data, error } = await sb.from('users').insert({ name, categories: [] }).select().single()
-      if (error) throw error
-      user = data
+// ── AUTH ──────────────────────────────────────────────
+async function doLogin(){
+  const name=document.getElementById('nameInput').value.trim(); if(!name)return
+  document.getElementById('loginSpin').style.display='inline-block'
+  document.getElementById('authErr').textContent=''
+  try{
+    let{data:user}=await sb.from('users').select('id,name,categories').eq('name',name).maybeSingle()
+    if(!user){const{data,error}=await sb.from('users').insert({name,categories:[]}).select().single();if(error)throw error;user=data}
+    currentUser=user; cats=Array.isArray(user.categories)?user.categories:[]
+    document.getElementById('authScreen').style.display='none'
+    document.getElementById('appScreen').style.display='flex'
+    document.getElementById('userAv').textContent=name.slice(0,2)
+    document.getElementById('userName').textContent=name
+    document.getElementById('settingsUserInfo').textContent=name+' 님'
+    // init month inputs
+    const ym=new Date().toISOString().slice(0,7)
+    document.getElementById('dashMonth').value=ym
+    document.getElementById('inputMonth').value=ym
+    document.getElementById('historyMonth').value=ym
+    await Promise.all([loadSalesData(),loadMsgLogs(),loadTemplates()])
+    renderMsgDash(); renderMsgInputTable(); renderMsgHistory(); renderCatTags()
+  }catch(e){document.getElementById('authErr').textContent='오류: '+e.message}
+  finally{document.getElementById('loginSpin').style.display='none'}
+}
+
+function doLogout(){
+  currentUser=null;tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[]
+  sel=null;vals={};files=[];selectMode=false;selectedIds=new Set()
+  if(chartDaily){chartDaily.destroy();chartDaily=null}
+  if(chartPie){chartPie.destroy();chartPie=null}
+  document.getElementById('appScreen').style.display='none'
+  document.getElementById('authScreen').style.display='flex'
+  document.getElementById('nameInput').value=''
+}
+
+// ── PAGE NAV ──────────────────────────────────────────
+function showPage(p){
+  ['msg','sales','mail','settings'].forEach(id=>{
+    document.getElementById('page-'+id).classList.toggle('on',id===p)
+    document.getElementById('nav-'+id).classList.toggle('on',id===p)
+  })
+}
+
+// ── MSG TAB ───────────────────────────────────────────
+function showMsgTab(t){
+  ['dash','input','history'].forEach(id=>{
+    document.getElementById('msgview-'+id).style.display=id===t?'flex':'none'
+    document.getElementById('msgtab-'+id).classList.toggle('on',id===t)
+  })
+  if(t==='dash')renderMsgDash()
+  if(t==='input')renderMsgInputTable()
+  if(t==='history')renderMsgHistory()
+}
+
+// ── MSG DATA ──────────────────────────────────────────
+const MSG_TYPES=['sms','lms','mms','alimtalk','brand_msg','rcs']
+const MSG_LABELS=['SMS','LMS','MMS','알림톡','브랜드메시지','RCS']
+const MSG_COLORS=['#185FA5','#534AB7','#0F6E56','#D85A30','#D4537E','#BA7517']
+const MSG_CLASSES=['mt-sms','mt-lms','mt-mms','mt-ali','mt-brand','mt-rcs']
+
+async function loadMsgLogs(){
+  const{data}=await sb.from('message_logs').select('*').order('log_date',{ascending:false})
+  msgLogs=data||[]
+}
+
+function getMsgLogsFiltered(ym,uid){
+  return msgLogs.filter(l=>{
+    const match=l.log_date&&l.log_date.startsWith(ym)
+    return match&&(uid?l.user_id===uid:true)
+  })
+}
+
+// ── MSG DASHBOARD ─────────────────────────────────────
+function renderMsgDash(){
+  const ym=document.getElementById('dashMonth').value||new Date().toISOString().slice(0,7)
+  const logs=getMsgLogsFiltered(ym,'')
+
+  // totals per type
+  const totals={}
+  MSG_TYPES.forEach(t=>totals[t]=logs.reduce((s,l)=>s+(l[t]||0),0))
+  const grandTotal=Object.values(totals).reduce((a,b)=>a+b,0)
+
+  // metrics
+  const metricsEl=document.getElementById('msgMetrics')
+  metricsEl.innerHTML=`
+    <div class="metric"><div class="metric-label">전체 발송</div><div class="metric-value">${grandTotal.toLocaleString()}</div><div class="metric-sub">건</div></div>
+    ${MSG_TYPES.map((t,i)=>`
+      <div class="metric">
+        <div class="metric-label"><span class="metric-dot" style="background:${MSG_COLORS[i]}"></span>${MSG_LABELS[i]}</div>
+        <div class="metric-value" style="font-size:18px">${(totals[t]||0).toLocaleString()}</div>
+        <div class="metric-sub">${grandTotal>0?Math.round((totals[t]||0)/grandTotal*100)+'%':'-'}</div>
+      </div>`).join('')}
+  `
+
+  // daily chart
+  const days=getDaysInMonth(ym)
+  const datasets=MSG_TYPES.map((t,i)=>({
+    label:MSG_LABELS[i],
+    data:days.map(d=>{ const log=logs.find(l=>l.log_date===d); return log?log[t]||0:0 }),
+    borderColor:MSG_COLORS[i],backgroundColor:MSG_COLORS[i]+'22',
+    borderWidth:2,tension:.3,pointRadius:3,fill:false
+  }))
+
+  if(chartDaily){chartDaily.destroy()}
+  const ctx=document.getElementById('chartDaily').getContext('2d')
+  chartDaily=new Chart(ctx,{type:'line',data:{labels:days.map(d=>d.slice(8)),datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}
+  }})
+
+  // pie chart
+  if(chartPie){chartPie.destroy()}
+  const ctx2=document.getElementById('chartPie').getContext('2d')
+  chartPie=new Chart(ctx2,{type:'doughnut',data:{
+    labels:MSG_LABELS,
+    datasets:[{data:MSG_TYPES.map(t=>totals[t]||0),backgroundColor:MSG_COLORS,borderWidth:2}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}}}})
+
+  // team table
+  const tbody=document.getElementById('teamMsgTable').querySelector('tbody')
+  const teamRows=allUsers.map(u=>{
+    const ul=getMsgLogsFiltered(ym,u.id)
+    const row={}; let tot=0
+    MSG_TYPES.forEach(t=>{row[t]=ul.reduce((s,l)=>s+(l[t]||0),0);tot+=row[t]})
+    return{u,row,tot}
+  }).sort((a,b)=>b.tot-a.tot)
+  const colTot={}; MSG_TYPES.forEach(t=>{colTot[t]=teamRows.reduce((s,r)=>s+r.row[t],0)})
+  const colGrand=teamRows.reduce((s,r)=>s+r.tot,0)
+  tbody.innerHTML=teamRows.map(({u,row,tot})=>`<tr>
+    <td style="font-weight:500">${e(u.name)}</td>
+    ${MSG_TYPES.map(t=>`<td>${(row[t]||0).toLocaleString()}</td>`).join('')}
+    <td class="td-total">${tot.toLocaleString()}</td>
+  </tr>`).join('')+`<tr style="font-weight:700;background:var(--bg2)">
+    <td>합계</td>
+    ${MSG_TYPES.map(t=>`<td>${(colTot[t]||0).toLocaleString()}</td>`).join('')}
+    <td>${colGrand.toLocaleString()}</td>
+  </tr>`
+}
+
+// ── MSG INPUT TABLE ───────────────────────────────────
+function renderMsgInputTable(){
+  const ym=document.getElementById('inputMonth').value||new Date().toISOString().slice(0,7)
+  const days=getDaysInMonth(ym)
+  const tbody=document.getElementById('msgInputBody')
+  tbody.innerHTML=days.map(d=>{
+    const existing=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)
+    const vals=existing||{}
+    const rowTotal=MSG_TYPES.reduce((s,t)=>s+(vals[t]||0),0)
+    return`<tr id="inputrow-${d}">
+      <td style="font-weight:500;text-align:left">${d.slice(5)}</td>
+      ${MSG_TYPES.map(t=>`<td><input type="number" min="0" id="inp-${d}-${t}" value="${vals[t]||''}" placeholder="0" oninput="updateRowTotal('${d}')"/></td>`).join('')}
+      <td class="row-total" id="rowtotal-${d}">${rowTotal>0?rowTotal.toLocaleString():'-'}</td>
+    </tr>`
+  }).join('')
+}
+
+function updateRowTotal(d){
+  let tot=0
+  MSG_TYPES.forEach(t=>{tot+=parseInt(document.getElementById(`inp-${d}-${t}`)?.value)||0})
+  document.getElementById(`rowtotal-${d}`).textContent=tot>0?tot.toLocaleString():'-'
+}
+
+async function saveMsgBatch(){
+  const ym=document.getElementById('inputMonth').value||new Date().toISOString().slice(0,7)
+  const days=getDaysInMonth(ym)
+  let saved=0
+  for(const d of days){
+    const rowVals={}; let hasVal=false
+    MSG_TYPES.forEach(t=>{const v=parseInt(document.getElementById(`inp-${d}-${t}`)?.value)||0;rowVals[t]=v;if(v>0)hasVal=true})
+    if(!hasVal)continue
+    const existing=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)
+    if(existing){
+      await sb.from('message_logs').update({...rowVals}).eq('id',existing.id)
+      Object.assign(existing,rowVals)
+    }else{
+      const{data}=await sb.from('message_logs').insert({user_id:currentUser.id,log_date:d,...rowVals}).select().single()
+      if(data)msgLogs.push(data)
     }
-    currentUser = user
-    cats = Array.isArray(user.categories) ? user.categories : []
-    document.getElementById('authScreen').style.display = 'none'
-    document.getElementById('appScreen').style.display = 'block'
-    document.getElementById('userAv').textContent = name.slice(0,2)
-    document.getElementById('userName').textContent = name + '님'
-    document.getElementById('settingsUserInfo').textContent = name
-    await loadTemplates()
-  } catch(e) {
-    document.getElementById('authErr').textContent = '오류: ' + e.message
-  } finally {
-    document.getElementById('loginSpin').style.display = 'none'
+    saved++
   }
+  alert(saved+'일치 데이터가 저장됐어요!')
+  renderMsgHistory()
 }
 
-function doLogout() {
-  currentUser = null; tpls = []; cats = []; sel = null; vals = {}; files = []
-  selectMode = false; selectedIds = new Set()
-  document.getElementById('appScreen').style.display = 'none'
-  document.getElementById('authScreen').style.display = 'flex'
-  document.getElementById('nameInput').value = ''
-  showEmpty()
+// ── MSG HISTORY ───────────────────────────────────────
+function renderMsgHistory(){
+  const ym=document.getElementById('historyMonth').value||new Date().toISOString().slice(0,7)
+  const uid=document.getElementById('historyUser').value
+  // fill user select
+  const hus=document.getElementById('historyUser')
+  const prev=hus.value
+  hus.innerHTML='<option value="">전체 팀원</option>'+allUsers.map(u=>`<option value="${u.id}" ${u.id===prev?'selected':''}>${e(u.name)}</option>`).join('')
+
+  const logs=getMsgLogsFiltered(ym,uid).sort((a,b)=>a.log_date>b.log_date?-1:1)
+  const tbody=document.getElementById('historyBody')
+  const tfoot=document.getElementById('historyFoot')
+
+  if(!logs.length){tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:20px">데이터가 없어요</td></tr>`;tfoot.innerHTML='';return}
+
+  tbody.innerHTML=logs.map(l=>{
+    const u=allUsers.find(x=>x.id===l.user_id)
+    const tot=MSG_TYPES.reduce((s,t)=>s+(l[t]||0),0)
+    return`<tr>
+      <td>${l.log_date}</td>
+      <td>${u?e(u.name):'-'}</td>
+      ${MSG_TYPES.map(t=>`<td>${(l[t]||0).toLocaleString()}</td>`).join('')}
+      <td class="td-total">${tot.toLocaleString()}</td>
+      <td><button class="btn btn-xs btn-danger" onclick="deleteMsgLog('${l.id}')">삭제</button></td>
+    </tr>`
+  }).join('')
+
+  const foot={}; let footTot=0
+  MSG_TYPES.forEach(t=>{foot[t]=logs.reduce((s,l)=>s+(l[t]||0),0);footTot+=foot[t]})
+  tfoot.innerHTML=`<tr>
+    <td colspan="2">합계</td>
+    ${MSG_TYPES.map(t=>`<td>${(foot[t]||0).toLocaleString()}</td>`).join('')}
+    <td>${footTot.toLocaleString()}</td>
+    <td></td>
+  </tr>`
 }
 
-// ── DB ────────────────────────────────────────────────────────
-async function loadTemplates() {
-  document.getElementById('sbScroll').innerHTML = '<div class="loading-row"><span class="spin"></span>불러오는 중…</div>'
-  const { data, error } = await sb.from('templates').select('*').eq('user_id', currentUser.id).order('sort_order')
-  if (error) { console.error(error); return }
-  tpls = (data||[]).map(t => ({...t, vars: Array.isArray(t.vars)?t.vars:JSON.parse(t.vars||'[]')}))
+async function deleteMsgLog(id){
+  if(!confirm('이 기록을 삭제할까요?'))return
+  await sb.from('message_logs').delete().eq('id',id)
+  msgLogs=msgLogs.filter(l=>l.id!==id)
+  renderMsgHistory()
+}
+
+// ── UTIL: days in month ───────────────────────────────
+function getDaysInMonth(ym){
+  const[y,m]=ym.split('-').map(Number)
+  const days=[]; const date=new Date(y,m-1,1)
+  while(date.getMonth()===m-1){days.push(date.toISOString().slice(0,10));date.setDate(date.getDate()+1)}
+  return days
+}
+
+// ── SALES DATA ────────────────────────────────────────
+async function loadSalesData(){
+  const[lu,ll,la,lt]=await Promise.all([
+    sb.from('users').select('id,name'),
+    sb.from('leads').select('*').order('created_at',{ascending:false}),
+    sb.from('activities').select('*').order('activity_at',{ascending:false}).limit(50),
+    sb.from('targets').select('*')
+  ])
+  allUsers=lu.data||[]; leads=ll.data||[]; activities=la.data||[]; targets=lt.data||[]
+  // fill history user select
+  const hus=document.getElementById('historyUser')
+  hus.innerHTML='<option value="">전체 팀원</option>'+allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
+  renderSalesDashboard()
+}
+
+const STATUS_ORDER=['잠재','접촉','제안','협상','완료','실패']
+const STATUS_COLOR={잠재:'b-gray',접촉:'b-blue',제안:'b-amber',협상:'b-purple',완료:'b-green',실패:'b-red'}
+
+function renderSalesDashboard(){
+  const ym=new Date().toISOString().slice(0,7)
+  const myT=targets.find(t=>t.user_id===currentUser.id&&t.year_month===ym)
+  const tgt=myT?.target_amt||0,act=myT?.actual_amt||0,rate=tgt>0?Math.round(act/tgt*100):0
+  document.getElementById('mTarget').textContent=tgt?tgt.toLocaleString()+'만':'-'
+  document.getElementById('mActual').textContent=act?act.toLocaleString()+'만':'-'
+  document.getElementById('mRate').textContent=tgt?rate+'%':'-'
+  document.getElementById('mProg').style.width=Math.min(rate,100)+'%'
+  document.getElementById('mLeads').textContent=leads.length
+  document.getElementById('mActs').textContent=activities.filter(a=>a.user_id===currentUser.id&&(a.activity_at||'').startsWith(ym)).length
+
+  // pipeline
+  document.getElementById('pipeline').innerHTML=STATUS_ORDER.map(st=>{
+    const items=leads.filter(l=>l.status===st)
+    const tot=items.reduce((s,l)=>s+(l.deal_value||0),0)
+    return`<div class="pipe-col">
+      <div class="pipe-head">${st}<span class="pipe-count">${items.length}</span></div>
+      ${tot?`<div style="font-size:10px;color:var(--text3);margin-bottom:6px">${tot.toLocaleString()}만원</div>`:''}
+      ${items.slice(0,5).map(l=>`<div class="pipe-card" onclick="openLeadModal('${l.id}')">
+        <div class="pipe-company">${e(l.company)}</div>
+        <div class="pipe-val">${l.deal_value?l.deal_value.toLocaleString()+'만':'-'}</div>
+      </div>`).join('')}
+    </div>`
+  }).join('')
+
+  // team list
+  document.getElementById('teamList').innerHTML=allUsers.map(u=>{
+    const t=targets.find(x=>x.user_id===u.id&&x.year_month===ym)
+    const tg=t?.target_amt||0,ac=t?.actual_amt||0,r=tg>0?Math.round(ac/tg*100):0
+    return`<div class="team-row">
+      <div class="team-av">${u.name.slice(0,2)}</div>
+      <div class="team-info">
+        <div class="team-name">${e(u.name)}</div>
+        <div class="team-stat">리드 ${leads.filter(l=>l.assignee_id===u.id).length}건 · 활동 ${activities.filter(a=>a.user_id===u.id&&(a.activity_at||'').startsWith(ym)).length}건</div>
+        ${tg?`<div class="prog-wrap"><div class="prog-bar" style="width:${Math.min(r,100)}%"></div></div>`:''}
+      </div>
+      <div class="team-nums">
+        <div><div class="team-num-val">${ac?ac.toLocaleString()+'만':'-'}</div><div class="team-num-lbl">실적</div></div>
+        <div><div class="team-num-val" style="color:${r>=100?'var(--green)':r>=70?'var(--amber)':'var(--text)'}">${tg?r+'%':'-'}</div><div class="team-num-lbl">달성률</div></div>
+      </div>
+    </div>`
+  }).join('')||'<div style="font-size:12px;color:var(--text3)">팀원 없음</div>'
+
+  // act feed
+  const ACT_ICON={전화:'📞',미팅:'🤝',메일:'✉️',기타:'📝'}
+  const ACT_BG={전화:'#E6F1FB',미팅:'#E1F5EE',메일:'#FAEEDA',기타:'#EEEDFE'}
+  document.getElementById('actFeed').innerHTML=activities.slice(0,8).map(a=>{
+    const u=allUsers.find(x=>x.id===a.user_id),l=leads.find(x=>x.id===a.lead_id)
+    const dt=a.activity_at?new Date(a.activity_at).toLocaleDateString('ko',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):''
+    return`<div class="act-item">
+      <div class="act-icon" style="background:${ACT_BG[a.type]||'#f0f0f0'}">${ACT_ICON[a.type]||'📝'}</div>
+      <div class="act-body">
+        <div class="act-title">${e(a.title)}${l?` <span style="font-size:11px;color:var(--text3)">· ${e(l.company)}</span>`:''}</div>
+        <div class="act-meta">${u?e(u.name):''} ${dt}</div>
+      </div>
+    </div>`
+  }).join('')||'<div style="font-size:12px;color:var(--text3)">활동 기록이 없어요</div>'
+
+  renderLeadTable()
+}
+
+function renderLeadTable(){
+  const filter=document.getElementById('filterStatus').value
+  const list=filter?leads.filter(l=>l.status===filter):leads
+  document.getElementById('leadTbody').innerHTML=list.map(l=>{
+    const u=allUsers.find(x=>x.id===l.assignee_id)
+    return`<tr>
+      <td style="font-weight:500">${e(l.company)}</td>
+      <td>${e(l.contact||'-')}</td>
+      <td style="font-size:12px;color:var(--text2)">${e(l.phone||l.email||'-')}</td>
+      <td><span class="badge ${STATUS_COLOR[l.status]||'b-gray'}">${l.status}</span></td>
+      <td>${l.deal_value?l.deal_value.toLocaleString()+'만':'-'}</td>
+      <td>${u?e(u.name):'-'}</td>
+      <td style="font-size:12px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(l.note||'')}</td>
+      <td><div class="td-act">
+        <button class="btn btn-xs" onclick="openLeadModal('${l.id}')">편집</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteLead('${l.id}')">삭제</button>
+      </div></td>
+    </tr>`
+  }).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">리드가 없어요</td></tr>'
+}
+
+// ── LEAD CRUD ─────────────────────────────────────────
+function openLeadModal(id){
+  editingLeadId=id||null
+  document.getElementById('leadModalTitle').textContent=id?'리드 수정':'리드 추가'
+  document.getElementById('lAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
+  if(id){const l=leads.find(x=>x.id===id);if(l){
+    document.getElementById('lCompany').value=l.company||''
+    document.getElementById('lContact').value=l.contact||''
+    document.getElementById('lEmail').value=l.email||''
+    document.getElementById('lPhone').value=l.phone||''
+    document.getElementById('lStatus').value=l.status||'잠재'
+    document.getElementById('lValue').value=l.deal_value||''
+    document.getElementById('lAssignee').value=l.assignee_id||''
+    document.getElementById('lNote').value=l.note||''
+  }}else{['lCompany','lContact','lEmail','lPhone','lValue','lNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('lStatus').value='잠재'}
+  openModal('modalLead')
+}
+async function saveLead(){
+  const company=document.getElementById('lCompany').value.trim();if(!company){alert('회사명을 입력하세요');return}
+  const payload={company,contact:document.getElementById('lContact').value.trim(),email:document.getElementById('lEmail').value.trim(),phone:document.getElementById('lPhone').value.trim(),status:document.getElementById('lStatus').value,deal_value:parseFloat(document.getElementById('lValue').value)||0,assignee_id:document.getElementById('lAssignee').value||null,note:document.getElementById('lNote').value.trim(),user_id:currentUser.id}
+  if(editingLeadId){await sb.from('leads').update(payload).eq('id',editingLeadId);const i=leads.findIndex(l=>l.id===editingLeadId);if(i>=0)leads[i]={...leads[i],...payload}}
+  else{const{data}=await sb.from('leads').insert(payload).select().single();if(data)leads.unshift(data)}
+  closeModal('modalLead');renderSalesDashboard()
+}
+async function deleteLead(id){if(!confirm('삭제할까요?'))return;await sb.from('leads').delete().eq('id',id);leads=leads.filter(l=>l.id!==id);renderSalesDashboard()}
+
+// ── ACTIVITY ──────────────────────────────────────────
+function openActModal(){
+  document.getElementById('aLead').innerHTML='<option value="">없음</option>'+leads.map(l=>`<option value="${l.id}">${e(l.company)}</option>`).join('')
+  document.getElementById('aTitle').value='';document.getElementById('aMemo').value=''
+  document.getElementById('aDate').value=new Date().toISOString().slice(0,16)
+  openModal('modalAct')
+}
+async function saveAct(){
+  const title=document.getElementById('aTitle').value.trim();if(!title){alert('제목을 입력하세요');return}
+  const payload={user_id:currentUser.id,lead_id:document.getElementById('aLead').value||null,type:document.getElementById('aType').value,title,memo:document.getElementById('aMemo').value.trim(),activity_at:document.getElementById('aDate').value||new Date().toISOString()}
+  const{data}=await sb.from('activities').insert(payload).select().single()
+  if(data)activities.unshift(data)
+  closeModal('modalAct');renderSalesDashboard()
+}
+
+// ── TARGET ────────────────────────────────────────────
+function openTargetModal(){
+  const ym=new Date().toISOString().slice(0,7)
+  document.getElementById('tMonth').value=ym
+  const t=targets.find(x=>x.user_id===currentUser.id&&x.year_month===ym)
+  document.getElementById('tTarget').value=t?.target_amt||''
+  document.getElementById('tActual').value=t?.actual_amt||''
+  openModal('modalTarget')
+}
+async function saveTarget(){
+  const ym=document.getElementById('tMonth').value,tgt=parseFloat(document.getElementById('tTarget').value)||0,act=parseFloat(document.getElementById('tActual').value)||0
+  const existing=targets.find(x=>x.user_id===currentUser.id&&x.year_month===ym)
+  if(existing){await sb.from('targets').update({target_amt:tgt,actual_amt:act}).eq('id',existing.id);existing.target_amt=tgt;existing.actual_amt=act}
+  else{const{data}=await sb.from('targets').insert({user_id:currentUser.id,year_month:ym,target_amt:tgt,actual_amt:act}).select().single();if(data)targets.push(data)}
+  closeModal('modalTarget');renderSalesDashboard()
+}
+
+// ── TEMPLATES ─────────────────────────────────────────
+async function loadTemplates(){
+  const{data}=await sb.from('templates').select('*').eq('user_id',currentUser.id).order('sort_order')
+  tpls=(data||[]).map(t=>({...t,vars:Array.isArray(t.vars)?t.vars:JSON.parse(t.vars||'[]')}))
   renderSb()
 }
+async function dbCreate(t){const{data,error}=await sb.from('templates').insert({...t,user_id:currentUser.id}).select().single();if(error)throw error;return{...data,vars:Array.isArray(data.vars)?data.vars:JSON.parse(data.vars||'[]')}}
+async function dbUpdate(id,ch){await sb.from('templates').update(ch).eq('id',id)}
+async function dbDelete(ids){await sb.from('templates').delete().in('id',ids)}
+async function dbSaveOrder(ids){await Promise.all(ids.map((id,i)=>sb.from('templates').update({sort_order:i}).eq('id',id)))}
 
-async function dbCreate(t) {
-  const { data, error } = await sb.from('templates').insert({...t, user_id: currentUser.id}).select().single()
-  if (error) throw error
-  return {...data, vars: Array.isArray(data.vars)?data.vars:JSON.parse(data.vars||'[]')}
+function groupByCat(){
+  const m={},order=[...cats,'미분류']
+  tpls.forEach(t=>{const c=t.category||'미분류';if(!m[c])m[c]=[];m[c].push(t)})
+  const result=[];order.forEach(c=>{if(m[c])result.push([c,m[c]])});Object.keys(m).forEach(c=>{if(!order.includes(c))result.push([c,m[c]])});return result
 }
 
-async function dbUpdate(id, ch) {
-  const { error } = await sb.from('templates').update(ch).eq('id', id)
-  if (error) throw error
-}
-
-async function dbDelete(ids) {
-  const { error } = await sb.from('templates').delete().in('id', ids)
-  if (error) throw error
-}
-
-async function dbSaveOrder(ids) {
-  await Promise.all(ids.map((id,i) => sb.from('templates').update({sort_order:i}).eq('id',id)))
-}
-
-async function saveCats() {
-  await sb.from('users').update({categories: cats}).eq('id', currentUser.id)
-}
-
-// ── SIDEBAR ───────────────────────────────────────────────────
-function groupByCat() {
-  const m = {}
-  const order = [...cats, '미분류']
-  tpls.forEach(t => {
-    const c = t.category || '미분류'
-    if (!m[c]) m[c] = []
-    m[c].push(t)
-  })
-  const result = []
-  order.forEach(c => { if (m[c]) result.push([c, m[c]]) })
-  Object.keys(m).forEach(c => { if (!order.includes(c)) result.push([c, m[c]]) })
-  return result
-}
-
-function renderSb() {
-  const el = document.getElementById('sbScroll')
-  el.innerHTML = ''
-  const groups = groupByCat()
-  if (!groups.length) {
-    el.innerHTML = '<div class="loading-row" style="color:var(--text3)">템플릿이 없어요</div>'
-    return
-  }
-  groups.forEach(([cat, items]) => {
-    if (openCats[cat] === undefined) openCats[cat] = true
-    const open = openCats[cat]
-    const ch = document.createElement('div'); ch.className = 'cat-head'
-    ch.innerHTML = `<span class="cat-arr ${open?'o':''}">\u25B6</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
-    ch.onclick = () => { openCats[cat] = !openCats[cat]; renderSb() }
+function renderSb(){
+  const el=document.getElementById('sbScroll');el.innerHTML=''
+  const groups=groupByCat()
+  if(!groups.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 10px">템플릿이 없어요</div>';return}
+  groups.forEach(([cat,items])=>{
+    if(openCats[cat]===undefined)openCats[cat]=true
+    const open=openCats[cat]
+    const ch=document.createElement('div');ch.className='cat-head'
+    ch.innerHTML=`<span class="cat-arr ${open?'o':''}">\u25B6</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
+    ch.onclick=()=>{openCats[cat]=!openCats[cat];renderSb()}
     el.appendChild(ch)
-    if (open) {
-      const ci = document.createElement('div')
-      items.forEach(t => {
-        const row = document.createElement('div')
-        const checked = selectedIds.has(t.id)
-        row.className = 'tpl-item' + (sel===t.id?' sel':'') + (checked?' checked':'')
-        row.draggable = !selectMode
-        row.innerHTML = `
-          ${selectMode ? `<input type="checkbox" class="tpl-cb" ${checked?'checked':''} onclick="toggleCheck(event,'${t.id}')"/>` : `<span class="dh">\u283F</span>`}
-          <span class="tn">${e(t.name)}</span>
-          ${!selectMode ? `<span class="tpl-menu-btn" onclick="openCtx(event,'${t.id}')">•••</span>` : ''}
-        `
-        row.onclick = ev => {
-          if (ev.target.classList.contains('tpl-cb') || ev.target.classList.contains('tpl-menu-btn')) return
-          if (selectMode) { toggleCheck(ev, t.id); return }
-          selT(t.id)
-        }
-        if (!selectMode) {
-          row.ondragstart = () => { dragSrc = t.id; row.classList.add('dragging') }
-          row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.tpl-item').forEach(r=>r.classList.remove('drag-over')) }
-          row.ondragover = ev => { ev.preventDefault(); row.classList.add('drag-over') }
-          row.ondragleave = () => row.classList.remove('drag-over')
-          row.ondrop = async ev => {
-            ev.preventDefault(); row.classList.remove('drag-over')
-            if (dragSrc && dragSrc !== t.id) {
-              const fi = tpls.findIndex(x=>x.id===dragSrc), ti = tpls.findIndex(x=>x.id===t.id)
-              if (fi>=0&&ti>=0) { const [item]=tpls.splice(fi,1); tpls.splice(ti,0,item); renderSb(); await dbSaveOrder(tpls.map(x=>x.id)) }
-            }
-          }
-        }
-        ci.appendChild(row)
-      })
-      el.appendChild(ci)
-    }
+    if(open){const ci=document.createElement('div');items.forEach(t=>{
+      const row=document.createElement('div'),checked=selectedIds.has(t.id)
+      row.className='tpl-item'+(sel===t.id?' sel':'')+(checked?' checked':'')
+      row.draggable=!selectMode
+      row.innerHTML=`${selectMode?`<input type="checkbox" class="tpl-cb" ${checked?'checked':''} onclick="toggleCheck(event,'${t.id}')"/>`:`<span class="dh">\u283F</span>`}<span class="tn">${e(t.name)}</span>${!selectMode?`<span class="tpl-menu-btn" onclick="openCtx(event,'${t.id}')">•••</span>`:''}`
+      row.onclick=ev=>{if(ev.target.classList.contains('tpl-cb')||ev.target.classList.contains('tpl-menu-btn'))return;if(selectMode){toggleCheck(ev,t.id);return}selT(t.id)}
+      if(!selectMode){
+        row.ondragstart=()=>{dragSrc=t.id;row.classList.add('dragging')}
+        row.ondragend=()=>{row.classList.remove('dragging');document.querySelectorAll('.tpl-item').forEach(r=>r.classList.remove('drag-over'))}
+        row.ondragover=ev=>{ev.preventDefault();row.classList.add('drag-over')}
+        row.ondragleave=()=>row.classList.remove('drag-over')
+        row.ondrop=async ev=>{ev.preventDefault();row.classList.remove('drag-over');if(dragSrc&&dragSrc!==t.id){const fi=tpls.findIndex(x=>x.id===dragSrc),ti=tpls.findIndex(x=>x.id===t.id);if(fi>=0&&ti>=0){const[item]=tpls.splice(fi,1);tpls.splice(ti,0,item);renderSb();await dbSaveOrder(tpls.map(x=>x.id))}}}
+      }
+      ci.appendChild(row)
+    });el.appendChild(ci)}
   })
 }
 
-// ── SELECT MODE ───────────────────────────────────────────────
-function toggleSelectMode() {
-  selectMode = !selectMode
-  selectedIds = new Set()
-  document.getElementById('btnSelMode').textContent = selectMode ? '선택 끄기' : '선택'
-  document.getElementById('selBar').classList.toggle('show', selectMode)
-  updateSelCount()
-  renderSb()
-}
+function toggleSelectMode(){selectMode=!selectMode;selectedIds=new Set();document.getElementById('btnSelMode').textContent=selectMode?'선택끄기':'선택';document.getElementById('selBar').classList.toggle('show',selectMode);updateSelCount();renderSb()}
+function toggleCheck(ev,id){if(typeof ev!=='string')ev.stopPropagation();const tid=typeof ev==='string'?ev:id;if(selectedIds.has(tid))selectedIds.delete(tid);else selectedIds.add(tid);updateSelCount();renderSb()}
+function updateSelCount(){document.getElementById('selCount').textContent=selectedIds.size+'개 선택'}
+function clearSelection(){selectMode=false;selectedIds=new Set();document.getElementById('btnSelMode').textContent='선택';document.getElementById('selBar').classList.remove('show');renderSb()}
+async function deleteSelected(){if(!selectedIds.size)return;if(!confirm(selectedIds.size+'개 삭제?'))return;const ids=[...selectedIds];await dbDelete(ids);tpls=tpls.filter(t=>!ids.includes(t.id));if(ids.includes(sel)){sel=null;showEmpty()}clearSelection()}
+async function deleteAllConfirm(){if(!tpls.length)return;if(!confirm('모든 템플릿('+tpls.length+'개)을 삭제할까요?'))return;await dbDelete(tpls.map(t=>t.id));tpls=[];sel=null;showEmpty();renderSb()}
+async function ctxDelete(){hideCtx();if(!ctxTargetId)return;if(!confirm('삭제할까요?'))return;await dbDelete([ctxTargetId]);tpls=tpls.filter(t=>t.id!==ctxTargetId);if(sel===ctxTargetId){sel=null;showEmpty()}renderSb()}
 
-function toggleCheck(ev, id) {
-  if (typeof ev !== 'string') ev.stopPropagation()
-  const tid = typeof ev === 'string' ? ev : id
-  if (selectedIds.has(tid)) selectedIds.delete(tid)
-  else selectedIds.add(tid)
-  updateSelCount()
-  renderSb()
-}
+function fillCatSelect(selId,cur){const el=document.getElementById(selId);el.innerHTML='<option value="">카테고리 없음</option>'+cats.map(c=>`<option value="${e(c)}" ${cur===c?'selected':''}>${e(c)}</option>`).join('')}
+function moveSelected(){if(!selectedIds.size)return;moveTargetIds=[...selectedIds];document.getElementById('moveTitle').textContent=moveTargetIds.length+'개 이동';fillCatSelect('moveCat','');openModal('modalMove')}
+async function confirmMove(){const cat=document.getElementById('moveCat').value;for(const id of moveTargetIds){const t=tpls.find(x=>x.id===id);if(!t)continue;t.category=cat;await dbUpdate(id,{category:cat})}closeModal('modalMove');clearSelection()}
+function copySelected(){if(!selectedIds.size)return;moveTargetIds=[...selectedIds];document.getElementById('copyTitle').textContent=moveTargetIds.length+'개 복사';document.getElementById('copyName').value=moveTargetIds.length===1?(tpls.find(t=>t.id===moveTargetIds[0])?.name||'')+' (복사)':'';fillCatSelect('copyCat','');openModal('modalCopy')}
+async function confirmCopy(){const cat=document.getElementById('copyCat').value,nameOverride=document.getElementById('copyName').value.trim();for(const id of moveTargetIds){const t=tpls.find(x=>x.id===id);if(!t)continue;const newName=moveTargetIds.length===1?(nameOverride||t.name+' (복사)'):t.name+' (복사)';const created=await dbCreate({name:newName,category:cat||t.category,subject:t.subject,vars:t.vars,body:t.body,sort_order:tpls.length});tpls.push(created)}closeModal('modalCopy');clearSelection()}
 
-function updateSelCount() {
-  document.getElementById('selCount').textContent = selectedIds.size + '개 선택'
-}
+function openCtx(ev,id){ev.stopPropagation();ctxTargetId=id;const m=document.getElementById('ctxMenu');m.style.display='block';m.style.left=Math.min(ev.clientX,window.innerWidth-170)+'px';m.style.top=Math.min(ev.clientY,window.innerHeight-160)+'px'}
+function hideCtx(){document.getElementById('ctxMenu').style.display='none'}
+document.addEventListener('click',hideCtx)
+function ctxEdit(){hideCtx();if(ctxTargetId)selT(ctxTargetId)}
+function ctxMove(){hideCtx();if(!ctxTargetId)return;moveTargetIds=[ctxTargetId];document.getElementById('moveTitle').textContent='이동';fillCatSelect('moveCat',tpls.find(x=>x.id===ctxTargetId)?.category||'');openModal('modalMove')}
+function ctxCopy(){hideCtx();if(!ctxTargetId)return;moveTargetIds=[ctxTargetId];const t=tpls.find(x=>x.id===ctxTargetId);document.getElementById('copyTitle').textContent='복사';document.getElementById('copyName').value=(t?.name||'')+' (복사)';fillCatSelect('copyCat',t?.category||'');openModal('modalCopy')}
 
-function clearSelection() {
-  selectMode = false; selectedIds = new Set()
-  document.getElementById('btnSelMode').textContent = '선택'
-  document.getElementById('selBar').classList.remove('show')
-  renderSb()
-}
+function selT(id){sel=id;vals={};files=[];tplMode='edit';renderSb();showEditArea();renderPanel()}
+function showEmpty(){document.getElementById('emptyPanel').style.display='flex';document.getElementById('editArea').style.display='none';renderSb()}
+function showEditArea(){document.getElementById('emptyPanel').style.display='none';document.getElementById('editArea').style.display='flex'}
+function switchMode(m){tplMode=m;document.getElementById('tabEdit').className='mtab'+(m==='edit'?' on':'');document.getElementById('tabUse').className='mtab'+(m==='use'?' on':'');renderPanel()}
 
-// ── DELETE ────────────────────────────────────────────────────
-async function deleteSelected() {
-  if (!selectedIds.size) return
-  if (!confirm(selectedIds.size + '개 템플릿을 삭제할까요?')) return
-  const ids = [...selectedIds]
-  await dbDelete(ids)
-  tpls = tpls.filter(t => !ids.includes(t.id))
-  if (ids.includes(sel)) { sel = null; showEmpty() }
-  clearSelection()
-}
-
-async function deleteAllConfirm() {
-  if (!tpls.length) return
-  if (!confirm('모든 템플릿(' + tpls.length + '개)을 삭제할까요?')) return
-  await dbDelete(tpls.map(t=>t.id))
-  tpls = []; sel = null; showEmpty(); renderSb()
-}
-
-async function ctxDelete() {
-  hideCtx()
-  if (!ctxTargetId) return
-  if (!confirm('이 템플릿을 삭제할까요?')) return
-  await dbDelete([ctxTargetId])
-  tpls = tpls.filter(t=>t.id!==ctxTargetId)
-  if (sel===ctxTargetId) { sel=null; showEmpty() }
-  renderSb()
-}
-
-// ── MOVE / COPY ───────────────────────────────────────────────
-function fillCatSelect(selId, currentCat) {
-  const el = document.getElementById(selId)
-  el.innerHTML = '<option value="">카테고리 없음</option>' + cats.map(c=>`<option value="${e(c)}" ${currentCat===c?'selected':''}>${e(c)}</option>`).join('')
-}
-
-function moveSelected() {
-  if (!selectedIds.size) return
-  moveTargetIds = [...selectedIds]; copyMode = false
-  document.getElementById('moveTitle').textContent = moveTargetIds.length + '개 템플릿 이동'
-  fillCatSelect('moveCat', '')
-  openModal('modalMove')
-}
-
-async function confirmMove() {
-  const cat = document.getElementById('moveCat').value
-  for (const id of moveTargetIds) {
-    const t = tpls.find(x=>x.id===id); if (!t) continue
-    t.category = cat
-    await dbUpdate(id, {category: cat})
-  }
-  closeModal('modalMove'); clearSelection()
-}
-
-function copySelected() {
-  if (!selectedIds.size) return
-  moveTargetIds = [...selectedIds]; copyMode = true
-  document.getElementById('copyTitle').textContent = moveTargetIds.length + '개 템플릿 복사'
-  document.getElementById('copyName').value = moveTargetIds.length === 1 ? (tpls.find(t=>t.id===moveTargetIds[0])?.name||'') + ' (복사)' : ''
-  fillCatSelect('copyCat', '')
-  openModal('modalCopy')
-}
-
-async function confirmCopy() {
-  const cat = document.getElementById('copyCat').value
-  const nameOverride = document.getElementById('copyName').value.trim()
-  for (const id of moveTargetIds) {
-    const t = tpls.find(x=>x.id===id); if (!t) continue
-    const newName = moveTargetIds.length === 1 ? (nameOverride || t.name + ' (복사)') : t.name + ' (복사)'
-    const created = await dbCreate({name:newName, category:cat||t.category, subject:t.subject, vars:t.vars, body:t.body, sort_order:tpls.length})
-    tpls.push(created)
-  }
-  closeModal('modalCopy'); clearSelection()
-}
-
-// ── CTX MENU ─────────────────────────────────────────────────
-function openCtx(ev, id) {
-  ev.stopPropagation()
-  ctxTargetId = id
-  const m = document.getElementById('ctxMenu')
-  m.style.display = 'block'
-  m.style.left = Math.min(ev.clientX, window.innerWidth-170) + 'px'
-  m.style.top = Math.min(ev.clientY, window.innerHeight-170) + 'px'
-}
-function hideCtx() { document.getElementById('ctxMenu').style.display = 'none' }
-document.addEventListener('click', hideCtx)
-
-function ctxEdit() { hideCtx(); if (ctxTargetId) selT(ctxTargetId) }
-
-function ctxMove() {
-  hideCtx()
-  if (!ctxTargetId) return
-  moveTargetIds = [ctxTargetId]; copyMode = false
-  document.getElementById('moveTitle').textContent = '템플릿 이동'
-  const t = tpls.find(x=>x.id===ctxTargetId)
-  fillCatSelect('moveCat', t?.category||'')
-  openModal('modalMove')
-}
-
-function ctxCopy() {
-  hideCtx()
-  if (!ctxTargetId) return
-  moveTargetIds = [ctxTargetId]; copyMode = true
-  const t = tpls.find(x=>x.id===ctxTargetId)
-  document.getElementById('copyTitle').textContent = '템플릿 복사'
-  document.getElementById('copyName').value = (t?.name||'') + ' (복사)'
-  fillCatSelect('copyCat', t?.category||'')
-  openModal('modalCopy')
-}
-
-// ── SELECT & EDIT ─────────────────────────────────────────────
-function selT(id) { sel=id; vals={}; files=[]; mode='edit'; renderSb(); showEditArea(); renderPanel() }
-
-function showEmpty() {
-  document.getElementById('emptyState').style.display = 'flex'
-  document.getElementById('editArea').style.display = 'none'
-  document.getElementById('settingsPage').style.display = 'none'
-}
-
-function showEditArea() {
-  document.getElementById('emptyState').style.display = 'none'
-  document.getElementById('editArea').style.display = 'flex'
-  document.getElementById('settingsPage').style.display = 'none'
-}
-
-function switchMode(m) {
-  mode = m
-  document.getElementById('tabEdit').className = 'mtab' + (m==='edit'?' on':'')
-  document.getElementById('tabUse').className  = 'mtab' + (m==='use'?' on':'')
-  renderPanel()
-}
-
-function renderPanel() {
-  if (!sel) return
-  const t = tpls.find(x=>x.id===sel); if(!t) return
-  const p = document.getElementById('panel')
-  if (mode==='edit') {
-    p.innerHTML = `
-      <div class="r2">
-        <div class="fl"><label>템플릿 이름</label><input id="fN" value="${e(t.name)}" oninput="pL('name',this.value)"/></div>
-        <div class="fl"><label>카테고리</label>
-          <select id="fCat" onchange="pL('category',this.value)">
-            <option value="">카테고리 없음</option>
-            ${cats.map(c=>`<option value="${e(c)}" ${t.category===c?'selected':''}>${e(c)}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="fl"><label>제목 (변수 = {중괄호})</label><input id="fS" value="${e(t.subject)}" oninput="pL('subject',this.value)"/></div>
-      <div class="fl">
-        <label>변수 목록</label>
-        <div class="vtags" id="vtags"></div>
-        <div class="vadd"><input id="vi" placeholder="변수명 입력 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button class="btn btn-sm" onclick="addV()">+ 추가</button></div>
-        <span class="hint">본문에서 {변수명} 형태로 사용하세요</span>
-      </div>
-      <div class="fl"><label>본문 템플릿</label><textarea id="fB" oninput="pL('body',this.value)">${e(t.body)}</textarea></div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <button class="btn btn-primary" onclick="saveT()">저장</button>
-        <span class="ok" id="okMsg" style="display:none">저장됐어요</span>
-      </div>`
+function renderPanel(){
+  if(!sel)return;const t=tpls.find(x=>x.id===sel);if(!t)return;const p=document.getElementById('panel')
+  if(tplMode==='edit'){
+    p.innerHTML=`<div class="r2">
+      <div class="fl"><label>이름</label><input id="fN" value="${e(t.name)}" oninput="pL('name',this.value)"/></div>
+      <div class="fl"><label>카테고리</label><select id="fCat" onchange="pL('category',this.value)"><option value="">없음</option>${cats.map(c=>`<option value="${e(c)}" ${t.category===c?'selected':''}>${e(c)}</option>`).join('')}</select></div>
+    </div>
+    <div class="fl"><label>제목 ({변수})</label><input id="fS" value="${e(t.subject)}" oninput="pL('subject',this.value)"/></div>
+    <div class="fl"><label>변수</label><div class="vtags" id="vtags"></div>
+      <div class="vadd"><input id="vi" placeholder="변수명 입력 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button class="btn btn-sm" onclick="addV()">+ 추가</button></div>
+      <span class="hint">본문에서 {변수명} 형태로 사용하세요</span>
+    </div>
+    <div class="fl"><label>본문</label><textarea id="fB" oninput="pL('body',this.value)">${e(t.body)}</textarea></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn btn-primary" onclick="saveT()">저장</button>
+      <span class="ok" id="okMsg" style="display:none">저장됐어요</span>
+    </div>`
     renderVtags(t)
-  } else {
-    p.innerHTML = `
-      <div class="r2">${t.vars.map(v=>`<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v]||'')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
-      <div class="fl">
-        <label>파일 첨부</label>
-        <div class="file-zone" onclick="document.getElementById('fileInput').click()">
-          <div><div class="fz-text">클릭하여 파일 선택</div><div class="fz-hint">여러 파일 동시 선택 가능</div></div>
-        </div>
-        <div class="flist" id="flist"></div>
-      </div>
-      <div class="psubj">제목: <b id="pSubj"></b></div>
-      <div class="pbody" id="pBody"></div>
-      <div class="pfiles" id="pFiles"></div>
-      <button class="btn" id="btnCopy" onclick="copyAll()" style="margin-top:4px;align-self:flex-start">복사하기</button>`
-    renderFlist(); updatePreview(t)
+  }else{
+    p.innerHTML=`<div class="r2">${t.vars.map(v=>`<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v]||'')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
+    <div class="fl"><label>파일 첨부</label>
+      <div class="file-zone" onclick="document.getElementById('fileInput').click()">
+        <div><div style="font-size:12px;color:var(--text2)">클릭하여 파일 선택</div><div style="font-size:11px;color:var(--text3)">여러 파일 동시 선택 가능</div></div>
+      </div><div id="flist"></div>
+    </div>
+    <div class="psubj">제목: <b id="pSubj"></b></div>
+    <div class="pbody" id="pBody"></div>
+    <div id="pFiles" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px"></div>
+    <button class="btn" id="btnCopy" onclick="copyAll()" style="align-self:flex-start;margin-top:4px">복사하기</button>`
+    renderFlist();updatePreview(t)
   }
 }
 
-function pL(k,v) { const t=tpls.find(x=>x.id===sel); if(!t)return; t[k]=v; if(k==='name'||k==='category')renderSb() }
-
-async function saveT() {
-  const t=tpls.find(x=>x.id===sel); if(!t)return
-  t.name=document.getElementById('fN').value
-  t.category=document.getElementById('fCat').value
-  t.subject=document.getElementById('fS').value
-  t.body=document.getElementById('fB').value
-  await dbUpdate(t.id,{name:t.name,category:t.category,subject:t.subject,body:t.body,vars:t.vars})
-  renderSb()
-  const m=document.getElementById('okMsg'); m.style.display='inline'; setTimeout(()=>m.style.display='none',2000)
-}
-
-function renderVtags(t) {
-  const el=document.getElementById('vtags'); if(!el)return
-  el.innerHTML=t.vars.map(v=>`<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">×</span></span>`).join('')
-}
+function pL(k,v){const t=tpls.find(x=>x.id===sel);if(!t)return;t[k]=v;if(k==='name'||k==='category')renderSb()}
+async function saveT(){const t=tpls.find(x=>x.id===sel);if(!t)return;t.name=document.getElementById('fN').value;t.category=document.getElementById('fCat').value;t.subject=document.getElementById('fS').value;t.body=document.getElementById('fB').value;await dbUpdate(t.id,{name:t.name,category:t.category,subject:t.subject,body:t.body,vars:t.vars});renderSb();const m=document.getElementById('okMsg');m.style.display='inline';setTimeout(()=>m.style.display='none',2000)}
+function renderVtags(t){const el=document.getElementById('vtags');if(!el)return;el.innerHTML=t.vars.map(v=>`<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">×</span></span>`).join('')}
 function addV(){const inp=document.getElementById('vi'),v=inp.value.trim().replace(/[{}]/g,'');if(!v)return;const t=tpls.find(x=>x.id===sel);if(!t||t.vars.includes(v)){inp.value='';return}t.vars.push(v);inp.value='';renderVtags(t)}
 function rmV(v){const t=tpls.find(x=>x.id===sel);if(!t)return;t.vars=t.vars.filter(x=>x!==v);renderVtags(t)}
-
 function setVal(k,v){vals[k]=v;const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
-function updatePreview(t){
-  let s=t.subject,b=t.body
-  t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)})
-  const ps=document.getElementById('pSubj'),pb=document.getElementById('pBody'),pf=document.getElementById('pFiles')
-  if(ps)ps.textContent=s
-  if(pb)pb.innerHTML=b.replace(/\{[^}]+\}/g,m=>`<span class="hi">${m}</span>`).replace(/\n/g,'<br>')
-  if(pf)pf.innerHTML=files.map(f=>`<span class="pfchip">${e(f.name)}</span>`).join('')
-}
+function updatePreview(t){let s=t.subject,b=t.body;t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)});const ps=document.getElementById('pSubj'),pb=document.getElementById('pBody'),pf=document.getElementById('pFiles');if(ps)ps.textContent=s;if(pb)pb.innerHTML=b.replace(/\{[^}]+\}/g,m=>`<span class="hi">${m}</span>`).replace(/\n/g,'<br>');if(pf)pf.innerHTML=files.map(f=>`<span style="display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text2)">${e(f.name)}</span>`).join('')}
 function onFiles(inp){Array.from(inp.files).forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size))files.push(f)});inp.value='';renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
-function renderFlist(){const el=document.getElementById('flist');if(!el)return;el.innerHTML=files.map((f,i)=>`<div class="fchip"><span class="fchip-name">${e(f.name)}</span><span class="fchip-size">${fmt(f.size)}</span><span class="fchip-x" onclick="rmFile(${i})">✕</span></div>`).join('')}
+function renderFlist(){const el=document.getElementById('flist');if(!el)return;el.innerHTML=files.map((f,i)=>`<div class="fchip"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${e(f.name)}</span><span style="font-size:11px;color:var(--text3);white-space:nowrap">${fmt(f.size)}</span><span style="cursor:pointer;color:var(--text3);font-size:12px" onclick="rmFile(${i})">✕</span></div>`).join('')}
 function rmFile(i){files.splice(i,1);renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
 function fmt(b){if(b<1024)return b+'B';if(b<1048576)return Math.round(b/1024)+'KB';return(b/1048576).toFixed(1)+'MB'}
-function copyAll(){
-  const t=tpls.find(x=>x.id===sel);if(!t)return
-  let s=t.subject,b=t.body
-  t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)})
-  if(files.length)b+='\n\n첨부파일: '+files.map(f=>f.name).join(', ')
-  navigator.clipboard.writeText(`제목: ${s}\n\n${b}`).then(()=>{
-    const btn=document.getElementById('btnCopy');btn.textContent='복사 완료!';btn.style.color='var(--green)'
-    setTimeout(()=>{btn.textContent='복사하기';btn.style.color=''},2000)
-  })
-}
+function copyAll(){const t=tpls.find(x=>x.id===sel);if(!t)return;let s=t.subject,b=t.body;t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||`{${v}}`);b=b.replace(rx,vals[v]||`{${v}}`)});if(files.length)b+='\n\n첨부파일: '+files.map(f=>f.name).join(', ');navigator.clipboard.writeText(`제목: ${s}\n\n${b}`).then(()=>{const btn=document.getElementById('btnCopy');btn.textContent='복사 완료!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent='복사하기';btn.style.color=''},2000)})}
 
-// ── NEW TEMPLATE ──────────────────────────────────────────────
-function openNewTpl() {
-  document.getElementById('nName').value = ''
-  const s = document.getElementById('nCat')
-  s.innerHTML = '<option value="">카테고리 없음</option>' + cats.map(c=>`<option value="${e(c)}">${e(c)}</option>`).join('')
-  openModal('modalNew')
-}
-async function confirmNew() {
-  const name=document.getElementById('nName').value.trim(); if(!name){alert('이름을 입력하세요');return}
-  const cat=document.getElementById('nCat').value
-  try {
-    const created=await dbCreate({name,category:cat,subject:`[${name}] {주제}`,vars:['수신자','발신자','주제'],body:'안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',sort_order:tpls.length})
-    tpls.push(created); closeModal('modalNew'); renderSb(); selT(created.id)
-  } catch(err){alert('생성 실패: '+err.message)}
-}
+function openNewTpl(){document.getElementById('nName').value='';const s=document.getElementById('nCat');s.innerHTML='<option value="">카테고리 없음</option>'+cats.map(c=>`<option value="${e(c)}">${e(c)}</option>`).join('');openModal('modalNew')}
+async function confirmNew(){const name=document.getElementById('nName').value.trim();if(!name){alert('이름을 입력하세요');return}const cat=document.getElementById('nCat').value;try{const created=await dbCreate({name,category:cat,subject:`[${name}] {주제}`,vars:['수신자','발신자','주제'],body:'안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',sort_order:tpls.length});tpls.push(created);closeModal('modalNew');renderSb();selT(created.id)}catch(err){alert('생성 실패: '+err.message)}}
 
-// ── SETTINGS ─────────────────────────────────────────────────
-function openSettings() {
-  document.getElementById('emptyState').style.display = 'none'
-  document.getElementById('editArea').style.display = 'none'
-  document.getElementById('settingsPage').style.display = 'flex'
-  sel = null; renderSb()
-  renderCatTags()
-}
-function closeSettings() { showEmpty() }
+// ── SETTINGS ──────────────────────────────────────────
+function renderCatTags(){const el=document.getElementById('catTagList');el.innerHTML=cats.length?cats.map((c,i)=>`<span class="cat-tag">${e(c)}<span class="cx" onclick="removeCategory(${i})">×</span></span>`).join(''):'<span style="font-size:12px;color:var(--text3)">카테고리가 없어요</span>'}
+async function addCategory(){const inp=document.getElementById('newCatInput'),name=inp.value.trim();if(!name||cats.includes(name)){inp.value='';return}cats.push(name);inp.value='';await sb.from('users').update({categories:cats}).eq('id',currentUser.id);renderCatTags()}
+async function removeCategory(i){if(!confirm(`'${cats[i]}' 삭제?`))return;cats.splice(i,1);await sb.from('users').update({categories:cats}).eq('id',currentUser.id);renderCatTags()}
 
-function renderCatTags() {
-  const el = document.getElementById('catTagList')
-  el.innerHTML = cats.length ? cats.map((c,i)=>`
-    <span class="cat-tag">
-      ${e(c)}
-      <span class="cx" onclick="removeCategory(${i})">×</span>
-    </span>`).join('') : '<span style="font-size:12px;color:var(--text3)">카테고리가 없어요. 추가해 보세요.</span>'
-}
+// ── MODAL ─────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.mbg').forEach(m=>m.addEventListener('click',ev=>{if(ev.target===m)m.classList.remove('open')}))})
 
-async function addCategory() {
-  const inp = document.getElementById('newCatInput')
-  const name = inp.value.trim()
-  if (!name || cats.includes(name)) { inp.value=''; return }
-  cats.push(name); inp.value=''
-  await saveCats(); renderCatTags()
-}
-
-async function removeCategory(i) {
-  if (!confirm(`'${cats[i]}' 카테고리를 삭제할까요?\n(템플릿은 삭제되지 않아요)`)) return
-  cats.splice(i,1)
-  await saveCats(); renderCatTags()
-}
-
-// ── MODAL HELPERS ─────────────────────────────────────────────
-function openModal(id) { document.getElementById(id).classList.add('open') }
-function closeModal(id) { document.getElementById(id).classList.remove('open') }
-document.querySelectorAll('.mbg').forEach(m => m.addEventListener('click', ev => { if(ev.target===m) m.classList.remove('open') }))
-
-// ── UTIL ──────────────────────────────────────────────────────
+// ── UTIL ──────────────────────────────────────────────
 function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 </script>
 </body>
