@@ -5,7 +5,1441 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>마케팅 CRM</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js">
+// === VOC 고객개선 ===
+
+// ======= EMBEDDED DATA =======
+const EMBEDDED = {"total":1408,"by_category":{"마케팅":658,"지원":336,"기술":303,"기타":106},"by_subcategory":{"영업관련":330,"계정정보":210,"결제":160,"청구서":102,"연동":100,"슈어비즈":98,"발신번호":96,"발송":90,"닷컴":76,"세금계산서":74,"카카오":21,"기타":20,"에러코드":15,"코아레스":8},"by_subdetail":{"신규":92,"계약(단가)":80,"전용계좌안내":67,"담당자정보변경":64,"영업 기타":51,"PW요청":50,"알림톡템플릿":45,"청구금액확인":45,"결과조회(실패)":42,"청구서 기타":38,"등록":36,"제출서류":34,"발행":34,"닷컴 기타":32,"연동/DB":30,"발송 기타":30,"슈어비즈 기타":29,"채권확보":28,"계정정보 기타":27,"연동/API":26},"by_channel":{"전화":1187,"메일":151,"1:1상담":61,"채널톡":9},"by_status":{"완료":1402,"진행중":4,"보류":2},"monthly_count":{"2026-01":530,"2026-02":412,"2026-03":466},"weekly_top":{"2025-12-29/2026-01-04":{"슈어비즈 기타":4,"담당자정보변경":3,"사업자정보변경":2,"연동 기타":2,"발송 기타":2,"알림톡템플릿":2,"계약(단가)":2,"전용계좌안내":2,"연동/DB":1,"결과조회/에러코드":1},"2026-01-05/2026-01-11":{"담당자정보변경":16,"계약(단가)":12,"PW요청":8,"전용계좌안내":8,"결과조회(실패)":6,"발송 기타":6,"신규":6,"스팸등록+autokisa(665)":5,"슈어비즈 기타":5,"등록":5},"2026-01-12/2026-01-18":{"신규":7,"영업 기타":7,"PW요청":5,"해지":4,"재발송":4,"계약(단가)":4,"채권확보":4,"전용계좌안내":4,"연동/DB":4,"스팸등록+autokisa(665)":3},"2026-01-19/2026-01-25":{"영업 기타":10,"계약(단가)":7,"신규":5,"담당자정보변경":5,"닷컴 기타":5,"전용계좌안내":5,"등록":5,"발송 기타":5,"발행":4,"알림톡템플릿":4},"2026-01-26/2026-02-01":{"계약(단가)":7,"영업 기타":7,"신규":7,"알림톡템플릿":6,"PW요청":5,"080수신거부":5,"발행":5,"양수양도":3,"환불요청":3,"결제 기타":3},"2026-02-02/2026-02-08":{"청구금액확인":17,"청구서 기타":9,"계약(단가)":8,"담당자정보변경":8,"전용계좌안내":6,"신규":6,"해지":5,"영업 기타":5,"계정정보 기타":5,"결과조회(실패)":4},"2026-02-09/2026-02-15":{"신규":11,"계약(단가)":8,"청구서 기타":7,"전용계좌안내":7,"충전내역":7,"담당자정보변경":6,"연동 기타":6,"발행":6,"문자발송":5,"채권확보":5},"2026-02-16/2026-02-22":{"PW요청":6,"결과조회(실패)":4,"전용계좌안내":4,"기타":3,"담당자정보변경":3,"연동 기타":3,"계정정보 기타":2,"IP등록":2,"청구금액확인":2,"슈어비즈 기타":2},"2026-02-23/2026-03-01":{"계약(단가)":9,"신규":7,"전용계좌안내":7,"알림톡템플릿":6,"제출서류":5,"PW요청":5,"해지":4,"연동/API":3,"연동/DB":3,"잔액이관":3},"2026-03-02/2026-03-08":{"신규":9,"청구서 기타":7,"충전내역":7,"전용계좌안내":6,"영업 기타":5,"청구금액확인":5,"제출서류":5,"닷컴 기타":5,"담당자정보변경":4,"알림톡템플릿":4},"2026-03-09/2026-03-15":{"신규":9,"연동/DB":6,"등록":6,"전용계좌안내":5,"연동/API":5,"청구금액확인":5,"계약(단가)":4,"발행":4,"슈어비즈 기타":3,"성공&미수신":3},"2026-03-16/2026-03-22":{"신규":13,"결과조회(실패)":8,"닷컴 기타":7,"담당자정보변경":7,"계약(단가)":7,"제출서류":5,"슈어비즈 기타":5,"전용계좌안내":5,"IP등록":5,"발행":3},"2026-03-23/2026-03-29":{"신규":8,"계약(단가)":7,"알림톡템플릿":6,"결과조회(실패)":6,"제출서류":5,"발신프로필":4,"PW요청":4,"재발행":4,"계정정보 확인 요청":3,"청구서 기타":3},"2026-03-30/2026-04-05":{"영업 기타":3,"전용계좌안내":3,"신규":3,"견적서":2,"채권확보":2,"닷컴 기타":2,"PW요청":2,"기타":2,"계약(단가)":2,"해지":1}},"monthly_top":{"2026-01":{"계약(단가)":32,"담당자정보변경":28,"영업 기타":27,"신규":25,"전용계좌안내":22,"PW요청":19,"알림톡템플릿":17,"발송 기타":17,"발행":15,"등록":15},"2026-02":{"계약(단가)":25,"신규":25,"전용계좌안내":24,"청구금액확인":21,"청구서 기타":20,"담당자정보변경":19,"PW요청":17,"알림톡템플릿":15,"결과조회(실패)":14,"제출서류":12},"2026-03":{"신규":42,"계약(단가)":23,"전용계좌안내":21,"결과조회(실패)":18,"제출서류":18,"닷컴 기타":17,"담당자정보변경":17,"영업 기타":14,"PW요청":14,"알림톡템플릿":13}},"monthly_15":{"2026-01":{"before":{"영업관련":58,"계정정보":56,"결제":27,"발송":25,"슈어비즈":24,"연동":18,"발신번호":18,"닷컴":16,"세금계산서":13,"청구서":13},"after":{"영업관련":72,"계정정보":36,"결제":30,"발신번호":18,"슈어비즈":16,"연동":16,"세금계산서":14,"닷컴":13,"청구서":12,"발송":11}},"2026-02":{"before":{"영업관련":59,"청구서":40,"계정정보":40,"결제":30,"연동":17,"슈어비즈":16,"발신번호":16,"발송":16,"세금계산서":15,"닷컴":12},"after":{"영업관련":30,"계정정보":25,"결제":20,"연동":13,"슈어비즈":12,"발신번호":9,"청구서":7,"닷컴":6,"세금계산서":5,"발송":5}},"2026-03":{"before":{"영업관련":50,"결제":31,"청구서":23,"발신번호":22,"계정정보":19,"연동":17,"세금계산서":12,"슈어비즈":11,"발송":11,"닷컴":10},"after":{"영업관련":61,"계정정보":34,"발송":22,"결제":22,"연동":19,"슈어비즈":19,"닷컴":19,"세금계산서":15,"발신번호":13,"카카오":8}}},"top_accounts":[{"업체아이디":"biztogether","업체명":"경매 인사이트","count":8},{"업체아이디":"elicompany","업체명":"BM_엘리컴퍼니","count":7},{"업체아이디":"kytti","업체명":"K3_경기교통연수","count":6},{"업체아이디":"gkrtk1234!","업체명":"gu_교무처학사","count":5},{"업체아이디":"learnpia24","업체명":"런피아주식회사","count":5},{"업체아이디":"kidsadmin","업체명":"한국의약품안전관리원","count":5},{"업체아이디":"hyundaem","업체명":"현대해상화재보험","count":5},{"업체아이디":"khra100","업체명":"한국해양조사협회","count":4},{"업체아이디":"keisepsEN","업체명":"BM_KEEPS_EN","count":4},{"업체아이디":"dirhfmwl11","업체명":"새롬세탁소","count":4},{"업체아이디":"seoilac","업체명":"서일대학","count":4},{"업체아이디":"skccmet","업체명":"sk-met","count":4},{"업체아이디":"mfhan","업체명":"메디필드한강병원","count":4},{"업체아이디":"sphh100","업체명":"서대문구역사관팀","count":4},{"업체아이디":"seoulbohun","업체명":"중앙보훈병원","count":4},{"업체아이디":"webphdhch","업체명":"포항대흥교회","count":4},{"업체아이디":"hcinfo","업체명":"(주)에이치씨인포","count":4},{"업체아이디":"workF1100","업체명":"WK_동대문여성","count":4},{"업체아이디":"pnu7153","업체명":"pnu_나노바이오","count":3},{"업체아이디":"vincheon","업체명":"인천보훈병원","count":3}],"monthly_accounts":{"2026-01":[{"업체아이디":"hyundaem","업체명":"현대해상화재보험","count":5},{"업체아이디":"webphdhch","업체명":"포항대흥교회","count":4},{"업체아이디":"khra100","업체명":"한국해양조사협회","count":4},{"업체아이디":"sphh100","업체명":"서대문구역사관팀","count":4},{"업체아이디":"kytti","업체명":"K3_경기교통연수","count":4},{"업체아이디":"learnpia24","업체명":"런피아주식회사","count":4},{"업체아이디":"seoulbohun","업체명":"중앙보훈병원","count":3},{"업체아이디":"seoilac","업체명":"서일대학","count":3},{"업체아이디":"itsmnotice","업체명":"갤럭시아컴즈_5","count":3},{"업체아이디":"fowi","업체명":"한국산림복지진흥원","count":3}],"2026-02":[{"업체아이디":"biztogether","업체명":"경매 인사이트","count":5},{"업체아이디":"goodpeople","업체명":"BM_좋은사람들","count":3},{"업체아이디":"kbs1101","업체명":"혜화당한의원","count":3},{"업체아이디":"earthact01","업체명":"지구시민연합","count":3},{"업체아이디":"sisul01","업체명":"서울시설공단_01","count":2},{"업체아이디":"anycarsms","업체명":"애니카랜드(후불)","count":2},{"업체아이디":"toyoko0208","업체명":"서울동대문","count":2},{"업체아이디":"sisakakaojpn","업체명":"시사일본어알림톡","count":2},{"업체아이디":"workF1100","업체명":"WK_동대문여성","count":2},{"업체아이디":"workF1122","업체명":"WK_천안여성인력","count":2}],"2026-03":[{"업체아이디":"elicompany","업체명":"BM_엘리컴퍼니","count":7},{"업체아이디":"kidsadmin","업체명":"한국의약품안전관리원","count":5},{"업체아이디":"gkrtk1234!","업체명":"gu_교무처학사","count":4},{"업체아이디":"dirhfmwl11","업체명":"새롬세탁소","count":4},{"업체아이디":"bpfc3115","업체명":"사단법인 부산항","count":3},{"업체아이디":"nayng2005","업체명":"명선한의원","count":3},{"업체아이디":"onppark","업체명":"(주)프린파크","count":3},{"업체아이디":"kflame55","업체명":"제일엠앤이(주)","count":3},{"업체아이디":"2000jifa","업체명":"이미경","count":3},{"업체아이디":"ktcqna","업체명":"TW_한국기계전기전자시험연구원","count":3}]},"monthly_channel":{"2026-01":{"전화":452,"메일":58,"1:1상담":19,"채널톡":1},"2026-02":{"전화":349,"메일":44,"1:1상담":16,"채널톡":3},"2026-03":{"전화":386,"메일":49,"1:1상담":26,"채널톡":5}}};
+
+EMBEDDED._rows = EMBEDDED._rows || [];
+EMBEDDED._cols = EMBEDDED._cols || {};
+let DATA = EMBEDDED;
+let charts = {};
+
+// EMBEDDED 데이터에 계정별 채널 정보 초기화
+(function initAccountChannels() {
+  const chRatio = [['전화',0.84],['메일',0.11],['1:1상담',0.04],['채널톡',0.01]];
+  function addCh(accounts) {
+    accounts.forEach(a => {
+      if (a.channels) return;
+      a.channels = {};
+      let rem = a.count;
+      chRatio.forEach(([ch, r], i) => {
+        if (i === chRatio.length - 1) { if (rem > 0) a.channels[ch] = rem; }
+        else { const n = Math.max(0, Math.round(a.count * r)); a.channels[ch] = Math.min(n, rem); rem -= a.channels[ch]; }
+      });
+      Object.keys(a.channels).forEach(k => { if (!a.channels[k]) delete a.channels[k]; });
+    });
+  }
+  addCh(DATA.top_accounts);
+  Object.values(DATA.monthly_accounts).forEach(addCh);
+})();
+
+// EMBEDDED 담당자·시간대 목업 데이터
+(function initExtraData() {
+  if (!DATA.by_agent_channel) {
+    DATA.by_agent_channel = {
+      '김민수': {'전화':128,'메일':16,'1:1상담':6},
+      '이지현': {'전화':118,'메일':20,'1:1상담':8,'채널톡':2},
+      '박서준': {'전화':112,'메일':14,'1:1상담':7},
+      '최유진': {'전화':106,'메일':17,'1:1상담':7,'채널톡':2},
+      '정하늘': {'전화':100,'메일':13,'1:1상담':5,'채널톡':1},
+      '한소희': {'전화':95,'메일':12,'1:1상담':5},
+      '윤도현': {'전화':90,'메일':11,'1:1상담':5},
+      '강예린': {'전화':84,'메일':10,'1:1상담':4,'채널톡':2},
+      '오승우': {'전화':80,'메일':9,'1:1상담':4},
+      '임수정': {'전화':74,'메일':8,'1:1상담':3,'채널톡':1}
+    };
+  }
+  if (!DATA.hourly) {
+    DATA.hourly = {'08':42,'09':168,'10':201,'11':189,'12':85,'13':145,'14':178,'15':162,'16':132,'17':82,'18':24};
+  }
+  if (!DATA.monthly_hourly_15) {
+    DATA.monthly_hourly_15 = {
+      '2026-01': {
+        before:{'08':8,'09':32,'10':39,'11':36,'12':16,'13':28,'14':34,'15':31,'16':25,'17':15,'18':4},
+        after: {'08':6,'09':28,'10':34,'11':32,'12':14,'13':24,'14':30,'15':27,'16':22,'17':14,'18':5}
+      },
+      '2026-02': {
+        before:{'08':7,'09':31,'10':37,'11':35,'12':16,'13':27,'14':33,'15':30,'16':24,'17':14,'18':4},
+        after: {'08':4,'09':16,'10':20,'11':18,'12':8,'13':14,'14':17,'15':16,'16':13,'17':8,'18':3}
+      },
+      '2026-03': {
+        before:{'08':5,'09':24,'10':29,'11':27,'12':12,'13':20,'14':25,'15':23,'16':19,'17':11,'18':4},
+        after: {'08':7,'09':30,'10':35,'11':33,'12':15,'13':25,'14':31,'15':28,'16':23,'17':14,'18':5}
+      }
+    };
+  }
+  if (!DATA.monthly_15_detail) {
+    DATA.monthly_15_detail = {
+      '2026-01': {
+        before: {'영업관련 > 계약(단가)':18,'영업관련 > 신규':14,'계정정보 > 담당자정보변경':13,'영업관련 > 영업 기타':12,'결제 > 전용계좌안내':10,'계정정보 > PW요청':9,'발신번호 > 알림톡템플릿':8,'발송 > 발송 기타':8,'슈어비즈 > 슈어비즈 기타':7,'발신번호 > 등록':6},
+        after: {'영업관련 > 계약(단가)':14,'영업관련 > 영업 기타':15,'영업관련 > 신규':11,'계정정보 > 담당자정보변경':10,'결제 > 전용계좌안내':12,'계정정보 > PW요청':10,'발신번호 > 알림톡템플릿':9,'세금계산서 > 발행':8,'연동 > 연동/DB':6,'영업관련 > 채권확보':5}
+      },
+      '2026-02': {
+        before: {'청구서 > 청구금액확인':17,'영업관련 > 계약(단가)':16,'영업관련 > 신규':15,'계정정보 > 담당자정보변경':12,'결제 > 전용계좌안내':11,'청구서 > 청구서 기타':10,'계정정보 > PW요청':9,'결제 > 충전내역':7,'발신번호 > 알림톡템플릿':7,'세금계산서 > 발행':6},
+        after: {'영업관련 > 계약(단가)':9,'영업관련 > 신규':10,'결제 > 전용계좌안내':7,'계정정보 > PW요청':8,'계정정보 > 담당자정보변경':7,'연동 > 연동 기타':5,'슈어비즈 > 슈어비즈 기타':4,'닷컴 > 닷컴 기타':4,'발송 > 결과조회(실패)':4,'영업관련 > 해지':4}
+      },
+      '2026-03': {
+        before: {'영업관련 > 신규':14,'영업관련 > 계약(단가)':10,'결제 > 전용계좌안내':9,'청구서 > 청구금액확인':8,'발신번호 > 등록':7,'연동 > 연동/DB':6,'연동 > 연동/API':5,'세금계산서 > 제출서류':5,'발신번호 > 알림톡템플릿':5,'슈어비즈 > 슈어비즈 기타':4},
+        after: {'영업관련 > 신규':28,'영업관련 > 계약(단가)':13,'계정정보 > 담당자정보변경':11,'발송 > 결과조회(실패)':10,'닷컴 > 닷컴 기타':9,'슈어비즈 > 슈어비즈 기타':8,'결제 > 전용계좌안내':7,'세금계산서 > 제출서류':7,'영업관련 > 영업 기타':6,'연동 > 연동/API':5}
+      }
+    };
+  }
+  if (!DATA.daily_latest) {
+    DATA.daily_latest = {
+      date: '2026-03-31',
+      total: 18,
+      completed: 16,
+      channels: {'전화':14,'메일':2,'1:1상담':1,'채널톡':1},
+      by_type: {'마케팅 > 신규':3,'마케팅 > 계약(단가)':3,'지원 > PW요청':2,'기술 > 결과조회(실패)':2,'마케팅 > 전용계좌안내':2,'지원 > 담당자정보변경':2,'기술 > 연동/DB':1,'기타 > 기타':1},
+      type_accounts: {
+        '마케팅 > 신규': ['경매 인사이트','런피아주식회사','새롬세탁소'],
+        '마케팅 > 계약(단가)': ['BM_엘리컴퍼니','한국의약품안전관리원','현대해상화재보험'],
+        '지원 > PW요청': ['중앙보훈병원','서일대학'],
+        '기술 > 결과조회(실패)': ['K3_경기교통연수','한국해양조사협회'],
+        '마케팅 > 전용계좌안내': ['포항대흥교회','서대문구역사관팀'],
+        '지원 > 담당자정보변경': ['(주)에이치씨인포','메디필드한강병원'],
+        '기술 > 연동/DB': ['인천보훈병원'],
+        '기타 > 기타': ['sk-met']
+      }
+    };
+  }
+  if (!DATA.daily_trend) {
+    DATA.daily_trend = [
+      {date:'2026-03-25', count:15},
+      {date:'2026-03-26', count:19},
+      {date:'2026-03-27', count:22},
+      {date:'2026-03-28', count:17},
+      {date:'2026-03-29', count:12},
+      {date:'2026-03-30', count:14},
+      {date:'2026-03-31', count:18}
+    ];
+  }
+  if (!DATA.top_slow) {
+    DATA.top_slow = [
+      {cat3:'연동/DB', acctNm:'경매 인사이트', date:'2026-01-15 09:30', closeDate:'2026-01-22 14:50', duration:10160, content:'DB 연동 시 데이터 동기화 오류 발생, 특정 테이블 조회 불가 현상 지속'},
+      {cat3:'결과조회(실패)', acctNm:'BM_엘리컴퍼니', date:'2026-02-03 10:15', closeDate:'2026-02-09 16:30', duration:9015, content:'발송 결과 조회 시 실패 건만 반복 노출, 성공 건 확인 불가'},
+      {cat3:'연동/API', acctNm:'K3_경기교통연수', date:'2026-03-05 11:00', closeDate:'2026-03-10 14:20', duration:7400, content:'API 인증 토큰 만료 후 재발급 절차 문의 및 연동 테스트 요청'},
+      {cat3:'슈어비즈 기타', acctNm:'런피아주식회사', date:'2026-01-20 14:30', closeDate:'2026-01-24 20:10', duration:6220, content:'슈어비즈 관리자 페이지 접속 불가, 권한 설정 변경 요청'},
+      {cat3:'계약(단가)', acctNm:'한국의약품안전관리원', date:'2026-02-12 09:00', closeDate:'2026-02-15 21:30', duration:5310, content:'계약 단가 변경 요청 건, 기존 단가표 대비 신규 단가 적용 문의'},
+      {cat3:'발송 기타', acctNm:'현대해상화재보험', date:'2026-03-18 10:20', closeDate:'2026-03-21 12:50', duration:4350, content:'대량 발송 예약 건이 예정 시간에 발송되지 않는 현상 문의'},
+      {cat3:'알림톡템플릿', acctNm:'한국해양조사협회', date:'2026-01-08 15:00', closeDate:'2026-01-11 09:15', duration:3855, content:'알림톡 템플릿 검수 반려 사유 확인 및 재등록 요청'},
+      {cat3:'청구금액확인', acctNm:'새롬세탁소', date:'2026-02-24 08:45', closeDate:'2026-02-26 13:20', duration:3155, content:'2월 청구 금액이 예상보다 높음, 사용량 상세 내역 확인 요청'},
+      {cat3:'닷컴 기타', acctNm:'서일대학', date:'2026-03-10 13:00', closeDate:'2026-03-12 03:30', duration:2310, content:'닷컴 페이지 내 발송 현황 통계 수치 불일치 문의'},
+      {cat3:'PW요청', acctNm:'중앙보훈병원', date:'2026-01-27 09:00', closeDate:'2026-01-28 12:15', duration:1635, content:'관리자 계정 비밀번호 초기화 요청'}
+    ];
+  }
+  if (!DATA.monthly_slow) {
+    const ms = {};
+    (DATA.top_slow||[]).forEach(e => { const m = e.date.substring(0,7); if(!ms[m]) ms[m]=[]; ms[m].push(e); });
+    DATA.monthly_slow = ms;
+  }
+  if (!DATA.weekly_slow) {
+    const ws = {};
+    (DATA.top_slow||[]).forEach(e => {
+      const d = new Date(e.date);
+      const wS = new Date(d); wS.setDate(d.getDate()-((d.getDay()+6)%7));
+      const wE = new Date(wS); wE.setDate(wS.getDate()+6);
+      const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+      const wk = `${fmt(wS)}/${fmt(wE)}`;
+      if(!ws[wk]) ws[wk]=[]; ws[wk].push(e);
+    });
+    DATA.weekly_slow = ws;
+  }
+})();
+
+const COLORS = ['#58a6ff','#3fb950','#f78166','#d2a8ff','#ffa657','#39d353','#ff7b72','#79c0ff','#56d364','#e3b341'];
+
+// 테마 감지 헬퍼
+function tc() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    grid: s.getPropertyValue('--chart-grid').trim(),
+    tick: s.getPropertyValue('--chart-tick').trim(),
+    label: s.getPropertyValue('--chart-label').trim(),
+    surface: s.getPropertyValue('--surface').trim(),
+  };
+}
+
+// 테마 전환
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const next = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('voc_theme', next);
+  document.getElementById('themeToggle').textContent = next === 'light' ? '☀️' : '🌙';
+  // 현재 활성 탭 차트 다시 렌더
+  const activePanel = document.querySelector('.panel.active');
+  if (activePanel) {
+    const name = activePanel.id.replace('panel-', '');
+    if (name === 'overview') renderOverview();
+    else if (name === 'ranking') { initWeekly(); initMonthly(); }
+    else if (name === 'accounts') renderAccounts();
+  }
+}
+
+// 저장된 테마 복원
+(function restoreTheme() {
+  const saved = localStorage.getItem('voc_theme');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeToggle').textContent = '☀️';
+  }
+})();
+
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+function makeChart(id, config) {
+  destroyChart(id);
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, config);
+  return charts[id];
+}
+
+// ========= HELPERS =========
+function formatDuration(mins) {
+  if (mins == null || mins < 0) return '-';
+  if (mins < 60) return `${mins}분`;
+  if (mins < 1440) return `${Math.floor(mins/60)}시간 ${mins%60}분`;
+  const days = Math.floor(mins / 1440);
+  const hours = Math.floor((mins % 1440) / 60);
+  return `${days}일 ${hours}시간`;
+}
+
+function renderSlowTable(containerId, list, limit) {
+  const items = (list || []).slice(0, limit || 10);
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = '<tr><td class="no-data" colspan="7">처리일 데이터가 필요합니다</td></tr>';
+    return;
+  }
+  el.innerHTML = `
+    <thead><tr><th>#</th><th>소분류</th><th>업체명</th><th>문의 내용</th><th>등록일</th><th>처리일</th><th>소요시간</th></tr></thead>
+    <tbody>${items.map((e, i) => {
+      const dur = e.duration;
+      const durClass = dur >= 4320 ? 'count-high' : dur >= 1440 ? 'count-mid' : 'count-low';
+      const content = (e.content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const shortContent = content.length > 40 ? content.substring(0, 40) + '…' : content;
+      return `<tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td><span class="pill pill-blue">${e.cat3||'-'}</span></td>
+        <td style="white-space:nowrap">${e.acctNm||'-'}</td>
+        <td style="max-width:280px" title="${content}">${shortContent||'-'}</td>
+        <td style="white-space:nowrap">${e.date||'-'}</td>
+        <td style="white-space:nowrap">${e.closeDate||'-'}</td>
+        <td><span class="count-badge ${durClass}">${formatDuration(dur)}</span></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+
+// ========= OVERVIEW =========
+function renderOverview() {
+  const d = DATA;
+  document.getElementById('dataInfo').textContent = `총 ${d.total.toLocaleString()}건 · ${Object.keys(d.monthly_count).join(', ')}`;
+
+  // Stat cards
+  const monthKeys = Object.keys(d.monthly_count);
+  const latestMonth = monthKeys[monthKeys.length - 1];
+  const latestCount = d.monthly_count[latestMonth];
+  const completionRate = Math.round((d.by_status['완료'] || 0) / d.total * 100);
+  const phoneRate = Math.round((d.by_channel['전화'] || 0) / d.total * 100);
+
+  // 전일 기준 데이터
+  const daily = d.daily_latest || {};
+  const dailyChStr = Object.entries(daily.channels||{}).map(([ch,cnt]) => `${ch} ${cnt}건`).join(' · ') || '-';
+
+  const dailyPending = (daily.total||0) - (daily.completed||0);
+
+  document.getElementById('statGrid').innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">전일 인입 건수</div><div class="stat-value">${(daily.total||0).toLocaleString()}</div><div class="stat-sub">${daily.date||'-'}</div></div>
+    <div class="stat-card green"><div class="stat-label">전일 처리 건수</div><div class="stat-value">${(daily.completed||0).toLocaleString()}</div><div class="stat-sub">${daily.total ? Math.round(daily.completed/daily.total*100)+'% 처리' : '-'}</div></div>
+    <div class="stat-card red"><div class="stat-label">전일 미처리 건수</div><div class="stat-value">${dailyPending.toLocaleString()}</div><div class="stat-sub">${dailyPending > 0 ? '확인 필요' : '전건 처리 완료'}</div><div style="font-size:10px;color:var(--text3);margin-top:6px">진행중·보류 상태의 문의건</div></div>
+  `;
+
+  const dateLabel = daily.date && daily.date !== '-' ? `(${daily.date} 기준)` : '';
+  document.getElementById('catDateLabel').textContent = dateLabel;
+  document.getElementById('chDateLabel').textContent = dateLabel;
+
+  // Category donut (전일 기준)
+  const cats = Object.entries(daily.by_type || daily.by_category || {}).reduce((acc, [key, cnt]) => {
+    const cat = key.includes(' > ') ? key.split(' > ')[0] : key;
+    acc[cat] = (acc[cat]||0) + cnt;
+    return acc;
+  }, {});
+  const catEntries = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  const catTotal = catEntries.reduce((s, c) => s + c[1], 0);
+  makeChart('catChart', {
+    type: 'doughnut',
+    data: {
+      labels: catEntries.map(c => c[0]),
+      datasets: [{ data: catEntries.map(c => c[1]), backgroundColor: COLORS, borderColor: tc().surface, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: tc().tick, font: { size: 12 }, padding: 12,
+            generateLabels: function(chart) {
+              const data = chart.data;
+              const labelColor = tc().tick;
+              return data.labels.map((label, i) => {
+                const val = data.datasets[0].data[i];
+                const pct = Math.round(val / catTotal * 100);
+                return {
+                  text: `${label}  ${val.toLocaleString()}건 (${pct}%)`,
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  fontColor: labelColor,
+                  hidden: false, index: i
+                };
+              });
+            }
+          }
+        }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // Channel donut (전일 기준)
+  const chs = Object.entries(daily.channels || {}).sort((a,b) => b[1]-a[1]);
+  const chTotal = chs.reduce((s, c) => s + c[1], 0);
+  const chColors = ['#58a6ff','#3fb950','#d2a8ff','#ffa657'];
+  makeChart('channelChart', {
+    type: 'doughnut',
+    data: {
+      labels: chs.map(c => c[0]),
+      datasets: [{ data: chs.map(c => c[1]), backgroundColor: chColors, borderColor: tc().surface, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: tc().tick, font: { size: 12 }, padding: 12,
+            generateLabels: function(chart) {
+              const data = chart.data;
+              const labelColor = tc().tick;
+              return data.labels.map((label, i) => {
+                const val = data.datasets[0].data[i];
+                const pct = Math.round(val / chTotal * 100);
+                return {
+                  text: `${label}  ${val.toLocaleString()}건 (${pct}%)`,
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  fontColor: labelColor,
+                  hidden: false, index: i
+                };
+              });
+            }
+          }
+        }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // 전일 문의유형 Top 5
+  const dailyTypes = Object.entries(daily.by_type || {}).sort((a,b) => b[1]-a[1]).slice(0, 5);
+  const maxDT = dailyTypes[0]?.[1] || 1;
+  const typeAccounts = daily.type_accounts || {};
+  document.getElementById('dailyTopList').innerHTML = dailyTypes.length
+    ? dailyTypes.map((e, i) => {
+      const parts = e[0].split(' > ');
+      const label = parts.length > 1
+        ? `<span style="color:var(--text3)">${parts[0]}</span> <span style="color:var(--text3);margin:0 2px">›</span> ${parts[1]}`
+        : e[0];
+      const accounts = typeAccounts[e[0]] || [];
+      const acctHtml = accounts.length
+        ? accounts.map(a => `<span style="display:inline-block;padding:2px 8px;margin:2px 4px 2px 0;border-radius:4px;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)">${a}</span>`).join('')
+        : '<span style="font-size:11px;color:var(--text3)">업체 정보 없음</span>';
+      return `<div>
+        <div class="rank-item" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+          <div class="rank-label" style="white-space:nowrap">${label}</div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxDT*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+          <div class="rank-count">${e[1]}건</div>
+          <div style="color:var(--text3);font-size:10px;margin-left:4px">▼</div>
+        </div>
+        <div style="display:none;padding:6px 0 10px 32px;line-height:1.8">${acctHtml}</div>
+      </div>`;
+    }).join('')
+    : '<div class="no-data">전일 데이터 없음</div>';
+
+  // 최근 N일 인입 추이
+  const trend = d.daily_trend || [];
+  document.getElementById('trendTitle').textContent = `최근 ${trend.length}일 인입 추이`;
+  if (trend.length) {
+    makeChart('weeklyTrendChart', {
+      type: 'line',
+      data: {
+        labels: trend.map(t => t.date.substring(5)),
+        datasets: [{
+          label: '인입 건수',
+          data: trend.map(t => t.count),
+          borderColor: '#58a6ff',
+          backgroundColor: '#58a6ff22',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#58a6ff',
+          clip: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        clip: false,
+        scales: {
+          x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+          y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid }, beginAtZero: true, grace: '20%' }
+        },
+        layout: { padding: { top: 20 } },
+        animation: {
+          onComplete: function() {
+            const ctx = this.ctx;
+            ctx.font = '600 12px Pretendard';
+            ctx.fillStyle = tc().label;
+            ctx.textAlign = 'center';
+            this.data.datasets[0].data.forEach((val, i) => {
+              const meta = this.getDatasetMeta(0).data[i];
+              ctx.fillText(val + '건', meta.x, meta.y - 12);
+            });
+          }
+        }
+      }
+    });
+  }
+}
+
+// ========= WEEKLY =========
+function renderWeekly() {
+  const sel = document.getElementById('weekSelect');
+  const week = sel.value;
+  const top = DATA.weekly_top[week];
+  if (!top) return;
+  const entries = Object.entries(top);
+  if (!entries.length) return;
+  const max = entries[0][1] || 1;
+
+  document.getElementById('weekRankList').innerHTML = entries.map((e, i) => `
+    <div class="rank-item">
+      <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="rank-label">${e[0]}</div>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <div class="rank-count">${e[1]}</div>
+    </div>
+  `).join('');
+
+  makeChart('weekChart', {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: COLORS.map(c => c+'cc'), borderColor: COLORS, borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // 소요시간 Top 5
+  renderSlowTable('weekSlowTable', (DATA.weekly_slow||{})[week], 5);
+}
+
+function initWeekly() {
+  const sel = document.getElementById('weekSelect');
+  const weeks = Object.keys(DATA.weekly_top).reverse();
+  sel.innerHTML = weeks.map(w => `<option value="${w}">${w}</option>`).join('');
+  renderWeekly();
+}
+
+// ========= MONTHLY =========
+function renderMonthly() {
+  const month = document.getElementById('monthSelect').value;
+  const top = DATA.monthly_top[month];
+  if (!top) return;
+  const entries = Object.entries(top);
+  if (!entries.length) return;
+  const max = entries[0][1] || 1;
+
+  document.getElementById('monthRankList').innerHTML = entries.map((e, i) => `
+    <div class="rank-item">
+      <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="rank-label">${e[0]}</div>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <div class="rank-count">${e[1]}</div>
+    </div>
+  `).join('');
+
+  makeChart('monthChart', {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: COLORS.map(c => c+'cc'), borderColor: COLORS, borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Channel monthly chart
+  const chData = DATA.monthly_channel;
+  const mKeys = Object.keys(chData);
+  const chTypes = [...new Set(Object.values(chData).flatMap(v => Object.keys(v)))];
+  const chColors = ['#58a6ff','#3fb950','#d2a8ff','#ffa657'];
+  makeChart('channelMonthChart', {
+    type: 'bar',
+    data: {
+      labels: mKeys,
+      datasets: chTypes.map((ch, i) => ({
+        label: ch,
+        data: mKeys.map(m => chData[m][ch] || 0),
+        backgroundColor: chColors[i % chColors.length] + 'cc',
+        borderColor: chColors[i % chColors.length],
+        borderWidth: 1, borderRadius: 4
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().tick }, grid: { color: tc().grid } }
+      }
+    }
+  });
+
+  // 소요시간 Top 5
+  renderSlowTable('monthSlowTable', (DATA.monthly_slow||{})[month], 5);
+
+  // ===== 전월 대비 변동 분석 =====
+  const allMonths = Object.keys(DATA.monthly_top).sort();
+  const mIdx = allMonths.indexOf(month);
+  const prevMonth = mIdx > 0 ? allMonths[mIdx - 1] : null;
+  const prevTop = prevMonth ? DATA.monthly_top[prevMonth] : null;
+
+  if (!prevTop) {
+    document.getElementById('monthIncreaseList').innerHTML = '<div class="no-data">이전 월 데이터 없음</div>';
+    document.getElementById('monthDecreaseList').innerHTML = '<div class="no-data">이전 월 데이터 없음</div>';
+    document.getElementById('monthChangeInsight').innerHTML = '<span style="color:var(--text3)">비교할 이전 월 데이터가 없습니다.</span>';
+    return;
+  }
+
+  const curTop = DATA.monthly_top[month];
+  const allCats = [...new Set([...Object.keys(curTop), ...Object.keys(prevTop)])];
+  const changes = allCats.map(cat => ({
+    name: cat,
+    cur: curTop[cat] || 0,
+    prev: prevTop[cat] || 0,
+    diff: (curTop[cat] || 0) - (prevTop[cat] || 0)
+  }));
+
+  const increased = changes.filter(c => c.diff > 0).sort((a, b) => b.diff - a.diff);
+  const decreased = changes.filter(c => c.diff < 0).sort((a, b) => a.diff - b.diff);
+
+  function renderChangeList(items, color, arrow) {
+    if (!items.length) return '<div class="no-data">변동 없음</div>';
+    const max = Math.abs(items[0].diff) || 1;
+    return items.slice(0, 7).map((c, i) => `
+      <div class="rank-item">
+        <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+        <div class="rank-label" style="white-space:nowrap">${c.name}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(Math.abs(c.diff)/max*100)}%;background:${color}"></div></div>
+        <div style="font-size:12px;font-weight:700;color:${color};min-width:50px;text-align:right">${arrow}${Math.abs(c.diff)} <span style="font-weight:400;color:var(--text3);font-size:10px">(${c.prev}→${c.cur})</span></div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('monthIncreaseList').innerHTML = renderChangeList(increased, '#f78166', '+');
+  document.getElementById('monthDecreaseList').innerHTML = renderChangeList(decreased, '#58a6ff', '-');
+
+  // 변동 인사이트
+  const curTotal = Object.values(curTop).reduce((s, v) => s + v, 0);
+  const prevTotal = Object.values(prevTop).reduce((s, v) => s + v, 0);
+  const totalDiff = curTotal - prevTotal;
+  const topInc = increased[0];
+  const topDec = decreased[0];
+
+  // Top10 순위 변동
+  const prevRank = Object.keys(prevTop);
+  const curRank = Object.keys(curTop);
+  const newEntries = curRank.filter(c => !prevRank.includes(c));
+  const droppedEntries = prevRank.filter(c => !curRank.includes(c));
+
+  let ins = `<strong style="color:var(--text)">${prevMonth} → ${month} 변동</strong><br><br>`;
+  ins += `📌 Top10 합계: <strong style="color:${totalDiff>=0?'#f78166':'#58a6ff'}">${totalDiff>=0?'+':''}${totalDiff}건</strong> (${prevTotal}→${curTotal})<br><br>`;
+
+  if (topInc) ins += `🔴 최대 증가: <strong style="color:#f78166">${topInc.name}</strong> (+${topInc.diff}건, ${topInc.prev}→${topInc.cur})<br>`;
+  if (topDec) ins += `🔵 최대 감소: <strong style="color:#58a6ff">${topDec.name}</strong> (${topDec.diff}건, ${topDec.prev}→${topDec.cur})<br>`;
+
+  if (newEntries.length) ins += `<br>🆕 신규 진입: <strong>${newEntries.join(', ')}</strong>`;
+  if (droppedEntries.length) ins += `<br>⬇️ Top10 이탈: <strong style="color:var(--text3)">${droppedEntries.join(', ')}</strong>`;
+
+  document.getElementById('monthChangeInsight').innerHTML = ins;
+}
+
+function initMonthly() {
+  const sel = document.getElementById('monthSelect');
+  const months = Object.keys(DATA.monthly_top).reverse();
+  sel.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+  renderMonthly();
+}
+
+// ========= ACCOUNTS =========
+let currentAcctView = 'all';
+function switchAcctView(view, btn) {
+  currentAcctView = view;
+  document.querySelectorAll('#panel-accounts .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAccounts();
+}
+
+function renderAccounts() {
+  const list = currentAcctView === 'all'
+    ? DATA.top_accounts
+    : DATA.monthly_accounts[currentAcctView] || [];
+
+  const CH_COLORS = { '전화': '#58a6ff', '메일': '#3fb950', '1:1상담': '#d2a8ff', '채널톡': '#ffa657' };
+  const allChannels = [...new Set(list.flatMap(a => Object.keys(a.channels || {})))];
+  if (!allChannels.length) allChannels.push('전화','메일','1:1상담','채널톡');
+
+  // Stacked horizontal bar chart - channel breakdown per account
+  const top10 = list.slice(0, 10).reverse(); // reverse for bottom-to-top display
+  makeChart('acctChart', {
+    type: 'bar',
+    data: {
+      labels: top10.map(a => a['업체명'] || a['업체아이디']),
+      datasets: allChannels.map(ch => ({
+        label: ch,
+        data: top10.map(a => (a.channels || {})[ch] || 0),
+        backgroundColor: (CH_COLORS[ch] || '#6e7681') + 'cc',
+        borderColor: CH_COLORS[ch] || '#6e7681',
+        borderWidth: 1,
+        borderRadius: 3
+      }))
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: tc().tick, font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: {
+          callbacks: {
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              const acct = top10[idx];
+              return `총 ${acct.count}건`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick, font: { size: 11 }, stepSize: 1 }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Table with channel breakdown
+  function channelBar(channels, total) {
+    if (!channels || !total) return '<span style="color:var(--text3)">-</span>';
+    return `<div style="display:flex;gap:2px;align-items:center;min-width:120px">` +
+      Object.entries(channels).map(([ch, cnt]) => {
+        const pct = Math.max(8, Math.round(cnt / total * 100));
+        const color = CH_COLORS[ch] || '#6e7681';
+        return `<div title="${ch}: ${cnt}건" style="width:${pct}%;height:20px;background:${color}cc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600;min-width:20px;cursor:default">${cnt}</div>`;
+      }).join('') + `</div>`;
+  }
+
+  function channelTags(channels) {
+    if (!channels) return '-';
+    return Object.entries(channels).map(([ch, cnt]) => {
+      const color = CH_COLORS[ch] || '#6e7681';
+      return `<span style="display:inline-flex;align-items:center;gap:4px;margin:2px 4px 2px 0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:${color}22;color:${color}">${ch} ${cnt}</span>`;
+    }).join('');
+  }
+
+  document.getElementById('acctTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>업체명</th><th>계정 ID</th><th>문의 건수</th><th>채널 분포</th><th>주요 채널</th>
+    </tr></thead>
+    <tbody>${list.map((a, i) => {
+      const chs = a.channels || {};
+      const topCh = Object.entries(chs).sort((x,y) => y[1]-x[1])[0];
+      const topChName = topCh ? topCh[0] : '-';
+      const topChColor = CH_COLORS[topChName] || '#6e7681';
+      return `<tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td>${a['업체명'] || '-'}</td>
+        <td><span class="id-badge">${a['업체아이디'] || '-'}</span></td>
+        <td><span class="count-badge ${a.count >= 6 ? 'count-high' : a.count >= 4 ? 'count-mid' : 'count-low'}">${a.count}</span></td>
+        <td>${channelBar(chs, a.count)}</td>
+        <td><span style="color:${topChColor};font-weight:600;font-size:12px">${topChName}</span></td>
+      </tr>`;
+    }).join('')}</tbody>
+  `;
+}
+
+// ========= 15TH =========
+function renderFifteenth() {
+  const month = document.getElementById('fifthMonthSelect').value;
+  const d = DATA.monthly_15[month];
+  if (!d) return;
+
+  const before = Object.entries(d.before || {});
+  const after = Object.entries(d.after || {});
+  if (!before.length && !after.length) return;
+
+  // 데이터 범위 안내
+  const noticeEl = document.getElementById('fifthDataNotice');
+  const bCnt = d.beforeCount != null ? d.beforeCount : before.reduce((s,e)=>s+e[1],0);
+  const aCnt = d.afterCount != null ? d.afterCount : after.reduce((s,e)=>s+e[1],0);
+  const minD = d.minDay;
+  const maxD = d.maxDay;
+
+  if (minD != null && maxD != null) {
+    let noticeHtml = '';
+    let noticeType = '';
+
+    if (bCnt === 0 && aCnt > 0) {
+      noticeType = 'warn';
+      noticeHtml = `⚠️ 이 월의 데이터는 <strong>${minD}일~${maxD}일</strong>만 존재합니다. 전반부(1~15일) 데이터가 없어 비교 분석이 불가합니다.`;
+    } else if (aCnt === 0 && bCnt > 0) {
+      noticeType = 'warn';
+      noticeHtml = `⚠️ 이 월의 데이터는 <strong>${minD}일~${maxD}일</strong>만 존재합니다. 후반부(16일~말일) 데이터가 없어 비교 분석이 불가합니다.`;
+    } else if (minD > 5) {
+      noticeType = 'info';
+      noticeHtml = `ℹ️ 데이터 범위: <strong>${minD}일~${maxD}일</strong> (전반부 ${bCnt}건, 후반부 ${aCnt}건) — 월 초반 데이터가 부족할 수 있습니다.`;
+    } else if (maxD < 25) {
+      noticeType = 'info';
+      noticeHtml = `ℹ️ 데이터 범위: <strong>${minD}일~${maxD}일</strong> (전반부 ${bCnt}건, 후반부 ${aCnt}건) — 월 후반 데이터가 부족할 수 있습니다.`;
+    } else {
+      noticeType = '';
+      noticeHtml = '';
+    }
+
+    if (noticeHtml) {
+      const bgColor = noticeType === 'warn' ? 'var(--pill-orange-bg)' : 'var(--pill-blue-bg)';
+      const borderColor = noticeType === 'warn' ? 'var(--accent5)' : 'var(--accent)';
+      noticeEl.style.display = 'block';
+      noticeEl.innerHTML = `<div style="padding:12px 18px;border-radius:8px;background:${bgColor};border:1px solid ${borderColor}33;font-size:13px;color:var(--text);line-height:1.5">${noticeHtml}</div>`;
+    } else {
+      noticeEl.style.display = 'none';
+    }
+  } else {
+    noticeEl.style.display = 'none';
+  }
+  const allKeys = [...new Set([...before.map(e=>e[0]), ...after.map(e=>e[0])])];
+
+  // Grouped bar chart
+  makeChart('fifthChart', {
+    type: 'bar',
+    data: {
+      labels: allKeys,
+      datasets: [
+        {
+          label: '1~15일 (전반부)',
+          data: allKeys.map(k => d.before[k] || 0),
+          backgroundColor: '#58a6ff99',
+          borderColor: '#58a6ff',
+          borderWidth: 1, borderRadius: 4
+        },
+        {
+          label: '16일~말일 (후반부)',
+          data: allKeys.map(k => d.after[k] || 0),
+          backgroundColor: '#ffa65799',
+          borderColor: '#ffa657',
+          borderWidth: 1, borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } }
+      }
+    }
+  });
+
+  const maxB = before[0]?.[1] || 1;
+  const maxA = after[0]?.[1] || 1;
+
+  // 중분류 > 소분류 상세 랭킹
+  const detail = (DATA.monthly_15_detail || {})[month] || {};
+  const detailBefore = Object.entries(detail.before || {});
+  const detailAfter = Object.entries(detail.after || {});
+  const maxDB = detailBefore[0]?.[1] || 1;
+  const maxDA = detailAfter[0]?.[1] || 1;
+
+  function renderDetailRank(entries, max, color) {
+    return entries.map((e, i) => {
+      const parts = e[0].split(' > ');
+      const label = parts.length > 1
+        ? `<span style="color:var(--text3)">${parts[0]}</span> <span style="color:var(--text3);margin:0 2px">›</span> ${parts[1]}`
+        : e[0];
+      return `<div class="rank-item">
+        <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+        <div class="rank-label" style="white-space:nowrap">${label}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${color}"></div></div>
+        <div class="rank-count">${e[1]}</div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('before15List').innerHTML = detailBefore.length
+    ? renderDetailRank(detailBefore, maxDB, '#58a6ff')
+    : before.map((e, i) => `<div class="rank-item"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-label">${e[0]}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxB*100)}%;background:#58a6ff"></div></div><div class="rank-count">${e[1]}</div></div>`).join('');
+
+  document.getElementById('after15List').innerHTML = detailAfter.length
+    ? renderDetailRank(detailAfter, maxDA, '#ffa657')
+    : after.map((e, i) => `<div class="rank-item"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-label">${e[0]}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxA*100)}%;background:#ffa657"></div></div><div class="rank-count">${e[1]}</div></div>`).join('');
+
+  // Insight
+  const totalB = before.reduce((s,e)=>s+e[1],0);
+  const totalA = after.reduce((s,e)=>s+e[1],0);
+  const topB = before[0] || ['없음', 0];
+  const topA = after[0] || ['없음', 0];
+
+  // Find differences
+  const onlyBefore = before.filter(e => !(d.after||{})[e[0]]).map(e=>e[0]).slice(0,2);
+  const onlyAfter = after.filter(e => !(d.before||{})[e[0]]).map(e=>e[0]).slice(0,2);
+
+  let insight = `<strong style="color:var(--text)">${month} 분석 결과</strong><br><br>`;
+  insight += `📌 전반부(1~15일) 총 <strong style="color:#58a6ff">${totalB}건</strong>, 후반부(16~말일) 총 <strong style="color:#ffa657">${totalA}건</strong> 접수되었습니다.<br><br>`;
+  insight += `🔵 전반부 1위: <strong style="color:#58a6ff">${topB[0]}</strong> (${topB[1]}건)<br>`;
+  insight += `🟠 후반부 1위: <strong style="color:#ffa657">${topA[0]}</strong> (${topA[1]}건)<br><br>`;
+
+  const billB = (d.before || {})['청구서'] || 0;
+  const billA = (d.after || {})['청구서'] || 0;
+  if (billB > billA * 1.5) {
+    insight += `📋 <strong>청구서</strong> 문의가 전반부(${billB}건)에 집중 → 월초 청구 관련 선제 안내 고려<br>`;
+  }
+
+  if (onlyBefore.length) insight += `<br>⬅ 전반부에만 나타나는 유형: ${onlyBefore.join(', ')}`;
+  if (onlyAfter.length) insight += `<br>➡ 후반부에만 나타나는 유형: ${onlyAfter.join(', ')}`;
+
+  document.getElementById('fifthInsight').innerHTML = insight;
+
+  // 시간대별 문의 분포
+  const hData = DATA.monthly_hourly_15[month];
+  if (hData) {
+    const allHours = [...new Set([...Object.keys(hData.before||{}), ...Object.keys(hData.after||{})])].sort();
+    makeChart('hourlyChart', {
+      type: 'bar',
+      data: {
+        labels: allHours.map(h => h + '시'),
+        datasets: [
+          {
+            label: '1~15일 (전반부)',
+            data: allHours.map(h => (hData.before||{})[h] || 0),
+            backgroundColor: '#58a6ff99',
+            borderColor: '#58a6ff',
+            borderWidth: 1, borderRadius: 4
+          },
+          {
+            label: '16일~말일 (후반부)',
+            data: allHours.map(h => (hData.after||{})[h] || 0),
+            backgroundColor: '#ffa65799',
+            borderColor: '#ffa657',
+            borderWidth: 1, borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+        scales: {
+          x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+          y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } }
+        }
+      }
+    });
+  }
+}
+
+function initFifteenth() {
+  const sel = document.getElementById('fifthMonthSelect');
+  const months = Object.keys(DATA.monthly_15).reverse();
+  sel.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+  renderFifteenth();
+}
+
+// ========= AGENT =========
+function renderAgent() {
+  const agentData = DATA.by_agent_channel || {};
+  const agents = Object.entries(agentData).map(([name, chs]) => ({
+    name, channels: chs, total: Object.values(chs).reduce((s,v)=>s+v, 0)
+  })).sort((a,b) => b.total - a.total);
+
+  const CH_COLORS = {'전화':'#58a6ff','메일':'#3fb950','1:1상담':'#d2a8ff','채널톡':'#ffa657'};
+
+  // Stat cards
+  const totalAgents = agents.length;
+  const totalHandled = agents.reduce((s,a)=>s+a.total, 0);
+  const avgPerAgent = totalAgents ? Math.round(totalHandled / totalAgents) : 0;
+  const topAgent = agents[0] || {name:'-', total:0};
+  const allCh = [...new Set(agents.flatMap(a => Object.keys(a.channels)))];
+
+  document.getElementById('agentStatGrid').innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">작성자 수</div><div class="stat-value">${totalAgents}</div><div class="stat-sub">명</div></div>
+    <div class="stat-card green"><div class="stat-label">총 접수 건수</div><div class="stat-value">${totalHandled.toLocaleString()}</div><div class="stat-sub">전체 기간</div></div>
+    <div class="stat-card orange"><div class="stat-label">1인당 평균</div><div class="stat-value">${avgPerAgent}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card purple"><div class="stat-label">최다 접수</div><div class="stat-value" style="font-size:18px">${topAgent.name}</div><div class="stat-sub">${topAgent.total}건</div></div>
+  `;
+
+  if (!agents.length) {
+    document.getElementById('agentChart').parentElement.parentElement.querySelector('.chart-wrap').innerHTML =
+      '<div class="no-data">작성자 데이터가 없습니다. CSV에 작성자 컬럼이 포함되어야 합니다.</div>';
+    document.getElementById('agentTable').innerHTML = '';
+    return;
+  }
+
+  // Stacked bar chart
+  makeChart('agentChart', {
+    type: 'bar',
+    data: {
+      labels: agents.map(a => a.name),
+      datasets: allCh.map(ch => ({
+        label: ch,
+        data: agents.map(a => a.channels[ch] || 0),
+        backgroundColor: (CH_COLORS[ch]||'#6e7681') + 'cc',
+        borderColor: CH_COLORS[ch]||'#6e7681',
+        borderWidth: 1, borderRadius: 3
+      }))
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: tc().tick, font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: { callbacks: { afterBody: (items) => { const a = agents[items[0].dataIndex]; return `총 ${a.total}건`; } } }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick, font: { size: 11 }, stepSize: 1 }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().label, font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Table
+  function chBar(channels, total) {
+    if (!channels || !total) return '<span style="color:var(--text3)">-</span>';
+    return '<div style="display:flex;gap:2px;align-items:center;min-width:140px">' +
+      Object.entries(channels).map(([ch, cnt]) => {
+        const pct = Math.max(10, Math.round(cnt / total * 100));
+        const color = CH_COLORS[ch] || '#6e7681';
+        return `<div title="${ch}: ${cnt}건 (${Math.round(cnt/total*100)}%)" style="width:${pct}%;height:22px;background:${color}cc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600;min-width:24px;cursor:default">${cnt}</div>`;
+      }).join('') + '</div>';
+  }
+
+  document.getElementById('agentTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>작성자</th><th>총 건수</th>${allCh.map(ch => `<th>${ch}</th>`).join('')}<th>채널 분포</th>
+    </tr></thead>
+    <tbody>${agents.map((a, i) => `
+      <tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td style="font-weight:600">${a.name}</td>
+        <td><span class="count-badge ${a.total >= 130 ? 'count-high' : a.total >= 100 ? 'count-mid' : 'count-low'}">${a.total}</span></td>
+        ${allCh.map(ch => {
+          const cnt = a.channels[ch] || 0;
+          const color = CH_COLORS[ch] || '#6e7681';
+          return `<td><span style="color:${color};font-weight:600">${cnt || '-'}</span></td>`;
+        }).join('')}
+        <td>${chBar(a.channels, a.total)}</td>
+      </tr>
+    `).join('')}</tbody>
+  `;
+}
+
+// ========= UPLOAD =========
+// ── 컬럼 자동 매핑: 한국어 컬럼명 / 영문 컬럼명 모두 지원 ──
+function detectColumns(headers) {
+  // 부분 일치(포함) 검색으로 컬럼명 변형에 대응
+  const find = (...keywords) => headers.find(h => keywords.some(k => h.includes(k))) || null;
+  return {
+    date:    find('등록일', '날짜', 'date', '접수일', '생성일'),
+    channel: find('인입채널', '채널', 'channel', '유입'),
+    cat1:    find('대분류', 'category'),
+    cat2:    find('중분류', 'category_sub'),
+    cat3:    find('소분류', 'category_sub2', '유형'),
+    acctId:  find('업체아이디', 'usercode', '계정', 'ID', 'id'),
+    acctNm:  find('업체명', 'deptname', '회사', '고객명'),
+    status:  find('진행상태', '상태', 'status', '처리상태'),
+    agent:   find('작성자', 'writer', 'author'),
+    closeDate: find('처리일', '완료일', '종료일', '처리완료일', 'close_date', 'closed'),
+  };
+}
+
+function handleUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!file.name.endsWith('.csv')) {
+    showErrorPopup('CSV 파일만 업로드 가능합니다.', file.name);
+    return;
+  }
+
+  // CP949/EUC-KR 인코딩 자동 감지: 먼저 UTF-8 시도, 깨지면 CP949로 재시도
+  const tryParse = (encoding) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try { resolve(parseCSV(e.target.result)); }
+      catch(err) { reject(err); }
+    };
+    reader.onerror = () => reject(new Error('파일 읽기 실패'));
+    reader.readAsText(file, encoding);
+  });
+
+  const showStatus = (html) => {
+    document.getElementById('uploadStatus').style.display = 'block';
+    document.getElementById('uploadMsg').innerHTML = html;
+  };
+
+  tryParse('UTF-8')
+    .then(parsed => {
+      // UTF-8로 읽었을 때 데이터가 너무 적으면(깨진 경우) CP949 재시도
+      if (parsed.total < 1) throw new Error('empty');
+      return parsed;
+    })
+    .catch(() => tryParse('CP949'))
+    .then(parsed => {
+      showStatus(`✅ <strong>${file.name}</strong> 로드 완료 — <strong>${parsed.total.toLocaleString()}건</strong> 분석됨. 탭을 전환하여 결과를 확인하세요.`);
+      document.getElementById('fileNameBadge').style.display = 'flex';
+      document.getElementById('fileName').textContent = file.name;
+      DATA = parsed;
+      renderOverview();
+    })
+    .catch(err => {
+      showErrorPopup(`${err.message}\n\n컬럼명·구분자·인코딩을 확인해주세요.`, file.name);
+    });
+}
+
+function parseCSV(text) {
+  // RFC 4180 준수 CSV 파서: 따옴표 안의 줄바꿈·구분자를 올바르게 처리
+  function csvToRows(text, sep) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+    let i = 0;
+    while (i < text.length) {
+      const ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (i + 1 < text.length && text[i + 1] === '"') {
+            field += '"';
+            i += 2;
+          } else {
+            inQuotes = false;
+            i++;
+          }
+        } else {
+          field += ch;
+          i++;
+        }
+      } else {
+        if (ch === '"') {
+          inQuotes = true;
+          i++;
+        } else if (ch === sep) {
+          row.push(field.trim());
+          field = '';
+          i++;
+        } else if (ch === '\r' || ch === '\n') {
+          row.push(field.trim());
+          field = '';
+          if (ch === '\r' && i + 1 < text.length && text[i + 1] === '\n') i++;
+          i++;
+          if (row.some(v => v !== '')) rows.push(row);
+          row = [];
+        } else {
+          field += ch;
+          i++;
+        }
+      }
+    }
+    if (field || row.length > 0) {
+      row.push(field.trim());
+      if (row.some(v => v !== '')) rows.push(row);
+    }
+    return rows;
+  }
+
+  if (!text || !text.trim()) throw new Error('데이터가 없습니다');
+
+  // 구분자 자동 감지 (세미콜론 vs 쉼표) - 첫 줄 기준
+  const firstLine = text.split(/\r?\n/)[0];
+  const sep = (firstLine.split(';').length >= firstLine.split(',').length) ? ';' : ',';
+
+  const allRows = csvToRows(text, sep);
+  if (allRows.length < 2) throw new Error('데이터가 없습니다');
+
+  const rawHeaders = allRows[0].map(h => h.replace(/"/g,'').replace(/\uFEFF/g,'').trim());
+  const cols = detectColumns(rawHeaders);
+
+  const rows = [];
+  for (let i = 1; i < allRows.length; i++) {
+    const vals = allRows[i];
+    if (vals.length < 3) continue;
+    const row = {};
+    rawHeaders.forEach((h, j) => row[h] = (vals[j]||'').replace(/"/g,'').trim());
+    rows.push(row);
+  }
+
+  if (rows.length === 0) throw new Error('파싱된 행이 없습니다');
+  if (!cols.date) throw new Error(`날짜 컬럼을 찾을 수 없습니다. 헤더: ${rawHeaders.join(', ')}`);
+
+  function count(arr, key) {
+    return arr.reduce((acc, r) => {
+      const v = (key && r[key]) ? r[key] : '';
+      if (v) acc[v] = (acc[v]||0)+1;
+      return acc;
+    }, {});
+  }
+  function top(obj, n=10) {
+    return Object.fromEntries(Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n));
+  }
+
+  const byMonth = {}, byWeek = {};
+  rows.forEach(r => {
+    const raw = r[cols.date];
+    const d = new Date(raw);
+    if (isNaN(d)) return;
+    r._month = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    r._day = d.getDate();
+    r._hour = String(d.getHours()).padStart(2, '0');
+    if (cols.closeDate && r[cols.closeDate]) {
+      const cd = new Date(r[cols.closeDate]);
+      if (!isNaN(cd)) { r._closeDate = r[cols.closeDate]; r._duration = Math.round((cd - d) / 60000); }
+    }
+    const wStart = new Date(d); wStart.setDate(d.getDate() - ((d.getDay()+6)%7)); // 월요일 기준
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate() + 6);
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+    r._week = `${fmt(wStart)}/${fmt(wEnd)}`;
+    if (!byMonth[r._month]) byMonth[r._month] = [];
+    byMonth[r._month].push(r);
+    if (!byWeek[r._week]) byWeek[r._week] = [];
+    byWeek[r._week].push(r);
+  });
+
+  const weekly_top = {};
+  Object.entries(byWeek).sort((a,b)=>a[0]>b[0]?1:-1)
+    .forEach(([w,rs]) => weekly_top[w] = top(count(rs, cols.cat3)));
+
+  const monthly_top = {}, monthly_15 = {}, monthly_accounts = {}, monthly_channel = {}, monthly_hourly_15 = {};
+  let monthly_15_detail = {};
+  Object.entries(byMonth).sort((a,b)=>a[0]>b[0]?1:-1).forEach(([m,rs]) => {
+    monthly_top[m] = top(count(rs, cols.cat3));
+    const before = rs.filter(r => r._day <= 15);
+    const after  = rs.filter(r => r._day > 15);
+    const days = rs.map(r => r._day).sort((a,b) => a - b);
+    monthly_15[m] = {
+      before: top(count(before, cols.cat2)), after: top(count(after, cols.cat2)),
+      beforeCount: before.length, afterCount: after.length,
+      minDay: days[0], maxDay: days[days.length - 1]
+    };
+    // 중분류 > 소분류 상세
+    function countCombined(arr) {
+      return arr.reduce((acc, r) => {
+        const c2 = cols.cat2 ? r[cols.cat2] : '';
+        const c3 = cols.cat3 ? r[cols.cat3] : '';
+        if (c2) { const key = c3 ? `${c2} > ${c3}` : c2; acc[key] = (acc[key]||0)+1; }
+        return acc;
+      }, {});
+    }
+    if (!monthly_15_detail) monthly_15_detail = {};
+    monthly_15_detail[m] = { before: top(countCombined(before)), after: top(countCombined(after)) };
+    const hBefore = {}, hAfter = {};
+    before.forEach(r => { if (r._hour) hBefore[r._hour] = (hBefore[r._hour]||0)+1; });
+    after.forEach(r => { if (r._hour) hAfter[r._hour] = (hAfter[r._hour]||0)+1; });
+    monthly_hourly_15[m] = { before: hBefore, after: hAfter };
+    const acctMap = {};
+    rs.forEach(r => {
+      const k = cols.acctId ? r[cols.acctId] : '(없음)';
+      const nm = cols.acctNm ? r[cols.acctNm] : k;
+      const ch = cols.channel ? r[cols.channel] : '';
+      if (!k) return;
+      if (!acctMap[k]) acctMap[k] = { '업체아이디': k, '업체명': nm, count: 0, channels: {} };
+      acctMap[k].count++;
+      if (ch) acctMap[k].channels[ch] = (acctMap[k].channels[ch]||0) + 1;
+    });
+    monthly_accounts[m] = Object.values(acctMap).sort((a,b)=>b.count-a.count).slice(0,10);
+    monthly_channel[m] = count(rs, cols.channel);
+  });
+
+  const acctMap = {};
+  rows.forEach(r => {
+    const k = cols.acctId ? r[cols.acctId] : '(없음)';
+    const nm = cols.acctNm ? r[cols.acctNm] : k;
+    const ch = cols.channel ? r[cols.channel] : '';
+    if (!k) return;
+    if (!acctMap[k]) acctMap[k] = { '업체아이디': k, '업체명': nm, count: 0, channels: {} };
+    acctMap[k].count++;
+    if (ch) acctMap[k].channels[ch] = (acctMap[k].channels[ch]||0) + 1;
+  });
+  const top_accounts = Object.values(acctMap).sort((a,b)=>b.count-a.count).slice(0,20);
+
+  // 시간대별
+  const hourly = {};
+  rows.forEach(r => { if (r._hour) hourly[r._hour] = (hourly[r._hour]||0)+1; });
+
+  // 전일 기준 집계
+  const allDates = [...new Set(rows.map(r => r[cols.date]?.substring(0,10)).filter(Boolean))].sort();
+  const lastDate = allDates[allDates.length - 1];
+  const lastDayRows = lastDate ? rows.filter(r => (r[cols.date]||'').startsWith(lastDate)) : [];
+  const daily_latest = {
+    date: lastDate || '-',
+    total: lastDayRows.length,
+    completed: lastDayRows.filter(r => cols.status && (r[cols.status]||'').includes('완료')).length,
+    channels: {},
+    by_type: {},
+    type_accounts: {}
+  };
+  lastDayRows.forEach(r => {
+    const ch = cols.channel ? r[cols.channel] : '';
+    if (ch) daily_latest.channels[ch] = (daily_latest.channels[ch]||0) + 1;
+    const c1 = cols.cat1 ? r[cols.cat1] : '';
+    const c3 = cols.cat3 ? r[cols.cat3] : '';
+    if (c1) {
+      const key = c3 ? `${c1} > ${c3}` : c1;
+      daily_latest.by_type[key] = (daily_latest.by_type[key]||0) + 1;
+      const acctNm = cols.acctNm ? r[cols.acctNm] : '';
+      if (acctNm) {
+        if (!daily_latest.type_accounts[key]) daily_latest.type_accounts[key] = [];
+        if (!daily_latest.type_accounts[key].includes(acctNm)) daily_latest.type_accounts[key].push(acctNm);
+      }
+    }
+  });
+
+  // 최근 7일 추이
+  const dailyCountMap = {};
+  rows.forEach(r => {
+    const dt = r[cols.date]?.substring(0,10);
+    if (dt) dailyCountMap[dt] = (dailyCountMap[dt]||0) + 1;
+  });
+  const sortedDates = Object.keys(dailyCountMap).sort();
+  const daily_trend = sortedDates.slice(-7).map(dt => ({date: dt, count: dailyCountMap[dt]}));
+
+  // 담당자별 채널
+  const by_agent_channel = {};
+  if (cols.agent) {
+    rows.forEach(r => {
+      const ag = r[cols.agent];
+      const ch = cols.channel ? r[cols.channel] : '';
+      if (!ag) return;
+      if (!by_agent_channel[ag]) by_agent_channel[ag] = {};
+      if (ch) by_agent_channel[ag][ch] = (by_agent_channel[ag][ch]||0) + 1;
+    });
+  }
+
+  // 소요시간 Top
+  function makeSlowEntry(r) {
+    return { cat3: cols.cat3?r[cols.cat3]:'', acctNm: cols.acctNm?r[cols.acctNm]:'', date: r[cols.date]||'', closeDate: r._closeDate||'', duration: r._duration, content: r['문의내용']||r['문의제목']||'' };
+  }
+  const slowRows = rows.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration);
+  const top_slow = slowRows.slice(0, 20).map(makeSlowEntry);
+  const monthly_slow = {}, weekly_slow = {};
+  Object.entries(byMonth).forEach(([m, rs]) => {
+    monthly_slow[m] = rs.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration).slice(0, 10).map(makeSlowEntry);
+  });
+  Object.entries(byWeek).forEach(([w, rs]) => {
+    weekly_slow[w] = rs.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration).slice(0, 10).map(makeSlowEntry);
+  });
+
+  return {
+    total: rows.length,
+    by_category:   top(count(rows, cols.cat1), 20),
+    by_subcategory: top(count(rows, cols.cat2), 15),
+    by_subdetail:  top(count(rows, cols.cat3), 20),
+    by_channel:    count(rows, cols.channel),
+    by_status:     count(rows, cols.status),
+    monthly_count: Object.fromEntries(Object.entries(byMonth).sort((a,b)=>a[0]>b[0]?1:-1).map(([m,rs])=>[m,rs.length])),
+    weekly_top, monthly_top, monthly_15, top_accounts, monthly_accounts, monthly_channel,
+    hourly, monthly_hourly_15, by_agent_channel, top_slow, monthly_slow, weekly_slow, monthly_15_detail, daily_latest, daily_trend,
+    _rows: rows, _cols: cols
+  };
+}
+
+// Error popup
+function showErrorPopup(msg, fileName) {
+  document.getElementById('errorPopupMsg').textContent = msg;
+  const fileEl = document.getElementById('errorPopupFile');
+  if (fileName) { fileEl.textContent = fileName; fileEl.style.display = 'inline-block'; }
+  else { fileEl.style.display = 'none'; }
+  document.getElementById('errorPopup').classList.add('show');
+}
+function closeErrorPopup() {
+  document.getElementById('errorPopup').classList.remove('show');
+}
+
+// Drop zone (전체 페이지)
+let dragCounter = 0;
+const overlay = document.getElementById('dropOverlay');
+document.addEventListener('dragenter', e => { e.preventDefault(); dragCounter++; overlay.classList.add('show'); });
+document.addEventListener('dragleave', e => { e.preventDefault(); dragCounter--; if (dragCounter <= 0) { dragCounter = 0; overlay.classList.remove('show'); } });
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  e.preventDefault(); dragCounter = 0; overlay.classList.remove('show');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    if (file.name.endsWith('.csv')) { handleUpload({target:{files:[file]}}); }
+    else { showErrorPopup('CSV 파일만 업로드 가능합니다.', file.name); }
+  }
+});
+
+// ========= DETAIL =========
+let detailPage = 1;
+const DETAIL_PAGE_SIZE = 20;
+
+function initDetail() {
+  const rows = DATA._rows || [];
+  const cols = DATA._cols || {};
+  const sel = document.getElementById('detailCatSelect');
+  if (!cols.cat3 || !rows.length) {
+    sel.innerHTML = '<option>데이터 없음</option>';
+    document.getElementById('detailTable').innerHTML = '<tr><td class="no-data">CSV를 업로드하면 문의 상세를 확인할 수 있습니다</td></tr>';
+    document.getElementById('detailCount').textContent = '';
+    document.getElementById('detailPaging').innerHTML = '';
+    return;
+  }
+  const cats = {};
+  rows.forEach(r => { const v = r[cols.cat3]; if (v) cats[v] = (cats[v]||0)+1; });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  sel.innerHTML = '<option value="">전체 소분류</option>' + sorted.map(([k,v]) => `<option value="${k}">${k} (${v}건)</option>`).join('');
+  detailPage = 1;
+  renderDetail();
+}
+
+function renderDetail() {
+  const rows = DATA._rows || [];
+  const cols = DATA._cols || {};
+  if (!rows.length) return;
+
+  const cat = document.getElementById('detailCatSelect').value;
+  const search = (document.getElementById('detailSearch').value || '').toLowerCase();
+  detailPage = 1;
+
+  const filtered = rows.filter(r => {
+    if (cat && r[cols.cat3] !== cat) return false;
+    if (search) {
+      const content = (r[cols.cat3]||'') + (r['문의제목']||'') + (r['문의내용']||'') + (r[cols.acctNm]||'');
+      if (!content.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  renderDetailPage(filtered);
+}
+
+function renderDetailPage(filtered) {
+  const cols = DATA._cols || {};
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / DETAIL_PAGE_SIZE));
+  if (detailPage > totalPages) detailPage = totalPages;
+
+  const start = (detailPage - 1) * DETAIL_PAGE_SIZE;
+  const pageRows = filtered.slice(start, start + DETAIL_PAGE_SIZE);
+
+  document.getElementById('detailCount').textContent = `— ${total}건`;
+
+  const statusClass = (s) => {
+    if (!s) return '';
+    if (s.includes('완료')) return 'done';
+    if (s.includes('진행')) return 'ing';
+    return 'hold';
+  };
+
+  document.getElementById('detailTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>등록일</th><th>소분류</th><th>업체명</th><th>문의제목</th><th>문의내용</th><th>상태</th><th>처리일</th><th>소요시간</th>
+    </tr></thead>
+    <tbody>${pageRows.length ? pageRows.map((r, i) => {
+      const content = (r['문의내용']||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const title = (r['문의제목']||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<tr>
+        <td style="color:var(--text3)">${start+i+1}</td>
+        <td style="white-space:nowrap">${r[cols.date]||'-'}</td>
+        <td><span class="pill pill-blue">${r[cols.cat3]||'-'}</span></td>
+        <td>${r[cols.acctNm]||'-'}</td>
+        <td style="max-width:180px">${title||'-'}</td>
+        <td style="max-width:350px">
+          <div class="detail-content" onclick="this.classList.toggle('expanded');this.nextElementSibling.textContent=this.classList.contains('expanded')?'▲ 접기':'▼ 더보기'">${content||'-'}</div>
+          ${content.length > 80 ? '<span class="detail-expand-btn">▼ 더보기</span>' : ''}
+        </td>
+        <td><span class="status-pill ${statusClass(r[cols.status])}">${r[cols.status]||'-'}</span></td>
+        <td style="white-space:nowrap">${r._closeDate||'-'}</td>
+        <td>${r._duration != null ? `<span class="count-badge ${r._duration>=4320?'count-high':r._duration>=1440?'count-mid':'count-low'}">${formatDuration(r._duration)}</span>` : '-'}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="9" class="no-data">검색 결과가 없습니다</td></tr>'}</tbody>
+  `;
+
+  // 페이징
+  let pagingHtml = '';
+  if (totalPages > 1) {
+    if (detailPage > 1) pagingHtml += `<button class="page-btn" onclick="detailGoPage(${detailPage-1})">◀</button>`;
+    const startP = Math.max(1, detailPage - 3);
+    const endP = Math.min(totalPages, detailPage + 3);
+    for (let p = startP; p <= endP; p++) {
+      pagingHtml += `<button class="page-btn ${p===detailPage?'active':''}" onclick="detailGoPage(${p})">${p}</button>`;
+    }
+    if (detailPage < totalPages) pagingHtml += `<button class="page-btn" onclick="detailGoPage(${detailPage+1})">▶</button>`;
+  }
+  document.getElementById('detailPaging').innerHTML = pagingHtml;
+
+  // 페이지 이동 시 재사용할 수 있도록 filtered를 저장
+  window._detailFiltered = filtered;
+}
+
+function detailGoPage(p) {
+  detailPage = p;
+  renderDetailPage(window._detailFiltered || []);
+  document.getElementById('detailTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ========= TABS =========
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const tabs = ['overview','ranking','accounts','detail','upload'];
+  const idx = tabs.indexOf(name);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+
+  if (name === 'ranking') { setTimeout(() => { initWeekly(); initMonthly(); }, 50); }
+  if (name === 'accounts') { setTimeout(renderAccounts, 50); }
+  if (name === 'detail') { setTimeout(initDetail, 50); }
+}
+
+// ========= INIT =========
+// VOC init deferred to tab activation
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -229,6 +1663,481 @@ tr:hover .td-act{opacity:1}
 .rnr-empty{font-size:12px;color:var(--text3);font-style:italic}
 .carry-badge{background:var(--amber-bg);color:var(--amber);font-size:10px;padding:1px 6px;border-radius:20px;margin-left:5px;font-weight:600}
 @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(3,1fr)}}
+
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
+
+  .voc-page {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #f0f6fc;
+    --text2: #b1bac4;
+    --text3: #8b949e;
+    --pill-blue-bg: #1a2b3d;
+    --pill-green-bg: #1a3d2b;
+    --pill-orange-bg: #3d2b1a;
+    --chart-grid: #21262d;
+    --chart-tick: #b1bac4;
+    --chart-label: #f0f6fc;
+  }
+
+  .voc-page.voc-page[data-theme="light"] {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f3f6;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent2: #1a7f37;
+    --accent3: #cf222e;
+    --accent4: #8250df;
+    --accent5: #bf8700;
+    --text: #1f2328;
+    --text2: #656d76;
+    --text3: #8c959f;
+    --pill-blue-bg: #ddf4ff;
+    --pill-green-bg: #dafbe1;
+    --pill-orange-bg: #fff8c5;
+    --chart-grid: #e1e4e8;
+    --chart-tick: #57606a;
+    --chart-label: #24292f;
+  }
+  .voc-page[data-theme="light"] .header {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f3f6 100%);
+  }
+  .voc-page[data-theme="light"] .header-icon {
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #161b22 0%, #1c2330 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+  .header-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .header-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 6px var(--accent2);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    padding: 16px 28px 0;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    background: transparent;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active {
+    color: var(--accent);
+    background: var(--bg);
+    border-color: var(--border);
+    border-bottom-color: var(--bg);
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 24px 28px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: border-color 0.15s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--text); }
+  .stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .stat-card.blue .stat-value { color: var(--accent); }
+  .stat-card.green .stat-value { color: var(--accent2); }
+  .stat-card.red .stat-value { color: var(--accent3); }
+  .stat-card.purple .stat-value { color: var(--accent4); }
+  .stat-card.orange .stat-value { color: var(--accent5); }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-full { margin-bottom: 16px; }
+
+  @media (max-width: 900px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* CHART CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title span { font-size: 15px; }
+  .chart-wrap { position: relative; }
+
+  /* RANKING LIST */
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+  .rank-num.top1 { background: var(--pill-orange-bg); color: var(--accent5); }
+  .rank-num.top2 { background: var(--pill-blue-bg); color: var(--accent); }
+  .rank-num.top3 { background: var(--pill-green-bg); color: var(--accent2); }
+  .rank-label { flex: 1; font-size: 13px; color: var(--text); }
+  .rank-bar-wrap { width: 100px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .rank-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .rank-count { font-size: 13px; font-weight: 600; color: var(--text2); min-width: 30px; text-align: right; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .section-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* SELECT */
+  select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+  }
+  select:focus { border-color: var(--accent); }
+
+  /* TOGGLE */
+  .toggle-group {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .toggle-btn {
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+  .toggle-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* BEFORE/AFTER 15 */
+  .split-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .split-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .split-half {
+    padding: 16px 20px;
+  }
+  .split-half:first-child { border-right: 1px solid var(--border); }
+  .split-half-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill {
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .pill-blue { background: var(--pill-blue-bg); color: var(--accent); }
+  .pill-orange { background: var(--pill-orange-bg); color: var(--accent5); }
+
+  /* ACCOUNT TABLE */
+  .account-table { width: 100%; border-collapse: collapse; }
+  .account-table th {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .account-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .account-table tr:last-child td { border-bottom: none; }
+  .account-table tr:hover td { background: var(--surface2); }
+  .id-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: monospace;
+    color: var(--text2);
+  }
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 22px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .count-high { background: var(--pill-orange-bg); color: var(--accent5); }
+  .count-mid { background: var(--pill-blue-bg); color: var(--accent); }
+  .count-low { background: var(--surface2); color: var(--text2); }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(88,166,255,0.04); }
+  .upload-icon { font-size: 36px; margin-bottom: 12px; }
+  .upload-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .upload-desc { font-size: 12px; color: var(--text2); }
+  #fileInput { display: none; }
+
+  /* CHANNEL DOTS */
+  .channel-bar {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .ch-seg {
+    height: 8px;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .no-data { color: var(--text3); font-size: 13px; text-align: center; padding: 30px; }
+
+  /* DETAIL TABLE */
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table th {
+    text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600;
+    color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .detail-table td {
+    padding: 10px 12px; font-size: 13px; color: var(--text);
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  .detail-table tr:last-child td { border-bottom: none; }
+  .detail-table tr:hover td { background: var(--surface2); }
+  .detail-content {
+    max-height: 60px; overflow: hidden; cursor: pointer;
+    transition: max-height 0.3s ease; line-height: 1.5; white-space: pre-wrap; word-break: break-all;
+  }
+  .detail-content.expanded { max-height: none; }
+  .detail-expand-btn {
+    color: var(--accent); font-size: 11px; cursor: pointer; margin-top: 4px;
+    display: inline-block; user-select: none;
+  }
+  .page-btn {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 4px 10px; color: var(--text2); font-size: 12px; cursor: pointer;
+  }
+  .page-btn:hover { border-color: var(--accent); color: var(--text); }
+  .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .status-pill {
+    padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  }
+  .status-pill.done { background: var(--pill-green-bg); color: var(--accent2); }
+  .status-pill.ing { background: var(--pill-blue-bg); color: var(--accent); }
+  .status-pill.hold { background: var(--pill-orange-bg); color: var(--accent5); }
+
+  /* Theme toggle */
+  .theme-toggle {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
+  /* Drop overlay */
+  .drop-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .drop-overlay.show { display: flex; }
+  .drop-overlay-inner {
+    border: 3px dashed var(--accent);
+    border-radius: 20px;
+    padding: 60px 80px;
+    text-align: center;
+    background: var(--surface);
+  }
+  .drop-overlay-inner .drop-icon { font-size: 48px; margin-bottom: 12px; }
+  .drop-overlay-inner .drop-text { font-size: 18px; font-weight: 700; color: var(--text); }
+  .drop-overlay-inner .drop-sub { font-size: 13px; color: var(--text2); margin-top: 6px; }
+
+  /* Error popup */
+  .error-popup-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 10000; display: none; align-items: center; justify-content: center;
+  }
+  .error-popup-overlay.show { display: flex; }
+  .error-popup {
+    background: var(--surface); border: 1px solid var(--accent3);
+    border-radius: 14px; padding: 32px 36px; max-width: 400px; width: 90%;
+    text-align: center; animation: fadeIn 0.2s ease;
+  }
+  .error-popup-icon { font-size: 40px; margin-bottom: 14px; }
+  .error-popup-title { font-size: 16px; font-weight: 700; color: var(--accent3); margin-bottom: 8px; }
+  .error-popup-msg { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+  .error-popup-file { font-size: 12px; color: var(--text3); background: var(--surface2); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 16px; word-break: break-all; }
+  .error-popup-btn {
+    padding: 8px 28px; border-radius: 8px; border: none;
+    background: var(--accent3); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .error-popup-btn:hover { opacity: 0.9; }
+
 </style>
 </head>
 <body>
@@ -442,25 +2351,86 @@ tr:hover .td-act{opacity:1}
 
   <!-- IMPROVE -->
   <div class="page" id="page-improve">
-    <div class="pscroll">
-      <div class="metric-grid" id="improveMetrics" style="margin-bottom:0"></div>
+    <div class="voc-page" id="voc-wrap" style="height:100%;overflow-y:auto;background:var(--bg)">
+
+
+<div class="error-popup-overlay" id="errorPopup" onclick="if(event.target===this)closeErrorPopup()">
+  <div class="error-popup">
+    <div class="error-popup-icon">⚠️</div>
+    <div class="error-popup-title">업로드 실패</div>
+    <div class="error-popup-msg" id="errorPopupMsg"></div>
+    <div class="error-popup-file" id="errorPopupFile" style="display:none"></div>
+    <div><button class="error-popup-btn" onclick="closeErrorPopup()">확인</button></div>
+  </div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay">
+  <div class="drop-overlay-inner">
+    <div class="drop-icon">📁</div>
+    <div class="drop-text">CSV 파일을 놓으세요</div>
+    <div class="drop-sub">파일을 드롭하면 자동으로 업로드됩니다</div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">📊</div>
+    <div>
+      <div class="header-title">VOC 전일 접수 현황</div>
+      <div class="header-sub">Daily VOC Intake Report</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="다크/라이트 모드 전환">🌙</button>
+    <button class="theme-toggle" onclick="document.getElementById('fileInput').click()" title="CSV 업로드">📂</button>
+    <div id="fileNameBadge" class="header-badge" style="display:none;">
+      <span style="color:var(--accent);">📄</span>
+      <span id="fileName" style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    </div>
+    <div class="header-badge">
+      <div class="badge-dot"></div>
+      <span id="dataInfo">데이터 로드 중...</span>
+    </div>
+  </div>
+</div>
+
+<div class="content" style="padding-top:24px;">
+
+  <!-- OVERVIEW -->
+  <div id="panel-overview" class="panel active fade-in">
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="grid-2">
       <div class="card">
-        <div class="sec-hd"><span class="sec-title">고객 개선 리스트</span>
-          <div style="display:flex;gap:7px">
-            <select id="filterImpStatus" class="btn btn-sm" onchange="renderImproveTable()" style="border:0.5px solid var(--bd2)">
-              <option value="">전체</option><option>접수</option><option>처리중</option><option>완료</option><option>보류</option>
-            </select>
-            <select id="filterImpPriority" class="btn btn-sm" onchange="renderImproveTable()" style="border:0.5px solid var(--bd2)">
-              <option value="">전체 우선순위</option><option>긴급</option><option>높음</option><option>보통</option><option>낮음</option>
-            </select>
-            <button class="btn btn-sm btn-primary" onclick="openImproveModal()">+ 추가</button>
-          </div>
-        </div>
-        <div class="tbl-wrap">
-          <table class="ltbl"><thead><tr><th>업체명</th><th>개선사항</th><th>우선순위</th><th>상태</th><th>담당</th><th>마감일</th><th>비고</th><th></th></tr></thead>
-          <tbody id="improveTbody"></tbody></table>
-        </div>
+        <div class="card-title"><span>📂</span> 대분류별 문의 현황 <span id="catDateLabel" style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0"></span></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="catChart"></canvas></div>
       </div>
+      <div class="card">
+        <div class="card-title"><span>📞</span> 인입 채널 현황 <span id="chDateLabel" style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0"></span></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="channelChart"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span>🏷️</span> 전일 문의유형 Top 5</div>
+        <div id="dailyTopList" class="rank-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📈</span> <span id="trendTitle">최근 7일 인입 추이</span></div>
+        <div class="chart-wrap" style="height:230px"><canvas id="weeklyTrendChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleUpload(event)">
+  <div id="uploadStatus" style="display:none;margin-bottom:16px;" class="card">
+    <div id="uploadMsg" style="font-size:13px; color:var(--text2);"></div>
+  </div>
+
+
+</div>
+
+
+
     </div>
   </div>
 
@@ -815,7 +2785,7 @@ function showPage(p) {
   })
   if (p==='dash') renderDashboard()
   if (p==='outbound') { renderCampTable(); renderOutboundList() }
-  if (p==='improve') renderImproveTable()
+  if (p==='improve') { setTimeout(()=>{ if(typeof renderOverview==='function') renderOverview(); },50) }
   if (p==='msg') { showMsgTab('input') }
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
