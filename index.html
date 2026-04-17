@@ -1162,7 +1162,7 @@ tr:hover .td-act{opacity:1}
     <div class="nav-tab"     id="nav-improve"  onclick="showPage('improve')">고객개선</div>
     <div class="nav-tab"     id="nav-tdl"      onclick="showPage('tdl')">TDL</div>
     <div class="nav-tab"     id="nav-rnr"      onclick="showPage('rnr')">R&amp;R</div>
-    <div class="nav-tab"     id="nav-notion"   onclick="showPage('notion')">노션 연동</div>
+    <div class="nav-tab"     id="nav-notion"   onclick="showPage('notion')">미팅캘린더</div>
     <div class="nav-tab"     id="nav-mail"     onclick="showPage('mail')">메일초안</div>
     <div class="nav-tab"     id="nav-settings" onclick="showPage('settings')">설정</div>
     <div class="nav-right">
@@ -1467,72 +1467,56 @@ tr:hover .td-act{opacity:1}
 
   <!-- MAIL -->
   <div class="page" id="page-notion">
-    <div class="inner-tabs">
-      <div class="inner-tab on" id="notiontab-docs"    onclick="showNotionTab('docs')">기획 문서</div>
-      <div class="inner-tab"   id="notiontab-meeting"  onclick="showNotionTab('meeting')">영업 미팅</div>
-    </div>
-
-    <!-- 기획 문서 -->
-    <div id="notionview-docs" class="pscroll">
+    <div class="pscroll">
+      <!-- 상단 컨트롤 -->
       <div class="card">
         <div class="sec-hd">
-          <div>
-            <span class="sec-title">기획파트 최신 문서 리스트</span>
-            <span style="font-size:11px;color:var(--text3);margin-left:8px">노션 연동</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn btn-sm" onclick="moveCalMonth(-1)">◀</button>
+            <span style="font-size:15px;font-weight:700" id="calTitle"></span>
+            <button class="btn btn-sm" onclick="moveCalMonth(1)">▶</button>
+            <button class="btn btn-xs" onclick="goToday()" style="margin-left:4px">오늘</button>
           </div>
           <div style="display:flex;gap:7px;align-items:center">
-            <select id="docsStatusFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderDocs()">
-              <option value="">전체</option><option>사용 가능</option><option>제작 중</option>
+            <select id="meetingTypeFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMeetings()">
+              <option value="">전체 유형</option>
+              <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
             </select>
-            <button class="btn btn-sm" onclick="loadDocs()">새로고침</button>
-            <button class="btn btn-sm btn-primary" onclick="openDocModal()">+ 문서 추가</button>
-          </div>
-        </div>
-        <div id="docsLoading" style="font-size:12px;color:var(--text3);padding:12px 0"><span class="spin"></span>노션에서 불러오는 중...</div>
-        <div class="tbl-wrap" id="docsTableWrap" style="display:none">
-          <table class="ltbl">
-            <thead><tr><th>문서명</th><th>상태</th><th>최종 업데이트</th><th>편집자</th><th></th></tr></thead>
-            <tbody id="docsTbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 영업 미팅 -->
-    <div id="notionview-meeting" class="pscroll" style="display:none">
-      <div class="card">
-        <div class="sec-hd">
-          <div>
-            <span class="sec-title">영업파트 고객사 미팅</span>
-            <span style="font-size:11px;color:var(--text3);margin-left:8px">노션 연동</span>
-          </div>
-          <div style="display:flex;gap:7px;align-items:center">
-            <select id="meetingFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMeetings()">
-              <option value="">전체</option><option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
+            <select id="meetingMemberFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMeetings()">
+              <option value="">전체 팀원</option>
             </select>
-            <button class="btn btn-sm" onclick="loadMeetings()">새로고침</button>
+            <button class="btn btn-xs" id="calViewBtn" onclick="toggleCalView()">리스트</button>
             <button class="btn btn-sm btn-primary" onclick="openMeetingModal()">+ 미팅 추가</button>
           </div>
         </div>
-        <div id="meetingLoading" style="font-size:12px;color:var(--text3);padding:12px 0"><span class="spin"></span>노션에서 불러오는 중...</div>
-        <div id="meetingCalWrap" style="display:none">
-          <!-- 캘린더 뷰 -->
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-            <button class="btn btn-sm" onclick="moveCalMonth(-1)">◀</button>
-            <span style="font-size:14px;font-weight:600" id="calTitle"></span>
-            <button class="btn btn-sm" onclick="moveCalMonth(1)">▶</button>
-            <button class="btn btn-xs" id="calViewBtn" onclick="toggleCalView()" style="margin-left:8px">리스트 보기</button>
+
+        <!-- 캘린더 뷰 -->
+        <div id="calendarWrap">
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;margin-bottom:2px">
+            <div style="text-align:center;font-size:11px;font-weight:600;color:#d04040;padding:5px">일</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:5px">월</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:5px">화</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:5px">수</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:5px">목</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:5px">금</div>
+            <div style="text-align:center;font-size:11px;font-weight:600;color:#185FA5;padding:5px">토</div>
           </div>
-          <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:16px"></div>
-          <!-- 리스트 뷰 -->
-          <div id="meetingListWrap" style="display:none">
+          <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"></div>
+        </div>
+
+        <!-- 리스트 뷰 -->
+        <div id="meetingListWrap" style="display:none">
+          <div class="tbl-wrap">
             <table class="ltbl">
-              <thead><tr><th>날짜</th><th>내용</th><th>대상</th><th>참여자</th><th>링크</th><th></th></tr></thead>
+              <thead><tr><th>날짜/시간</th><th>제목</th><th>업체명</th><th>유형</th><th>담당</th><th>장소</th><th>메모</th><th></th></tr></thead>
               <tbody id="meetingTbody"></tbody>
             </table>
           </div>
         </div>
       </div>
+
+      <!-- 이번달 요약 -->
+      <div class="grid3" id="meetingSummary"></div>
     </div>
   </div>
 
@@ -1730,26 +1714,28 @@ tr:hover .td-act{opacity:1}
   </div>
 </div></div>
 
-<div class="mbg" id="modalMeeting"><div class="modal">
+<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:520px">
   <h3 id="meetingModalTitle">미팅 추가</h3>
-  <div class="fl"><label>내용 *</label><input id="mtContent" placeholder="예) 볼보 DW 계약 미팅"/></div>
   <div class="r2">
-    <div class="fl"><label>날짜 *</label><input id="mtDate" type="date"/></div>
-    <div class="fl"><label>미팅 목적</label><select id="mtPurpose"><option value="">선택 안함</option><option>고객관리</option></select></div>
+    <div class="fl"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
+    <div class="fl"><label>업체명</label><input id="mtCompany" placeholder="예) (주)볼보코리아"/></div>
   </div>
-  <div class="fl"><label>대상</label>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px" id="mtTargetWrap">
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="고객사" onchange="updateMtTarget()"/> 고객사</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="신규" onchange="updateMtTarget()"/> 신규</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="내부" onchange="updateMtTarget()"/> 내부</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="회의" onchange="updateMtTarget()"/> 회의</label>
-      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="경쟁사" onchange="updateMtTarget()"/> 경쟁사</label>
+  <div class="r2">
+    <div class="fl"><label>날짜/시간 *</label><input id="mtDatetime" type="datetime-local"/></div>
+    <div class="fl"><label>유형</label>
+      <select id="mtType">
+        <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
+      </select>
     </div>
   </div>
-  <div class="fl"><label>링크</label><input id="mtLink" placeholder="https://"/></div>
+  <div class="r2">
+    <div class="fl"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
+    <div class="fl"><label>장소</label><input id="mtLocation" placeholder="예) 본사 회의실 / 온라인"/></div>
+  </div>
+  <div class="fl"><label>메모</label><textarea id="mtMemo" style="min-height:60px"></textarea></div>
   <div class="mbtns">
     <button class="btn" onclick="closeModal('modalMeeting')">취소</button>
-    <button class="btn btn-primary" onclick="saveMeeting()">노션에 저장</button>
+    <button class="btn btn-primary" onclick="saveMeeting()">저장</button>
   </div>
 </div></div>
 
@@ -1862,12 +1848,12 @@ async function selectUser(id) {
 
   // 화면 먼저 표시 후 데이터 병렬 로딩
   renderDashboard()
-  Promise.all([loadSalesData(), loadMsgLogs(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr()])
+  Promise.all([loadSalesData(), loadMsgLogs(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr(), loadMeetings()])
     .then(() => { renderDashboard(); renderCatTags(); renderMemberManage() })
 }
 
 function switchUser() {
-  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[];campaigns=[];outbounds=[];improvements=[];todos=[];rnrData=[]
+  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[];campaigns=[];outbounds=[];improvements=[];todos=[];rnrData=[];meetings=[]
   sel=null;vals={};files=[];selectMode=false;selectedIds=new Set()
   if(dashChart1){dashChart1.destroy();dashChart1=null}
   if(dashChart2){dashChart2.destroy();dashChart2=null}
@@ -1888,7 +1874,7 @@ function showPage(p) {
   if (p==='msg') { showMsgTab('input') }
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
-  if (p==='notion') { showNotionTab('docs'); loadDocs() }
+  if (p==='notion') { loadMeetings() }
   if (p==='settings') { renderCatTags(); renderMemberManage() }
 }
 
@@ -2599,274 +2585,203 @@ async function deleteTdl(id){
   todos=todos.filter(t=>t.id!==id);renderTdl()
 }
 
-// -- NOTION 연동 --
-const NOTION_DOCS_DB  = '57d0bfd1-b105-4e25-9303-545c484851b6'
-const NOTION_MTG_DB   = 'ac2e386c-d6b6-4517-b655-5583f87561c0'
-const NOTION_PROXY    = SUPABASE_URL + '/functions/v1/notion-proxy'
-
-let notionDocs=[], notionMeetings=[]
+// -- 미팅 캘린더 --
+let meetings=[]
 let calYear=new Date().getFullYear(), calMonth=new Date().getMonth()
-let calViewMode='calendar', editingDocId=null, editingMeetingId=null, mtTargetSelected=[]
+let calViewMode='calendar', editingMeetingId=null
 
-async function notionCall(path, method, body){
-  const resp = await fetch(NOTION_PROXY, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY
-    },
-    body: JSON.stringify({ path, method: method||'GET', body })
-  })
-  if(!resp.ok) throw new Error('Notion 프록시 오류: ' + resp.status)
-  const data = await resp.json()
-  if(data.object === 'error') throw new Error(data.message || 'Notion 오류')
-  return data
-}
-
-async function notionQuery(dbId, filter){
-  return notionCall('databases/'+dbId+'/query', 'POST', filter||{})
-}
-async function notionCreate(dbId, props){
-  return notionCall('pages', 'POST', { parent:{database_id:dbId}, properties:props })
-}
-async function notionUpdate(pageId, props){
-  return notionCall('pages/'+pageId, 'PATCH', { properties:props })
-}
-async function notionArchive(pageId){
-  return notionCall('pages/'+pageId, 'PATCH', { archived:true })
-}
-
-// ── 노션 탭 전환
-function showNotionTab(t){
-  ['docs','meeting'].forEach(id=>{
-    document.getElementById('notionview-'+id).style.display = id===t?'flex':'none'
-    document.getElementById('notiontab-'+id).classList.toggle('on', id===t)
-  })
-  if(t==='docs') loadDocs()
-  if(t==='meeting') loadMeetings()
-}
-
-// ── 기획 문서 ──────────────────────────────────────
-async function loadDocs(){
-  document.getElementById('docsLoading').style.display='block'
-  document.getElementById('docsTableWrap').style.display='none'
-  try{
-    const data = await notionQuery(NOTION_DOCS_DB, { sorts:[{property:'최종 업데이트 일자',direction:'descending'}] })
-    notionDocs = (data.results||[]).map(p=>({
-      id: p.id,
-      name: p.properties['문서명']?.title?.[0]?.plain_text || '(제목없음)',
-      status: p.properties['상태']?.status?.name || '',
-      updatedDate: p.properties['최종 업데이트 일자']?.date?.start || '',
-      editor: p.properties['최종 편집자']?.people?.[0]?.name || '',
-      url: p.url
-    }))
-    renderDocs()
-  }catch(err){
-    document.getElementById('docsLoading').innerHTML='<span style="color:var(--red)">로드 실패: '+err.message+'</span>'
-  }
-}
-
-function renderDocs(){
-  const filter = document.getElementById('docsStatusFilter')?.value
-  let list = filter ? notionDocs.filter(d=>d.status===filter) : notionDocs
-  document.getElementById('docsLoading').style.display='none'
-  document.getElementById('docsTableWrap').style.display='block'
-  const sc={사용가능:'b-green',제작중:'b-amber'}
-  document.getElementById('docsTbody').innerHTML = list.map(d=>`
-    <tr>
-      <td style="font-weight:500"><a href="${e(d.url)}" target="_blank" style="color:var(--blue);text-decoration:none">${e(d.name)}</a></td>
-      <td><span class="badge ${d.status==='사용 가능'?'b-green':'b-amber'}">${e(d.status)}</span></td>
-      <td style="font-size:11px;color:var(--text2)">${d.updatedDate||'-'}</td>
-      <td style="font-size:11px;color:var(--text2)">${e(d.editor)}</td>
-      <td><div class="td-act">
-        <button class="btn btn-xs" onclick="openDocModal('${d.id}')">수정</button>
-        <button class="btn btn-xs btn-danger" onclick="deleteDoc('${d.id}')">삭제</button>
-      </div></td>
-    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:16px">문서가 없어요</td></tr>'
-}
-
-function openDocModal(id){
-  editingDocId = id||null
-  document.getElementById('docModalTitle').textContent = id?'문서 수정':'문서 추가'
-  if(id){
-    const d=notionDocs.find(x=>x.id===id);if(!d)return
-    document.getElementById('docName').value=d.name
-    document.getElementById('docStatus').value=d.status
-    document.getElementById('docDate').value=d.updatedDate
-  }else{
-    document.getElementById('docName').value=''
-    document.getElementById('docStatus').value='사용 가능'
-    document.getElementById('docDate').value=new Date().toISOString().slice(0,10)
-  }
-  openModal('modalDoc')
-}
-
-async function saveDoc(){
-  const name=document.getElementById('docName').value.trim()
-  if(!name){alert('문서명을 입력하세요');return}
-  const props={
-    '문서명':{title:[{text:{content:name}}]},
-    '상태':{status:{name:document.getElementById('docStatus').value}},
-    '최종 업데이트 일자':{date:{start:document.getElementById('docDate').value||new Date().toISOString().slice(0,10)}}
-  }
-  try{
-    if(editingDocId){ await notionUpdate(editingDocId, props) }
-    else{ await notionCreate(NOTION_DOCS_DB, props) }
-    closeModal('modalDoc'); await loadDocs()
-    alert(editingDocId?'수정됐어요!':'노션에 추가됐어요!')
-  }catch(err){ alert('저장 실패: '+err.message) }
-}
-
-async function deleteDoc(id){
-  if(!confirm('노션에서 삭제할까요?'))return
-  try{ await notionArchive(id); notionDocs=notionDocs.filter(d=>d.id!==id); renderDocs() }
-  catch(err){ alert('삭제 실패: '+err.message) }
-}
-
-// ── 영업 미팅 ──────────────────────────────────────
 async function loadMeetings(){
-  document.getElementById('meetingLoading').style.display='block'
-  document.getElementById('meetingCalWrap').style.display='none'
-  try{
-    const data = await notionQuery(NOTION_MTG_DB, { sorts:[{property:'날짜',direction:'descending'}], page_size:100 })
-    notionMeetings = (data.results||[]).map(p=>({
-      id: p.id,
-      content: p.properties['내용']?.title?.[0]?.plain_text || '(내용없음)',
-      date: p.properties['날짜']?.date?.start || '',
-      target: (p.properties['대상']?.multi_select||[]).map(t=>t.name),
-      participants: (p.properties['참여자']?.people||[]).map(u=>u.name),
-      link: p.properties['링크']?.rich_text?.[0]?.plain_text || '',
-      purpose: p.properties['미팅 목적']?.select?.name || '',
-      url: p.url
-    }))
-    renderMeetings()
-  }catch(err){
-    document.getElementById('meetingLoading').innerHTML='<span style="color:var(--red)">로드 실패: '+err.message+'</span>'
-  }
+  const{data}=await sb.from('meetings').select('*').order('meeting_at',{ascending:true})
+  meetings=data||[]
+  renderMeetings()
+  renderMeetingSummary()
 }
 
 function renderMeetings(){
-  const filter = document.getElementById('meetingFilter')?.value
-  let list = filter ? notionMeetings.filter(m=>m.target.includes(filter)) : notionMeetings
-  document.getElementById('meetingLoading').style.display='none'
-  document.getElementById('meetingCalWrap').style.display='block'
+  // 팀원 필터 셀렉트 채우기
+  const ms=document.getElementById('meetingMemberFilter')
+  if(ms){
+    const cur=ms.value
+    ms.innerHTML='<option value="">전체 팀원</option>'+allUsers.map(u=>'<option value="'+u.id+'"'+(cur===u.id?' selected':'')+'>'+e(u.name)+'</option>').join('')
+  }
+  const tf=document.getElementById('meetingTypeFilter')?.value||''
+  const mf=document.getElementById('meetingMemberFilter')?.value||''
+  let list=meetings
+  if(tf) list=list.filter(m=>m.type===tf)
+  if(mf) list=list.filter(m=>m.user_id===mf)
   if(calViewMode==='calendar') renderCalendar(list)
   else renderMeetingList(list)
 }
 
+const TYPE_COLOR={고객사:'#185FA5',신규:'#1D9E75',내부:'#854F0B',회의:'#534AB7',경쟁사:'#d04040'}
+const TYPE_BADGE={고객사:'b-blue',신규:'b-green',내부:'b-amber',회의:'b-purple',경쟁사:'b-red'}
+
 function renderCalendar(list){
-  const d = new Date(calYear, calMonth, 1)
-  document.getElementById('calTitle').textContent = calYear+'년 '+(calMonth+1)+'월'
-  const firstDay = d.getDay()
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate()
+  const today=new Date().toISOString().slice(0,10)
+  document.getElementById('calTitle').textContent=calYear+'년 '+(calMonth+1)+'월'
+  const firstDay=new Date(calYear,calMonth,1).getDay()
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate()
   const byDate={}
-  list.forEach(m=>{ if(m.date){ const dk=m.date.slice(0,10); if(!byDate[dk])byDate[dk]=[]; byDate[dk].push(m) } })
-  const days=['일','월','화','수','목','금','토']
-  let html = days.map(d=>`<div style="text-align:center;font-size:11px;font-weight:600;color:var(--text3);padding:4px">${d}</div>`).join('')
-  for(let i=0;i<firstDay;i++) html+='<div></div>'
+  list.forEach(function(m){const d=(m.meeting_at||'').slice(0,10);if(!byDate[d])byDate[d]=[];byDate[d].push(m)})
+  let html=''
+  for(let i=0;i<firstDay;i++) html+='<div style="min-height:80px;background:var(--bg2);border-radius:var(--r);opacity:.3"></div>'
   for(let day=1;day<=daysInMonth;day++){
-    const dk=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
+    const dk=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0')
     const events=byDate[dk]||[]
-    const today=new Date().toISOString().slice(0,10)
     const isToday=dk===today
-    html+=`<div style="min-height:64px;border:0.5px solid var(--bd);border-radius:var(--r);padding:4px;background:${isToday?'var(--amber-bg)':'var(--bg)'}">
-      <div style="font-size:11px;font-weight:${isToday?'700':'400'};color:${isToday?'var(--amber)':'var(--text3)'};margin-bottom:2px">${day}</div>
-      ${events.slice(0,2).map(m=>`<div style="font-size:10px;background:var(--blue);color:#fff;border-radius:3px;padding:1px 4px;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="openMeetingModal('${m.id}')" title="${e(m.content)}">${e(m.content)}</div>`).join('')}
-      ${events.length>2?`<div style="font-size:10px;color:var(--text3)">+${events.length-2}건</div>`:''}
-    </div>`
+    const dow=new Date(calYear,calMonth,day).getDay()
+    const dayColor=dow===0?'#d04040':dow===6?'#185FA5':'var(--text2)'
+    let evHtml=events.slice(0,3).map(function(m){
+      const u=allUsers.find(function(x){return x.id===m.user_id})
+      const t=m.meeting_at?m.meeting_at.slice(11,16):''
+      const bg=TYPE_COLOR[m.type]||'#888'
+      const label=e((t?t+' ':'')+m.title)
+      const tip=e(m.title)+(u?' ('+e(u.name)+')':'')
+      return '<div class="cal-event" data-mid="'+m.id+'" title="'+tip+'" style="font-size:10px;background:'+bg+';color:#fff;border-radius:3px;padding:2px 5px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">'+label+'</div>'
+    }).join('')
+    if(events.length>3) evHtml+='<div class="cal-more" style="font-size:10px;color:var(--text3);cursor:pointer">+'+(events.length-3)+'건 더</div>'
+    html+='<div style="min-height:80px;border:0.5px solid '+(isToday?'var(--blue)':'var(--bd)')+';border-radius:var(--r);padding:4px 5px;background:'+(isToday?'rgba(24,95,165,.05)':'var(--bg)')+'"><div style="font-size:11px;font-weight:'+(isToday?700:400)+';color:'+(isToday?'var(--blue)':dayColor)+';margin-bottom:3px">'+day+'</div>'+evHtml+'</div>'
   }
   document.getElementById('calendarGrid').innerHTML=html
+  document.getElementById('calendarWrap').style.display='block'
   document.getElementById('meetingListWrap').style.display='none'
-  document.getElementById('calendarGrid').style.display='grid'
+  document.getElementById('calendarGrid').onclick=function(ev){
+    const el=ev.target.closest('.cal-event')
+    if(el&&el.dataset.mid) openMeetingModal(el.dataset.mid)
+    if(ev.target.classList.contains('cal-more')) setCalViewList()
+  }
 }
 
+function setCalViewList(){calViewMode='list';document.getElementById('calViewBtn').textContent='캘린더';renderMeetings()}
+
 function renderMeetingList(list){
-  const tColor={고객사:'b-blue',신규:'b-green',내부:'b-amber',회의:'b-purple',경쟁사:'b-red'}
-  document.getElementById('calendarGrid').style.display='none'
+  document.getElementById('calendarWrap').style.display='none'
   document.getElementById('meetingListWrap').style.display='block'
-  document.getElementById('meetingTbody').innerHTML = list.map(m=>`
-    <tr>
-      <td style="font-size:11px;white-space:nowrap">${m.date||'-'}</td>
-      <td style="font-weight:500"><a href="${e(m.url)}" target="_blank" style="color:var(--blue);text-decoration:none">${e(m.content)}</a></td>
-      <td>${m.target.map(t=>`<span class="badge ${tColor[t]||'b-gray'}">${t}</span>`).join(' ')}</td>
-      <td style="font-size:11px;color:var(--text2)">${m.participants.join(', ')||'-'}</td>
-      <td style="font-size:11px">${m.link?`<a href="${e(m.link)}" target="_blank" style="color:var(--blue)">링크</a>`:'-'}</td>
-      <td><div class="td-act">
-        <button class="btn btn-xs" onclick="openMeetingModal('${m.id}')">수정</button>
-        <button class="btn btn-xs btn-danger" onclick="deleteMeeting('${m.id}')">삭제</button>
-      </div></td>
-    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:16px">미팅이 없어요</td></tr>'
+  const tbody=document.getElementById('meetingTbody')
+  if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:16px">미팅이 없어요</td></tr>';return}
+  tbody.innerHTML=list.map(function(m){
+    const u=allUsers.find(function(x){return x.id===m.user_id})
+    const dt=m.meeting_at?new Date(m.meeting_at).toLocaleString('ko',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'-'
+    return '<tr>'+
+      '<td style="white-space:nowrap;font-size:12px">'+dt+'</td>'+
+      '<td style="font-weight:500">'+e(m.title)+'</td>'+
+      '<td style="font-size:12px;color:var(--text2)">'+e(m.company||'-')+'</td>'+
+      '<td><span class="badge '+(TYPE_BADGE[m.type]||'b-gray')+'">'+e(m.type)+'</span></td>'+
+      '<td style="font-size:12px">'+(u?e(u.name):'-')+'</td>'+
+      '<td style="font-size:11px;color:var(--text2)">'+e(m.location||'-')+'</td>'+
+      '<td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(m.memo||'')+'</td>'+
+      '<td><div class="td-act">'+
+        '<button class="btn btn-xs cal-edit" data-mid="'+m.id+'">수정</button>'+
+        '<button class="btn btn-xs btn-danger cal-del" data-mid="'+m.id+'">삭제</button>'+
+      '</div></td>'+
+    '</tr>'
+  }).join('')
+  tbody.onclick=function(ev){
+    const editBtn=ev.target.closest('.cal-edit')
+    if(editBtn) openMeetingModal(editBtn.dataset.mid)
+    const delBtn=ev.target.closest('.cal-del')
+    if(delBtn) deleteMeeting(delBtn.dataset.mid)
+  }
+}
+
+function renderMeetingSummary(){
+  const ym=calYear+'-'+String(calMonth+1).padStart(2,'0')
+  const thisMonth=meetings.filter(function(m){return (m.meeting_at||'').startsWith(ym)})
+  const byType={}; thisMonth.forEach(function(m){byType[m.type]=(byType[m.type]||0)+1})
+  const now=new Date()
+  const upcoming=meetings.filter(function(m){return m.meeting_at&&new Date(m.meeting_at)>=now&&m.meeting_at.startsWith(ym)}).slice(0,5)
+  const el=document.getElementById('meetingSummary'); if(!el)return
+  el.innerHTML=
+    '<div class="card"><div class="metric-label">이번달 미팅</div><div class="metric-value">'+thisMonth.length+'</div><div class="metric-sub">건</div>'+
+    '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">'+Object.entries(byType).map(function(e2){return '<span class="badge '+(TYPE_BADGE[e2[0]]||'b-gray')+'">'+e2[0]+' '+e2[1]+'</span>'}).join('')+'</div></div>'+
+    '<div class="card"><div class="sec-title" style="margin-bottom:10px">다가오는 미팅</div>'+
+    (upcoming.length?upcoming.map(function(m){
+      const u=allUsers.find(function(x){return x.id===m.user_id})
+      const dt=m.meeting_at?new Date(m.meeting_at).toLocaleString('ko',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):''
+      return '<div class="act-item"><div class="act-icon" style="background:rgba(24,95,165,.1);font-size:11px;color:var(--blue);font-weight:600">'+(m.meeting_at?new Date(m.meeting_at).getDate():'')+'</div>'+
+        '<div class="act-body"><div class="act-title">'+e(m.title)+(m.company?' · '+e(m.company):'')+'</div>'+
+        '<div class="act-meta">'+dt+(u?' · '+e(u.name):'')+'</div></div></div>'
+    }).join(''):'<div style="font-size:12px;color:var(--text3)">예정된 미팅이 없어요</div>')+
+    '</div>'+
+    '<div class="card"><div class="sec-title" style="margin-bottom:10px">팀원별 이번달</div>'+
+    allUsers.map(function(u){const cnt=thisMonth.filter(function(m){return m.user_id===u.id}).length
+      return '<div class="team-row"><div class="team-av">'+u.name.slice(0,2)+'</div>'+
+        '<div class="team-info"><div class="team-name">'+e(u.name)+'</div></div>'+
+        '<div style="font-weight:600;font-size:14px">'+cnt+'</div><div style="font-size:10px;color:var(--text3);margin-left:2px">건</div></div>'
+    }).join('')+'</div>'
 }
 
 function moveCalMonth(dir){
   calMonth+=dir
   if(calMonth>11){calMonth=0;calYear++}
   if(calMonth<0){calMonth=11;calYear--}
-  renderMeetings()
+  renderMeetings(); renderMeetingSummary()
 }
-
+function goToday(){
+  calYear=new Date().getFullYear(); calMonth=new Date().getMonth()
+  renderMeetings(); renderMeetingSummary()
+}
 function toggleCalView(){
-  calViewMode = calViewMode==='calendar'?'list':'calendar'
-  document.getElementById('calViewBtn').textContent = calViewMode==='calendar'?'리스트 보기':'캘린더 보기'
+  calViewMode=calViewMode==='calendar'?'list':'calendar'
+  document.getElementById('calViewBtn').textContent=calViewMode==='calendar'?'리스트':'캘린더'
   renderMeetings()
-}
-
-function updateMtTarget(){
-  mtTargetSelected=[]
-  document.querySelectorAll('#mtTargetWrap input[type=checkbox]:checked').forEach(cb=>mtTargetSelected.push(cb.value))
 }
 
 function openMeetingModal(id){
   editingMeetingId=id||null
   document.getElementById('meetingModalTitle').textContent=id?'미팅 수정':'미팅 추가'
-  document.querySelectorAll('#mtTargetWrap input[type=checkbox]').forEach(cb=>cb.checked=false)
-  mtTargetSelected=[]
+  document.getElementById('mtAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>'<option value="'+u.id+'">'+e(u.name)+'</option>').join('')
   if(id){
-    const m=notionMeetings.find(x=>x.id===id);if(!m)return
-    document.getElementById('mtContent').value=m.content
-    document.getElementById('mtDate').value=m.date
-    document.getElementById('mtPurpose').value=m.purpose||''
-    document.getElementById('mtLink').value=m.link||''
-    m.target.forEach(t=>{
-      const cb=document.querySelector(`#mtTargetWrap input[value="${t}"]`)
-      if(cb){cb.checked=true;mtTargetSelected.push(t)}
-    })
+    const m=meetings.find(x=>x.id===id); if(!m)return
+    document.getElementById('mtTitle').value=m.title||''
+    document.getElementById('mtCompany').value=m.company||''
+    document.getElementById('mtDatetime').value=m.meeting_at?m.meeting_at.slice(0,16):''
+    document.getElementById('mtType').value=m.type||'고객사'
+    document.getElementById('mtAssignee').value=m.user_id||''
+    document.getElementById('mtLocation').value=m.location||''
+    document.getElementById('mtMemo').value=m.memo||''
   }else{
-    document.getElementById('mtContent').value=''
-    document.getElementById('mtDate').value=new Date().toISOString().slice(0,10)
-    document.getElementById('mtPurpose').value=''
-    document.getElementById('mtLink').value=''
+    document.getElementById('mtTitle').value=''
+    document.getElementById('mtCompany').value=''
+    document.getElementById('mtDatetime').value=new Date().toISOString().slice(0,16)
+    document.getElementById('mtType').value='고객사'
+    document.getElementById('mtLocation').value=''
+    document.getElementById('mtMemo').value=''
+    document.getElementById('mtAssignee').value=currentUser?.id||''
   }
   openModal('modalMeeting')
 }
 
 async function saveMeeting(){
-  const content=document.getElementById('mtContent').value.trim()
-  if(!content){alert('내용을 입력하세요');return}
-  const date=document.getElementById('mtDate').value
-  if(!date){alert('날짜를 입력하세요');return}
-  const purpose=document.getElementById('mtPurpose').value
-  const link=document.getElementById('mtLink').value.trim()
-  const props={
-    '내용':{title:[{text:{content}}]},
-    '날짜':{date:{start:date}},
-    '대상':{multi_select:mtTargetSelected.map(t=>({name:t}))},
-    '링크':{rich_text:link?[{text:{content:link}}]:[]}
+  const title=document.getElementById('mtTitle').value.trim()
+  if(!title){alert('제목을 입력하세요');return}
+  const dt=document.getElementById('mtDatetime').value
+  if(!dt){alert('날짜/시간을 입력하세요');return}
+  const p={
+    title,
+    company:document.getElementById('mtCompany').value.trim(),
+    meeting_at:dt,
+    type:document.getElementById('mtType').value,
+    user_id:document.getElementById('mtAssignee').value||currentUser?.id||null,
+    location:document.getElementById('mtLocation').value.trim(),
+    memo:document.getElementById('mtMemo').value.trim()
   }
-  if(purpose) props['미팅 목적']={select:{name:purpose}}
-  try{
-    if(editingMeetingId){ await notionUpdate(editingMeetingId, props) }
-    else{ await notionCreate(NOTION_MTG_DB, props) }
-    closeModal('modalMeeting'); await loadMeetings()
-    alert(editingMeetingId?'수정됐어요!':'노션에 추가됐어요!')
-  }catch(err){ alert('저장 실패: '+err.message) }
+  if(editingMeetingId){
+    await sb.from('meetings').update(p).eq('id',editingMeetingId)
+    const i=meetings.findIndex(m=>m.id===editingMeetingId); if(i>=0)meetings[i]={...meetings[i],...p}
+  }else{
+    const{data}=await sb.from('meetings').insert(p).select().single()
+    if(data)meetings.push(data)
+    meetings.sort((a,b)=>a.meeting_at>b.meeting_at?1:-1)
+  }
+  closeModal('modalMeeting'); renderMeetings(); renderMeetingSummary()
 }
 
 async function deleteMeeting(id){
-  if(!confirm('노션에서 삭제할까요?'))return
-  try{ await notionArchive(id); notionMeetings=notionMeetings.filter(m=>m.id!==id); renderMeetings() }
-  catch(err){ alert('삭제 실패: '+err.message) }
+  if(!confirm('삭제할까요?'))return
+  await sb.from('meetings').delete().eq('id',id)
+  meetings=meetings.filter(m=>m.id!==id)
+  renderMeetings(); renderMeetingSummary()
 }
 
 // -- RNR --
