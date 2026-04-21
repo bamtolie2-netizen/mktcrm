@@ -1373,22 +1373,35 @@ tr:hover .td-act{opacity:1}
     <div class="header-icon">📊</div>
     <div>
       <div class="header-title">VOC 전일 접수 현황</div>
-      <div class="header-sub">Daily VOC Intake Report</div>
+      <div class="header-sub" id="vocLastSaved">저장된 데이터 없음</div>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <button class="upload-btn" id="uploadBtn" title="CSV/엑셀 업로드">📂</button>
-    <button class="upload-btn" id="vocSaveBtn" title="Supabase에 저장" style="display:none;background:var(--accent2);font-size:12px;padding:6px 12px;border-radius:8px;border:none;color:#fff;cursor:pointer;font-weight:600">💾 저장</button>
-    <button class="upload-btn" id="vocLoadBtn" onclick="loadVocFromDB()" title="저장된 데이터 불러오기" style="font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer">📥 불러오기</button>
-    <div id="fileNameBadge" class="header-badge" style="display:none;">
-      <span style="color:var(--accent);">📄</span>
-      <span id="fileName" style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <!-- 업로드 -->
+    <button onclick="document.getElementById('vocFileInput').click()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;font-weight:500">
+      📂 파일 업로드
+    </button>
+    <!-- 저장 (업로드 후 표시) -->
+    <button id="vocSaveBtn" onclick="saveVocToDB()" style="display:none;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;background:#238636;color:#fff;font-size:12px;cursor:pointer;font-weight:600">
+      💾 DB 저장
+    </button>
+    <!-- 파일명 배지 -->
+    <div id="fileNameBadge" style="display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--text2);">
+      <span style="color:var(--accent)">📄</span>
+      <span id="fileName" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
     </div>
+    <!-- 상태 배지 -->
     <div class="header-badge">
       <div class="badge-dot"></div>
-      <span id="dataInfo">데이터 로드 중...</span>
+      <span id="dataInfo">불러오는 중...</span>
     </div>
   </div>
+</div>
+
+<!-- 저장된 파일 목록 바 -->
+<div id="vocSavedBar" style="display:none;padding:10px 28px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+  <span style="font-size:12px;color:var(--text3);font-weight:500">저장된 데이터:</span>
+  <div id="vocSavedList" style="display:flex;gap:6px;flex-wrap:wrap"></div>
 </div>
 
 <div class="content" style="padding-top:24px;">
@@ -1875,7 +1888,7 @@ function showPage(p) {
   })
   if (p==='dash') renderDashboard()
   if (p==='outbound') { renderCampTable(); renderOutboundList() }
-  if (p==='improve') { setTimeout(()=>{ if(typeof renderOverview==='function') renderOverview(); },50) }
+  if (p==='improve') { setTimeout(()=>{ if(typeof renderOverview==='function') renderOverview(); if(typeof vocAutoLoad==='function') vocAutoLoad(); },50) }
   if (p==='msg') { showMsgTab('input') }
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
@@ -3835,184 +3848,175 @@ function handleUpload(event) {
     document.getElementById('uploadMsg').innerHTML = html;
   };
 
-  // 엑셀 파일 처리
   if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
-    if (typeof XLSX === 'undefined') {
-      showErrorPopup('엑셀 라이브러리 로딩 중입니다. 잠시 후 다시 시도하세요.', file.name);
-      return;
-    }
+    if (typeof XLSX === 'undefined') { showErrorPopup('엑셀 라이브러리 로딩 중입니다. 잠시 후 다시 시도하세요.', file.name); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
         const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
         const ws = wb.Sheets[wb.SheetNames[0]];
-        const csvText = XLSX.utils.sheet_to_csv(ws);
-        const parsed = parseCSV(csvText);
+        const parsed = parseCSV(XLSX.utils.sheet_to_csv(ws));
         if (!parsed || parsed.total < 1) { showErrorPopup('데이터가 없거나 형식이 맞지 않습니다.', file.name); return; }
-        showStatus('<strong>' + file.name + '</strong> 로드 완료 — <strong>' + parsed.total.toLocaleString() + '건</strong> 분석됨.');
-        document.getElementById('fileNameBadge').style.display = 'flex';
-        document.getElementById('fileName').textContent = file.name;
-        document.getElementById('vocSaveBtn').style.display = 'inline-block';
-        DATA = parsed;
-        renderOverview();
-      } catch(err) {
-        showErrorPopup('엑셀 파싱 실패: ' + err.message, file.name);
-      }
+        vocApplyData(parsed, file.name, true);
+        showStatus('📂 <strong>' + file.name + '</strong> 로드 완료 — <strong>' + parsed.total.toLocaleString() + '건</strong> · 저장 버튼을 눌러 DB에 저장하세요');
+      } catch(err) { showErrorPopup('엑셀 파싱 실패: ' + err.message, file.name); }
     };
-    reader.readAsArrayBuffer(file);
-    return;
+    reader.readAsArrayBuffer(file); return;
   }
+  if (!file.name.endsWith('.csv')) { showErrorPopup('CSV 또는 엑셀(.xlsx) 파일만 업로드 가능합니다.', file.name); return; }
 
-  // CSV 파일 처리
-  if (!file.name.endsWith('.csv')) {
-    showErrorPopup('CSV 또는 엑셀(.xlsx) 파일만 업로드 가능합니다.', file.name);
-    return;
-  }
-
-  const tryParse = (encoding) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      try { resolve(parseCSV(e.target.result)); }
-      catch(err) { reject(err); }
-    };
-    reader.onerror = () => reject(new Error('파일 읽기 실패'));
-    reader.readAsText(file, encoding);
+  const tryParse = (enc) => new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => { try { res(parseCSV(e.target.result)); } catch(err) { rej(err); } };
+    r.onerror = () => rej(new Error('파일 읽기 실패'));
+    r.readAsText(file, enc);
   });
-
-  tryParse('UTF-8')
-    .then(parsed => {
-      if (parsed.total < 1) throw new Error('empty');
-      return parsed;
-    })
+  tryParse('UTF-8').then(p => { if(p.total<1) throw new Error('empty'); return p; })
     .catch(() => tryParse('CP949'))
     .then(parsed => {
-      showStatus('<strong>' + file.name + '</strong> 로드 완료 — <strong>' + parsed.total.toLocaleString() + '건</strong> 분석됨.');
-      document.getElementById('fileNameBadge').style.display = 'flex';
-      document.getElementById('fileName').textContent = file.name;
-      document.getElementById('vocSaveBtn').style.display = 'inline-block';
-      DATA = parsed;
-      renderOverview();
+      vocApplyData(parsed, file.name, true);
+      showStatus('📂 <strong>' + file.name + '</strong> 로드 완료 — <strong>' + parsed.total.toLocaleString() + '건</strong> · 저장 버튼을 눌러 DB에 저장하세요');
     })
-    .catch(err => {
-      showErrorPopup(err.message + '\n\n컬럼명·구분자·인코딩을 확인해주세요.', file.name);
-    });
+    .catch(err => showErrorPopup(err.message + '\n\n컬럼명·구분자·인코딩을 확인해주세요.', file.name));
+}
+
+function vocApplyData(parsed, name, showSave) {
+  DATA = parsed;
+  document.getElementById('fileNameBadge').style.display = 'flex';
+  document.getElementById('fileName').textContent = name;
+  const saveBtn = document.getElementById('vocSaveBtn');
+  saveBtn.style.display = showSave ? 'inline-flex' : 'none';
+  saveBtn.textContent = '💾 DB 저장'; saveBtn.disabled = false; saveBtn.style.background = '#238636';
+  renderOverview();
 }
 
 // Supabase에 저장
 async function saveVocToDB() {
-  if (!DATA || !DATA._rows || !DATA._rows.length) { alert('저장할 데이터가 없어요. 파일을 먼저 업로드하세요.'); return; }
+  if (!DATA || !DATA._rows || !DATA._rows.length) { alert('저장할 데이터가 없어요.'); return; }
   if (!window.currentUser) { alert('팀원을 선택한 후 저장해주세요.'); return; }
-
   const btn = document.getElementById('vocSaveBtn');
   btn.textContent = '저장 중...'; btn.disabled = true;
-
   const fileName = vocCurrentFile ? vocCurrentFile.name : '업로드_' + new Date().toISOString().slice(0,10);
   const rows = DATA._rows;
-  const batchSize = 100;
-  let saved = 0;
-
+  const batchSize = 100; let saved = 0;
   try {
-    // 기존 동일 파일명 데이터 삭제 후 재저장
     await window.sb.from('voc_data').delete().eq('upload_name', fileName).eq('uploaded_by', window.currentUser.id);
-
     for (let i = 0; i < rows.length; i += batchSize) {
-      const batch = rows.slice(i, i + batchSize).map(r => ({
-        upload_name: fileName,
-        uploaded_by: window.currentUser.id,
-        row_data: r
-      }));
+      const batch = rows.slice(i, i+batchSize).map(r => ({ upload_name: fileName, uploaded_by: window.currentUser.id, row_data: r }));
       const { error } = await window.sb.from('voc_data').insert(batch);
       if (error) throw new Error(error.message);
       saved += batch.length;
       btn.textContent = '저장 중... ' + Math.round(saved/rows.length*100) + '%';
     }
-    btn.textContent = '저장됨!'; btn.style.background = '#1D9E75';
-    setTimeout(() => { btn.textContent = '💾 저장'; btn.disabled = false; btn.style.background = ''; }, 2000);
-    document.getElementById('uploadMsg').innerHTML += ' &nbsp;<span style="color:#1D9E75;font-weight:600">✅ DB 저장 완료 (' + saved + '건)</span>';
+    btn.textContent = '✅ 저장됨'; btn.style.background = '#1D9E75';
+    setTimeout(() => { btn.style.display = 'none'; }, 2000);
+    document.getElementById('uploadMsg').innerHTML += ' &nbsp;<span style="color:#3fb950;font-weight:600">✅ DB 저장 완료 (' + saved + '건)</span>';
+    // 저장 후 목록 새로고침
+    vocRenderSavedList();
   } catch(err) {
     alert('저장 실패: ' + err.message);
-    btn.textContent = '💾 저장'; btn.disabled = false;
+    btn.textContent = '💾 DB 저장'; btn.disabled = false;
   }
 }
 
-// Supabase에서 불러오기
-async function loadVocFromDB() {
+// 저장된 파일 목록을 헤더 아래 바에 표시
+async function vocRenderSavedList() {
   if (!window.sb) return;
-  const btn = document.getElementById('vocLoadBtn');
-  btn.textContent = '불러오는 중...'; btn.disabled = true;
-
   try {
-    // 저장된 파일 목록
     const { data: files } = await window.sb.from('voc_data')
       .select('upload_name, uploaded_by, uploaded_at')
       .order('uploaded_at', { ascending: false });
-
-    if (!files || !files.length) { alert('저장된 데이터가 없어요.'); btn.textContent = '📥 불러오기'; btn.disabled = false; return; }
-
-    // 유니크 파일 목록
+    if (!files || !files.length) {
+      document.getElementById('vocSavedBar').style.display = 'none';
+      document.getElementById('vocLastSaved').textContent = 'Daily VOC Intake Report';
+      return;
+    }
     const unique = [];
     const seen = new Set();
-    files.forEach(f => { const k = f.upload_name + '|' + f.uploaded_by; if (!seen.has(k)) { seen.add(k); unique.push(f); } });
+    files.forEach(f => { const k = f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f);} });
+    window._vocFileList = unique;
 
-    // 선택 팝업
-    const listHtml = unique.map((f, i) => {
-      const u = window.allUsers ? window.allUsers.find(x => x.id === f.uploaded_by) : null;
-      const dt = f.uploaded_at ? f.uploaded_at.slice(0,16).replace('T',' ') : '';
-      return '<button onclick="selectVocFile('+i+')" style="display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:6px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:13px">' +
-        '<strong>' + f.upload_name + '</strong><br>' +
-        '<span style="font-size:11px;color:var(--text3)">' + (u ? u.name : '') + ' · ' + dt + '</span></button>';
+    const bar = document.getElementById('vocSavedBar');
+    const list = document.getElementById('vocSavedList');
+    bar.style.display = 'flex';
+
+    list.innerHTML = unique.map((f, i) => {
+      const u = window.allUsers ? window.allUsers.find(x=>x.id===f.uploaded_by) : null;
+      const dt = f.uploaded_at ? f.uploaded_at.slice(0,10) : '';
+      return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap" title="'+(u?u.name+' · ':'')+dt+'">'+f.upload_name+'</button>';
     }).join('');
 
+    // 가장 최근 파일 자동 로드
+    const latest = unique[0];
+    document.getElementById('vocLastSaved').textContent = '최근: ' + latest.upload_name + ' (' + (latest.uploaded_at||'').slice(0,10) + ')';
+  } catch(e) {}
+}
+
+// 자동 로드 (탭 진입 또는 새로고침)
+async function vocAutoLoad() {
+  if (!window.sb) return;
+  try {
+    const { data: files } = await window.sb.from('voc_data')
+      .select('upload_name, uploaded_by, uploaded_at')
+      .order('uploaded_at', { ascending: false });
+    if (!files || !files.length) {
+      document.getElementById('dataInfo').textContent = '저장된 데이터 없음';
+      return;
+    }
+    const unique = [];
+    const seen = new Set();
+    files.forEach(f => { const k=f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f);} });
     window._vocFileList = unique;
-    const overlay = document.createElement('div');
-    overlay.id = 'vocSelectOverlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9999;display:flex;align-items:center;justify-content:center';
-    overlay.innerHTML = '<div style="background:var(--surface);border-radius:12px;padding:20px;width:90%;max-width:480px;max-height:80vh;overflow-y:auto">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><strong style="font-size:15px">저장된 데이터 선택</strong>' +
-      '<button onclick="document.getElementById(\'vocSelectOverlay\').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text2)">✕</button></div>' +
-      listHtml + '</div>';
-    document.getElementById('voc-wrap').appendChild(overlay);
-  } catch(err) {
-    alert('불러오기 실패: ' + err.message);
+
+    // 저장된 바 렌더
+    const bar = document.getElementById('vocSavedBar');
+    const list = document.getElementById('vocSavedList');
+    if (bar && list) {
+      bar.style.display = 'flex';
+      list.innerHTML = unique.map((f, i) => {
+        const u = window.allUsers ? window.allUsers.find(x=>x.id===f.uploaded_by) : null;
+        const dt = f.uploaded_at ? f.uploaded_at.slice(0,10) : '';
+        return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap" title="'+(u?u.name+' · ':'')+dt+'">'+f.upload_name+'</button>';
+      }).join('');
+    }
+
+    // 가장 최근 파일 자동 로드
+    document.getElementById('dataInfo').textContent = '자동 로드 중...';
+    await selectVocFile(0);
+  } catch(e) {
+    document.getElementById('dataInfo').textContent = '데이터 없음';
   }
-  btn.textContent = '📥 불러오기'; btn.disabled = false;
 }
 
 async function selectVocFile(idx) {
   document.getElementById('vocSelectOverlay')?.remove();
-  const file = window._vocFileList[idx];
+  const file = window._vocFileList ? window._vocFileList[idx] : null;
   if (!file) return;
 
-  document.getElementById('uploadMsg').innerHTML = '불러오는 중...';
   document.getElementById('uploadStatus').style.display = 'block';
+  document.getElementById('uploadMsg').innerHTML = '📥 <strong>' + file.upload_name + '</strong> 불러오는 중...';
 
   try {
     const { data, error } = await window.sb.from('voc_data')
-      .select('row_data')
-      .eq('upload_name', file.upload_name)
-      .eq('uploaded_by', file.uploaded_by)
-      .order('id');
-
+      .select('row_data').eq('upload_name', file.upload_name).eq('uploaded_by', file.uploaded_by).order('id');
     if (error) throw new Error(error.message);
     const rows = data.map(d => d.row_data);
-
-    // rows → CSV 텍스트로 변환 후 parseCSV
     if (!rows.length) { alert('데이터가 없어요.'); return; }
+
     const headers = Object.keys(rows[0]);
     const csvText = [headers.join(','), ...rows.map(r => headers.map(h => {
-      const v = String(r[h] || '');
-      return v.includes(',') || v.includes('"') || v.includes('\n') ? '"' + v.replace(/"/g, '""') + '"' : v;
+      const v = String(r[h]||'');
+      return v.includes(',')||v.includes('"')||v.includes('\n') ? '"'+v.replace(/"/g,'""')+'"' : v;
     }).join(','))].join('\n');
 
     const parsed = parseCSV(csvText);
-    DATA = parsed;
-    document.getElementById('fileNameBadge').style.display = 'flex';
-    document.getElementById('fileName').textContent = file.upload_name;
-    document.getElementById('vocSaveBtn').style.display = 'none';
-    document.getElementById('uploadMsg').innerHTML = '✅ <strong>' + file.upload_name + '</strong> 불러오기 완료 — <strong>' + parsed.total.toLocaleString() + '건</strong>';
-    renderOverview();
+    const u = window.allUsers ? window.allUsers.find(x=>x.id===file.uploaded_by) : null;
+    const dt = file.uploaded_at ? file.uploaded_at.slice(0,10) : '';
+    vocApplyData(parsed, file.upload_name, false);
+    document.getElementById('uploadMsg').innerHTML = '✅ <strong>' + file.upload_name + '</strong> — <strong>' + parsed.total.toLocaleString() + '건</strong>' + (u?' · '+u.name:'') + (dt?' · '+dt:'');
+    document.getElementById('vocLastSaved').textContent = '최근: ' + file.upload_name + ' (' + dt + ')';
   } catch(err) {
-    alert('불러오기 실패: ' + err.message);
+    document.getElementById('uploadMsg').innerHTML = '❌ 불러오기 실패: ' + err.message;
   }
 }
 
