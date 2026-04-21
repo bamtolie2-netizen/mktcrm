@@ -1223,6 +1223,14 @@ tr:hover .td-act{opacity:1}
         <div class="sec-hd"><span class="sec-title">팀원 영업 현황</span><button class="btn btn-xs btn-primary" onclick="openTargetModal()">목표 입력</button></div>
         <div id="dashTeam"></div>
       </div>
+      <!-- 건수 특이사항 -->
+      <div class="card" id="dashNoteCard" style="display:none">
+        <div class="sec-hd">
+          <span class="sec-title">📋 건수 특이사항</span>
+          <span style="font-size:11px;color:var(--text3)" id="dashNoteMonth"></span>
+        </div>
+        <div id="dashNoteList" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
     </div>
   </div>
 
@@ -1231,6 +1239,7 @@ tr:hover .td-act{opacity:1}
     <div class="inner-tabs">
       <div class="inner-tab on" id="msgtab-input"   onclick="showMsgTab('input')">일별 입력</div>
       <div class="inner-tab"   id="msgtab-history" onclick="showMsgTab('history')">전체 내역</div>
+      <div class="inner-tab"   id="msgtab-note"    onclick="showMsgTab('note')">건수 특이사항</div>
     </div>
     <div id="msgview-input" class="pscroll">
       <div class="card">
@@ -1271,6 +1280,32 @@ tr:hover .td-act{opacity:1}
             <tbody id="historyBody"></tbody>
             <tfoot id="historyFoot"></tfoot>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 건수 특이사항 -->
+    <div id="msgview-note" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <div>
+            <span class="sec-title">건수 특이사항</span>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">대시보드 하단에 표시됩니다</div>
+          </div>
+          <input type="month" id="noteMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgNotes()"/>
+        </div>
+        <!-- 작성 영역 -->
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:6px">새 특이사항 작성</div>
+          <textarea id="noteInput" placeholder="예) 04-03 알림톡 급증 사유: A사 이벤트 발송&#10;04-11 SMS 감소: 공휴일(식목일)&#10;..." style="width:100%;min-height:100px;font-size:13px;padding:10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);font-family:inherit;line-height:1.7;resize:vertical;outline:none"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:8px">
+            <button class="btn btn-primary" onclick="saveMsgNote()">저장</button>
+          </div>
+        </div>
+        <!-- 저장된 목록 -->
+        <div style="border-top:0.5px solid var(--bd);padding-top:14px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:10px">저장된 특이사항</div>
+          <div id="noteList"></div>
         </div>
       </div>
     </div>
@@ -1866,12 +1901,12 @@ async function selectUser(id) {
 
   // 화면 먼저 표시 후 데이터 병렬 로딩
   renderDashboard()
-  Promise.all([loadSalesData(), loadMsgLogs(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr(), loadMeetings()])
+  Promise.all([loadSalesData(), loadMsgLogs(), loadMsgNotes(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr(), loadMeetings()])
     .then(() => { renderDashboard(); renderCatTags(); renderMemberManage() })
 }
 
 function switchUser() {
-  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[];campaigns=[];outbounds=[];improvements=[];todos=[];rnrData=[];meetings=[]
+  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[];campaigns=[];outbounds=[];improvements=[];todos=[];rnrData=[];meetings=[];msgNotes=[]
   sel=null;vals={};files=[];selectMode=false;selectedIds=new Set()
   if(dashChart1){dashChart1.destroy();dashChart1=null}
   if(dashChart2){dashChart2.destroy();dashChart2=null}
@@ -1897,11 +1932,12 @@ function showPage(p) {
 }
 
 function showMsgTab(t) {
-  ['input','history'].forEach(id => {
+  ['input','history','note'].forEach(id => {
     document.getElementById('msgview-'+id).style.display = id===t ? 'block' : 'none'
     document.getElementById('msgtab-'+id).classList.toggle('on', id===t)
   })
   if (t==='history') renderMsgHistory()
+  else if (t==='note') renderMsgNotes()
   else renderMsgInputTable()
 }
 
@@ -2061,10 +2097,88 @@ function renderDashboard() {
       </div>
     </div>`
   }).join('') || '<div style="font-size:12px;color:var(--text3)">팀원 없음</div>'
+
+  // 건수 특이사항
+  renderDashNotes(ym)
 }
 
 // -- MSG --
+let msgNotes = []
+
 async function loadMsgLogs() { const{data}=await sb.from('message_logs').select('*').order('log_date',{ascending:false}); msgLogs=data||[] }
+async function loadMsgNotes() { const{data}=await sb.from('msg_notes').select('*').order('created_at',{ascending:false}); msgNotes=data||[] }
+
+function renderMsgNotes() {
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  if (document.getElementById('noteMonth')) document.getElementById('noteMonth').value = ym
+  if (document.getElementById('noteInput') && !document.getElementById('noteInput').value) {}
+  const list = msgNotes.filter(n => n.year_month === ym)
+  const el = document.getElementById('noteList')
+  if (!el) return
+  if (!list.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 0">이번달 특이사항이 없어요</div>'; return }
+  el.innerHTML = list.map(n => {
+    const u = allUsers.find(x => x.id === n.user_id)
+    const dt = n.updated_at ? n.updated_at.slice(0,16).replace('T',' ') : ''
+    return `<div style="border:0.5px solid var(--bd);border-radius:var(--r);padding:12px 14px;position:relative">
+      <div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+        <span>${e(u?.name||'-')} <span style="color:var(--text3);font-weight:400">${dt}</span></span>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-xs" onclick="editMsgNote('${n.id}')">수정</button>
+          <button class="btn btn-xs btn-danger" onclick="deleteMsgNote('${n.id}')">삭제</button>
+        </div>
+      </div>
+      <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text)">${e(n.note)}</div>
+    </div>`
+  }).join('')
+}
+
+async function saveMsgNote() {
+  const noteInput = document.getElementById('noteInput')
+  const note = noteInput?.value.trim()
+  if (!note) { alert('내용을 입력하세요'); return }
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  const { data } = await sb.from('msg_notes').insert({ user_id: currentUser.id, year_month: ym, note }).select().single()
+  if (data) msgNotes.unshift(data)
+  noteInput.value = ''
+  renderMsgNotes()
+  renderDashNotes(ym)
+}
+
+async function deleteMsgNote(id) {
+  if (!confirm('삭제할까요?')) return
+  await sb.from('msg_notes').delete().eq('id', id)
+  msgNotes = msgNotes.filter(n => n.id !== id)
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  renderMsgNotes()
+  renderDashNotes(ym)
+}
+
+function editMsgNote(id) {
+  const n = msgNotes.find(x => x.id === id); if (!n) return
+  const newNote = prompt('특이사항 수정', n.note)
+  if (newNote === null) return
+  sb.from('msg_notes').update({ note: newNote, updated_at: new Date().toISOString() }).eq('id', id)
+    .then(() => { n.note = newNote; n.updated_at = new Date().toISOString(); renderMsgNotes(); renderDashNotes(n.year_month) })
+}
+
+function renderDashNotes(ym) {
+  const notes = msgNotes.filter(n => n.year_month === ym)
+  const card = document.getElementById('dashNoteCard')
+  const list = document.getElementById('dashNoteList')
+  const monthEl = document.getElementById('dashNoteMonth')
+  if (!card || !list) return
+  if (!notes.length) { card.style.display = 'none'; return }
+  card.style.display = 'block'
+  if (monthEl) monthEl.textContent = ym
+  list.innerHTML = notes.map(n => {
+    const u = allUsers.find(x => x.id === n.user_id)
+    const dt = n.updated_at ? n.updated_at.slice(0,10) : ''
+    return `<div style="padding:10px 14px;border-radius:var(--r);background:var(--bg2);border-left:3px solid var(--blue)">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:5px">${e(u?.name||'')} · ${dt}</div>
+      <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text)">${e(n.note)}</div>
+    </div>`
+  }).join('')
+}
 function getDaysInMonth(ym){
   const[y,m]=ym.split('-').map(Number),days=[]
   const daysInMonth=new Date(y,m,0).getDate()
