@@ -228,6 +228,17 @@ tr:hover .td-act{opacity:1}
 .rnr-desc{font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-wrap}
 .rnr-empty{font-size:12px;color:var(--text3);font-style:italic}
 .carry-badge{background:var(--amber-bg);color:var(--amber);font-size:10px;padding:1px 6px;border-radius:20px;margin-left:5px;font-weight:600}
+.aip-plat-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--bd2);font-size:12px;cursor:pointer;background:var(--bg2);color:var(--text2);user-select:none}
+.aip-plat-btn input{display:none}
+.aip-plat-btn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.aip-card{border:0.5px solid var(--bd);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;background:var(--bg)}
+.aip-card:hover{border-color:var(--bd2)}
+.aip-card-title{font-size:14px;font-weight:600;margin-bottom:5px;color:var(--text)}
+.aip-card-meta{font-size:11px;color:var(--text3);margin-bottom:8px;display:flex;gap:10px;flex-wrap:wrap}
+.aip-card-summary{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.aip-card-actions{display:flex;gap:7px;align-items:center}
+.kw-tag{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text2)}
+.kw-tag .kx{cursor:pointer;color:var(--text3);font-size:12px}
 @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(3,1fr)}}
 
   @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
@@ -1165,6 +1176,7 @@ tr:hover .td-act{opacity:1}
     <div class="nav-tab"     id="nav-tdl"      onclick="showPage('tdl')">TDL</div>
     <div class="nav-tab"     id="nav-rnr"      onclick="showPage('rnr')">R&amp;R</div>
     <div class="nav-tab"     id="nav-notion"   onclick="showPage('notion')">미팅캘린더</div>
+    <div class="nav-tab"     id="nav-aiproj"   onclick="showPage('aiproj')">AI프로젝트</div>
     <div class="nav-tab"     id="nav-mail"     onclick="showPage('mail')">메일초안</div>
     <div class="nav-tab"     id="nav-settings" onclick="showPage('settings')">설정</div>
     <div class="nav-right">
@@ -1186,6 +1198,14 @@ tr:hover .td-act{opacity:1}
           <span style="font-size:11px;color:var(--text3)" id="dashYm"></span>
         </div>
         <div class="metric-grid" id="dashMsgMetrics"></div>
+      </div>
+      <!-- 건수 특이사항 -->
+      <div class="card" id="dashNoteCard" style="display:none">
+        <div class="sec-hd">
+          <span class="sec-title">📋 건수 특이사항</span>
+          <span style="font-size:11px;color:var(--text3)" id="dashNoteMonth"></span>
+        </div>
+        <div id="dashNoteList" style="display:flex;flex-direction:column;gap:10px"></div>
       </div>
       <!-- 메시지 차트 -->
       <div class="card">
@@ -1222,14 +1242,6 @@ tr:hover .td-act{opacity:1}
       <div class="card">
         <div class="sec-hd"><span class="sec-title">팀원 영업 현황</span><button class="btn btn-xs btn-primary" onclick="openTargetModal()">목표 입력</button></div>
         <div id="dashTeam"></div>
-      </div>
-      <!-- 건수 특이사항 -->
-      <div class="card" id="dashNoteCard" style="display:none">
-        <div class="sec-hd">
-          <span class="sec-title">📋 건수 특이사항</span>
-          <span style="font-size:11px;color:var(--text3)" id="dashNoteMonth"></span>
-        </div>
-        <div id="dashNoteList" style="display:flex;flex-direction:column;gap:10px"></div>
       </div>
     </div>
   </div>
@@ -1572,6 +1584,90 @@ tr:hover .td-act{opacity:1}
     </div>
   </div>
 
+
+  <!-- AI 프로젝트 탐색 -->
+  <div class="page" id="page-aiproj">
+    <div class="inner-tabs">
+      <div class="inner-tab on" id="aiptab-search" onclick="showAipTab('search')">프로젝트 탐색</div>
+      <div class="inner-tab"   id="aiptab-saved"  onclick="showAipTab('saved')">저장된 프로젝트</div>
+    </div>
+
+    <!-- 탐색 탭 -->
+    <div id="aipview-search" class="pscroll">
+      <div class="card">
+        <div class="sec-hd">
+          <div>
+            <span class="sec-title">AI 개발 프로젝트 탐색</span>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">나라장터 Open API + 위시켓/크몽 크롤링으로 실시간 수집</div>
+          </div>
+        </div>
+
+        <!-- 키워드 입력 -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:6px">검색 키워드</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px" id="aipKeywordTags"></div>
+          <div style="display:flex;gap:7px">
+            <input id="aipKeywordInput" placeholder="예) AI, 챗봇, LLM, 자동화, RPA..." style="flex:1;font-size:13px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;font-family:inherit" onkeydown="if(event.key==='Enter')addAipKeyword()"/>
+            <button class="btn btn-sm" onclick="addAipKeyword()">+ 추가</button>
+          </div>
+        </div>
+
+        <!-- 플랫폼 선택 -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:8px">탐색 플랫폼</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label class="aip-plat-btn on"><input type="checkbox" value="g2b" checked onchange="toggleAipPlat(this)"/> 나라장터</label>
+            <label class="aip-plat-btn on"><input type="checkbox" value="wishket" checked onchange="toggleAipPlat(this)"/> 위시켓</label>
+            <label class="aip-plat-btn on"><input type="checkbox" value="kmong" checked onchange="toggleAipPlat(this)"/> 크몽</label>
+            <label class="aip-plat-btn"><input type="checkbox" value="upwork" onchange="toggleAipPlat(this)"/> Upwork</label>
+          </div>
+        </div>
+
+        <!-- 나라장터 API 키 -->
+        <div style="padding:12px 14px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--bd);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="font-size:11px;color:var(--text2);font-weight:500">나라장터 Open API 키</div>
+            <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15129394" target="_blank" style="font-size:11px;color:var(--blue)">무료 발급 →</a>
+          </div>
+          <div style="display:flex;gap:7px">
+            <input type="password" id="aipG2bKey" placeholder="data.go.kr 에서 발급한 인증키" style="flex:1;font-size:12px;padding:7px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg);color:var(--text);outline:none;font-family:inherit"/>
+            <button class="btn btn-sm" onclick="aipSaveKey()">저장</button>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="aipKeyStatus">브라우저에 저장됩니다 · 나라장터 없이도 위시켓/크몽 크롤링 가능</div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-primary" id="aipSearchBtn" onclick="runAipSearch()" style="padding:9px 24px;font-size:13px">🔍 프로젝트 탐색 시작</button>
+          <button class="btn btn-sm" onclick="aipClearResults()">결과 초기화</button>
+          <span style="font-size:12px;color:var(--text3)" id="aipSearchStatus"></span>
+        </div>
+      </div>
+
+      <!-- 결과 -->
+      <div id="aipResults"></div>
+    </div>
+
+    <!-- 저장된 프로젝트 탭 -->
+    <div id="aipview-saved" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">저장된 프로젝트</span>
+          <div style="display:flex;gap:7px;align-items:center">
+            <select id="aipStatusFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderAipSaved()">
+              <option value="">전체</option>
+              <option>검토중</option><option>제안준비</option><option>제안완료</option><option>수주</option><option>보류</option>
+            </select>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="ltbl">
+            <thead><tr><th>프로젝트명</th><th>출처</th><th>예산</th><th>마감</th><th>상태</th><th>발견일</th><th></th></tr></thead>
+            <tbody id="aipSavedBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- MAIL -->
   <div class="page" id="page-mail">
@@ -1917,7 +2013,7 @@ function switchUser() {
 }
 
 function showPage(p) {
-  ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','settings'].forEach(id => {
+  ['dash','msg','sales','outbound','improve','tdl','rnr','notion','aiproj','mail','settings'].forEach(id => {
     document.getElementById('page-'+id).classList.toggle('on', id===p)
     document.getElementById('nav-'+id).classList.toggle('on', id===p)
   })
@@ -1928,6 +2024,7 @@ function showPage(p) {
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
   if (p==='notion') { loadMeetings() }
+  if (p==='aiproj') { aipInit() }
   if (p==='settings') { renderCatTags(); renderMemberManage() }
 }
 
@@ -2966,6 +3063,390 @@ async function saveRnr(){
     if(data)rnrData.push(data)
   }
   closeModal('modalRnr');renderRnr()
+}
+
+// -- AI 프로젝트 탐색 --
+let aipKeywords = []
+let aipProjects = []
+let aipSelectedPlats = ['g2b','wishket','kmong']
+
+// CORS 프록시 목록 (순서대로 시도)
+const CORS_PROXIES = [
+  'https://corsproxy.io/?',
+  'https://api.allorigins.win/raw?url='
+]
+
+function aipInit() {
+  const savedKey = localStorage.getItem('aip_g2b_key')
+  if (savedKey) {
+    const el = document.getElementById('aipG2bKey')
+    if (el) { el.value = savedKey; document.getElementById('aipKeyStatus').textContent = '저장된 키 불러옴' }
+  }
+  renderAipKeywords()
+  loadAipProjects()
+}
+
+function aipSaveKey() {
+  const key = document.getElementById('aipG2bKey').value.trim()
+  if (!key) return
+  localStorage.setItem('aip_g2b_key', key)
+  const st = document.getElementById('aipKeyStatus')
+  st.textContent = '✅ 저장됐어요'
+  setTimeout(() => st.textContent = '브라우저에 저장됩니다 · 나라장터 없이도 위시켓/크몽 크롤링 가능', 2000)
+}
+
+function addAipKeyword() {
+  const inp = document.getElementById('aipKeywordInput')
+  const kw = inp.value.trim()
+  if (!kw || aipKeywords.includes(kw)) { inp.value = ''; return }
+  aipKeywords.push(kw); inp.value = ''
+  renderAipKeywords()
+}
+
+function removeAipKeyword(kw) {
+  aipKeywords = aipKeywords.filter(k => k !== kw)
+  renderAipKeywords()
+}
+
+function renderAipKeywords() {
+  const el = document.getElementById('aipKeywordTags')
+  if (!el) return
+    el.innerHTML = aipKeywords.map(function(k){
+    return '<span class="kw-tag">' + e(k) + '<span class="kx" data-kw="' + encodeURIComponent(k) + '" onclick="removeAipKeyword(decodeURIComponent(this.dataset.kw))">x</span></span>'
+  }).join('') || '<span style="font-size:12px;color:var(--text3)">키워드를 추가하세요</span>'
+}
+
+function toggleAipPlat(cb) {
+  const label = cb.closest('.aip-plat-btn')
+  if (cb.checked) { aipSelectedPlats.push(cb.value); label.classList.add('on') }
+  else { aipSelectedPlats = aipSelectedPlats.filter(p => p !== cb.value); label.classList.remove('on') }
+}
+
+function showAipTab(t) {
+  ['search','saved'].forEach(id => {
+    document.getElementById('aipview-'+id).style.display = id===t ? 'flex' : 'none'
+    document.getElementById('aiptab-'+id).classList.toggle('on', id===t)
+  })
+  if (t === 'saved') renderAipSaved()
+}
+
+function aipClearResults() {
+  document.getElementById('aipResults').innerHTML = ''
+  document.getElementById('aipSearchStatus').textContent = ''
+  window._aipSearchResults = []
+}
+
+// 프록시를 통한 fetch
+async function proxyFetch(url) {
+  for (const proxy of CORS_PROXIES) {
+    try {
+      const resp = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(10000) })
+      if (resp.ok) return await resp.text()
+    } catch(e) { continue }
+  }
+  throw new Error('프록시 연결 실패')
+}
+
+// 나라장터 Open API 크롤링
+async function crawlG2B(keyword) {
+  const apiKey = localStorage.getItem('aip_g2b_key') || document.getElementById('aipG2bKey')?.value.trim()
+  if (!apiKey) return []
+
+  try {
+    const today = new Date()
+    const from = new Date(today - 30*86400000).toISOString().slice(0,10).replace(/-/g,'')
+    const to   = today.toISOString().slice(0,10).replace(/-/g,'')
+
+    const url = 'https://apis.data.go.kr/1230000/BidPublicInfoService04/getBidPblancListInfoServc' +
+      '?serviceKey=' + encodeURIComponent(apiKey) +
+      '&numOfRows=20&pageNo=1&type=json' +
+      '&bidNtceNm=' + encodeURIComponent(keyword) +
+      '&inqryBgnDt=' + from + '0000&inqryEndDt=' + to + '2359'
+
+    const resp = await fetch(url, { signal: AbortSignal.timeout(10000) })
+    const json = await resp.json()
+    const items = json?.response?.body?.items || []
+    return items.slice(0,10).map(item => ({
+      title: item.bidNtceNm || '',
+      source: '나라장터',
+      url: 'https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=/pt/menu/frameBidPblancDtl.do?bidPblancId=' + (item.bidPblancId||''),
+      summary: (item.ntceInsttNm||'') + ' | ' + (item.bidMethdNm||'') + ' | 추정가: ' + (item.presmptPrce ? Number(item.presmptPrce).toLocaleString()+'원' : '미정'),
+      budget: item.presmptPrce ? Math.round(Number(item.presmptPrce)/10000).toLocaleString()+'만원' : '미정',
+      deadline: item.bidClseDate ? item.bidClseDate.slice(0,10) : '',
+      tags: ['나라장터', '공공', keyword]
+    }))
+  } catch(err) {
+    console.warn('나라장터 API 오류:', err.message)
+    return []
+  }
+}
+
+// 위시켓 크롤링
+async function crawlWishket(keyword) {
+  try {
+    const url = 'https://www.wishket.com/project/?q=' + encodeURIComponent(keyword) + '&status=ongoing'
+    const html = await proxyFetch(url)
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+    const cards = doc.querySelectorAll('.project-item, .project-card, [class*="project"]')
+    const results = []
+    cards.forEach((card, i) => {
+      if (i >= 8) return
+      const titleEl = card.querySelector('h4,h3,h2,.title,[class*="title"]')
+      const title = titleEl?.textContent?.trim()
+      if (!title) return
+      const budgetEl = card.querySelector('[class*="budget"],[class*="price"],[class*="fee"]')
+      const deadlineEl = card.querySelector('[class*="deadline"],[class*="date"],[class*="period"]')
+      const linkEl = card.querySelector('a')
+      const href = linkEl?.getAttribute('href')
+      results.push({
+        title,
+        source: '위시켓',
+        url: href ? (href.startsWith('http') ? href : 'https://www.wishket.com' + href) : 'https://www.wishket.com/project/?q='+encodeURIComponent(keyword),
+        summary: card.textContent?.trim().slice(0,150).replace(/\s+/g,' ') || '',
+        budget: budgetEl?.textContent?.trim() || '협의',
+        deadline: deadlineEl?.textContent?.trim() || '',
+        tags: ['위시켓', '외주', keyword]
+      })
+    })
+    return results.length ? results : aipFallbackWishket(keyword)
+  } catch(err) {
+    return aipFallbackWishket(keyword)
+  }
+}
+
+function aipFallbackWishket(keyword) {
+  return [{
+    title: keyword + ' 관련 프로젝트 검색',
+    source: '위시켓',
+    url: 'https://www.wishket.com/project/?q=' + encodeURIComponent(keyword),
+    summary: '위시켓에서 직접 검색하세요. 크롤링이 차단된 경우 링크를 클릭하여 확인하세요.',
+    budget: '협의',
+    deadline: '',
+    tags: ['위시켓', keyword]
+  }]
+}
+
+// 크몽 크롤링
+async function crawlKmong(keyword) {
+  try {
+    const url = 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword)
+    const html = await proxyFetch(url)
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+    const cards = doc.querySelectorAll('[class*="gig"],[class*="service"],[class*="card"]')
+    const results = []
+    cards.forEach((card, i) => {
+      if (i >= 6) return
+      const titleEl = card.querySelector('h3,h4,[class*="title"]')
+      const title = titleEl?.textContent?.trim()
+      if (!title || title.length < 5) return
+      const priceEl = card.querySelector('[class*="price"],[class*="fee"]')
+      const linkEl = card.querySelector('a')
+      const href = linkEl?.getAttribute('href')
+      results.push({
+        title,
+        source: '크몽',
+        url: href ? (href.startsWith('http') ? href : 'https://kmong.com' + href) : 'https://kmong.com/search?keyword='+encodeURIComponent(keyword),
+        summary: card.textContent?.trim().slice(0,150).replace(/\s+/g,' ') || '',
+        budget: priceEl?.textContent?.trim() || '협의',
+        deadline: '',
+        tags: ['크몽', '외주', keyword]
+      })
+    })
+    return results.length ? results : [{
+      title: keyword + ' 서비스 검색',
+      source: '크몽',
+      url: 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword),
+      summary: '크몽에서 직접 검색하세요.',
+      budget: '협의', deadline: '', tags: ['크몽', keyword]
+    }]
+  } catch(err) {
+    return [{
+      title: keyword + ' 서비스 검색',
+      source: '크몽',
+      url: 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword),
+      summary: '크몽에서 직접 검색하세요.',
+      budget: '협의', deadline: '', tags: ['크몽', keyword]
+    }]
+  }
+}
+
+// Upwork RSS 크롤링
+async function crawlUpwork(keyword) {
+  try {
+    const url = 'https://www.upwork.com/ab/feed/jobs/rss?q=' + encodeURIComponent(keyword) + '&sort=recency'
+    const xml = await proxyFetch(url)
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(xml, 'text/xml')
+    const items = doc.querySelectorAll('item')
+    const results = []
+    items.forEach((item, i) => {
+      if (i >= 8) return
+      const title = item.querySelector('title')?.textContent?.trim()
+      const link  = item.querySelector('link')?.textContent?.trim()
+      const desc  = item.querySelector('description')?.textContent?.replace(/<[^>]*>/g,'').trim().slice(0,200) || ''
+      if (!title) return
+      const budgetMatch = desc.match(/\$[\d,]+/)
+      results.push({
+        title, source: 'Upwork',
+        url: link || 'https://www.upwork.com/search/jobs/?q='+encodeURIComponent(keyword),
+        summary: desc,
+        budget: budgetMatch ? budgetMatch[0] : '협의',
+        deadline: '',
+        tags: ['Upwork', '해외', keyword]
+      })
+    })
+    return results.length ? results : [{
+      title: keyword + ' jobs on Upwork',
+      source: 'Upwork',
+      url: 'https://www.upwork.com/search/jobs/?q=' + encodeURIComponent(keyword),
+      summary: 'Upwork에서 직접 검색하세요.',
+      budget: '협의', deadline: '', tags: ['Upwork', keyword]
+    }]
+  } catch(err) {
+    return [{
+      title: keyword + ' jobs on Upwork',
+      source: 'Upwork',
+      url: 'https://www.upwork.com/search/jobs/?q=' + encodeURIComponent(keyword),
+      summary: 'Upwork에서 직접 검색하세요.',
+      budget: '협의', deadline: '', tags: ['Upwork', keyword]
+    }]
+  }
+}
+
+async function runAipSearch() {
+  if (!aipKeywords.length) { alert('키워드를 하나 이상 추가하세요'); return }
+
+  const btn = document.getElementById('aipSearchBtn')
+  const status = document.getElementById('aipSearchStatus')
+  const results = document.getElementById('aipResults')
+  btn.disabled = true; btn.textContent = '탐색 중...'
+  results.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)"><span class="spin"></span> 플랫폼별 프로젝트를 수집하고 있어요...</div>'
+
+  const allResults = []
+  let done = 0
+  const total = aipKeywords.length * aipSelectedPlats.length
+
+  for (const kw of aipKeywords) {
+    const tasks = []
+    if (aipSelectedPlats.includes('g2b'))     tasks.push(crawlG2B(kw))
+    if (aipSelectedPlats.includes('wishket')) tasks.push(crawlWishket(kw))
+    if (aipSelectedPlats.includes('kmong'))   tasks.push(crawlKmong(kw))
+    if (aipSelectedPlats.includes('upwork'))  tasks.push(crawlUpwork(kw))
+
+    const batchResults = await Promise.allSettled(tasks)
+    batchResults.forEach(r => { if (r.status === 'fulfilled') allResults.push(...r.value) })
+    done += tasks.length
+    status.textContent = Math.round(done/total*100) + '% 수집 중...'
+  }
+
+  // 중복 제거 (제목 기준)
+  const seen = new Set()
+  const deduped = allResults.filter(p => {
+    const key = p.title.slice(0,20)
+    if (seen.has(key)) return false
+    seen.add(key); return true
+  })
+
+  window._aipSearchResults = deduped
+  renderAipResults(deduped)
+  btn.disabled = false; btn.textContent = '🔍 프로젝트 탐색 시작'
+  status.textContent = deduped.length + '개 수집 완료'
+}
+
+function renderAipResults(projects) {
+  const el = document.getElementById('aipResults')
+  if (!projects.length) {
+    el.innerHTML = '<div class="card"><div style="font-size:12px;color:var(--text3)">결과가 없어요. 키워드나 플랫폼을 바꿔보세요.</div></div>'
+    return
+  }
+  const srcColor = {'나라장터':'b-blue','위시켓':'b-green','크몽':'b-amber','Upwork':'b-purple'}
+  el.innerHTML = '<div class="card" style="margin-bottom:0"><div class="sec-title">탐색 결과 (' + projects.length + '개)</div></div>' +
+    projects.map((p, i) => {
+      const tagHtml = (p.tags||[]).slice(0,4).map(t => '<span class="badge b-gray">' + e(t) + '</span>').join(' ')
+      const srcBadge = '<span class="badge ' + (srcColor[p.source]||'b-gray') + '">' + e(p.source) + '</span>'
+      return '<div class="aip-card">' +
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">' +
+          '<div class="aip-card-title" style="flex:1">' + e(p.title) + '</div>' +
+          srcBadge +
+        '</div>' +
+        '<div class="aip-card-meta">' +
+          (p.budget ? '<span>💰 ' + e(p.budget) + '</span>' : '') +
+          (p.deadline ? '<span>⏰ ' + e(p.deadline) + '</span>' : '') +
+        '</div>' +
+        (p.summary ? '<div class="aip-card-summary">' + e(p.summary.slice(0,200)) + '</div>' : '') +
+        (tagHtml ? '<div style="margin-bottom:10px;display:flex;gap:4px;flex-wrap:wrap">' + tagHtml + '</div>' : '') +
+        '<div class="aip-card-actions">' +
+          (p.url ? '<a href="' + e(p.url) + '" target="_blank" class="btn btn-xs">🔗 바로가기</a>' : '') +
+          '<button class="btn btn-xs btn-primary" data-idx="' + i + '" onclick="saveAipProject(+this.dataset.idx)">&#128190; 저장</button>' +
+        '</div>' +
+      '</div>'
+    }).join('')
+}
+
+async function saveAipProject(idx) {
+  const p = window._aipSearchResults?.[idx]
+  if (!p || !currentUser) return
+  try {
+    const { data, error } = await sb.from('ai_projects').insert({
+      title: p.title, source: p.source, url: p.url,
+      summary: p.summary, budget: p.budget, deadline: p.deadline,
+      tags: p.tags || [], status: '검토중', added_by: currentUser.id
+    }).select().single()
+    if (error) throw new Error(error.message)
+    aipProjects.unshift(data)
+    const btn = document.querySelectorAll('.aip-card')[idx]?.querySelector('.btn-primary')
+    if (btn) { btn.textContent = '저장됨'; btn.disabled = true; btn.style.background = 'var(--green)' }
+  } catch(err) { alert('저장 실패: ' + err.message) }
+}
+
+async function loadAipProjects() {
+  const { data } = await sb.from('ai_projects').select('*').order('found_at', { ascending: false })
+  aipProjects = data || []
+}
+
+function renderAipSaved() {
+  const filter = document.getElementById('aipStatusFilter')?.value
+  const list = filter ? aipProjects.filter(function(p){ return p.status === filter }) : aipProjects
+  const tbody = document.getElementById('aipSavedBody')
+  if (!tbody) return
+  const srcColor = {'나라장터':'b-blue','위시켓':'b-green','크몽':'b-amber','Upwork':'b-purple'}
+  const statuses = ['검토중','제안준비','제안완료','수주','보류']
+  tbody.innerHTML = list.map(function(p) {
+    const opts = statuses.map(function(s){ return '<option' + (p.status===s?' selected':'') + '>' + s + '</option>' }).join('')
+    const link = p.url ? '<a href="' + e(p.url) + '" target="_blank" style="color:var(--blue);text-decoration:none">' + e(p.title) + '</a>' : e(p.title)
+    return '<tr>' +
+      '<td style="font-weight:500;max-width:220px">' + link + '</td>' +
+      '<td><span class="badge ' + (srcColor[p.source]||'b-gray') + '">' + e(p.source||'-') + '</span></td>' +
+      '<td style="font-size:12px">' + e(p.budget||'-') + '</td>' +
+      '<td style="font-size:12px">' + e(p.deadline||'-') + '</td>' +
+      '<td><select class="btn btn-xs aip-status-sel" data-id="' + p.id + '" style="border:0.5px solid var(--bd2)">' + opts + '</select></td>' +
+      '<td style="font-size:11px;color:var(--text3)">' + (p.found_at||'').slice(0,10) + '</td>' +
+      '<td><div class="td-act"><button class="btn btn-xs btn-danger aip-del-btn" data-id="' + p.id + '">삭제</button></div></td>' +
+    '</tr>'
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:16px">저장된 프로젝트가 없어요</td></tr>'
+  // 이벤트 위임
+  tbody.onchange = function(ev) {
+    const sel = ev.target.closest('.aip-status-sel')
+    if (sel) updateAipStatus(sel.dataset.id, sel.value)
+  }
+  tbody.onclick = function(ev) {
+    const btn = ev.target.closest('.aip-del-btn')
+    if (btn) deleteAipProject(btn.dataset.id)
+  }
+}
+
+async function updateAipStatus(id, status) {
+  await sb.from('ai_projects').update({ status }).eq('id', id)
+  const p = aipProjects.find(x => x.id === id); if (p) p.status = status
+}
+
+async function deleteAipProject(id) {
+  if (!confirm('삭제할까요?')) return
+  await sb.from('ai_projects').delete().eq('id', id)
+  aipProjects = aipProjects.filter(p => p.id !== id)
+  renderAipSaved()
 }
 
 // -- SETTINGS --
