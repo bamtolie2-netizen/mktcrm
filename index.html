@@ -5568,50 +5568,6 @@ window.selectVocFile = selectVocFile;
 // === 홈페이지 비교 ===
 
 // ========= HPC 진입점 =========
-function hpcInit() {
-  // API 키 주입 (설정 탭에서 저장한 키)
-  try {
-    var k = localStorage.getItem('crm_anthropic_key');
-    if (k) {
-      ['cfg-api-key','auto-api-key-gem','auto-api-key-cld'].forEach(function(id){
-        var el = document.getElementById(id); if(el) el.value=k;
-      });
-    }
-  } catch(e) {}
-  hpcRestoreState();
-  renderGrid('gem');
-  renderGrid('cld');
-  renderHistory();
-  // 이벤트 위임
-  var wrap = document.getElementById('hpc-wrap');
-  if (wrap && !wrap._hpcBound) {
-    wrap._hpcBound = true;
-    wrap.addEventListener('click', function(ev) {
-      var el = ev.target.closest('[data-hpc-fn]');
-      if (el) {
-        var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
-        if (typeof func==='function') { arg!==undefined&&arg!==''?func(arg):func(); }
-      }
-      var tr = ev.target.closest('[data-hpc-trigger]');
-      if (tr) { var t=document.getElementById(tr.dataset.hpcTrigger); if(t) t.click(); }
-    });
-    wrap.addEventListener('change', function(ev) {
-      var el=ev.target.closest('[data-hpc-fn]');
-      if (!el) return;
-      var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
-      if (typeof func==='function') { arg?func(arg):func(ev.target.value); }
-    });
-    wrap.addEventListener('dragover', function(ev) {
-      if (ev.target.closest('[data-hpc-drop]')) ev.preventDefault();
-    });
-    wrap.addEventListener('drop', function(ev) {
-      var el=ev.target.closest('[data-hpc-drop]');
-      if (!el) return;
-      ev.preventDefault();
-      if (typeof onDrop==='function') onDrop(ev, el.dataset.hpcDrop);
-    });
-  }
-}
 
 
 var __SD__ = null;
@@ -5646,6 +5602,55 @@ const HPC_COLORS=['#e8613a','#4285F4','#1a9e6e','#c97f00','#9b59b6','#e74c3c','#
 // 상태 — AI별 독립 데이터
 // ══════════════════════════════════════════
 const DB={gem:{sites:[],colorIdx:0},cld:{sites:[],colorIdx:0}};
+
+function hpcInit() {
+  // API 키 주입 (설정 탭에서 저장한 키)
+  try {
+    var k = localStorage.getItem('crm_anthropic_key');
+    if (k) {
+      ['cfg-api-key','auto-api-key-gem','auto-api-key-cld'].forEach(function(id){
+        var el = document.getElementById(id); if(el) el.value=k;
+      });
+    }
+  } catch(e) {}
+  hpcRestoreState();
+  // DB 초기화 후 실행
+  setTimeout(function() {
+    renderGrid('gem');
+    renderGrid('cld');
+    renderHistory();
+  }, 0);
+  // 이벤트 위임
+  var wrap = document.getElementById('hpc-wrap');
+  if (wrap && !wrap._hpcBound) {
+    wrap._hpcBound = true;
+    wrap.addEventListener('click', function(ev) {
+      var el = ev.target.closest('[data-hpc-fn]');
+      if (el) {
+        var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
+        if (typeof func==='function') { arg!==undefined&&arg!==''?func(arg):func(); }
+      }
+      var tr = ev.target.closest('[data-hpc-trigger]');
+      if (tr) { var t=document.getElementById(tr.dataset.hpcTrigger); if(t) t.click(); }
+    });
+    wrap.addEventListener('change', function(ev) {
+      var el=ev.target.closest('[data-hpc-fn]');
+      if (!el) return;
+      var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
+      if (typeof func==='function') { arg?func(arg):func(ev.target.value); }
+    });
+    wrap.addEventListener('dragover', function(ev) {
+      if (ev.target.closest('[data-hpc-drop]')) ev.preventDefault();
+    });
+    wrap.addEventListener('drop', function(ev) {
+      var el=ev.target.closest('[data-hpc-drop]');
+      if (!el) return;
+      ev.preventDefault();
+      if (typeof onDrop==='function') onDrop(ev, el.dataset.hpcDrop);
+    });
+  }
+}
+
 // 이력: [{id, ai, date, name, url, type, scores, checks, note, totalScore}]
 let HISTORY=[];
 let selectedHistIds=[];
