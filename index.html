@@ -5507,10 +5507,19 @@ function switchTab(name) {
 }
 
 // ========= EVENT BINDINGS =========
-document.getElementById('uploadBtn').addEventListener('click', function() { document.getElementById('vocFileInput').click(); });
-document.getElementById('errorPopup').addEventListener('click', function(e) { if (e.target === this) closeErrorPopup(); });
-document.getElementById('errorPopupBtn').addEventListener('click', closeErrorPopup);
-document.getElementById('vocFileInput').addEventListener('change', handleUpload);
+;(function() {
+  function safeOn(id, ev, fn) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener(ev, fn);
+  }
+  safeOn('uploadBtn', 'click', function() {
+    var fi = document.getElementById('vocFileInput');
+    if (fi) fi.click();
+  });
+  safeOn('errorPopup', 'click', function(e) { if (e.target === this) closeErrorPopup(); });
+  safeOn('errorPopupBtn', 'click', closeErrorPopup);
+  safeOn('vocFileInput', 'change', handleUpload);
+})();
 
 // 문의 상세 토글 (이벤트 위임)
 document.addEventListener('click', function(e) {
@@ -5567,59 +5576,26 @@ window.selectVocFile = selectVocFile;
 
 // === 홈페이지 비교 ===
 
-// ========= HPC 진입점 =========
-
-
-var __SD__ = null;
-// ══════════════════════════════════════════
-// 상수
-// ══════════════════════════════════════════
-const DCATS=[
-  {k:'visual',lb:'시각 디자인',desc:'색상·폰트·이미지',isNew:false},
-  {k:'layout',lb:'레이아웃·구조',desc:'정보구조, 가독성',isNew:false},
-  {k:'mobile',lb:'모바일 대응',desc:'반응형, 터치UX',isNew:false},
-  {k:'speed',lb:'로딩 속도',desc:'페이지 성능',isNew:false},
-  {k:'brand',lb:'브랜드 일관성',desc:'색상·톤앤매너',isNew:false},
-  {k:'ux',lb:'사용 편의성',desc:'네비·CTA 명확성',isNew:false},
-  {k:'ai_opt',lb:'AI 최적화',desc:'텍스트 비중, 메타데이터 구성',isNew:true},
-  {k:'engage',lb:'몰입도',desc:'스크롤리텔링, 마이크로 애니메이션',isNew:true},
-  {k:'convert',lb:'전환 편의성',desc:'문의폼 간소화, CTA 배치',isNew:true},
-];
-const FITEMS=[
-  {k:'f_service',lb:'서비스 소개 페이지'},{k:'f_price',lb:'요금/가격 공개'},
-  {k:'f_docs',lb:'API 문서/개발자 가이드'},{k:'f_faq',lb:'FAQ 페이지'},
-  {k:'f_case',lb:'고객 사례/레퍼런스'},{k:'f_blog',lb:'블로그/뉴스'},
-  {k:'f_chat',lb:'실시간 채팅 상담'},{k:'f_demo',lb:'데모/체험 신청'},
-  {k:'f_login',lb:'회원가입/로그인'},{k:'f_search',lb:'사이트 내 검색'},
-  {k:'f_multi',lb:'다국어 지원'},{k:'f_ssl',lb:'HTTPS/보안 인증'},
-  {k:'f_sns',lb:'SNS 연동 버튼'},{k:'f_video',lb:'소개 영상'},
-];
-const DKMAP={'시각 디자인':'visual','시각디자인':'visual','레이아웃':'layout','레이아웃·구조':'layout','레이아웃 · 구조':'layout','모바일':'mobile','모바일 대응':'mobile','로딩':'speed','로딩 속도':'speed','로딩 속도·성능':'speed','로딩 속도 · 성능':'speed','브랜드':'brand','브랜드 일관성':'brand','사용 편의성':'ux','사용편의성':'ux','AI 최적화':'ai_opt','ai 최적화':'ai_opt','몰입도':'engage','전환 편의성':'convert','전환편의성':'convert'};
-const FKMAP={'서비스 소개':'f_service','요금':'f_price','가격':'f_price','API 문서':'f_docs','개발자 가이드':'f_docs','FAQ':'f_faq','고객 사례':'f_case','레퍼런스':'f_case','블로그':'f_blog','뉴스':'f_blog','실시간 채팅':'f_chat','채팅 상담':'f_chat','데모':'f_demo','체험 신청':'f_demo','회원가입':'f_login','로그인':'f_login','사이트 내 검색':'f_search','검색':'f_search','다국어':'f_multi','HTTPS':'f_ssl','보안 인증':'f_ssl','SNS':'f_sns','소개 영상':'f_video','영상':'f_video'};
-const HPC_COLORS=['#e8613a','#4285F4','#1a9e6e','#c97f00','#9b59b6','#e74c3c','#2980b9','#16a085','#f39c12','#1abc9c'];
-
-// ══════════════════════════════════════════
-// 상태 — AI별 독립 데이터
-// ══════════════════════════════════════════
-const DB={gem:{sites:[],colorIdx:0},cld:{sites:[],colorIdx:0}};
-
 function hpcInit() {
-  // API 키 주입 (설정 탭에서 저장한 키)
+  if (!window._hpcLoaded) {
+    window._hpcLoaded = true;
+    hpcLoad();
+  }
+  // API 키 주입
   try {
     var k = localStorage.getItem('crm_anthropic_key');
     if (k) {
       ['cfg-api-key','auto-api-key-gem','auto-api-key-cld'].forEach(function(id){
-        var el = document.getElementById(id); if(el) el.value=k;
+        var el = document.getElementById(id); if(el) el.value = k;
       });
     }
   } catch(e) {}
-  hpcRestoreState();
-  // DB 초기화 후 실행
-  setTimeout(function() {
+  // 렌더링
+  if (typeof renderGrid === 'function') {
     renderGrid('gem');
     renderGrid('cld');
-    renderHistory();
-  }, 0);
+  }
+  if (typeof renderHistory === 'function') renderHistory();
   // 이벤트 위임
   var wrap = document.getElementById('hpc-wrap');
   if (wrap && !wrap._hpcBound) {
@@ -5651,10 +5627,49 @@ function hpcInit() {
   }
 }
 
+function hpcLoad() {
+// ========= HPC 진입점 =========
+
+
+var __SD__ = null;
+// ══════════════════════════════════════════
+// 상수
+// ══════════════════════════════════════════
+var DCATS =[
+  {k:'visual',lb:'시각 디자인',desc:'색상·폰트·이미지',isNew:false},
+  {k:'layout',lb:'레이아웃·구조',desc:'정보구조, 가독성',isNew:false},
+  {k:'mobile',lb:'모바일 대응',desc:'반응형, 터치UX',isNew:false},
+  {k:'speed',lb:'로딩 속도',desc:'페이지 성능',isNew:false},
+  {k:'brand',lb:'브랜드 일관성',desc:'색상·톤앤매너',isNew:false},
+  {k:'ux',lb:'사용 편의성',desc:'네비·CTA 명확성',isNew:false},
+  {k:'ai_opt',lb:'AI 최적화',desc:'텍스트 비중, 메타데이터 구성',isNew:true},
+  {k:'engage',lb:'몰입도',desc:'스크롤리텔링, 마이크로 애니메이션',isNew:true},
+  {k:'convert',lb:'전환 편의성',desc:'문의폼 간소화, CTA 배치',isNew:true},
+];
+var FITEMS =[
+  {k:'f_service',lb:'서비스 소개 페이지'},{k:'f_price',lb:'요금/가격 공개'},
+  {k:'f_docs',lb:'API 문서/개발자 가이드'},{k:'f_faq',lb:'FAQ 페이지'},
+  {k:'f_case',lb:'고객 사례/레퍼런스'},{k:'f_blog',lb:'블로그/뉴스'},
+  {k:'f_chat',lb:'실시간 채팅 상담'},{k:'f_demo',lb:'데모/체험 신청'},
+  {k:'f_login',lb:'회원가입/로그인'},{k:'f_search',lb:'사이트 내 검색'},
+  {k:'f_multi',lb:'다국어 지원'},{k:'f_ssl',lb:'HTTPS/보안 인증'},
+  {k:'f_sns',lb:'SNS 연동 버튼'},{k:'f_video',lb:'소개 영상'},
+];
+var DKMAP ={'시각 디자인':'visual','시각디자인':'visual','레이아웃':'layout','레이아웃·구조':'layout','레이아웃 · 구조':'layout','모바일':'mobile','모바일 대응':'mobile','로딩':'speed','로딩 속도':'speed','로딩 속도·성능':'speed','로딩 속도 · 성능':'speed','브랜드':'brand','브랜드 일관성':'brand','사용 편의성':'ux','사용편의성':'ux','AI 최적화':'ai_opt','ai 최적화':'ai_opt','몰입도':'engage','전환 편의성':'convert','전환편의성':'convert'};
+var FKMAP ={'서비스 소개':'f_service','요금':'f_price','가격':'f_price','API 문서':'f_docs','개발자 가이드':'f_docs','FAQ':'f_faq','고객 사례':'f_case','레퍼런스':'f_case','블로그':'f_blog','뉴스':'f_blog','실시간 채팅':'f_chat','채팅 상담':'f_chat','데모':'f_demo','체험 신청':'f_demo','회원가입':'f_login','로그인':'f_login','사이트 내 검색':'f_search','검색':'f_search','다국어':'f_multi','HTTPS':'f_ssl','보안 인증':'f_ssl','SNS':'f_sns','소개 영상':'f_video','영상':'f_video'};
+var HPC_COLORS =['#e8613a','#4285F4','#1a9e6e','#c97f00','#9b59b6','#e74c3c','#2980b9','#16a085','#f39c12','#1abc9c'];
+
+// ══════════════════════════════════════════
+// 상태 — AI별 독립 데이터
+// ══════════════════════════════════════════
+var DB ={gem:{sites:[],colorIdx:0},cld:{sites:[],colorIdx:0}};
+
+
+
 // 이력: [{id, ai, date, name, url, type, scores, checks, note, totalScore}]
-let HISTORY=[];
-let selectedHistIds=[];
-let tone='formal';
+var HISTORY =[];
+var selectedHistIds =[];
+var tone ='formal';
 
 function hpcRestoreState() {
   try {
@@ -6556,6 +6571,7 @@ function clearAll(){
 // 초기 렌더
 renderGrid('gem');
 renderGrid('cld');
+}
 
 // === 홈페이지 비교 END ===
 </script>
