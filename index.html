@@ -5550,7 +5550,118 @@ document.getElementById('dailyTopList').addEventListener('click', function(e) {
 
 // VOC 전역 노출
 window.handleUpload = handleUpload;
-window.renderOverview = renderOverview;
+
+// -- VOC DB 저장/불러오기 함수 --
+let vocCurrentFile = null
+let _vocFileList = []
+
+function vocApplyData(parsed, name, showSave) {
+  DATA = parsed
+  document.getElementById('fileNameBadge').style.display = 'flex'
+  document.getElementById('fileName').textContent = name
+  var saveBtn = document.getElementById('vocSaveBtn')
+  if (saveBtn) { saveBtn.style.display = showSave ? 'inline-flex' : 'none'; saveBtn.textContent = '💾 DB 저장'; saveBtn.disabled = false; saveBtn.style.background = '#238636' }
+  renderOverview()
+}
+
+async function saveVocToDB() {
+  if (!DATA || !DATA._rows || !DATA._rows.length) { alert('저장할 데이터가 없어요.'); return }
+  if (!currentUser) { alert('팀원을 선택한 후 저장해주세요.'); return }
+  var btn = document.getElementById('vocSaveBtn')
+  btn.textContent = '저장 중...'; btn.disabled = true
+  var fileName = vocCurrentFile ? vocCurrentFile.name : '업로드_' + new Date().toISOString().slice(0,10)
+  var rows = DATA._rows, batchSize = 100, saved = 0
+  try {
+    await sb.from('voc_data').delete().eq('upload_name', fileName).eq('uploaded_by', currentUser.id)
+    for (var i = 0; i < rows.length; i += batchSize) {
+      var batch = rows.slice(i, i+batchSize).map(function(r){ return { upload_name: fileName, uploaded_by: currentUser.id, row_data: r } })
+      var res = await sb.from('voc_data').insert(batch)
+      if (res.error) throw new Error(res.error.message)
+      saved += batch.length
+      btn.textContent = '저장 중... ' + Math.round(saved/rows.length*100) + '%'
+    }
+    btn.textContent = '✅ 저장됨'; btn.style.background = '#1D9E75'
+    setTimeout(function(){ btn.style.display = 'none' }, 2000)
+    var msg = document.getElementById('uploadMsg')
+    if (msg) msg.innerHTML += ' &nbsp;<span style="color:#3fb950;font-weight:600">✅ DB 저장 완료 (' + saved + '건)</span>'
+    vocRenderSavedList()
+  } catch(err) {
+    alert('저장 실패: ' + err.message)
+    btn.textContent = '💾 DB 저장'; btn.disabled = false
+  }
+}
+
+async function vocRenderSavedList() {
+  if (!sb) return
+  try {
+    var res = await sb.from('voc_data').select('upload_name, uploaded_by, uploaded_at').order('uploaded_at', { ascending: false })
+    var files = res.data || []
+    if (!files.length) { var bar=document.getElementById('vocSavedBar'); if(bar) bar.style.display='none'; return }
+    var unique = [], seen = new Set()
+    files.forEach(function(f){ var k=f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f)} })
+    _vocFileList = unique
+    var bar = document.getElementById('vocSavedBar'), list = document.getElementById('vocSavedList')
+    if (bar) bar.style.display = 'flex'
+    if (list) list.innerHTML = unique.map(function(f,i){
+      var u = allUsers ? allUsers.find(function(x){return x.id===f.uploaded_by}) : null
+      var dt = f.uploaded_at ? f.uploaded_at.slice(0,10) : ''
+      return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap">' + f.upload_name + '</button>'
+    }).join('')
+    var sub = document.getElementById('vocLastSaved')
+    if (sub && unique[0]) sub.textContent = '최근: ' + unique[0].upload_name + ' (' + (unique[0].uploaded_at||'').slice(0,10) + ')'
+  } catch(e) {}
+}
+
+async function vocAutoLoad() {
+  if (!sb) return
+  try {
+    var res = await sb.from('voc_data').select('upload_name, uploaded_by, uploaded_at').order('uploaded_at', { ascending: false })
+    var files = res.data || []
+    if (!files.length) { var di=document.getElementById('dataInfo'); if(di) di.textContent='저장된 데이터 없음'; return }
+    var unique = [], seen = new Set()
+    files.forEach(function(f){ var k=f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f)} })
+    _vocFileList = unique
+    var bar=document.getElementById('vocSavedBar'), list=document.getElementById('vocSavedList')
+    if (bar) bar.style.display = 'flex'
+    if (list) list.innerHTML = unique.map(function(f,i){
+      return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap">' + f.upload_name + '</button>'
+    }).join('')
+    var di = document.getElementById('dataInfo')
+    if (di) di.textContent = '자동 로드 중...'
+    await selectVocFile(0)
+  } catch(e) { var di=document.getElementById('dataInfo'); if(di) di.textContent='데이터 없음' }
+}
+
+async function selectVocFile(idx) {
+  var file = _vocFileList[idx]
+  if (!file) return
+  var upStatus = document.getElementById('uploadStatus'), upMsg = document.getElementById('uploadMsg')
+  if (upStatus) upStatus.style.display = 'block'
+  if (upMsg) upMsg.innerHTML = '📥 <strong>' + file.upload_name + '</strong> 불러오는 중...'
+  try {
+    var res = await sb.from('voc_data').select('row_data').eq('upload_name', file.upload_name).eq('uploaded_by', file.uploaded_by).order('id')
+    if (res.error) throw new Error(res.error.message)
+    var rows = (res.data||[]).map(function(d){ return d.row_data })
+    if (!rows.length) { alert('데이터가 없어요.'); return }
+    var headers = Object.keys(rows[0])
+    var csvText = [headers.join(',')].concat(rows.map(function(r){
+      return headers.map(function(h){
+        var v = String(r[h]||'')
+        return v.includes(',')||v.includes('"')||v.includes('\n') ? '"'+v.replace(/"/g,'""')+'"' : v
+      }).join(',')
+    })).join('\n')
+    var parsed = parseCSV(csvText)
+    var u = allUsers ? allUsers.find(function(x){return x.id===file.uploaded_by}) : null
+    var dt = file.uploaded_at ? file.uploaded_at.slice(0,10) : ''
+    vocApplyData(parsed, file.upload_name, false)
+    if (upMsg) upMsg.innerHTML = '✅ <strong>' + file.upload_name + '</strong> — <strong>' + parsed.total.toLocaleString() + '건</strong>' + (u?' · '+u.name:'') + (dt?' · '+dt:'')
+    var sub = document.getElementById('vocLastSaved')
+    if (sub) sub.textContent = '최근: ' + file.upload_name + ' (' + dt + ')'
+  } catch(err) {
+    if (upMsg) upMsg.innerHTML = '❌ 불러오기 실패: ' + err.message
+  }
+}
+
 window.saveVocToDB = saveVocToDB;
 window.vocAutoLoad = vocAutoLoad;
 window.selectVocFile = selectVocFile;
