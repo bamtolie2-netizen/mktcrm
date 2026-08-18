@@ -1759,6 +1759,7 @@ tr:hover .td-act{opacity:1}
               <option value="">전체 팀원</option>
             </select>
             <button class="btn btn-xs" id="calViewBtn" onclick="toggleCalView()">리스트</button>
+            <button class="btn btn-sm" onclick="openMeetingExcelModal()" style="background:var(--green);color:#fff;border:none">📥 차량비 엑셀</button>
             <button class="btn btn-sm btn-primary" onclick="openMeetingModal()">+ 미팅 추가</button>
           </div>
         </div>
@@ -1781,7 +1782,7 @@ tr:hover .td-act{opacity:1}
         <div id="meetingListWrap" style="display:none">
           <div class="tbl-wrap">
             <table class="ltbl">
-              <thead><tr><th>날짜/시간</th><th>제목</th><th>업체명</th><th>유형</th><th>담당</th><th>장소</th><th>메모</th><th></th></tr></thead>
+              <thead><tr><th>날짜/시간</th><th>제목</th><th>업체명</th><th>출발→장소</th><th>km</th><th>통행료</th><th>유형</th><th>담당</th><th>메모</th><th></th></tr></thead>
               <tbody id="meetingTbody"></tbody>
             </table>
           </div>
@@ -2452,7 +2453,7 @@ tr:hover .td-act{opacity:1}
   </div>
 </div></div>
 
-<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:520px">
+<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:540px">
   <h3 id="meetingModalTitle">미팅 추가</h3>
   <div class="r2">
     <div class="fl"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
@@ -2468,16 +2469,52 @@ tr:hover .td-act{opacity:1}
   </div>
   <div class="r2">
     <div class="fl"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
-    <div class="fl"><label>장소</label><input id="mtLocation" placeholder="예) 본사 회의실 / 온라인"/></div>
+    <div class="fl"><label>출발지</label><input id="mtOrigin" placeholder="예) 슈어엠 본사" oninput="updateNaverLink()"/></div>
   </div>
-  <div class="fl"><label>메모</label><textarea id="mtMemo" style="min-height:60px"></textarea></div>
+  <div class="r2">
+    <div class="fl"><label>장소 (목적지)</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="mtLocation" placeholder="예) 강남구청" style="flex:1" oninput="updateNaverLink()"/>
+        <a id="mtNaverLink" href="#" target="_blank" style="font-size:11px;color:var(--blue);white-space:nowrap;display:none">🗺 길찾기</a>
+      </div>
+    </div>
+    <div class="fl"><label>거리 (km)</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="mtKm" type="number" step="0.1" min="0" placeholder="0.0" style="width:80px"/>
+        <span style="font-size:11px;color:var(--text3)">네이버 지도 확인 후 입력</span>
+      </div>
+    </div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>통행/주차료 (원)</label><input id="mtToll" type="number" step="1" min="0" placeholder="0"/></div>
+    <div class="fl"><label>메모</label><input id="mtMemo" placeholder="업무내용 기재"/></div>
+  </div>
   <div class="mbtns">
     <button class="btn" onclick="closeModal('modalMeeting')">취소</button>
     <button class="btn btn-primary" onclick="saveMeeting()">저장</button>
   </div>
 </div></div>
 
-<div class="mbg" id="modalNew"><div class="modal">
+<div class="mbg" id="modalMeetingExcel"><div class="modal" style="max-width:460px">
+  <h3>차량유지비 산출내역서 다운로드</h3>
+  <div style="font-size:12px;color:var(--text3);margin-bottom:14px">미팅캘린더에 저장된 데이터로 엑셀을 생성합니다</div>
+  <div class="r2">
+    <div class="fl"><label>시작일</label><input type="date" id="excelFrom"/></div>
+    <div class="fl"><label>종료일</label><input type="date" id="excelTo"/></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>담당자 이름</label><input id="excelName" placeholder="예) 이원영"/></div>
+    <div class="fl"><label>차량번호</label><input id="excelCarNo" placeholder="예) 155호7944"/></div>
+  </div>
+  <div class="fl"><label>Km당 금액 (원, 선택)</label>
+    <input id="excelRate" type="number" placeholder="비워두면 빈칸으로 생성" style="width:180px"/>
+  </div>
+  <div id="excelPreview" style="margin-top:12px;font-size:12px;color:var(--text2)"></div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalMeetingExcel')">취소</button>
+    <button class="btn btn-primary" onclick="downloadMeetingExcel()">📥 엑셀 다운로드</button>
+  </div>
+</div></div>
   <h3>새 템플릿</h3>
   <div class="fl"><label>이름 *</label><input id="nName"/></div>
   <div class="fl"><label>카테고리</label><select id="nCat"><option value="">카테고리 없음</option></select></div>
@@ -3484,17 +3521,23 @@ function renderMeetingList(list){
   document.getElementById('calendarWrap').style.display='none'
   document.getElementById('meetingListWrap').style.display='block'
   const tbody=document.getElementById('meetingTbody')
-  if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:16px">미팅이 없어요</td></tr>';return}
+  if(!list.length){tbody.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:16px">미팅이 없어요</td></tr>';return}
   tbody.innerHTML=list.map(function(m){
     const u=allUsers.find(function(x){return x.id===m.user_id})
     const dt=m.meeting_at?new Date(m.meeting_at).toLocaleString('ko',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'-'
+    const origin=m.origin||''
+    const dest=m.location||''
+    const naverUrl = (origin&&dest) ? 'https://map.naver.com/v5/directions/-/-/-/car?departure='+encodeURIComponent(origin)+'&destination='+encodeURIComponent(dest) : ''
+    const locCell = dest ? (naverUrl?'<a href="'+naverUrl+'" target="_blank" style="color:var(--blue)">'+e(origin?origin+'→':'')+'</a>'+e(dest):e(origin?origin+'→'+dest:dest)) : '-'
     return '<tr>'+
       '<td style="white-space:nowrap;font-size:12px">'+dt+'</td>'+
       '<td style="font-weight:500">'+e(m.title)+'</td>'+
       '<td style="font-size:12px;color:var(--text2)">'+e(m.company||'-')+'</td>'+
+      '<td style="font-size:11px">'+locCell+'</td>'+
+      '<td style="font-size:12px;text-align:right">'+(m.km?m.km+'km':'-')+'</td>'+
+      '<td style="font-size:12px;text-align:right">'+(m.toll?m.toll.toLocaleString()+'원':'-')+'</td>'+
       '<td><span class="badge '+(TYPE_BADGE[m.type]||'b-gray')+'">'+e(m.type)+'</span></td>'+
       '<td style="font-size:12px">'+(u?e(u.name):'-')+'</td>'+
-      '<td style="font-size:11px;color:var(--text2)">'+e(m.location||'-')+'</td>'+
       '<td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e(m.memo||'')+'</td>'+
       '<td><div class="td-act">'+
         '<button class="btn btn-xs cal-edit" data-mid="'+m.id+'">수정</button>'+
@@ -3603,11 +3646,177 @@ async function saveMeeting(){
   closeModal('modalMeeting'); renderMeetings(); renderMeetingSummary()
 }
 
+function openMeetingModal(id){
+  editingMeetingId=id||null
+  document.getElementById('meetingModalTitle').textContent=id?'미팅 수정':'미팅 추가'
+  document.getElementById('mtAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>'<option value="'+u.id+'">'+e(u.name)+'</option>').join('')
+  if(id){
+    const m=meetings.find(x=>x.id===id); if(!m)return
+    document.getElementById('mtTitle').value=m.title||''
+    document.getElementById('mtCompany').value=m.company||''
+    document.getElementById('mtDatetime').value=m.meeting_at?m.meeting_at.slice(0,16):''
+    document.getElementById('mtType').value=m.type||'고객사'
+    document.getElementById('mtAssignee').value=m.user_id||''
+    document.getElementById('mtOrigin').value=m.origin||''
+    document.getElementById('mtLocation').value=m.location||''
+    document.getElementById('mtKm').value=m.km||''
+    document.getElementById('mtToll').value=m.toll||''
+    document.getElementById('mtMemo').value=m.memo||''
+  }else{
+    document.getElementById('mtTitle').value=''
+    document.getElementById('mtCompany').value=''
+    document.getElementById('mtDatetime').value=new Date().toISOString().slice(0,16)
+    document.getElementById('mtType').value='고객사'
+    document.getElementById('mtOrigin').value='슈어엠 본사'
+    document.getElementById('mtLocation').value=''
+    document.getElementById('mtKm').value=''
+    document.getElementById('mtToll').value=''
+    document.getElementById('mtMemo').value=''
+    document.getElementById('mtAssignee').value=currentUser?.id||''
+  }
+  updateNaverLink()
+  openModal('modalMeeting')
+}
+
+function updateNaverLink(){
+  const origin = document.getElementById('mtOrigin')?.value.trim()
+  const dest   = document.getElementById('mtLocation')?.value.trim()
+  const link   = document.getElementById('mtNaverLink')
+  if(!link) return
+  if(origin && dest){
+    link.href = 'https://map.naver.com/v5/directions/-/-/-/car?c=15,0,0,0,dh&departure='+encodeURIComponent(origin)+'&destination='+encodeURIComponent(dest)
+    link.style.display = 'inline'
+  } else {
+    link.style.display = 'none'
+  }
+}
+
+async function saveMeeting(){
+  const title=document.getElementById('mtTitle').value.trim()
+  if(!title){alert('제목을 입력하세요');return}
+  const dt=document.getElementById('mtDatetime').value
+  if(!dt){alert('날짜/시간을 입력하세요');return}
+  const p={
+    title,
+    company:document.getElementById('mtCompany').value.trim(),
+    meeting_at:dt,
+    type:document.getElementById('mtType').value,
+    user_id:document.getElementById('mtAssignee').value||currentUser?.id||null,
+    origin:document.getElementById('mtOrigin').value.trim(),
+    location:document.getElementById('mtLocation').value.trim(),
+    km:parseFloat(document.getElementById('mtKm').value)||0,
+    toll:parseFloat(document.getElementById('mtToll').value)||0,
+    memo:document.getElementById('mtMemo').value.trim()
+  }
+  if(editingMeetingId){
+    await sb.from('meetings').update(p).eq('id',editingMeetingId)
+    const i=meetings.findIndex(m=>m.id===editingMeetingId); if(i>=0)meetings[i]={...meetings[i],...p}
+  }else{
+    const{data}=await sb.from('meetings').insert(p).select().single()
+    if(data)meetings.push(data)
+    meetings.sort((a,b)=>a.meeting_at>b.meeting_at?1:-1)
+  }
+  closeModal('modalMeeting'); renderMeetings(); renderMeetingSummary()
+}
+
 async function deleteMeeting(id){
   if(!confirm('삭제할까요?'))return
   await sb.from('meetings').delete().eq('id',id)
   meetings=meetings.filter(m=>m.id!==id)
   renderMeetings(); renderMeetingSummary()
+}
+
+function openMeetingExcelModal(){
+  const now = new Date()
+  const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,'0')
+  const lastDay = new Date(y, now.getMonth()+1, 0).getDate()
+  document.getElementById('excelFrom').value = y+'-'+m+'-01'
+  document.getElementById('excelTo').value   = y+'-'+m+'-'+String(lastDay).padStart(2,'0')
+  // 현재 팀원 기본값
+  const u = allUsers.find(x=>x.id===currentUser?.id)
+  document.getElementById('excelName').value = u?.name || ''
+  // 미리보기
+  updateExcelPreview()
+  openModal('modalMeetingExcel')
+}
+
+function updateExcelPreview(){
+  const from = document.getElementById('excelFrom')?.value
+  const to   = document.getElementById('excelTo')?.value
+  if(!from||!to) return
+  const list = meetings.filter(m=>m.km>0 && m.meeting_at>=from && m.meeting_at<=to+'T23:59')
+  const el = document.getElementById('excelPreview')
+  if(el) el.innerHTML = `<span style="color:var(--blue);font-weight:600">${list.length}건</span> · 총 <span style="color:var(--blue);font-weight:600">${list.reduce((s,m)=>s+(m.km||0),0).toFixed(1)}km</span> · 통행료 <span style="color:var(--blue);font-weight:600">${list.reduce((s,m)=>s+(m.toll||0),0).toLocaleString()}원</span>`
+}
+
+async function downloadMeetingExcel(){
+  const from  = document.getElementById('excelFrom').value
+  const to    = document.getElementById('excelTo').value
+  const name  = document.getElementById('excelName').value.trim() || '이원영'
+  const carNo = document.getElementById('excelCarNo').value.trim() || ''
+  const rate  = document.getElementById('excelRate').value.trim()
+
+  const list = meetings
+    .filter(m=>m.km>0 && m.meeting_at>=from && m.meeting_at<=to+'T23:59')
+    .sort((a,b)=>a.meeting_at>b.meeting_at?1:-1)
+
+  if(!list.length){alert('해당 기간에 거리(km)가 입력된 미팅이 없어요.');return}
+
+  // SheetJS로 엑셀 생성
+  if(typeof XLSX==='undefined'){alert('엑셀 라이브러리 로딩 중입니다. 잠시 후 다시 시도하세요.');return}
+
+  const wb = XLSX.utils.book_new()
+
+  // ── 양식 시트
+  const rows = []
+  rows.push(['차량유지비 산출 내역서 (개인차량 회사업무 사용)'])
+  rows.push(['소유(운행자) : '+name + (carNo ? '    차량번호 : '+carNo : '')])
+  rows.push(['no','일자','출발지 / 시간','','목적지 / 시간','','업무내용','Km','통행/주차료','비고'])
+
+  let totalKm = 0, totalToll = 0, totalFee = 0
+  list.forEach((m, i) => {
+    const dt   = new Date(m.meeting_at)
+    const date = dt.toISOString().slice(0,10)
+    const time = dt.toTimeString().slice(0,5)
+    const km   = m.km || 0
+    const toll = m.toll || 0
+    const fee  = rate ? Math.round(km * parseFloat(rate)) : ''
+    totalKm   += km
+    totalToll += toll
+    if(rate) totalFee += fee
+    rows.push([
+      i+1, date,
+      m.origin||'본사', time,
+      m.location||'', '',
+      m.memo||m.title||'',
+      km, toll, fee
+    ])
+  })
+  // 빈 행 (25개 채우기)
+  for(let i=list.length+1; i<=25; i++) rows.push([i,'','','','','','','','',''])
+  rows.push(['합계','','','','','','', totalKm, totalToll, rate?totalFee:''])
+
+  const ws = XLSX.utils.aoa_to_sheet(rows)
+
+  // 열 너비
+  ws['!cols'] = [{wch:4},{wch:12},{wch:16},{wch:8},{wch:16},{wch:8},{wch:20},{wch:7},{wch:10},{wch:10}]
+
+  XLSX.utils.book_append_sheet(wb, ws, '양식')
+
+  // 지급기준 시트 (간략버전)
+  const ratesData = [
+    ['교통비 지급 기준'],[''],
+    ['유류 금액','Km 당 적용'],
+    ['2400원대',295],['2300원대',283],['2200원대',275],['2100원대',263],
+    ['2000원대',250],['1900원대',238],['1800원대',225],['1700원대',213],
+    ['1600원대',200],['1500원대',187.5],['1400원대',175],['1300원대',162.5],['1200원대',150],['1100원대',138],
+  ]
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ratesData), '지급기준')
+
+  // 파일명
+  const fileName = '차량유지비_산출내역서_'+from.slice(0,7)+'.xlsx'
+  XLSX.writeFile(wb, fileName)
+  closeModal('modalMeetingExcel')
 }
 
 // -- RNR --
@@ -6682,8 +6891,63 @@ function clearAll(){
 // 초기 렌더
 renderGrid('gem');
 renderGrid('cld');
-}
 
+  // 전역 노출
+  window.hpcRestoreState = hpcRestoreState;
+  window.goMain = goMain;
+  window.goSub = goSub;
+  window.dtotal = dtotal;
+  window.dBasic = dBasic;
+  window.dNew = dNew;
+  window.ftotal = ftotal;
+  window.newSite = newSite;
+  window.addSite = addSite;
+  window.delSite = delSite;
+  window.setScore = setScore;
+  window.hoverStar = hoverStar;
+  window.unhoverStar = unhoverStar;
+  window.updateStarDisplay = updateStarDisplay;
+  window.setCheck = setCheck;
+  window.setNote = setNote;
+  window.renderGrid = renderGrid;
+  window.onDrop = onDrop;
+  window.onTxtFile = onTxtFile;
+  window.parseTxt = parseTxt;
+  window.parseTxtData = parseTxtData;
+  window.renderSingle = renderSingle;
+  window.renderReport = renderReport;
+  window.renderSummaryCards = renderSummaryCards;
+  window.renderMergedTable = renderMergedTable;
+  window.diffBadge = diffBadge;
+  window.makeDoubleRow = makeDoubleRow;
+  window.sumDoubleRow = sumDoubleRow;
+  window.setTone = setTone;
+  window.makeReport = makeReport;
+  window.aiAvg = aiAvg;
+  window.copyKakao = copyKakao;
+  window.copyFull = copyFull;
+  window.syncApiKey = syncApiKey;
+  window.syncApiKeyFromTab = syncApiKeyFromTab;
+  window.getApiKey = getApiKey;
+  window.addBulkRow = addBulkRow;
+  window.delBulkRow = delBulkRow;
+  window.runBulkAnalysis = runBulkAnalysis;
+  window.analyzeWithClaude = analyzeWithClaude;
+  window.saveToHistory = saveToHistory;
+  window.renderHistory = renderHistory;
+  window.toggleHistBlock = toggleHistBlock;
+  window.loadHistoryToCompare = loadHistoryToCompare;
+  window.toggleHistSelect = toggleHistSelect;
+  window.updateCompareBar = updateCompareBar;
+  window.loadSelectedToCompare = loadSelectedToCompare;
+  window.applyEntries = applyEntries;
+  window.clearSelectedHistory = clearSelectedHistory;
+  window.deleteHistory = deleteHistory;
+  window.clearAllHistory = clearAllHistory;
+  window.saveToFile = saveToFile;
+  window.exportCsv = exportCsv;
+  window.clearAll = clearAll;
+}
 // === 홈페이지 비교 END ===
 </script>
 </body>
