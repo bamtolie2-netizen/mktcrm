@@ -228,17 +228,7 @@ tr:hover .td-act{opacity:1}
 .rnr-desc{font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-wrap}
 .rnr-empty{font-size:12px;color:var(--text3);font-style:italic}
 .carry-badge{background:var(--amber-bg);color:var(--amber);font-size:10px;padding:1px 6px;border-radius:20px;margin-left:5px;font-weight:600}
-.aip-plat-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--bd2);font-size:12px;cursor:pointer;background:var(--bg2);color:var(--text2);user-select:none}
-.aip-plat-btn input{display:none}
-.aip-plat-btn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
-.aip-card{border:0.5px solid var(--bd);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;background:var(--bg)}
-.aip-card:hover{border-color:var(--bd2)}
-.aip-card-title{font-size:14px;font-weight:600;margin-bottom:5px;color:var(--text)}
-.aip-card-meta{font-size:11px;color:var(--text3);margin-bottom:8px;display:flex;gap:10px;flex-wrap:wrap}
-.aip-card-summary{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px}
-.aip-card-actions{display:flex;gap:7px;align-items:center}
-.kw-tag{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text2)}
-.kw-tag .kx{cursor:pointer;color:var(--text3);font-size:12px}
+.row-done td{opacity:.5;text-decoration:line-through}
 @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(3,1fr)}}
 
   @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
@@ -1146,214 +1136,6 @@ tr:hover .td-act{opacity:1}
 
 
 
-
-/* === 홈페이지 비교 ===*/
-.hpc-wrap { display:block; }
-
-.hpc-wrap {
-  --bg:#f7f6f3;--sur:#fff;--sur2:#f0efe9;--bdr:#e2e0d8;
-  --tx:#1a1a1a;--tx2:#6b6b6b;--tx3:#ababab;
-  --green:#1a9e6e;--yellow:#c97f00;--red:#c94040;--blue:#1a6fc9;
-  --org:#d4541a;--purple:#7c3aed;
-  --gem:#4285F4;--cld:#CC785C;
-  --fn:'Noto Sans KR',sans-serif;--r:10px;
-}
-.hpc-wrap {font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px}
-/* 상단 */
-.topbar{background:var(--sur);border-bottom:1px solid var(--bdr);padding:.75rem 1.5rem;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
-  position:sticky;top:0;z-index:100}
-.logo{font-size:15px;font-weight:700}.logo em{font-style:normal}
-.logo .gem{color:var(--gem)}.logo .cld{color:var(--cld)}
-.topbar-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.save-info{font-size:11px;color:var(--tx3)}
-.toast{font-size:11px;color:var(--green);opacity:0;transition:opacity .4s}.toast.show{opacity:1}
-/* 메인 탭 */
-.main-tabs{background:var(--sur);border-bottom:2px solid var(--bdr);display:flex;overflow-x:auto}
-.main-tab{padding:12px 20px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;
-  color:var(--tx2);border-bottom:3px solid transparent;margin-bottom:-2px;
-  white-space:nowrap;font-family:var(--fn);display:flex;align-items:center;gap:6px}
-.main-tab:hover{color:var(--tx)}
-.main-tab.gem.on{color:var(--gem);border-bottom-color:var(--gem)}
-.main-tab.cld.on{color:var(--cld);border-bottom-color:var(--cld)}
-.main-tab.rep.on{color:var(--org);border-bottom-color:var(--org)}
-.ai-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700}
-.gem-badge{background:rgba(66,133,244,.12);color:var(--gem)}
-.cld-badge{background:rgba(204,120,92,.12);color:var(--cld)}
-.rep-badge{background:rgba(212,84,26,.12);color:var(--org)}
-/* 서브 탭 */
-.sub-tabs{background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto;padding:0 1rem}
-.sub-tab{padding:8px 14px;font-size:12px;cursor:pointer;border:none;background:none;
-  color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-1px;
-  white-space:nowrap;font-family:var(--fn)}
-.sub-tab:hover{color:var(--tx)}.sub-tab.on{color:var(--tx);border-bottom-color:var(--tx);font-weight:500}
-/* 페이지 */
-.mpg{display:none;padding:1.5rem;max-width:1200px;margin:0 auto}.mpg.on{display:block}
-.spg{display:none}.spg.on{display:block}
-/* 카드 */
-.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem}
-.ctitle{font-size:13px;font-weight:600;margin-bottom:10px}
-/* AI 색상 헤더 */
-.ai-header-gem{background:linear-gradient(135deg,rgba(66,133,244,.08),rgba(66,133,244,.02));
-  border-left:3px solid var(--gem);padding:.75rem 1rem;border-radius:0 var(--r) var(--r) 0;margin-bottom:1rem}
-.ai-header-cld{background:linear-gradient(135deg,rgba(204,120,92,.08),rgba(204,120,92,.02));
-  border-left:3px solid var(--cld);padding:.75rem 1rem;border-radius:0 var(--r) var(--r) 0;margin-bottom:1rem}
-.ai-title{font-size:14px;font-weight:700}
-.ai-sub{font-size:11px;color:var(--tx2);margin-top:2px}
-/* 버튼 */
-.btn{padding:6px 12px;border:1px solid var(--bdr);border-radius:7px;cursor:pointer;
-  font-size:13px;background:var(--sur);color:var(--tx);font-family:var(--fn);transition:background .15s}
-.btn:hover{background:var(--sur2)}.btn.dk{background:var(--tx);color:#fff;border-color:var(--tx)}.btn.dk:hover{opacity:.85}
-.btn.og{background:var(--org);color:#fff;border-color:var(--org)}.btn.og:hover{opacity:.85}
-.btn.gem-btn{background:var(--gem);color:#fff;border-color:var(--gem)}.btn.gem-btn:hover{opacity:.85}
-.btn.cld-btn{background:var(--cld);color:#fff;border-color:var(--cld)}.btn.cld-btn:hover{opacity:.85}
-.btn.sm{padding:5px 9px;font-size:12px}
-/* 업로드존 */
-.upzone{background:var(--sur2);border:1.5px dashed var(--bdr);border-radius:8px;
-  padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s}
-.upzone:hover,.upzone.drag{border-color:var(--org);background:#fff5f0}
-.upzone.gem-zone:hover,.upzone.gem-zone.drag{border-color:var(--gem);background:rgba(66,133,244,.05)}
-.upzone.cld-zone:hover,.upzone.cld-zone.drag{border-color:var(--cld);background:rgba(204,120,92,.05)}
-/* 직접추가 폼 */
-.arow{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:end}
-.fl{display:flex;flex-direction:column;gap:4px}.fl label{font-size:11px;color:var(--tx2);font-weight:500}
-.fl input,.fl select{padding:7px 9px;border:1px solid var(--bdr);border-radius:7px;
-  font-size:13px;background:var(--sur);color:var(--tx);font-family:var(--fn)}
-.fl input:focus,.fl select:focus{outline:none;border-color:var(--org)}
-/* 사이트 그리드 */
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-bottom:1rem}
-.scard{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden}
-.scard-hd{padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bdr)}
-.sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.sname{font-size:13px;font-weight:600;flex:1}.surl{font-size:10px;color:var(--tx3);font-family:monospace}
-.scard-bd{padding:12px}
-.openbtn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--fn);padding:0;margin-bottom:8px;display:block}
-.openbtn:hover{text-decoration:underline}
-.sec-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--tx3);margin:12px 0 6px;padding-top:8px;border-top:1px dashed var(--bdr)}
-.sec-label.first{border-top:none;padding-top:0;margin-top:4px}
-.sec-new{display:inline-block;font-size:9px;padding:1px 5px;border-radius:4px;background:var(--purple);color:#fff;margin-left:5px;font-weight:700;vertical-align:middle}
-.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.slabel{font-size:12px;color:var(--tx2);flex:1}
-.stars{display:flex;gap:2px}.star{font-size:17px;cursor:pointer;color:#ddd;transition:color .1s;user-select:none;line-height:1}.star.on{color:#f5a623}
-.sbadge{font-size:11px;color:var(--tx2);min-width:20px;text-align:right}
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
-.citem{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2);cursor:pointer;padding:2px 0}
-.citem input{accent-color:var(--org);cursor:pointer}.citem.ck{color:var(--tx)}
-.snote{width:100%;padding:6px 8px;border:1px solid var(--bdr);border-radius:6px;font-size:12px;background:var(--sur2);color:var(--tx);font-family:var(--fn);resize:none;margin-top:8px}
-.snote:focus{outline:none;border-color:var(--org)}
-.stotal{margin-top:8px;display:flex;gap:10px;font-size:12px;flex-wrap:wrap}
-/* 비교표 */
-.twrap{overflow-x:auto;border:1px solid var(--bdr);border-radius:var(--r)}
-.ctbl{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
-.ctbl th{padding:9px 11px;text-align:left;font-size:11px;font-weight:700;color:var(--tx2);background:var(--sur2);border-bottom:1px solid var(--bdr);white-space:nowrap}
-.ctbl th.me{color:var(--org)}.ctbl th.gem-th{color:var(--gem);background:rgba(66,133,244,.04)}
-.ctbl th.cld-th{color:var(--cld);background:rgba(204,120,92,.04)}
-.ctbl td{padding:8px 11px;border-bottom:1px solid var(--bdr);vertical-align:middle}
-.ctbl tr:last-child td{border-bottom:none}.ctbl tr:hover td{background:#fafaf8}
-.catd{font-size:12px;font-weight:500;color:var(--tx2);white-space:nowrap}
-.metd{background:#fffaf7}
-.gem-td{background:rgba(66,133,244,.025)}.cld-td{background:rgba(204,120,92,.025)}
-.grp{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--tx3);background:var(--sur2);padding:5px 11px;border-bottom:1px solid var(--bdr)}
-.grp-new{background:#f5f0ff;color:var(--purple)}
-.grp-gem{background:rgba(66,133,244,.06);color:var(--gem)}
-.grp-cld{background:rgba(204,120,92,.06);color:var(--cld)}
-.sdsp{color:#f5a623;letter-spacing:1px}
-.bdg{display:inline-block;padding:2px 6px;border-radius:7px;font-size:11px;font-weight:500}
-.bg{background:#edfaf4;color:var(--green)}.br{background:#fff0f0;color:var(--red)}
-.tscore{font-size:14px;font-weight:700;color:var(--org)}
-.rk1{background:#FAC775;color:#633806;padding:2px 6px;border-radius:5px;font-size:10px;font-weight:700}
-.rk2{background:#D3D1C7;color:#444;padding:2px 6px;border-radius:5px;font-size:10px;font-weight:700}
-.rk3{background:#e8c4a0;color:#6b3a1f;padding:2px 6px;border-radius:5px;font-size:10px;font-weight:700}
-/* diff 뱃지 */
-.diff-up{color:var(--green);font-size:11px;font-weight:600}.diff-dn{color:var(--red);font-size:11px;font-weight:600}.diff-eq{color:var(--tx3);font-size:11px}
-/* 보고 */
-.tone-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tbtn{padding:5px 12px;border:1px solid var(--bdr);border-radius:20px;cursor:pointer;font-size:12px;background:var(--sur);color:var(--tx2);font-family:var(--fn)}
-.tbtn.on{background:var(--tx);color:#fff;border-color:var(--tx)}
-.kw{background:#d4dde6;border-radius:14px;padding:16px;margin-bottom:10px}
-.kb{background:#FEE500;border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:13px;line-height:1.9;color:#1a1a1a;white-space:pre-wrap;word-break:keep-all;max-width:380px;margin:0 auto}
-.rbox{background:var(--sur2);border-radius:var(--r);padding:1.25rem;font-size:12px;line-height:1.9;white-space:pre-wrap;border:1px solid var(--bdr);font-family:monospace;max-height:500px;overflow-y:auto}
-.ctst{display:inline-block;font-size:12px;color:var(--green);margin-left:6px;opacity:0;transition:opacity .3s}.ctst.show{opacity:1}
-/* 설정 */
-.krow{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin-bottom:8px}
-.krow label{font-size:13px;color:var(--tx2)}
-.krow input{padding:6px 9px;border:1px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--sur);color:var(--tx);font-family:var(--fn)}
-.krow input:focus{outline:none;border-color:var(--org)}
-.info-purple{background:#f5f0ff;border:1px solid #d4b8ff;border-radius:8px;padding:9px 11px;font-size:12px;color:var(--purple);margin-bottom:10px;line-height:1.6}
-.info-blue{background:#edf3ff;border:1px solid #c0d4ff;border-radius:8px;padding:9px 11px;font-size:12px;color:var(--blue);margin-bottom:10px;line-height:1.6}
-.tip{font-size:11px;color:var(--tx3);margin-top:5px}
-.status{font-size:12px;margin-top:8px;min-height:18px}
-/* 통합 요약 카드 */
-.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem}
-.sum-card{border-radius:var(--r);padding:1rem;border:1px solid var(--bdr)}
-.sum-card.gem-card{border-color:rgba(66,133,244,.3);background:rgba(66,133,244,.03)}
-.sum-card.cld-card{border-color:rgba(204,120,92,.3);background:rgba(204,120,92,.03)}
-.sum-card-title{font-size:12px;font-weight:700;margin-bottom:8px}
-.sum-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--bdr)}
-.sum-row:last-child{border-bottom:none}
-.sum-label{color:var(--tx2)}.sum-val{font-weight:600}
-@media(max-width:700px){
-  .arow{grid-template-columns:1fr 1fr}.cgrid{grid-template-columns:1fr}
-  .mpg{padding:1rem}.sum-grid{grid-template-columns:1fr}
-}
-
-/* 자동분석 */
-.auto-form{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem}
-.auto-form.gem-form{border-color:rgba(66,133,244,.35);background:rgba(66,133,244,.02)}
-.auto-form.cld-form{border-color:rgba(204,120,92,.35);background:rgba(204,120,92,.02)}
-.auto-title{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.auto-badge{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:700}
-.auto-badge.ai{background:rgba(124,58,237,.12);color:var(--purple)}
-.bulk-list{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
-.bulk-list th{text-align:left;padding:5px 8px;font-size:11px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--bdr)}
-.bulk-list td{padding:5px 8px;border-bottom:1px solid var(--bdr);vertical-align:middle}
-.bulk-list tr:last-child td{border-bottom:none}
-.bulk-list input[type=text]{width:100%;padding:4px 7px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;background:var(--sur);color:var(--tx);font-family:var(--fn)}
-.bulk-list input[type=text]:focus{outline:none;border-color:var(--org)}
-.bulk-list select{padding:4px 6px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;background:var(--sur);color:var(--tx);font-family:var(--fn)}
-.del-row-btn{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;padding:0 4px}
-.del-row-btn:hover{color:var(--red)}
-.add-row-btn{font-size:12px;color:var(--blue);background:none;border:none;cursor:pointer;padding:6px 0;font-family:var(--fn)}
-.add-row-btn:hover{text-decoration:underline}
-.progress-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;color:var(--tx2)}
-.prog-spin{width:13px;height:13px;border:2px solid var(--bdr);border-top-color:var(--org);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-.prog-done{color:var(--green);font-size:14px}
-.prog-err{color:var(--red);font-size:14px}
-.api-key-hint{font-size:11px;color:var(--tx3);margin-top:5px}
-
-/* 이력 관리 */
-.hist-tab-on{color:var(--purple)!important;border-bottom-color:var(--purple)!important}
-.hist-company-block{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);margin-bottom:.75rem;overflow:hidden}
-.hist-company-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
-  cursor:pointer;user-select:none;gap:8px}
-.hist-company-hd:hover{background:var(--sur2)}
-.hist-company-name{font-size:13px;font-weight:600;flex:1}
-.hist-company-meta{font-size:11px;color:var(--tx3)}
-.hist-company-.hpc-wrap {border-top:1px solid var(--bdr);padding:10px 14px;display:none}
-.hist-company-body.open{display:block}
-.hist-record-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px}
-.hist-record-row:last-child{border-bottom:none}
-.hist-date{min-width:90px;color:var(--tx2);font-weight:500}
-.hist-ai-tag{font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600}
-.hist-score{min-width:50px;font-weight:600;color:var(--org)}
-.hist-delta{font-size:11px;min-width:40px}
-.hist-delta.up{color:var(--green)}.hist-delta.dn{color:var(--red)}.hist-delta.eq{color:var(--tx3)}
-.hist-note{flex:1;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hist-load-btn{padding:3px 9px;font-size:11px;border:1px solid var(--bdr);border-radius:6px;
-  background:var(--sur);color:var(--tx);cursor:pointer;white-space:nowrap}
-.hist-load-btn:hover{background:var(--purple);color:#fff;border-color:var(--purple)}
-.hist-del-btn{padding:2px 7px;font-size:11px;border:1px solid var(--bdr);border-radius:6px;
-  background:none;color:var(--tx3);cursor:pointer}
-.hist-del-btn:hover{color:var(--red);border-color:var(--red)}
-.hist-empty{text-align:center;color:var(--tx3);padding:2rem;font-size:13px}
-.hist-filter-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
-.hist-filter-row input,.hist-filter-row select{padding:6px 10px;border:1px solid var(--bdr);
-  border-radius:7px;font-size:12px;background:var(--sur);color:var(--tx);font-family:var(--fn)}
-.hist-filter-row input:focus,.hist-filter-row select:focus{outline:none;border-color:var(--purple)}
-.compare-sel-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:8px;
-  background:rgba(124,58,237,.12);color:var(--purple);margin-left:5px;font-weight:600}
-
 </style>
 </head>
 <body>
@@ -1384,9 +1166,8 @@ tr:hover .td-act{opacity:1}
     <div class="nav-tab"     id="nav-tdl"      onclick="showPage('tdl')">TDL</div>
     <div class="nav-tab"     id="nav-rnr"      onclick="showPage('rnr')">R&amp;R</div>
     <div class="nav-tab"     id="nav-notion"   onclick="showPage('notion')">미팅캘린더</div>
-    <div class="nav-tab"     id="nav-hpc"      onclick="showPage('hpc')">홈페이지비교</div>
-    <div class="nav-tab"     id="nav-aiproj"   onclick="showPage('aiproj')">AI프로젝트</div>
     <div class="nav-tab"     id="nav-mail"     onclick="showPage('mail')">메일초안</div>
+    <div class="nav-tab"     id="nav-chinsuk"  onclick="showPage('chinsuk')">친숙자료</div>
     <div class="nav-tab"     id="nav-settings" onclick="showPage('settings')">설정</div>
     <div class="nav-right">
       <div class="user-chip" onclick="switchUser()">
@@ -1796,454 +1577,7 @@ tr:hover .td-act{opacity:1}
 
 
 
-  <!-- 홈페이지 비교 -->
-  <div class="page" id="page-hpc">
-    <div class="hpc-wrap" id="hpc-wrap" style="height:100%;overflow-y:auto">
-<div class="topbar">
-  <div class="logo">
-    <span class="gem">Gemini</span> + <span class="cld">Claude</span> 홈페이지 비교 분석
-  </div>
-  <div class="topbar-r">
-    <span class="save-info" id="save-info">저장 없음</span>
-    <span class="toast" id="toast-save">✓ 저장됨</span>
-    <button class="btn sm dk" data-hpc-fn="saveToFile" data-hpc-arg="">💾 저장</button>
-    <button class="btn sm" data-hpc-fn="exportCsv" data-hpc-arg="">CSV</button>
-    <button class="btn sm og" data-hpc-fn="goMain" data-hpc-arg="report">📋 통합 보고</button>
-  </div>
-</div>
 
-<!-- 메인 탭 -->
-<div class="main-tabs">
-  <button class="main-tab gem on" data-hpc-fn="goMain" data-hpc-arg="gem">
-    <span class="ai-badge gem-badge">Gemini</span> 분석 입력
-  </button>
-  <button class="main-tab cld" data-hpc-fn="goMain" data-hpc-arg="cld">
-    <span class="ai-badge cld-badge">Claude</span> 분석 입력
-  </button>
-  <button class="main-tab rep" data-hpc-fn="goMain" data-hpc-arg="report">
-    📊 통합 비교 &amp; 보고
-  </button>
-  <button class="main-tab" data-hpc-fn="goMain" data-hpc-arg="history" id="main-tab-history">
-    <span class="ai-badge" style="background:rgba(124,58,237,.12);color:var(--purple)">이력</span> 분석 이력 관리
-  </button>
-  <button class="main-tab" data-hpc-fn="goMain" data-hpc-arg="settings" style="margin-left:auto">⚙️ 설정</button>
-</div>
-<!-- Gemini 페이지 -->
-<div class="mpg on" id="mpg-gem">
-  <div class="ai-header-gem">
-    <div class="ai-title" style="color:var(--gem)">🔵 Gemini 분석 데이터</div>
-    <div class="ai-sub">Gemini가 평가한 홈페이지 분석 결과를 입력하세요</div>
-  </div>
-
-  <!-- 서브 탭 -->
-  <div class="sub-tabs" style="margin:-1.5rem -1.5rem 1.5rem;padding:0 1.5rem">
-    <button class="sub-tab on" data-hpc-fn="goSub" data-hpc-arg="gem','input',this">업체 등록 &amp; 평가</button>
-    <button class="sub-tab" data-hpc-fn="goSub" data-hpc-arg="gem','compare',this">비교표</button>
-  </div>
-
-  <div class="spg on" id="spg-gem-input">
-    <div class="card">
-      <div class="ctitle">📄 Gemini 분석 결과 TXT 업로드</div>
-      <div class="info-purple">💾 저장 후 저장된 .html 파일을 다시 열면 데이터 유지됩니다</div>
-      <div class="upzone gem-zone" id="dropzone-gem"
-        data-hpc-drop="gem"
-        data-hpc-trigger="txt-inp-gem">
-        <div style="font-size:26px;margin-bottom:5px">📄</div>
-        <div style="font-size:13px;font-weight:500;color:var(--gem)">Gemini 분석 결과 업로드</div>
-        <div style="font-size:11px;color:var(--tx3);margin-top:3px">surem_website_analysis_v2.txt 형식</div>
-        <input type="file" id="txt-inp-gem" accept=".txt" style="display:none" data-hpc-fn="onTxtFile" data-hpc-arg="gem" data-hpc-event="change"/>
-      </div>
-      <div class="status" id="st-gem"></div>
-    </div>
-    <div class="card auto-form gem-form">
-      <div class="auto-title">
-        ✨ 자동 분석 <span class="auto-badge ai">Claude AI</span>
-        <span style="font-size:11px;font-weight:400;color:var(--tx2)">URL 입력 → AI가 홈페이지 자동 분석 → 별점·체크 자동 입력</span>
-      </div>
-      <div class="krow" style="margin-bottom:10px">
-        <label style="font-size:12px">Claude API 키</label>
-        <input type="password" id="auto-api-key-gem" placeholder="sk-ant-..." data-hpc-fn="syncApiKeyFromTab" data-hpc-arg="gem" data-hpc-event="input" style="padding:6px 9px;border:1px solid var(--bdr);border-radius:7px;font-size:12px;background:var(--sur);color:var(--tx);font-family:var(--fn);font-family:monospace"/>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="bulk-list">
-          <thead><tr><th style="width:160px">회사명</th><th>홈페이지 URL</th><th style="width:90px">구분</th><th style="width:28px"></th></tr></thead>
-          <tbody id="bulk-rows-gem">
-            <tr>
-              <td><input type="text" placeholder="슈어엠" value="슈어엠"/></td>
-              <td><input type="text" placeholder="https://surem.co.kr" value="https://www.surem.co.kr"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic">국내 경쟁사</option><option value="foreign">해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-            <tr>
-              <td><input type="text" placeholder="인포뱅크" value="인포뱅크"/></td>
-              <td><input type="text" placeholder="https://bizgo.io" value="https://bizgo.io"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic" selected>국내 경쟁사</option><option value="foreign">해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-            <tr>
-              <td><input type="text" placeholder="Twilio" value="Twilio"/></td>
-              <td><input type="text" placeholder="https://twilio.com" value="https://twilio.com"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic">국내 경쟁사</option><option value="foreign" selected>해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:8px">
-        <button class="add-row-btn" data-hpc-fn="addBulkRow" data-hpc-arg="gem">+ 업체 추가</button>
-        <button class="btn gem-btn" data-hpc-fn="runBulkAnalysis" data-hpc-arg="gem" id="bulk-run-gem">🤖 전체 자동 분석 시작</button>
-      </div>
-      <div id="bulk-progress-gem" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <div class="ctitle">직접 추가</div>
-      <div class="arow">
-        <div class="fl"><label>회사명</label><input type="text" id="add-nm-gem" placeholder="예: 인포뱅크"/></div>
-        <div class="fl"><label>URL</label><input type="text" id="add-url-gem" placeholder="예: bizgo.io"/></div>
-        <div class="fl"><label>구분</label>
-          <select id="add-tp-gem">
-            <option value="me">우리 회사</option>
-            <option value="domestic">국내 경쟁사</option>
-            <option value="foreign">해외 경쟁사</option>
-          </select>
-        </div>
-        <button class="btn gem-btn" data-hpc-fn="addSite" data-hpc-arg="gem" style="height:36px;align-self:end">+ 추가</button>
-      </div>
-      <div class="tip">💡 홈페이지 열어보면서 별점 입력하세요</div>
-    </div>
-    <div class="sgrid" id="sgrid-gem"></div>
-    <div id="empty-gem" style="text-align:center;color:var(--tx3);padding:2rem;font-size:13px">
-      업체를 추가하거나 TXT 파일을 업로드하세요
-    </div>
-  </div>
-
-  <div class="spg" id="spg-gem-compare">
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <div class="ctitle" style="margin:0;color:var(--gem)">🔵 Gemini 분석 비교표</div>
-        <div style="display:flex;gap:8px">
-          <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-score-gem" checked data-hpc-fn="renderSingle" data-hpc-arg="gem" data-hpc-event="change" style="accent-color:var(--gem)"/> 점수</label>
-          <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-rank-gem" checked data-hpc-fn="renderSingle" data-hpc-arg="gem" data-hpc-event="change" style="accent-color:var(--gem)"/> 순위</label>
-        </div>
-      </div>
-      <div class="twrap" style="border:none;border-radius:0"><div id="cmp-gem"></div></div>
-    </div>
-  </div>
-</div>
-<!-- Claude 페이지 -->
-<div class="mpg" id="mpg-cld">
-  <div class="ai-header-cld">
-    <div class="ai-title" style="color:var(--cld)">🟠 Claude 분석 데이터</div>
-    <div class="ai-sub">Claude가 평가한 홈페이지 분석 결과를 입력하세요</div>
-  </div>
-
-  <div class="sub-tabs" style="margin:-1.5rem -1.5rem 1.5rem;padding:0 1.5rem">
-    <button class="sub-tab on" data-hpc-fn="goSub" data-hpc-arg="cld','input',this">업체 등록 &amp; 평가</button>
-    <button class="sub-tab" data-hpc-fn="goSub" data-hpc-arg="cld','compare',this">비교표</button>
-  </div>
-
-  <div class="spg on" id="spg-cld-input">
-    <div class="card">
-      <div class="ctitle">📄 Claude 분석 결과 TXT 업로드</div>
-      <div class="info-purple">💾 저장 후 저장된 .html 파일을 다시 열면 데이터 유지됩니다</div>
-      <div class="upzone cld-zone" id="dropzone-cld"
-        data-hpc-drop="cld"
-        data-hpc-trigger="txt-inp-cld">
-        <div style="font-size:26px;margin-bottom:5px">📄</div>
-        <div style="font-size:13px;font-weight:500;color:var(--cld)">Claude 분석 결과 업로드</div>
-        <div style="font-size:11px;color:var(--tx3);margin-top:3px">surem_website_analysis_v2.txt 형식</div>
-        <input type="file" id="txt-inp-cld" accept=".txt" style="display:none" data-hpc-fn="onTxtFile" data-hpc-arg="cld" data-hpc-event="change"/>
-      </div>
-      <div class="status" id="st-cld"></div>
-    </div>
-    <div class="card auto-form cld-form">
-      <div class="auto-title">
-        ✨ 자동 분석 <span class="auto-badge ai">Claude AI</span>
-        <span style="font-size:11px;font-weight:400;color:var(--tx2)">URL 입력 → AI가 홈페이지 자동 분석 → 별점·체크 자동 입력</span>
-      </div>
-      <div class="krow" style="margin-bottom:10px">
-        <label style="font-size:12px">Claude API 키</label>
-        <input type="password" id="auto-api-key-cld" placeholder="sk-ant-..." data-hpc-fn="syncApiKeyFromTab" data-hpc-arg="cld" data-hpc-event="input" style="padding:6px 9px;border:1px solid var(--bdr);border-radius:7px;font-size:12px;background:var(--sur);color:var(--tx);font-family:var(--fn);font-family:monospace"/>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="bulk-list">
-          <thead><tr><th style="width:160px">회사명</th><th>홈페이지 URL</th><th style="width:90px">구분</th><th style="width:28px"></th></tr></thead>
-          <tbody id="bulk-rows-cld">
-            <tr>
-              <td><input type="text" placeholder="슈어엠" value="슈어엠"/></td>
-              <td><input type="text" placeholder="https://surem.co.kr" value="https://www.surem.co.kr"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic">국내 경쟁사</option><option value="foreign">해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-            <tr>
-              <td><input type="text" placeholder="인포뱅크" value="인포뱅크"/></td>
-              <td><input type="text" placeholder="https://bizgo.io" value="https://bizgo.io"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic" selected>국내 경쟁사</option><option value="foreign">해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-            <tr>
-              <td><input type="text" placeholder="Twilio" value="Twilio"/></td>
-              <td><input type="text" placeholder="https://twilio.com" value="https://twilio.com"/></td>
-              <td><select><option value="me">우리 회사</option><option value="domestic">국내 경쟁사</option><option value="foreign" selected>해외 경쟁사</option></select></td>
-              <td><button class="del-row-btn" data-hpc-fn="delBulkRow" data-hpc-arg="this">×</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:8px">
-        <button class="add-row-btn" data-hpc-fn="addBulkRow" data-hpc-arg="cld">+ 업체 추가</button>
-        <button class="btn cld-btn" data-hpc-fn="runBulkAnalysis" data-hpc-arg="cld" id="bulk-run-cld">🤖 전체 자동 분석 시작</button>
-      </div>
-      <div id="bulk-progress-cld" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <div class="ctitle">직접 추가</div>
-      <div class="arow">
-        <div class="fl"><label>회사명</label><input type="text" id="add-nm-cld" placeholder="예: 인포뱅크"/></div>
-        <div class="fl"><label>URL</label><input type="text" id="add-url-cld" placeholder="예: bizgo.io"/></div>
-        <div class="fl"><label>구분</label>
-          <select id="add-tp-cld">
-            <option value="me">우리 회사</option>
-            <option value="domestic">국내 경쟁사</option>
-            <option value="foreign">해외 경쟁사</option>
-          </select>
-        </div>
-        <button class="btn cld-btn" data-hpc-fn="addSite" data-hpc-arg="cld" style="height:36px;align-self:end">+ 추가</button>
-      </div>
-      <div class="tip">💡 홈페이지 열어보면서 별점 입력하세요</div>
-    </div>
-    <div class="sgrid" id="sgrid-cld"></div>
-    <div id="empty-cld" style="text-align:center;color:var(--tx3);padding:2rem;font-size:13px">
-      업체를 추가하거나 TXT 파일을 업로드하세요
-    </div>
-  </div>
-
-  <div class="spg" id="spg-cld-compare">
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <div class="ctitle" style="margin:0;color:var(--cld)">🟠 Claude 분석 비교표</div>
-        <div style="display:flex;gap:8px">
-          <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-score-cld" checked data-hpc-fn="renderSingle" data-hpc-arg="cld" data-hpc-event="change" style="accent-color:var(--cld)"/> 점수</label>
-          <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-rank-cld" checked data-hpc-fn="renderSingle" data-hpc-arg="cld" data-hpc-event="change" style="accent-color:var(--cld)"/> 순위</label>
-        </div>
-      </div>
-      <div class="twrap" style="border:none;border-radius:0"><div id="cmp-cld"></div></div>
-    </div>
-  </div>
-</div>
-<!-- 통합 보고 페이지 -->
-<div class="mpg" id="mpg-report">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
-    <div style="font-size:15px;font-weight:700">📊 통합 비교 &amp; 보고</div>
-    <span style="font-size:12px;color:var(--tx2)">Gemini + Claude 분석 결과 종합</span>
-    <button class="btn sm" data-hpc-fn="renderReport" data-hpc-arg="" style="margin-left:auto">🔄 새로고침</button>
-  </div>
-
-  <!-- AI별 요약 카드 -->
-  <div class="sum-grid" id="sum-grid">
-    <div class="sum-card gem-card">
-      <div class="sum-card-title" style="color:var(--gem)">🔵 Gemini 분석 요약</div>
-      <div id="sum-gem-body" style="color:var(--tx3);font-size:12px">데이터 없음</div>
-    </div>
-    <div class="sum-card cld-card">
-      <div class="sum-card-title" style="color:var(--cld)">🟠 Claude 분석 요약</div>
-      <div id="sum-cld-body" style="color:var(--tx3);font-size:12px">데이터 없음</div>
-    </div>
-  </div>
-
-  <!-- 통합 비교표 -->
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1rem">
-    <div style="padding:.875rem 1.25rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <div class="ctitle" style="margin:0">Gemini vs Claude 통합 비교표</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-diff" checked data-hpc-fn="renderReport" data-hpc-arg="" data-hpc-event="change" style="accent-color:var(--purple)"/> 점수 차이</label>
-        <label style="font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="cb-new-rep" checked data-hpc-fn="renderReport" data-hpc-arg="" data-hpc-event="change" style="accent-color:var(--purple)"/> 신규항목</label>
-      </div>
-    </div>
-    <div class="twrap" style="border:none;border-radius:0"><div id="cmp-merged"></div></div>
-  </div>
-
-  <!-- 보고 문구 -->
-  <div class="card">
-    <div class="ctitle">보고 톤</div>
-    <div class="tone-row">
-      <button class="tbtn on" data-hpc-fn="setTone" data-hpc-arg="formal',this">정중한 공식 보고</button>
-      <button class="tbtn" data-hpc-fn="setTone" data-hpc-arg="brief',this">간결 요약</button>
-      <button class="tbtn" data-hpc-fn="setTone" data-hpc-arg="competitive',this">경쟁 우위 강조</button>
-      <button class="tbtn" data-hpc-fn="setTone" data-hpc-arg="action',this">개선 액션 중심</button>
-    </div>
-  </div>
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div class="ctitle" style="margin:0">카카오톡 / 문자 보고 문구</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <button class="btn sm" data-hpc-fn="makeReport" data-hpc-arg="">다시 생성</button>
-        <button class="btn sm og" data-hpc-fn="copyKakao" data-hpc-arg="">복사</button>
-        <span class="ctst" id="ct1"></span>
-      </div>
-    </div>
-    <div class="kw"><div class="kb" id="kakao-txt">Gemini 또는 Claude 탭에서 데이터를 먼저 입력하세요.</div></div>
-    <div style="font-size:11px;color:var(--tx3);text-align:center">복사 후 카카오톡 / 문자에 바로 붙여넣기</div>
-  </div>
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div class="ctitle" style="margin:0">전문 보고서</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <button class="btn sm" data-hpc-fn="copyFull" data-hpc-arg="">전문 복사</button>
-        <span class="ctst" id="ct2"></span>
-      </div>
-    </div>
-    <div class="rbox" id="report-txt">데이터를 입력하면 보고서가 생성됩니다.</div>
-  </div>
-</div>
-<!-- 이력 관리 페이지 -->
-<div class="mpg" id="mpg-history">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
-    <div style="font-size:15px;font-weight:700">📋 분석 이력 관리</div>
-    <div style="font-size:12px;color:var(--tx2)">업체별 분석 누적 · 날짜 선택 후 비교표 불러오기</div>
-  </div>
-
-  <!-- 필터 -->
-  <div class="hist-filter-row">
-    <input type="text" id="hist-search" placeholder="🔍 업체명 검색..." data-hpc-fn="renderHistory" data-hpc-arg="" data-hpc-event="input" style="width:180px"/>
-    <select id="hist-ai-filter" data-hpc-fn="renderHistory" data-hpc-arg="" data-hpc-event="change">
-      <option value="all">전체 AI</option>
-      <option value="gem">Gemini</option>
-      <option value="cld">Claude</option>
-    </select>
-    <select id="hist-type-filter" data-hpc-fn="renderHistory" data-hpc-arg="" data-hpc-event="change">
-      <option value="all">전체 구분</option>
-      <option value="me">우리 회사</option>
-      <option value="domestic">국내 경쟁사</option>
-      <option value="foreign">해외 경쟁사</option>
-    </select>
-    <button class="btn sm" data-hpc-fn="renderHistory" data-hpc-arg="" style="margin-left:auto">🔄 새로고침</button>
-    <button class="btn sm" style="color:var(--red)" data-hpc-fn="clearAllHistory" data-hpc-arg="">전체 이력 삭제</button>
-  </div>
-
-  <!-- 비교 선택 안내 -->
-  <div id="hist-compare-bar" style="display:none;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.25);border-radius:8px;padding:10px 14px;margin-bottom:1rem;display:none;align-items:center;gap:10px;flex-wrap:wrap">
-    <span style="font-size:13px;font-weight:600;color:var(--purple)">비교표에 불러올 이력 선택됨:</span>
-    <div id="hist-selected-list" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
-    <button class="btn sm" style="background:var(--purple);color:#fff;border-color:var(--purple)" data-hpc-fn="loadSelectedToCompare" data-hpc-arg="">📊 비교표로 불러오기</button>
-    <button class="btn sm" data-hpc-fn="clearSelectedHistory" data-hpc-arg="">선택 해제</button>
-  </div>
-
-  <div id="hist-list"></div>
-</div>
-<!-- 설정 -->
-<div class="mpg" id="mpg-settings">
-  <div class="card">
-    <div class="ctitle">보고 설정</div>
-    <div class="krow"><label>보고자 이름</label><input type="text" id="cfg-reporter" placeholder="홍길동 매니저"/></div>
-    <div class="krow"><label>의장 호칭</label><input type="text" id="cfg-chairman" value="의장님"/></div>
-    <div class="krow"><label>우리 회사명</label><input type="text" id="cfg-company" value="슈어엠"/></div>
-    <div class="krow"><label>분석 날짜</label><input type="date" id="cfg-date"/></div>
-  </div>
-  <div class="card">
-    <div class="ctitle">저장 안내</div>
-    <div class="info-blue">
-      💾 <b>저장</b>: 상단 저장 버튼 → <code>homepage_compare_saved.html</code> 다운로드<br/>
-      📂 <b>복원</b>: 저장된 .html 파일을 브라우저에서 열면 Gemini + Claude 데이터 모두 복원
-    </div>
-    <button class="btn" data-hpc-fn="clearAll" data-hpc-arg="">전체 초기화</button>
-  </div>
-  <div class="card">
-    <div class="ctitle">자동 분석 API 키 공통 설정</div>
-    <div class="info-blue">여기에 입력하면 Gemini·Claude 탭 모두에 자동 적용됩니다</div>
-    <div class="krow">
-      <label>Claude API 키</label>
-      <input type="password" id="cfg-api-key" placeholder="sk-ant-..." data-hpc-fn="syncApiKey" data-hpc-arg="" data-hpc-event="input" style="font-family:monospace"/>
-    </div>
-    <div class="api-key-hint">💾 저장 버튼을 누르면 API 키도 함께 파일에 저장됩니다. 저장된 파일을 열면 자동 복원.</div>
-  </div>
-</div>
-    </div>
-  </div>
-
-  <!-- AI 프로젝트 탐색 -->
-  <div class="page" id="page-aiproj">
-    <div class="inner-tabs">
-      <div class="inner-tab on" id="aiptab-search" onclick="showAipTab('search')">프로젝트 탐색</div>
-      <div class="inner-tab"   id="aiptab-saved"  onclick="showAipTab('saved')">저장된 프로젝트</div>
-    </div>
-
-    <!-- 탐색 탭 -->
-    <div id="aipview-search" class="pscroll">
-      <div class="card">
-        <div class="sec-hd">
-          <div>
-            <span class="sec-title">AI 개발 프로젝트 탐색</span>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px">나라장터 Open API + 위시켓/크몽 크롤링으로 실시간 수집</div>
-          </div>
-        </div>
-
-        <!-- 키워드 입력 -->
-        <div style="margin-bottom:14px">
-          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:6px">검색 키워드</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px" id="aipKeywordTags"></div>
-          <div style="display:flex;gap:7px">
-            <input id="aipKeywordInput" placeholder="예) AI, 챗봇, LLM, 자동화, RPA..." style="flex:1;font-size:13px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;font-family:inherit" onkeydown="if(event.key==='Enter')addAipKeyword()"/>
-            <button class="btn btn-sm" onclick="addAipKeyword()">+ 추가</button>
-          </div>
-        </div>
-
-        <!-- 플랫폼 선택 -->
-        <div style="margin-bottom:14px">
-          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:8px">탐색 플랫폼</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <label class="aip-plat-btn on"><input type="checkbox" value="g2b" checked onchange="toggleAipPlat(this)"/> 나라장터</label>
-            <label class="aip-plat-btn on"><input type="checkbox" value="wishket" checked onchange="toggleAipPlat(this)"/> 위시켓</label>
-            <label class="aip-plat-btn on"><input type="checkbox" value="kmong" checked onchange="toggleAipPlat(this)"/> 크몽</label>
-            <label class="aip-plat-btn"><input type="checkbox" value="upwork" onchange="toggleAipPlat(this)"/> Upwork</label>
-          </div>
-        </div>
-
-        <!-- 나라장터 API 키 -->
-        <div style="padding:12px 14px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--bd);margin-bottom:14px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <div style="font-size:11px;color:var(--text2);font-weight:500">나라장터 Open API 키</div>
-            <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15129394" target="_blank" style="font-size:11px;color:var(--blue)">무료 발급 →</a>
-          </div>
-          <div style="display:flex;gap:7px">
-            <input type="password" id="aipG2bKey" placeholder="data.go.kr 에서 발급한 인증키" style="flex:1;font-size:12px;padding:7px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg);color:var(--text);outline:none;font-family:inherit"/>
-            <button class="btn btn-sm" onclick="aipSaveKey()">저장</button>
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="aipKeyStatus">브라우저에 저장됩니다 · 나라장터 없이도 위시켓/크몽 크롤링 가능</div>
-        </div>
-
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn btn-primary" id="aipSearchBtn" onclick="runAipSearch()" style="padding:9px 24px;font-size:13px">🔍 프로젝트 탐색 시작</button>
-          <button class="btn btn-sm" onclick="aipClearResults()">결과 초기화</button>
-          <span style="font-size:12px;color:var(--text3)" id="aipSearchStatus"></span>
-        </div>
-      </div>
-
-      <!-- 결과 -->
-      <div id="aipResults"></div>
-    </div>
-
-    <!-- 저장된 프로젝트 탭 -->
-    <div id="aipview-saved" class="pscroll" style="display:none">
-      <div class="card">
-        <div class="sec-hd">
-          <span class="sec-title">저장된 프로젝트</span>
-          <div style="display:flex;gap:7px;align-items:center">
-            <select id="aipStatusFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderAipSaved()">
-              <option value="">전체</option>
-              <option>검토중</option><option>제안준비</option><option>제안완료</option><option>수주</option><option>보류</option>
-            </select>
-          </div>
-        </div>
-        <div class="tbl-wrap">
-          <table class="ltbl">
-            <thead><tr><th>프로젝트명</th><th>출처</th><th>예산</th><th>마감</th><th>상태</th><th>발견일</th><th></th></tr></thead>
-            <tbody id="aipSavedBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- MAIL -->
   <div class="page" id="page-mail">
@@ -2275,6 +1609,109 @@ tr:hover .td-act{opacity:1}
       </div>
     </div>
   </div>
+
+  <!-- 친숙자료 -->
+  <div class="page" id="page-chinsuk">
+    <div class="inner-tabs">
+      <div class="inner-tab on" id="chtab-list"   onclick="showChinsukTab('list')">배포 리스트</div>
+      <div class="inner-tab"   id="chtab-summary" onclick="showChinsukTab('summary')">현황 요약</div>
+    </div>
+
+    <!-- 배포 리스트 -->
+    <div id="chview-list" class="pscroll">
+      <div class="card">
+        <div class="sec-hd">
+          <div>
+            <span class="sec-title">친숙자료 배포 관리</span>
+            <span style="font-size:11px;color:var(--text3);margin-left:8px" id="chinsukEventLabel"></span>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center">
+            <select id="chEventFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="loadChinsuk()">
+              <option value="">행사 선택</option>
+            </select>
+            <select id="chMethodFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+              <option value="">전체</option><option>직접전달</option><option>배송</option><option>거절</option>
+            </select>
+            <select id="chGradeFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+              <option value="">전체등급</option><option>A</option><option>B</option><option>C</option>
+            </select>
+            <button class="btn btn-sm btn-primary" onclick="openChinsukModal()">+ 추가</button>
+            <button class="btn btn-sm" onclick="openChinsukExcelModal()">📥 엑셀 업로드</button>
+            <button class="btn btn-sm" onclick="downloadChinsukExcel()">📤 엑셀 다운</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="ltbl">
+            <thead><tr>
+              <th>완료</th><th>업체명</th><th>담당자</th><th>전화번호</th>
+              <th>등급</th><th>전달방법</th><th>선물</th><th>전달일</th>
+              <th>대상자</th><th>비고</th><th>담당</th><th></th>
+            </tr></thead>
+            <tbody id="chinsukTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 현황 요약 -->
+    <div id="chview-summary" class="pscroll" style="display:none">
+      <div class="grid3" id="chinsukSummaryCards"></div>
+    </div>
+  </div>
+
+  <!-- 친숙자료 추가 모달 -->
+  <div class="mbg" id="modalChinsuk"><div class="modal" style="max-width:560px">
+    <h3 id="chinsukModalTitle">친숙자료 추가</h3>
+    <div class="r2">
+      <div class="fl"><label>행사명 *</label><input id="chEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+      <div class="fl"><label>업체명 *</label><input id="chCompany" placeholder="예) 컴잇_꼬끼오"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>담당자</label><input id="chContact" placeholder="예) 이원영"/></div>
+      <div class="fl"><label>전화번호</label><input id="chPhone" placeholder="010-0000-0000"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>등급</label>
+        <select id="chGrade"><option value="">선택</option><option>A</option><option>B</option><option>C</option></select>
+      </div>
+      <div class="fl"><label>전달방법</label>
+        <select id="chMethod"><option value="">선택</option><option>직접전달</option><option>배송</option><option>거절</option></select>
+      </div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>선물</label><input id="chGift" placeholder="예) 세트 1 - 동원참치"/></div>
+      <div class="fl"><label>전달/배송일</label><input id="chDeliveryAt" type="date"/></div>
+    </div>
+    <div class="fl"><label>대상자 (수령인)</label><input id="chAddress2" placeholder="예) 유광현 차장"/></div>
+    <div class="fl"><label>배송 주소</label><input id="chAddress" placeholder="예) 경기도 고양시..."/></div>
+    <div class="r2">
+      <div class="fl"><label>담당 팀원</label><select id="chAssignee"><option value="">미배정</option></select></div>
+      <div class="fl"><label>비고</label><input id="chNote" placeholder="메모"/></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalChinsuk')">취소</button>
+      <button class="btn btn-primary" onclick="saveChinsuk()">저장</button>
+    </div>
+  </div></div>
+
+  <!-- 엑셀 업로드 모달 -->
+  <div class="mbg" id="modalChinsukExcel"><div class="modal" style="max-width:420px">
+    <h3>엑셀 업로드</h3>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:12px">
+      업로드 컬럼: <b>업체명, 담당자, 전화번호, 등급, 전달방법, 선물, 비고, 전달일, 완료여부, 대상자, 주소</b>
+    </div>
+    <div class="fl"><label>행사명 *</label><input id="chUploadEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+    <div style="margin-top:10px">
+      <input type="file" id="chinsukFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleChinsukUpload(event)"/>
+      <button class="btn btn-primary" onclick="document.getElementById('chinsukFileInput').click()">📂 파일 선택</button>
+      <span id="chUploadStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span>
+    </div>
+    <div id="chUploadPreview" style="margin-top:10px;font-size:12px;color:var(--text2)"></div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalChinsukExcel')">취소</button>
+      <button class="btn btn-primary" id="chUploadSaveBtn" onclick="saveChinsukUpload()" style="display:none">💾 저장</button>
+    </div>
+  </div></div>
 
   <!-- SETTINGS -->
   <div class="page" id="page-settings">
@@ -2639,7 +2076,7 @@ function switchUser() {
 }
 
 function showPage(p) {
-  ['dash','msg','sales','outbound','improve','tdl','rnr','notion','hpc','aiproj','mail','settings'].forEach(id => {
+  ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings'].forEach(id => {
     document.getElementById('page-'+id).classList.toggle('on', id===p)
     document.getElementById('nav-'+id).classList.toggle('on', id===p)
   })
@@ -2650,8 +2087,7 @@ function showPage(p) {
   if (p==='tdl') renderTdl()
   if (p==='rnr') renderRnr()
   if (p==='notion') { loadMeetings() }
-  if (p==='hpc') { hpcInit() }
-  if (p==='aiproj') { aipInit() }
+  if (p==='chinsuk') { loadChinsuk() }
   if (p==='settings') { renderCatTags(); renderMemberManage(); renderApiKeySetting() }
 }
 
@@ -3864,388 +3300,277 @@ async function saveRnr(){
   closeModal('modalRnr');renderRnr()
 }
 
-// -- AI 프로젝트 탐색 --
-let aipKeywords = []
-let aipProjects = []
-let aipSelectedPlats = ['g2b','wishket','kmong']
+// -- 친숙자료 --
+let chinsukData = []
+let chinsukUploadRows = []
+let editingChinsukId = null
 
-// CORS 프록시 목록 (순서대로 시도)
-const CORS_PROXIES = [
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url='
-]
-
-function aipInit() {
-  const savedKey = localStorage.getItem('aip_g2b_key')
-  if (savedKey) {
-    const el = document.getElementById('aipG2bKey')
-    if (el) { el.value = savedKey; document.getElementById('aipKeyStatus').textContent = '저장된 키 불러옴' }
-  }
-  renderAipKeywords()
-  loadAipProjects()
+async function loadChinsuk() {
+  const event = document.getElementById('chEventFilter')?.value
+  let q = sb.from('chinsuk').select('*').order('delivery_at', { ascending: true })
+  if (event) q = q.eq('event_name', event)
+  const { data } = await q
+  chinsukData = data || []
+  // 행사 목록 갱신
+  await refreshChinsukEvents()
+  renderChinsuk()
+  renderChinsukSummary()
 }
 
-function aipSaveKey() {
-  const key = document.getElementById('aipG2bKey').value.trim()
-  if (!key) return
-  localStorage.setItem('aip_g2b_key', key)
-  const st = document.getElementById('aipKeyStatus')
-  st.textContent = '✅ 저장됐어요'
-  setTimeout(() => st.textContent = '브라우저에 저장됩니다 · 나라장터 없이도 위시켓/크몽 크롤링 가능', 2000)
+async function refreshChinsukEvents() {
+  const { data } = await sb.from('chinsuk').select('event_name').order('created_at', { ascending: false })
+  const events = [...new Set((data||[]).map(d=>d.event_name).filter(Boolean))]
+  const sel = document.getElementById('chEventFilter')
+  if (!sel) return
+  const cur = sel.value
+  sel.innerHTML = '<option value="">행사 선택</option>' + events.map(ev=>`<option value="${e(ev)}"${cur===ev?' selected':''}>${e(ev)}</option>`).join('')
 }
 
-function addAipKeyword() {
-  const inp = document.getElementById('aipKeywordInput')
-  const kw = inp.value.trim()
-  if (!kw || aipKeywords.includes(kw)) { inp.value = ''; return }
-  aipKeywords.push(kw); inp.value = ''
-  renderAipKeywords()
+function showChinsukTab(t) {
+  ['list','summary'].forEach(id => {
+    document.getElementById('chview-'+id).style.display = id===t ? 'flex' : 'none'
+    document.getElementById('chtab-'+id).classList.toggle('on', id===t)
+  })
+  if (t==='summary') renderChinsukSummary()
 }
 
-function removeAipKeyword(kw) {
-  aipKeywords = aipKeywords.filter(k => k !== kw)
-  renderAipKeywords()
+function renderChinsuk() {
+  const method = document.getElementById('chMethodFilter')?.value
+  const grade  = document.getElementById('chGradeFilter')?.value
+  let list = chinsukData
+  if (method) list = list.filter(r=>r.method===method)
+  if (grade)  list = list.filter(r=>r.grade===grade)
+
+  const GRADE_COLOR = {A:'b-blue',B:'b-green',C:'b-amber'}
+  const METHOD_COLOR = {직접전달:'b-purple',배송:'b-blue',거절:'b-red'}
+
+  document.getElementById('chinsukTbody').innerHTML = list.map(r => {
+    const u = allUsers.find(x=>x.id===r.assignee_id)
+    return `<tr class="${r.done?'row-done':''}">
+      <td><input type="checkbox" ${r.done?'checked':''} onchange="toggleChinsukDone('${r.id}',this.checked)" style="cursor:pointer"/></td>
+      <td style="font-weight:500">${e(r.company||'-')}</td>
+      <td style="font-size:12px">${e(r.contact_name||'-')}</td>
+      <td style="font-size:12px">${e(r.phone||'-')}</td>
+      <td><span class="badge ${GRADE_COLOR[r.grade]||'b-gray'}">${e(r.grade||'-')}</span></td>
+      <td><span class="badge ${METHOD_COLOR[r.method]||'b-gray'}">${e(r.method||'-')}</span></td>
+      <td style="font-size:12px">${e(r.gift||'-')}</td>
+      <td style="font-size:12px;white-space:nowrap">${r.delivery_at||'-'}</td>
+      <td style="font-size:11px;color:var(--text2)">${e(r.note||'-')}</td>
+      <td style="font-size:11px;color:var(--text2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(r.address||'')}</td>
+      <td style="font-size:12px">${u?e(u.name):'-'}</td>
+      <td><div class="td-act">
+        <button class="btn btn-xs" onclick="openChinsukModal('${r.id}')">수정</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteChinsuk('${r.id}')">삭제</button>
+      </div></td>
+    </tr>`
+  }).join('') || '<tr><td colspan="12" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>'
 }
 
-function renderAipKeywords() {
-  const el = document.getElementById('aipKeywordTags')
+function renderChinsukSummary() {
+  const list = chinsukData
+  const total   = list.length
+  const done    = list.filter(r=>r.done).length
+  const byMethod = {}; list.forEach(r=>{byMethod[r.method||'미정']=(byMethod[r.method||'미정']||0)+1})
+  const byGrade  = {}; list.forEach(r=>{byGrade[r.grade||'미정']=(byGrade[r.grade||'미정']||0)+1})
+  const byGift   = {}; list.forEach(r=>{byGift[r.gift||'미정']=(byGift[r.gift||'미정']||0)+1})
+
+  const el = document.getElementById('chinsukSummaryCards')
   if (!el) return
-    el.innerHTML = aipKeywords.map(function(k){
-    return '<span class="kw-tag">' + e(k) + '<span class="kx" data-kw="' + encodeURIComponent(k) + '" onclick="removeAipKeyword(decodeURIComponent(this.dataset.kw))">x</span></span>'
-  }).join('') || '<span style="font-size:12px;color:var(--text3)">키워드를 추가하세요</span>'
+  el.innerHTML = `
+    <div class="card">
+      <div class="metric-label">전체 배포 현황</div>
+      <div class="metric-value">${done}<span style="font-size:16px;color:var(--text3)">/${total}</span></div>
+      <div class="metric-sub">완료 / 전체</div>
+      <div style="margin-top:8px;background:var(--bg2);border-radius:var(--r);height:8px;overflow:hidden">
+        <div style="background:var(--green);height:100%;width:${total?Math.round(done/total*100):0}%;transition:width .3s"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">${total?Math.round(done/total*100):0}% 완료</div>
+    </div>
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:10px">전달방법별</div>
+      ${Object.entries(byMethod).map(([k,v])=>`
+        <div class="team-row">
+          <div class="team-name">${e(k)}</div>
+          <div style="font-weight:600;font-size:14px">${v}</div><div style="font-size:11px;color:var(--text3);margin-left:2px">건</div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:10px">선물별 집계</div>
+      ${Object.entries(byGift).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+        <div class="team-row">
+          <div class="team-name" style="font-size:11px">${e(k)}</div>
+          <div style="font-weight:600;font-size:14px">${v}</div><div style="font-size:11px;color:var(--text3);margin-left:2px">개</div>
+        </div>`).join('')}
+    </div>`
 }
 
-function toggleAipPlat(cb) {
-  const label = cb.closest('.aip-plat-btn')
-  if (cb.checked) { aipSelectedPlats.push(cb.value); label.classList.add('on') }
-  else { aipSelectedPlats = aipSelectedPlats.filter(p => p !== cb.value); label.classList.remove('on') }
+async function toggleChinsukDone(id, done) {
+  await sb.from('chinsuk').update({ done }).eq('id', id)
+  const r = chinsukData.find(x=>x.id===id); if(r) r.done = done
+  renderChinsuk(); renderChinsukSummary()
 }
 
-function showAipTab(t) {
-  ['search','saved'].forEach(id => {
-    document.getElementById('aipview-'+id).style.display = id===t ? 'flex' : 'none'
-    document.getElementById('aiptab-'+id).classList.toggle('on', id===t)
-  })
-  if (t === 'saved') renderAipSaved()
-}
-
-function aipClearResults() {
-  document.getElementById('aipResults').innerHTML = ''
-  document.getElementById('aipSearchStatus').textContent = ''
-  window._aipSearchResults = []
-}
-
-// 프록시를 통한 fetch
-async function proxyFetch(url) {
-  for (const proxy of CORS_PROXIES) {
-    try {
-      const resp = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(10000) })
-      if (resp.ok) return await resp.text()
-    } catch(e) { continue }
+function openChinsukModal(id) {
+  editingChinsukId = id||null
+  document.getElementById('chinsukModalTitle').textContent = id ? '친숙자료 수정' : '친숙자료 추가'
+  document.getElementById('chAssignee').innerHTML = '<option value="">미배정</option>' + allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
+  const event = document.getElementById('chEventFilter')?.value
+  if (id) {
+    const r = chinsukData.find(x=>x.id===id); if(!r) return
+    document.getElementById('chEvent').value = r.event_name||''
+    document.getElementById('chCompany').value = r.company||''
+    document.getElementById('chContact').value = r.contact_name||''
+    document.getElementById('chPhone').value = r.phone||''
+    document.getElementById('chGrade').value = r.grade||''
+    document.getElementById('chMethod').value = r.method||''
+    document.getElementById('chGift').value = r.gift||''
+    document.getElementById('chDeliveryAt').value = r.delivery_at||''
+    document.getElementById('chAddress2').value = r.note||''
+    document.getElementById('chAddress').value = r.address||''
+    document.getElementById('chNote').value = ''
+    document.getElementById('chAssignee').value = r.assignee_id||''
+  } else {
+    document.getElementById('chEvent').value = event||''
+    document.getElementById('chCompany').value = ''
+    document.getElementById('chContact').value = ''
+    document.getElementById('chPhone').value = ''
+    document.getElementById('chGrade').value = ''
+    document.getElementById('chMethod').value = ''
+    document.getElementById('chGift').value = ''
+    document.getElementById('chDeliveryAt').value = ''
+    document.getElementById('chAddress2').value = ''
+    document.getElementById('chAddress').value = ''
+    document.getElementById('chNote').value = ''
+    document.getElementById('chAssignee').value = currentUser?.id||''
   }
-  throw new Error('프록시 연결 실패')
+  openModal('modalChinsuk')
 }
 
-// 나라장터 Open API 크롤링
-async function crawlG2B(keyword) {
-  const apiKey = localStorage.getItem('aip_g2b_key') || document.getElementById('aipG2bKey')?.value.trim()
-  if (!apiKey) return []
-
-  try {
-    const today = new Date()
-    const from = new Date(today - 30*86400000).toISOString().slice(0,10).replace(/-/g,'')
-    const to   = today.toISOString().slice(0,10).replace(/-/g,'')
-
-    const url = 'https://apis.data.go.kr/1230000/BidPublicInfoService04/getBidPblancListInfoServc' +
-      '?serviceKey=' + encodeURIComponent(apiKey) +
-      '&numOfRows=20&pageNo=1&type=json' +
-      '&bidNtceNm=' + encodeURIComponent(keyword) +
-      '&inqryBgnDt=' + from + '0000&inqryEndDt=' + to + '2359'
-
-    const resp = await fetch(url, { signal: AbortSignal.timeout(10000) })
-    const json = await resp.json()
-    const items = json?.response?.body?.items || []
-    return items.slice(0,10).map(item => ({
-      title: item.bidNtceNm || '',
-      source: '나라장터',
-      url: 'https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=/pt/menu/frameBidPblancDtl.do?bidPblancId=' + (item.bidPblancId||''),
-      summary: (item.ntceInsttNm||'') + ' | ' + (item.bidMethdNm||'') + ' | 추정가: ' + (item.presmptPrce ? Number(item.presmptPrce).toLocaleString()+'원' : '미정'),
-      budget: item.presmptPrce ? Math.round(Number(item.presmptPrce)/10000).toLocaleString()+'만원' : '미정',
-      deadline: item.bidClseDate ? item.bidClseDate.slice(0,10) : '',
-      tags: ['나라장터', '공공', keyword]
-    }))
-  } catch(err) {
-    console.warn('나라장터 API 오류:', err.message)
-    return []
+async function saveChinsuk() {
+  const event = document.getElementById('chEvent').value.trim()
+  const company = document.getElementById('chCompany').value.trim()
+  if (!event||!company) { alert('행사명과 업체명을 입력하세요'); return }
+  const p = {
+    event_name:  event,
+    company,
+    contact_name: document.getElementById('chContact').value.trim(),
+    phone:        document.getElementById('chPhone').value.trim(),
+    grade:        document.getElementById('chGrade').value,
+    method:       document.getElementById('chMethod').value,
+    gift:         document.getElementById('chGift').value.trim(),
+    delivery_at:  document.getElementById('chDeliveryAt').value || null,
+    note:         document.getElementById('chAddress2').value.trim(),
+    address:      document.getElementById('chAddress').value.trim(),
+    assignee_id:  document.getElementById('chAssignee').value || null
   }
-}
-
-// 위시켓 크롤링
-async function crawlWishket(keyword) {
-  try {
-    const url = 'https://www.wishket.com/project/?q=' + encodeURIComponent(keyword) + '&status=ongoing'
-    const html = await proxyFetch(url)
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(html, 'text/html')
-    const cards = doc.querySelectorAll('.project-item, .project-card, [class*="project"]')
-    const results = []
-    cards.forEach((card, i) => {
-      if (i >= 8) return
-      const titleEl = card.querySelector('h4,h3,h2,.title,[class*="title"]')
-      const title = titleEl?.textContent?.trim()
-      if (!title) return
-      const budgetEl = card.querySelector('[class*="budget"],[class*="price"],[class*="fee"]')
-      const deadlineEl = card.querySelector('[class*="deadline"],[class*="date"],[class*="period"]')
-      const linkEl = card.querySelector('a')
-      const href = linkEl?.getAttribute('href')
-      results.push({
-        title,
-        source: '위시켓',
-        url: href ? (href.startsWith('http') ? href : 'https://www.wishket.com' + href) : 'https://www.wishket.com/project/?q='+encodeURIComponent(keyword),
-        summary: card.textContent?.trim().slice(0,150).replace(/\s+/g,' ') || '',
-        budget: budgetEl?.textContent?.trim() || '협의',
-        deadline: deadlineEl?.textContent?.trim() || '',
-        tags: ['위시켓', '외주', keyword]
-      })
-    })
-    return results.length ? results : aipFallbackWishket(keyword)
-  } catch(err) {
-    return aipFallbackWishket(keyword)
+  if (editingChinsukId) {
+    await sb.from('chinsuk').update(p).eq('id', editingChinsukId)
+    const i = chinsukData.findIndex(x=>x.id===editingChinsukId); if(i>=0) chinsukData[i]={...chinsukData[i],...p}
+  } else {
+    const { data } = await sb.from('chinsuk').insert(p).select().single()
+    if (data) chinsukData.push(data)
   }
+  closeModal('modalChinsuk'); renderChinsuk(); renderChinsukSummary()
+  await refreshChinsukEvents()
 }
 
-function aipFallbackWishket(keyword) {
-  return [{
-    title: keyword + ' 관련 프로젝트 검색',
-    source: '위시켓',
-    url: 'https://www.wishket.com/project/?q=' + encodeURIComponent(keyword),
-    summary: '위시켓에서 직접 검색하세요. 크롤링이 차단된 경우 링크를 클릭하여 확인하세요.',
-    budget: '협의',
-    deadline: '',
-    tags: ['위시켓', keyword]
-  }]
-}
-
-// 크몽 크롤링
-async function crawlKmong(keyword) {
-  try {
-    const url = 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword)
-    const html = await proxyFetch(url)
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(html, 'text/html')
-    const cards = doc.querySelectorAll('[class*="gig"],[class*="service"],[class*="card"]')
-    const results = []
-    cards.forEach((card, i) => {
-      if (i >= 6) return
-      const titleEl = card.querySelector('h3,h4,[class*="title"]')
-      const title = titleEl?.textContent?.trim()
-      if (!title || title.length < 5) return
-      const priceEl = card.querySelector('[class*="price"],[class*="fee"]')
-      const linkEl = card.querySelector('a')
-      const href = linkEl?.getAttribute('href')
-      results.push({
-        title,
-        source: '크몽',
-        url: href ? (href.startsWith('http') ? href : 'https://kmong.com' + href) : 'https://kmong.com/search?keyword='+encodeURIComponent(keyword),
-        summary: card.textContent?.trim().slice(0,150).replace(/\s+/g,' ') || '',
-        budget: priceEl?.textContent?.trim() || '협의',
-        deadline: '',
-        tags: ['크몽', '외주', keyword]
-      })
-    })
-    return results.length ? results : [{
-      title: keyword + ' 서비스 검색',
-      source: '크몽',
-      url: 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword),
-      summary: '크몽에서 직접 검색하세요.',
-      budget: '협의', deadline: '', tags: ['크몽', keyword]
-    }]
-  } catch(err) {
-    return [{
-      title: keyword + ' 서비스 검색',
-      source: '크몽',
-      url: 'https://kmong.com/search?keyword=' + encodeURIComponent(keyword),
-      summary: '크몽에서 직접 검색하세요.',
-      budget: '협의', deadline: '', tags: ['크몽', keyword]
-    }]
-  }
-}
-
-// Upwork RSS 크롤링
-async function crawlUpwork(keyword) {
-  try {
-    const url = 'https://www.upwork.com/ab/feed/jobs/rss?q=' + encodeURIComponent(keyword) + '&sort=recency'
-    const xml = await proxyFetch(url)
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(xml, 'text/xml')
-    const items = doc.querySelectorAll('item')
-    const results = []
-    items.forEach((item, i) => {
-      if (i >= 8) return
-      const title = item.querySelector('title')?.textContent?.trim()
-      const link  = item.querySelector('link')?.textContent?.trim()
-      const desc  = item.querySelector('description')?.textContent?.replace(/<[^>]*>/g,'').trim().slice(0,200) || ''
-      if (!title) return
-      const budgetMatch = desc.match(/\$[\d,]+/)
-      results.push({
-        title, source: 'Upwork',
-        url: link || 'https://www.upwork.com/search/jobs/?q='+encodeURIComponent(keyword),
-        summary: desc,
-        budget: budgetMatch ? budgetMatch[0] : '협의',
-        deadline: '',
-        tags: ['Upwork', '해외', keyword]
-      })
-    })
-    return results.length ? results : [{
-      title: keyword + ' jobs on Upwork',
-      source: 'Upwork',
-      url: 'https://www.upwork.com/search/jobs/?q=' + encodeURIComponent(keyword),
-      summary: 'Upwork에서 직접 검색하세요.',
-      budget: '협의', deadline: '', tags: ['Upwork', keyword]
-    }]
-  } catch(err) {
-    return [{
-      title: keyword + ' jobs on Upwork',
-      source: 'Upwork',
-      url: 'https://www.upwork.com/search/jobs/?q=' + encodeURIComponent(keyword),
-      summary: 'Upwork에서 직접 검색하세요.',
-      budget: '협의', deadline: '', tags: ['Upwork', keyword]
-    }]
-  }
-}
-
-async function runAipSearch() {
-  if (!aipKeywords.length) { alert('키워드를 하나 이상 추가하세요'); return }
-
-  const btn = document.getElementById('aipSearchBtn')
-  const status = document.getElementById('aipSearchStatus')
-  const results = document.getElementById('aipResults')
-  btn.disabled = true; btn.textContent = '탐색 중...'
-  results.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3)"><span class="spin"></span> 플랫폼별 프로젝트를 수집하고 있어요...</div>'
-
-  const allResults = []
-  let done = 0
-  const total = aipKeywords.length * aipSelectedPlats.length
-
-  for (const kw of aipKeywords) {
-    const tasks = []
-    if (aipSelectedPlats.includes('g2b'))     tasks.push(crawlG2B(kw))
-    if (aipSelectedPlats.includes('wishket')) tasks.push(crawlWishket(kw))
-    if (aipSelectedPlats.includes('kmong'))   tasks.push(crawlKmong(kw))
-    if (aipSelectedPlats.includes('upwork'))  tasks.push(crawlUpwork(kw))
-
-    const batchResults = await Promise.allSettled(tasks)
-    batchResults.forEach(r => { if (r.status === 'fulfilled') allResults.push(...r.value) })
-    done += tasks.length
-    status.textContent = Math.round(done/total*100) + '% 수집 중...'
-  }
-
-  // 중복 제거 (제목 기준)
-  const seen = new Set()
-  const deduped = allResults.filter(p => {
-    const key = p.title.slice(0,20)
-    if (seen.has(key)) return false
-    seen.add(key); return true
-  })
-
-  window._aipSearchResults = deduped
-  renderAipResults(deduped)
-  btn.disabled = false; btn.textContent = '🔍 프로젝트 탐색 시작'
-  status.textContent = deduped.length + '개 수집 완료'
-}
-
-function renderAipResults(projects) {
-  const el = document.getElementById('aipResults')
-  if (!projects.length) {
-    el.innerHTML = '<div class="card"><div style="font-size:12px;color:var(--text3)">결과가 없어요. 키워드나 플랫폼을 바꿔보세요.</div></div>'
-    return
-  }
-  const srcColor = {'나라장터':'b-blue','위시켓':'b-green','크몽':'b-amber','Upwork':'b-purple'}
-  el.innerHTML = '<div class="card" style="margin-bottom:0"><div class="sec-title">탐색 결과 (' + projects.length + '개)</div></div>' +
-    projects.map((p, i) => {
-      const tagHtml = (p.tags||[]).slice(0,4).map(t => '<span class="badge b-gray">' + e(t) + '</span>').join(' ')
-      const srcBadge = '<span class="badge ' + (srcColor[p.source]||'b-gray') + '">' + e(p.source) + '</span>'
-      return '<div class="aip-card">' +
-        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">' +
-          '<div class="aip-card-title" style="flex:1">' + e(p.title) + '</div>' +
-          srcBadge +
-        '</div>' +
-        '<div class="aip-card-meta">' +
-          (p.budget ? '<span>💰 ' + e(p.budget) + '</span>' : '') +
-          (p.deadline ? '<span>⏰ ' + e(p.deadline) + '</span>' : '') +
-        '</div>' +
-        (p.summary ? '<div class="aip-card-summary">' + e(p.summary.slice(0,200)) + '</div>' : '') +
-        (tagHtml ? '<div style="margin-bottom:10px;display:flex;gap:4px;flex-wrap:wrap">' + tagHtml + '</div>' : '') +
-        '<div class="aip-card-actions">' +
-          (p.url ? '<a href="' + e(p.url) + '" target="_blank" class="btn btn-xs">🔗 바로가기</a>' : '') +
-          '<button class="btn btn-xs btn-primary" data-idx="' + i + '" onclick="saveAipProject(+this.dataset.idx)">&#128190; 저장</button>' +
-        '</div>' +
-      '</div>'
-    }).join('')
-}
-
-async function saveAipProject(idx) {
-  const p = window._aipSearchResults?.[idx]
-  if (!p || !currentUser) return
-  try {
-    const { data, error } = await sb.from('ai_projects').insert({
-      title: p.title, source: p.source, url: p.url,
-      summary: p.summary, budget: p.budget, deadline: p.deadline,
-      tags: p.tags || [], status: '검토중', added_by: currentUser.id
-    }).select().single()
-    if (error) throw new Error(error.message)
-    aipProjects.unshift(data)
-    const btn = document.querySelectorAll('.aip-card')[idx]?.querySelector('.btn-primary')
-    if (btn) { btn.textContent = '저장됨'; btn.disabled = true; btn.style.background = 'var(--green)' }
-  } catch(err) { alert('저장 실패: ' + err.message) }
-}
-
-async function loadAipProjects() {
-  const { data } = await sb.from('ai_projects').select('*').order('found_at', { ascending: false })
-  aipProjects = data || []
-}
-
-function renderAipSaved() {
-  const filter = document.getElementById('aipStatusFilter')?.value
-  const list = filter ? aipProjects.filter(function(p){ return p.status === filter }) : aipProjects
-  const tbody = document.getElementById('aipSavedBody')
-  if (!tbody) return
-  const srcColor = {'나라장터':'b-blue','위시켓':'b-green','크몽':'b-amber','Upwork':'b-purple'}
-  const statuses = ['검토중','제안준비','제안완료','수주','보류']
-  tbody.innerHTML = list.map(function(p) {
-    const opts = statuses.map(function(s){ return '<option' + (p.status===s?' selected':'') + '>' + s + '</option>' }).join('')
-    const link = p.url ? '<a href="' + e(p.url) + '" target="_blank" style="color:var(--blue);text-decoration:none">' + e(p.title) + '</a>' : e(p.title)
-    return '<tr>' +
-      '<td style="font-weight:500;max-width:220px">' + link + '</td>' +
-      '<td><span class="badge ' + (srcColor[p.source]||'b-gray') + '">' + e(p.source||'-') + '</span></td>' +
-      '<td style="font-size:12px">' + e(p.budget||'-') + '</td>' +
-      '<td style="font-size:12px">' + e(p.deadline||'-') + '</td>' +
-      '<td><select class="btn btn-xs aip-status-sel" data-id="' + p.id + '" style="border:0.5px solid var(--bd2)">' + opts + '</select></td>' +
-      '<td style="font-size:11px;color:var(--text3)">' + (p.found_at||'').slice(0,10) + '</td>' +
-      '<td><div class="td-act"><button class="btn btn-xs btn-danger aip-del-btn" data-id="' + p.id + '">삭제</button></div></td>' +
-    '</tr>'
-  }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:16px">저장된 프로젝트가 없어요</td></tr>'
-  // 이벤트 위임
-  tbody.onchange = function(ev) {
-    const sel = ev.target.closest('.aip-status-sel')
-    if (sel) updateAipStatus(sel.dataset.id, sel.value)
-  }
-  tbody.onclick = function(ev) {
-    const btn = ev.target.closest('.aip-del-btn')
-    if (btn) deleteAipProject(btn.dataset.id)
-  }
-}
-
-async function updateAipStatus(id, status) {
-  await sb.from('ai_projects').update({ status }).eq('id', id)
-  const p = aipProjects.find(x => x.id === id); if (p) p.status = status
-}
-
-async function deleteAipProject(id) {
+async function deleteChinsuk(id) {
   if (!confirm('삭제할까요?')) return
-  await sb.from('ai_projects').delete().eq('id', id)
-  aipProjects = aipProjects.filter(p => p.id !== id)
-  renderAipSaved()
+  await sb.from('chinsuk').delete().eq('id', id)
+  chinsukData = chinsukData.filter(r=>r.id!==id)
+  renderChinsuk(); renderChinsukSummary()
+}
+
+// 엑셀 업로드
+function openChinsukExcelModal() {
+  document.getElementById('chUploadEvent').value = document.getElementById('chEventFilter')?.value||''
+  document.getElementById('chUploadStatus').textContent = ''
+  document.getElementById('chUploadPreview').innerHTML = ''
+  document.getElementById('chUploadSaveBtn').style.display = 'none'
+  document.getElementById('chinsukFileInput').value = ''
+  chinsukUploadRows = []
+  openModal('modalChinsukExcel')
+}
+
+function handleChinsukUpload(event) {
+  const file = event.target.files[0]; if(!file) return
+  const reader = new FileReader()
+  reader.onload = function(e) {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array', cellDates:true})
+      const ws = wb.Sheets[wb.SheetNames[0]]
+      const rows = XLSX.utils.sheet_to_json(ws, {defval:''})
+      // 컬럼 매핑 (유연하게)
+      const COL = {
+        company:      ['업체명','company'],
+        contact_name: ['담당자','contact','contact_name'],
+        phone:        ['전화번호','phone','전화'],
+        grade:        ['등급','grade','등급(A, B, C)','등급(A,B,C)'],
+        method:       ['전달방법','method','전달 방법'],
+        gift:         ['선물','gift','선물NEW','선물 명'],
+        note:         ['대상자','note','비고'],
+        address:      ['주소','address','배송주소'],
+        delivery_at:  ['전달일','delivery_at','전달일/배송일','배송일'],
+        done:         ['완료여부','done','전달 완료 여부']
+      }
+      function findVal(row, keys) {
+        for (const k of keys) {
+          const found = Object.keys(row).find(rk=>rk.trim()===k||rk.toLowerCase()===k.toLowerCase())
+          if (found !== undefined && row[found] !== '') return row[found]
+        }
+        return ''
+      }
+      chinsukUploadRows = rows.map(row=>({
+        company:      String(findVal(row, COL.company)||'').trim(),
+        contact_name: String(findVal(row, COL.contact_name)||'').trim(),
+        phone:        String(findVal(row, COL.phone)||'').trim(),
+        grade:        String(findVal(row, COL.grade)||'').trim().toUpperCase(),
+        method:       String(findVal(row, COL.method)||'').trim(),
+        gift:         String(findVal(row, COL.gift)||'').trim(),
+        note:         String(findVal(row, COL.note)||'').trim(),
+        address:      String(findVal(row, COL.address)||'').trim(),
+        delivery_at:  (()=>{const v=findVal(row,COL.delivery_at);if(!v)return null;if(v instanceof Date)return v.toISOString().slice(0,10);const s=String(v).slice(0,10);return s.match(/\d{4}-\d{2}-\d{2}/)?s:null})(),
+        done:         String(findVal(row, COL.done)||'').includes('완료')||String(findVal(row,COL.done)||'')==='TRUE'
+      })).filter(r=>r.company)
+
+      document.getElementById('chUploadStatus').textContent = `${chinsukUploadRows.length}건 감지됨`
+      document.getElementById('chUploadPreview').innerHTML = `<b>${chinsukUploadRows.length}건</b> 업로드 예정<br>`+
+        chinsukUploadRows.slice(0,3).map(r=>`• ${r.company} / ${r.contact_name} / ${r.grade} / ${r.method}`).join('<br>')
+      document.getElementById('chUploadSaveBtn').style.display = 'inline-block'
+    } catch(err) { document.getElementById('chUploadStatus').textContent = '파싱 실패: '+err.message }
+  }
+  reader.readAsArrayBuffer(file)
+}
+
+async function saveChinsukUpload() {
+  const eventName = document.getElementById('chUploadEvent').value.trim()
+  if (!eventName) { alert('행사명을 입력하세요'); return }
+  if (!chinsukUploadRows.length) { alert('업로드할 데이터가 없어요'); return }
+  const btn = document.getElementById('chUploadSaveBtn')
+  btn.disabled = true; btn.textContent = '저장 중...'
+  const rows = chinsukUploadRows.map(r=>({...r, event_name: eventName, assignee_id: currentUser?.id||null}))
+  const batchSize = 100
+  for (let i=0; i<rows.length; i+=batchSize) {
+    const { error } = await sb.from('chinsuk').insert(rows.slice(i,i+batchSize))
+    if (error) { alert('저장 실패: '+error.message); btn.disabled=false; btn.textContent='💾 저장'; return }
+  }
+  btn.textContent = '✅ 완료'; btn.disabled = false
+  closeModal('modalChinsukExcel')
+  await loadChinsuk()
+}
+
+function downloadChinsukExcel() {
+  if (!chinsukData.length) { alert('데이터가 없어요'); return }
+  if (typeof XLSX==='undefined') { alert('엑셀 라이브러리 로딩 중'); return }
+  const rows = [['업체명','담당자','전화번호','등급','전달방법','선물','대상자','주소','전달일','완료','담당자(내부)']]
+  chinsukData.forEach(r=>{
+    const u = allUsers.find(x=>x.id===r.assignee_id)
+    rows.push([r.company,r.contact_name,r.phone,r.grade,r.method,r.gift,r.note,r.address,r.delivery_at||'',r.done?'완료':'',u?.name||''])
+  })
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), '배포리스트')
+  const event = document.getElementById('chEventFilter')?.value
+  XLSX.writeFile(wb, '친숙자료_'+(event||'전체')+'_'+new Date().toISOString().slice(0,10)+'.xlsx')
 }
 
 // -- SETTINGS --
@@ -5894,1061 +5219,6 @@ window.selectVocFile = selectVocFile;
 
 
 
-// === 홈페이지 비교 ===
-
-function hpcInit() {
-  if (!window._hpcLoaded) {
-    window._hpcLoaded = true;
-    hpcLoad();
-  }
-  // API 키 주입
-  try {
-    var k = localStorage.getItem('crm_anthropic_key');
-    if (k) {
-      ['cfg-api-key','auto-api-key-gem','auto-api-key-cld'].forEach(function(id){
-        var el = document.getElementById(id); if(el) el.value = k;
-      });
-    }
-  } catch(e) {}
-  // 렌더링
-  if (typeof renderGrid === 'function') {
-    renderGrid('gem');
-    renderGrid('cld');
-  }
-  if (typeof renderHistory === 'function') renderHistory();
-  // 이벤트 위임
-  var wrap = document.getElementById('hpc-wrap');
-  if (wrap && !wrap._hpcBound) {
-    wrap._hpcBound = true;
-    wrap.addEventListener('click', function(ev) {
-      var el = ev.target.closest('[data-hpc-fn]');
-      if (el) {
-        var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
-        if (typeof func==='function') { arg!==undefined&&arg!==''?func(arg):func(); }
-      }
-      var tr = ev.target.closest('[data-hpc-trigger]');
-      if (tr) { var t=document.getElementById(tr.dataset.hpcTrigger); if(t) t.click(); }
-    });
-    wrap.addEventListener('change', function(ev) {
-      var el=ev.target.closest('[data-hpc-fn]');
-      if (!el) return;
-      var fn=el.dataset.hpcFn, arg=el.dataset.hpcArg, func=window[fn];
-      if (typeof func==='function') { arg?func(arg):func(ev.target.value); }
-    });
-    wrap.addEventListener('dragover', function(ev) {
-      if (ev.target.closest('[data-hpc-drop]')) ev.preventDefault();
-    });
-    wrap.addEventListener('drop', function(ev) {
-      var el=ev.target.closest('[data-hpc-drop]');
-      if (!el) return;
-      ev.preventDefault();
-      if (typeof onDrop==='function') onDrop(ev, el.dataset.hpcDrop);
-    });
-  }
-}
-
-function hpcLoad() {
-// ========= HPC 진입점 =========
-
-
-var __SD__ = null;
-// ══════════════════════════════════════════
-// 상수
-// ══════════════════════════════════════════
-var DCATS =[
-  {k:'visual',lb:'시각 디자인',desc:'색상·폰트·이미지',isNew:false},
-  {k:'layout',lb:'레이아웃·구조',desc:'정보구조, 가독성',isNew:false},
-  {k:'mobile',lb:'모바일 대응',desc:'반응형, 터치UX',isNew:false},
-  {k:'speed',lb:'로딩 속도',desc:'페이지 성능',isNew:false},
-  {k:'brand',lb:'브랜드 일관성',desc:'색상·톤앤매너',isNew:false},
-  {k:'ux',lb:'사용 편의성',desc:'네비·CTA 명확성',isNew:false},
-  {k:'ai_opt',lb:'AI 최적화',desc:'텍스트 비중, 메타데이터 구성',isNew:true},
-  {k:'engage',lb:'몰입도',desc:'스크롤리텔링, 마이크로 애니메이션',isNew:true},
-  {k:'convert',lb:'전환 편의성',desc:'문의폼 간소화, CTA 배치',isNew:true},
-];
-var FITEMS =[
-  {k:'f_service',lb:'서비스 소개 페이지'},{k:'f_price',lb:'요금/가격 공개'},
-  {k:'f_docs',lb:'API 문서/개발자 가이드'},{k:'f_faq',lb:'FAQ 페이지'},
-  {k:'f_case',lb:'고객 사례/레퍼런스'},{k:'f_blog',lb:'블로그/뉴스'},
-  {k:'f_chat',lb:'실시간 채팅 상담'},{k:'f_demo',lb:'데모/체험 신청'},
-  {k:'f_login',lb:'회원가입/로그인'},{k:'f_search',lb:'사이트 내 검색'},
-  {k:'f_multi',lb:'다국어 지원'},{k:'f_ssl',lb:'HTTPS/보안 인증'},
-  {k:'f_sns',lb:'SNS 연동 버튼'},{k:'f_video',lb:'소개 영상'},
-];
-var DKMAP ={'시각 디자인':'visual','시각디자인':'visual','레이아웃':'layout','레이아웃·구조':'layout','레이아웃 · 구조':'layout','모바일':'mobile','모바일 대응':'mobile','로딩':'speed','로딩 속도':'speed','로딩 속도·성능':'speed','로딩 속도 · 성능':'speed','브랜드':'brand','브랜드 일관성':'brand','사용 편의성':'ux','사용편의성':'ux','AI 최적화':'ai_opt','ai 최적화':'ai_opt','몰입도':'engage','전환 편의성':'convert','전환편의성':'convert'};
-var FKMAP ={'서비스 소개':'f_service','요금':'f_price','가격':'f_price','API 문서':'f_docs','개발자 가이드':'f_docs','FAQ':'f_faq','고객 사례':'f_case','레퍼런스':'f_case','블로그':'f_blog','뉴스':'f_blog','실시간 채팅':'f_chat','채팅 상담':'f_chat','데모':'f_demo','체험 신청':'f_demo','회원가입':'f_login','로그인':'f_login','사이트 내 검색':'f_search','검색':'f_search','다국어':'f_multi','HTTPS':'f_ssl','보안 인증':'f_ssl','SNS':'f_sns','소개 영상':'f_video','영상':'f_video'};
-var HPC_COLORS =['#e8613a','#4285F4','#1a9e6e','#c97f00','#9b59b6','#e74c3c','#2980b9','#16a085','#f39c12','#1abc9c'];
-
-// ══════════════════════════════════════════
-// 상태 — AI별 독립 데이터
-// ══════════════════════════════════════════
-var DB ={gem:{sites:[],colorIdx:0},cld:{sites:[],colorIdx:0}};
-
-
-
-// 이력: [{id, ai, date, name, url, type, scores, checks, note, totalScore}]
-var HISTORY =[];
-var selectedHistIds =[];
-var tone ='formal';
-
-function hpcRestoreState() {
-  try {
-    var cfgDate = document.getElementById('cfg-date');
-    if (cfgDate && !cfgDate.value) cfgDate.value = new Date().toISOString().slice(0,10);
-    if (typeof __SD__ === 'undefined' || !__SD__) return;
-    var d = __SD__;
-    if (d.gem) { DB.gem.sites = d.gem.sites||[]; DB.gem.colorIdx = d.gem.colorIdx||0; }
-    if (d.cld) { DB.cld.sites = d.cld.sites||[]; DB.cld.colorIdx = d.cld.colorIdx||0; }
-    if (d.history) HISTORY = d.history||[];
-    function ss(id,v){ var el=document.getElementById(id); if(el&&v) el.value=v; }
-    ss('cfg-reporter', d.reporter);
-    ss('cfg-chairman', d.chairman);
-    ss('cfg-company',  d.company);
-    if (d.date) { var el=document.getElementById('cfg-date'); if(el) el.value=d.date; }
-    if (d.savedAt) { var el=document.getElementById('save-info'); if(el) el.textContent='마지막 저장: '+d.savedAt; }
-    if (d.apiKey) {
-      ss('cfg-api-key', d.apiKey);
-      ss('auto-api-key-gem', d.apiKey);
-      ss('auto-api-key-cld', d.apiKey);
-    }
-  } catch(e) { console.warn('복원 실패', e); }
-}
-
-
-// ══════════════════════════════════════════
-// 탭 네비게이션
-// ══════════════════════════════════════════
-function goMain(id){
-  document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.mpg').forEach(p=>p.classList.remove('on'));
-  const idx={gem:0,cld:1,report:2,history:3,settings:4}[id];
-  document.querySelectorAll('.main-tab')[idx].classList.add('on');
-  document.getElementById('mpg-'+id).classList.add('on');
-  if(id==='report')renderReport();
-  if(id==='history')renderHistory();
-}
-function goSub(ai,id,btn){
-  const pg=document.getElementById('mpg-'+ai);
-  pg.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('on'));
-  pg.querySelectorAll('.spg').forEach(p=>p.classList.remove('on'));
-  btn.classList.add('on');
-  document.getElementById('spg-'+ai+'-'+id).classList.add('on');
-  if(id==='compare')renderSingle(ai);
-}
-
-// ══════════════════════════════════════════
-// 데이터 함수
-// ══════════════════════════════════════════
-function dtotal(s){return Object.values(s.scores).reduce((a,b)=>a+(b||0),0);}
-function dBasic(s){return DCATS.filter(c=>!c.isNew).reduce((a,c)=>a+(s.scores[c.k]||0),0);}
-function dNew(s){return DCATS.filter(c=>c.isNew).reduce((a,c)=>a+(s.scores[c.k]||0),0);}
-function ftotal(s){return Object.values(s.checks).filter(Boolean).length;}
-function newSite(name,url,type,ai){
-  const db=DB[ai];
-  const s={id:Date.now()+Math.random(),name,url,type,color:HPC_COLORS[db.colorIdx++%HPC_COLORS.length],scores:{},checks:{},note:''};
-  DCATS.forEach(c=>s.scores[c.k]=0);FITEMS.forEach(f=>s.checks[f.k]=false);return s;
-}
-
-// ══════════════════════════════════════════
-// 직접 추가 / 삭제
-// ══════════════════════════════════════════
-function addSite(ai){
-  const nm=document.getElementById('add-nm-'+ai).value.trim();
-  let url=document.getElementById('add-url-'+ai).value.trim();
-  const tp=document.getElementById('add-tp-'+ai).value;
-  if(!nm){alert('회사명을 입력하세요');return;}
-  if(url&&!url.startsWith('http'))url='https://'+url;
-  DB[ai].sites.push(newSite(nm,url,tp,ai));
-  document.getElementById('add-nm-'+ai).value='';document.getElementById('add-url-'+ai).value='';
-  saveToHistory(ai, DB[ai].sites[DB[ai].sites.length-1]);
-  renderGrid(ai);
-}
-function delSite(ai,id){
-  if(!confirm('삭제?'))return;
-  DB[ai].sites=DB[ai].sites.filter(s=>s.id!==id);renderGrid(ai);
-}
-
-// ══════════════════════════════════════════
-// 별점 / 체크 / 메모
-// ══════════════════════════════════════════
-function setScore(ai,id,k,v){
-  const s=DB[ai].sites.find(s=>s.id===id);if(!s)return;s.scores[k]=v;
-  updateStarDisplay(ai,id,k,v);
-  document.getElementById('sb-'+ai+'-'+id+'-'+k).textContent=v;
-  const e=document.getElementById('dt-'+ai+'-'+id);if(e)e.textContent=dtotal(s)+'/45';
-  const f=document.getElementById('dn-'+ai+'-'+id);if(f)f.textContent=dNew(s)+'/15';
-}
-function hoverStar(ai,id,k,v){
-  const els=document.querySelectorAll('#stars-'+ai+'-'+id+'-'+k+' .star');
-  els.forEach((el,i)=>{el.style.color=i<Math.ceil(v)?'#f5a623':'#ddd';});
-}
-function unhoverStar(ai,id,k){
-  const s=DB[ai].sites.find(s=>s.id===id);if(!s)return;
-  updateStarDisplay(ai,id,k,s.scores[k]||0);
-}
-function updateStarDisplay(ai,id,k,v){
-  const els=document.querySelectorAll('#stars-'+ai+'-'+id+'-'+k+' .star');
-  els.forEach((el,i)=>{
-    const n=i+1;
-    if(v>=n){el.textContent='★';el.style.color='#f5a623';}
-    else if(v>=n-0.5){el.textContent='½';el.style.color='#f5a623';el.style.fontSize='15px';}
-    else{el.textContent='★';el.style.color='#ddd';}
-  });
-}
-function setCheck(ai,id,k,v){const s=DB[ai].sites.find(s=>s.id===id);if(s)s.checks[k]=v;}
-function setNote(ai,id,v){const s=DB[ai].sites.find(s=>s.id===id);if(s)s.note=v;}
-
-// ══════════════════════════════════════════
-// 그리드 렌더 (AI 구분)
-// ══════════════════════════════════════════
-function renderGrid(ai){
-  const sites=DB[ai].sites;
-  const grid=document.getElementById('sgrid-'+ai);
-  const emsg=document.getElementById('empty-'+ai);
-  if(!sites.length){grid.innerHTML='';emsg.style.display='block';return;}
-  emsg.style.display='none';
-  const bc=DCATS.filter(c=>!c.isNew),nc=DCATS.filter(c=>c.isNew);
-  const acColor=ai==='gem'?'var(--gem)':'var(--cld)';
-  grid.innerHTML=sites.map(s=>{
-    const tl=s.type==='me'?'우리 회사':s.type==='foreign'?'해외':'국내';
-    const tc=s.type==='me'?'#d4541a':s.type==='foreign'?'#1a6fc9':'#1a9e6e';
-    const row=c=>`<div class="srow">
-      <div class="slabel">${c.lb}${c.isNew?'<span class="sec-new">NEW</span>':''} <span style="color:var(--tx3);font-size:10px">${c.desc}</span></div>
-      <div class="stars" id="stars-${ai}-${s.id}-${c.k}" title="클릭: 정수 / 우클릭: 0.5 감소">${[1,2,3,4,5].map(n=>{
-        const sv=s.scores[c.k]||0;
-        let txt='★',clr='#ddd';
-        if(sv>=n){clr='#f5a623';}
-        else if(sv>=n-0.5){txt='½';clr='#f5a623';}
-        return `<span class="star" style="color:${clr};font-size:${txt==='½'?'15px':'17px'}"
-          onclick="setScore('${ai}',${s.id},'${c.k}',${n})"
-          oncontextmenu="event.preventDefault();setScore('${ai}',${s.id},'${c.k}',${n}-0.5)"
-          onmouseover="hoverStar('${ai}',${s.id},'${c.k}',${n})"
-          onmouseout="unhoverStar('${ai}',${s.id},'${c.k}')">${txt}</span>`;
-      }).join('')}</div>
-      <div class="sbadge" id="sb-${ai}-${s.id}-${c.k}">${s.scores[c.k]||'—'}</div>
-    </div>`;
-    return `<div class="scard" style="border-top:2px solid ${acColor}">
-      <div class="scard-hd">
-        <div class="sdot" style="background:${s.color}"></div>
-        <div style="flex:1;min-width:0">
-          <div class="sname">${s.name} <span style="font-size:10px;padding:1px 5px;border-radius:5px;background:${tc}22;color:${tc};font-weight:500">${tl}</span></div>
-          <div class="surl">${s.url||'URL없음'}</div>
-        </div>
-        <button onclick="delSite('${ai}',${s.id})" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:16px;padding:0 2px">×</button>
-      </div>
-      <div class="scard-bd">
-        ${s.url?`<button class="openbtn" onclick="window.open('${s.url}','_blank')">🔗 홈페이지 열기 →</button>`:''}
-        <div class="sec-label first">🎨 기본 디자인</div>${bc.map(row).join('')}
-        <div class="sec-label" style="color:var(--purple);border-top-color:#d4b8ff">✨ 신규 항목</div>${nc.map(row).join('')}
-        <div class="sec-label">⚙️ 기능 체크</div>
-        <div class="cgrid">${FITEMS.map(f=>`<label class="citem ${s.checks[f.k]?'ck':''}"><input type="checkbox" ${s.checks[f.k]?'checked':''} onchange="setCheck('${ai}',${s.id},'${f.k}',this.checked)"/>${f.lb}</label>`).join('')}</div>
-        <textarea class="snote" rows="2" placeholder="메모..." onchange="setNote('${ai}',${s.id},this.value)">${s.note||''}</textarea>
-        <div class="stotal">
-          <span>기본:<b>${dBasic(s)}/30</b></span>
-          <span style="color:var(--purple)">신규:<b id="dn-${ai}-${s.id}">${dNew(s)}/15</b></span>
-          <span>전체:<b id="dt-${ai}-${s.id}">${dtotal(s)}/45</b></span>
-          <span>기능:<b>${ftotal(s)}/${FITEMS.length}</b></span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  setTimeout(()=>{
-    sites.forEach(s=>{DCATS.forEach(c=>{
-      if(s.scores[c.k]>0) updateStarDisplay(ai,s.id,c.k,s.scores[c.k]);
-    });});
-  },0);
-}
-
-// ══════════════════════════════════════════
-// TXT 파싱
-// ══════════════════════════════════════════
-function onDrop(e,ai){e.preventDefault();document.getElementById('dropzone-'+ai).classList.remove('drag');if(e.dataTransfer.files[0])parseTxt(e.dataTransfer.files[0],ai);}
-function onTxtFile(input,ai){if(input.files[0])parseTxt(input.files[0],ai);input.value='';}
-function parseTxt(file,ai){
-  const st=document.getElementById('st-'+ai);
-  st.innerHTML='<span style="color:var(--tx2)">파싱 중...</span>';
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    try{
-      const parsed=parseTxtData(ev.target.result,ai);
-      if(!parsed.length){st.innerHTML='<span style="color:var(--red)">⚠ 파싱 실패</span>';return;}
-      let added=0,updated=0;
-      parsed.forEach(p=>{
-        const exist=DB[ai].sites.find(s=>s.name===p.name);
-        if(exist){exist.url=p.url;exist.type=p.type;exist.scores=p.scores;exist.checks=p.checks;exist.note=p.note;updated++;}
-        else{p.id=Date.now()+Math.random();p.color=HPC_COLORS[DB[ai].colorIdx++%HPC_COLORS.length];DB[ai].sites.push(p);added++;}
-        // 이력 저장
-        const _ts=Object.values(p.scores||{}).reduce((a,b)=>a+(b||0),0);
-        HISTORY.push({id:Date.now()+Math.random(),ai,date:new Date().toLocaleDateString('ko-KR'),dateISO:new Date().toISOString(),name:p.name,url:p.url||'',type:p.type||'domestic',scores:{...(p.scores||{})},checks:{...(p.checks||{})},note:p.note||'',totalScore:_ts});
-      });
-      renderGrid(ai);
-      const aiName=ai==='gem'?'Gemini':'Claude';
-      st.innerHTML=`<span style="color:var(--green)">✓ ${aiName} ${added}개 추가, ${updated}개 업데이트</span><span style="color:var(--tx3);font-size:11px;margin-left:8px">← 💾 저장하세요</span>`;
-    }catch(err){st.innerHTML='<span style="color:var(--red)">⚠ 오류: '+err.message+'</span>';}
-  };
-  reader.onerror=function(){st.innerHTML='<span style="color:var(--red)">⚠ 파일 읽기 실패</span>';};
-  reader.readAsText(file,'utf-8');
-}
-function parseTxtData(text,ai){
-  const blocks=text.split(/\n●/).map(b=>b.trim()).filter(Boolean);
-  return blocks.map(block=>{
-    const lines=block.replace(/^●/,'').split('\n').map(l=>l.trim()).filter(Boolean);
-    if(!lines.length||lines[0].startsWith('[')&&lines[0].endsWith(']'))return null;
-    const hdr=lines[0],m=hdr.match(/^(.+?)\s*[\(（](.+?)[\)）]/);
-    const name=m?m[1].trim():hdr.replace(/\s*\(.*\)/,'').trim(),hint=m?m[2]:'';
-    const type=/우리|기준|자사/.test(hint)?'me':/해외|global/i.test(hint)?'foreign':'domestic';
-    const urlLine=lines.find(l=>/^url:/i.test(l));
-    const url=urlLine?urlLine.replace(/^url:\s*/i,'').trim():'';
-    const scores={};DCATS.forEach(c=>scores[c.k]=0);
-    const checks={};FITEMS.forEach(f=>checks[f.k]=false);
-    lines.forEach(line=>{
-      // ① 괄호 안 숫자 우선 인식: (4.5) / (4) / （4.5） — 소수점 포함
-      const pm=line.match(/[-\u2013\u00b7\u2022]?\s*([^:：\n]+)[：:]\s*[★☆\s]*[\(（](\d+\.?\d*)[\)）]/);
-      if(pm){
-        const lbl=pm[1].trim(),score=parseFloat(pm[2]);
-        if(score>=0.5&&score<=5){const key=Object.entries(DKMAP).find(([k])=>lbl.includes(k))?.[1];if(key)scores[key]=score;}
-        return;
-      }
-      // ② 괄호 없을 경우 ★ 개수로 카운트
-      const sm=line.match(/[-\u2013\u00b7\u2022]?\s*([^:：\n]+)[：:]\s*(★+)/);
-      if(sm){
-        const lbl=sm[1].trim(),score=sm[2].length;
-        if(score>=1&&score<=5){const key=Object.entries(DKMAP).find(([k])=>lbl.includes(k))?.[1];if(key)scores[key]=score;}
-      }
-    });
-    lines.forEach(line=>{
-      const isC=/\[x\]|\[X\]/i.test(line),isU=/\[ \]|\[\s\]/.test(line);if(!isC&&!isU)return;
-      const lbl=line.replace(/\[.?\]/g,'').replace(/\(.*?\)/g,'').trim();
-      const key=Object.entries(FKMAP).find(([k])=>lbl.includes(k))?.[1];if(key)checks[key]=isC;
-    });
-    const ml=lines.find(l=>/^메모[：:]/i.test(l));
-    const note=ml?ml.replace(/^메모[：:]\s*/i,'').trim():'';
-    return {name,url,type,scores,checks,note};
-  }).filter(Boolean);
-}
-
-// ══════════════════════════════════════════
-// 단일 AI 비교표
-// ══════════════════════════════════════════
-function renderSingle(ai){
-  const el=document.getElementById('cmp-'+ai);
-  const sites=DB[ai].sites;
-  const color=ai==='gem'?'var(--gem)':'var(--cld)';
-  const tdCls=ai==='gem'?'gem-td':'cld-td';
-  const thCls=ai==='gem'?'gem-th':'cld-th';
-  if(!sites.length){el.innerHTML='<div style="text-align:center;color:var(--tx3);padding:2rem">데이터 없음</div>';return;}
-  const showScore=document.getElementById('cb-score-'+ai)?.checked??true;
-  const showRank=document.getElementById('cb-rank-'+ai)?.checked??true;
-  const sorted=[...sites].sort((a,b)=>dtotal(b)-dtotal(a));
-  const rankOf=id=>sorted.findIndex(s=>s.id===id)+1;
-  const ordered=[...sites.filter(s=>s.type==='me'),...sites.filter(s=>s.type!=='me')];
-  const stars=n=>{if(n===undefined||n===null)return '☆☆☆☆☆';const full=Math.floor(n),half=(n%1)>=0.5,empty=5-full-(half?1:0);return '★'.repeat(full)+(half?'½':'')+'☆'.repeat(Math.max(0,empty));};
-  const rkB=id=>{if(!showRank)return '';const r=rankOf(id);return r===1?'<span class="rk1">🥇1위</span>':r===2?'<span class="rk2">🥈2위</span>':r===3?'<span class="rk3">🥉3위</span>':'';};
-  const sC=n=>n>=4?'var(--green)':n>=3?'var(--yellow)':n>=0.5?'var(--red)':'var(--tx3)';
-  const thead=`<thead><tr><th style="width:140px">항목</th>${ordered.map(s=>`<th class="${s.type==='me'?'me':thCls}"><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap"><span style="width:7px;height:7px;border-radius:50%;background:${s.color};display:inline-block"></span>${s.name} ${rkB(s.id)}</div><div style="font-size:10px;color:var(--tx3);font-weight:400;margin-top:2px">${s.url||''}</div></th>`).join('')}</tr></thead>`;
-  const bc=DCATS.filter(c=>!c.isNew),nc=DCATS.filter(c=>c.isNew);
-  const mkR=cats=>cats.map(c=>`<tr><td class="catd">${c.lb}${c.isNew?'<span class="sec-new" style="margin-left:4px">NEW</span>':''}</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}"><span class="sdsp" style="color:${sC(s.scores[c.k]||0)}">${stars(s.scores[c.k]||0)}</span>${showScore?`<span style="font-size:11px;color:var(--tx2);margin-left:3px">${s.scores[c.k]||'—'}</span>`:''}</td>`).join('')}</tr>`).join('');
-  const fr=FITEMS.map(f=>`<tr><td class="catd">${f.lb}</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}">${s.checks[f.k]?'<span class="bdg bg">✓ 있음</span>':'<span class="bdg br">✕ 없음</span>'}</td>`).join('')}</tr>`).join('');
-  const maxS=DCATS.length*5;
-  const sr=`<tr style="background:#fafaf8"><td class="catd" style="font-weight:700">기본 합산</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}"><span class="tscore">${dBasic(s)}</span><span style="font-size:11px;color:var(--tx3)">/30</span></td>`).join('')}</tr><tr style="background:#faf5ff"><td class="catd" style="font-weight:700;color:var(--purple)">신규 합산</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}"><span style="font-size:14px;font-weight:700;color:var(--purple)">${dNew(s)}</span><span style="font-size:11px;color:var(--tx3)">/15</span></td>`).join('')}</tr><tr style="background:#fff8f5"><td class="catd" style="font-weight:700">전체 합산</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}"><span class="tscore" style="font-size:16px">${dtotal(s)}</span><span style="font-size:11px;color:var(--tx3)">/${maxS}</span></td>`).join('')}</tr><tr style="background:#fafaf8"><td class="catd" style="font-weight:700">기능 보유</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}"><span class="tscore">${ftotal(s)}</span><span style="font-size:11px;color:var(--tx3)">/${FITEMS.length}</span></td>`).join('')}</tr>`;
-  const nr=`<tr><td class="catd">메모</td>${ordered.map(s=>`<td class="${s.type==='me'?'metd':tdCls}" style="font-size:11px;color:var(--tx2)">${s.note||'—'}</td>`).join('')}</tr>`;
-  el.innerHTML=`<table class="ctbl">${thead}<tbody><tr><td colspan="${ordered.length+1}" class="grp">🎨 기본 디자인</td></tr>${mkR(bc)}<tr><td colspan="${ordered.length+1}" class="grp grp-new">✨ 신규 항목</td></tr>${mkR(nc)}${sr}<tr><td colspan="${ordered.length+1}" class="grp">⚙️ 기능</td></tr>${fr}<tr><td colspan="${ordered.length+1}" class="grp">📝 메모</td></tr>${nr}</tbody></table>`;
-}
-
-// ══════════════════════════════════════════
-// 통합 비교표 & 보고
-// ══════════════════════════════════════════
-function renderReport(){
-  renderSummaryCards();
-  renderMergedTable();
-  makeReport();
-}
-
-function renderSummaryCards(){
-  ['gem','cld'].forEach(ai=>{
-    const sites=DB[ai].sites;
-    const el=document.getElementById('sum-'+ai+'-body');
-    if(!sites.length){el.innerHTML='<span style="color:var(--tx3);font-size:12px">데이터 없음</span>';return;}
-    const sorted=[...sites].sort((a,b)=>dtotal(b)-dtotal(a));
-    const top=sorted[0];
-    const me=sites.find(s=>s.type==='me');
-    const myRank=me?sorted.findIndex(s=>s.id===me.id)+1:'—';
-    const rows=[
-      ['분석 업체', sites.length+'개'],
-      ['1위', top.name+' ('+dtotal(top)+'/'+DCATS.length*5+'점)'],
-      me?['슈어엠 순위', myRank+'/'+sites.length+'위']:null,
-      me?['슈어엠 총점', dtotal(me)+'/'+DCATS.length*5+'점']:null,
-      me?['AI 최적화', (me.scores['ai_opt']||0)+'/5']:null,
-      me?['몰입도', (me.scores['engage']||0)+'/5']:null,
-      me?['전환 편의성', (me.scores['convert']||0)+'/5']:null,
-    ].filter(Boolean);
-    el.innerHTML=rows.map(([l,v])=>`<div class="sum-row"><span class="sum-label">${l}</span><span class="sum-val">${v}</span></div>`).join('');
-  });
-}
-
-function renderMergedTable(){
-  const el=document.getElementById('cmp-merged');
-  const gSites=DB.gem.sites,cSites=DB.cld.sites;
-  if(!gSites.length&&!cSites.length){el.innerHTML='<div style="text-align:center;color:var(--tx3);padding:2rem">Gemini 또는 Claude 탭에서 데이터를 입력하세요</div>';return;}
-  const showDiff=document.getElementById('cb-diff')?.checked??true;
-  const showNew=document.getElementById('cb-new-rep')?.checked??true;
-
-  // 공통 업체명 목록 (Gemini 기준 + Claude에만 있는 것)
-  const allNames=[...new Set([...gSites.map(s=>s.name),...cSites.map(s=>s.name)])];
-  const colNames=['항목','AI',...allNames];
-
-  const stars=n=>{if(n===undefined||n===null)return '☆☆☆☆☆';const full=Math.floor(n),half=(n%1)>=0.5,empty=5-full-(half?1:0);return '★'.repeat(full)+(half?'½':'')+'☆'.repeat(Math.max(0,empty));};
-  const sC=n=>n>=4?'var(--green)':n>=3?'var(--yellow)':n>=0.5?'var(--red)':'var(--tx3)';
-  function diffBadge(g,c){
-    if(!showDiff||g===undefined||c===undefined)return '';
-    const d=c-g;
-    if(d>0)return `<span class="diff-up">▲${d}</span>`;
-    if(d<0)return `<span class="diff-dn">▼${Math.abs(d)}</span>`;
-    return `<span class="diff-eq">=</span>`;
-  }
-
-  const thead=`<thead><tr>
-    <th style="width:140px">항목</th>
-    <th style="width:60px">AI</th>
-    ${allNames.map(nm=>{
-      const gS=gSites.find(s=>s.name===nm),cS=cSites.find(s=>s.name===nm);
-      const type=gS?.type||cS?.type||'domestic';
-      const isMe=type==='me';
-      return `<th class="${isMe?'me':''}" style="min-width:90px">${nm}</th>`;
-    }).join('')}
-  </tr></thead>`;
-
-  function makeDoubleRow(c){
-    const gRow=`<tr>
-      <td class="catd" rowspan="2">${c.lb}${c.isNew?'<span class="sec-new" style="margin-left:4px">NEW</span>':''}</td>
-      <td style="font-size:11px;font-weight:600;color:var(--gem);background:rgba(66,133,244,.04);white-space:nowrap">Gemini</td>
-      ${allNames.map(nm=>{
-        const s=gSites.find(s=>s.name===nm);
-        const v=s?s.scores[c.k]||0:null;
-        return `<td class="${s?.type==='me'?'metd gem-td':'gem-td'}">${v!==null?`<span class="sdsp" style="color:${sC(v)}">${stars(v)}</span><span style="font-size:10px;color:var(--tx2);margin-left:2px">${v||'—'}</span>`:'<span style="color:var(--tx3)">—</span>'}</td>`;
-      }).join('')}
-    </tr>`;
-    const cRow=`<tr>
-      <td style="font-size:11px;font-weight:600;color:var(--cld);background:rgba(204,120,92,.04);white-space:nowrap;border-bottom:2px solid var(--bdr)">Claude</td>
-      ${allNames.map(nm=>{
-        const gs=gSites.find(s=>s.name===nm),cs=cSites.find(s=>s.name===nm);
-        const cv=cs?cs.scores[c.k]||0:null;const gv=gs?gs.scores[c.k]||0:null;
-        return `<td class="${cs?.type==='me'?'metd cld-td':'cld-td'}" style="border-bottom:2px solid var(--bdr)">${cv!==null?`<span class="sdsp" style="color:${sC(cv)}">${stars(cv)}</span><span style="font-size:10px;color:var(--tx2);margin-left:2px">${cv||'—'}</span>${diffBadge(gv,cv)}`:'<span style="color:var(--tx3)">—</span>'}</td>`;
-      }).join('')}
-    </tr>`;
-    return gRow+cRow;
-  }
-
-  const bc=DCATS.filter(c=>!c.isNew),nc=DCATS.filter(c=>c.isNew);
-  const drows=bc.map(makeDoubleRow).join('');
-  const nrows=showNew?nc.map(makeDoubleRow).join(''):'';
-
-  // 합산 행
-  function sumDoubleRow(label,fn,max,isNew){
-    return `<tr>
-      <td class="catd" style="font-weight:700" rowspan="2">${label}</td>
-      <td style="font-size:11px;font-weight:600;color:var(--gem);background:rgba(66,133,244,.04)">Gemini</td>
-      ${allNames.map(nm=>{const s=gSites.find(s=>s.name===nm);return `<td class="${s?.type==='me'?'metd gem-td':'gem-td'}">${s?`<span class="tscore">${fn(s)}</span><span style="font-size:11px;color:var(--tx3)">/${max}</span>`:'—'}</td>`;}).join('')}
-    </tr><tr>
-      <td style="font-size:11px;font-weight:600;color:var(--cld);background:rgba(204,120,92,.04)">Claude</td>
-      ${allNames.map(nm=>{
-        const cs=cSites.find(s=>s.name===nm),gs=gSites.find(s=>s.name===nm);
-        const cv=cs?fn(cs):null,gv=gs?fn(gs):null;
-        return `<td class="${cs?.type==='me'?'metd cld-td':'cld-td'}">${cv!==null?`<span class="tscore">${cv}</span><span style="font-size:11px;color:var(--tx3)">/${max}</span>${diffBadge(gv,cv)}`:'—'}</td>`;
-      }).join('')}
-    </tr>`;
-  }
-
-  const maxS=DCATS.length*5;
-  const sr=sumDoubleRow('전체 합산',dtotal,maxS)+sumDoubleRow('기능 보유',ftotal,FITEMS.length);
-
-  el.innerHTML=`<table class="ctbl">${thead}<tbody>
-    <tr><td colspan="${allNames.length+2}" class="grp grp-gem">🔵 기본 디자인 (Gemini ↔ Claude 비교)</td></tr>${drows}
-    ${showNew?`<tr><td colspan="${allNames.length+2}" class="grp grp-new">✨ 신규 항목 (AI 최적화 · 몰입도 · 전환 편의성)</td></tr>${nrows}`:''}
-    <tr><td colspan="${allNames.length+2}" class="grp">📊 합산</td></tr>${sr}
-  </tbody></table>`;
-}
-
-// ══════════════════════════════════════════
-// 통합 보고 문구
-// ══════════════════════════════════════════
-function setTone(t,btn){tone=t;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');makeReport();}
-
-function makeReport(){
-  const chairman=document.getElementById('cfg-chairman').value||'의장님';
-  const reporter=document.getElementById('cfg-reporter').value||'담당자';
-  const myComp=document.getElementById('cfg-company').value||'슈어엠';
-  const dv=document.getElementById('cfg-date').value,d=new Date(dv);
-  const dow=['일','월','화','수','목','금','토'][d.getDay()],ds=`${d.getMonth()+1}/${d.getDate()}(${dow})`;
-  const maxS=DCATS.length*5;
-  const gSites=DB.gem.sites,cSites=DB.cld.sites;
-  const hasGem=gSites.length>0,hasCld=cSites.length>0;
-
-  if(!hasGem&&!hasCld){
-    document.getElementById('kakao-txt').textContent='Gemini 또는 Claude 탭에서 데이터를 먼저 입력하세요.';
-    document.getElementById('report-txt').textContent='데이터 없음';
-    return;
-  }
-
-  // 슈어엠 데이터
-  const gMe=gSites.find(s=>s.type==='me'),cMe=cSites.find(s=>s.type==='me');
-  const gMeRank=gMe?[...gSites].sort((a,b)=>dtotal(b)-dtotal(a)).findIndex(s=>s.id===gMe.id)+1:'—';
-  const cMeRank=cMe?[...cSites].sort((a,b)=>dtotal(b)-dtotal(a)).findIndex(s=>s.id===cMe.id)+1:'—';
-
-  // 각 AI 1위
-  const gTop=hasGem?[...gSites].sort((a,b)=>dtotal(b)-dtotal(a))[0]:null;
-  const cTop=hasCld?[...cSites].sort((a,b)=>dtotal(b)-dtotal(a))[0]:null;
-
-  // 신규 항목 비교
-  const gAi=gMe?gMe.scores['ai_opt']||0:null,cAi=cMe?cMe.scores['ai_opt']||0:null;
-  const gEng=gMe?gMe.scores['engage']||0:null,cEng=cMe?cMe.scores['engage']||0:null;
-  const gConv=gMe?gMe.scores['convert']||0:null,cConv=cMe?cMe.scores['convert']||0:null;
-
-  function aiAvg(key){
-    const vals=[];
-    if(gMe)vals.push(gMe.scores[key]||0);
-    if(cMe)vals.push(cMe.scores[key]||0);
-    return vals.length?Math.round(vals.reduce((a,b)=>a+b)/vals.length*10)/10:null;
-  }
-
-  let kakao='';
-  const gemLine=hasGem&&gMe?`Gemini: ${dtotal(gMe)}점(${gMeRank}위)`:hasGem?'Gemini: 데이터 있음':'';
-  const cldLine=hasCld&&cMe?`Claude: ${dtotal(cMe)}점(${cMeRank}위)`:hasCld?'Claude: 데이터 있음':'';
-
-  if(tone==='formal'){
-    kakao=`${chairman}, 안녕하세요. ${reporter}입니다.\n\n🖥️ [${ds} 홈페이지 비교 분석 보고 (Gemini + Claude 통합)]\n\n■ 분석 AI: ${[hasGem?'Gemini':'',hasCld?'Claude':''].filter(Boolean).join(' + ')}\n■ 분석 업체: ${[...new Set([...gSites.map(s=>s.name),...cSites.map(s=>s.name)])].join(', ')}\n${(gMe||cMe)?`\n🔵 ${myComp} 종합 현황:\n  ${gemLine}\n  ${cldLine}\n  · AI 최적화 평균: ${aiAvg('ai_opt')!==null?aiAvg('ai_opt')+'/5':'—'}\n  · 몰입도 평균: ${aiAvg('engage')!==null?aiAvg('engage')+'/5':'—'}\n  · 전환 편의성 평균: ${aiAvg('convert')!==null?aiAvg('convert')+'/5':'—'}`:''}\n${gTop?`\n📊 Gemini 1위: ${gTop.name} (${dtotal(gTop)}점)`:''}\n${cTop?`📊 Claude 1위: ${cTop.name} (${dtotal(cTop)}점)`:''}\n\n상세 비교표 별도 공유 드리겠습니다.\n감사합니다.`;
-  } else if(tone==='brief'){
-    kakao=`${chairman} ${ds} 홈페이지 비교 (Gemini+Claude).\n\n${gemLine?gemLine+'\n':''}${cldLine?cldLine+'\n':''}\nAI최적화 ${aiAvg('ai_opt')??'—'}/5 | 몰입도 ${aiAvg('engage')??'—'}/5 | 전환 ${aiAvg('convert')??'—'}/5`;
-  } else if(tone==='competitive'){
-    kakao=`${chairman}, ${reporter}입니다. 📊\n\n[${ds} Gemini+Claude 통합 경쟁력 분석]\n\n${gMe||cMe?`✅ ${myComp} 현황:\n  ${gemLine}\n  ${cldLine}\n  · AI 최적화: G${gAi??'—'}/C${cAi??'—'}\n  · 몰입도: G${gEng??'—'}/C${cEng??'—'}\n  · 전환 편의성: G${gConv??'—'}/C${cConv??'—'}\n`:''}${gTop?`Gemini 1위: ${gTop.name}\n`:''}${cTop?`Claude 1위: ${cTop.name}\n`:''}\n감사합니다.`;
-  } else {
-    const nc=DCATS.filter(c=>c.isNew);
-    const weakNew=nc.filter(c=>{const avg=aiAvg(c.k);return avg!==null&&avg<3;}).map(c=>c.lb);
-    kakao=`${chairman}, ${reporter}입니다.\n\n📋 [${ds} Gemini+Claude 통합 비교 & 개선 제언]\n\n현황:\n${gemLine?'• '+gemLine+'\n':''}${cldLine?'• '+cldLine+'\n':''}\n${weakNew.length?`개선 필요 항목 (두 AI 공통 3점 미만):\n• ${weakNew.join(', ')}\n`:'두 AI 모두 신규 항목 양호\n'}\n다음 보고 시 개선 계획 공유 드리겠습니다.`;
-  }
-  document.getElementById('kakao-txt').textContent=kakao;
-
-  // 전문 보고서
-  const allNames=[...new Set([...gSites.map(s=>s.name),...cSites.map(s=>s.name)])];
-  const full=`수신: ${chairman}\n발신: ${reporter}\n일시: ${dv} (${dow}요일)\n제목: 경쟁사 홈페이지 비교 분석 보고 (Gemini + Claude AI 통합)\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n1. 분석 개요\n━━━━━━━━━━━━━━━━━━━━━━━━\n• 분석 AI: ${[hasGem?'Gemini':'',hasCld?'Claude':''].filter(Boolean).join(' + ')}\n• 분석 업체(${allNames.length}개): ${allNames.join(', ')}\n• 평가 체계: 기본(30점) + 신규(15점) = 45점 / 기능 ${FITEMS.length}개\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n2. ${myComp} 종합 현황\n━━━━━━━━━━━━━━━━━━━━━━━━\n${gMe?`[Gemini 평가]\n  종합: ${dtotal(gMe)}/${maxS}점 (${gMeRank}/${gSites.length}위)\n  AI 최적화: ${gAi}/5 | 몰입도: ${gEng}/5 | 전환 편의성: ${gConv}/5\n`:''}${cMe?`[Claude 평가]\n  종합: ${dtotal(cMe)}/${maxS}점 (${cMeRank}/${cSites.length}위)\n  AI 최적화: ${cAi}/5 | 몰입도: ${cEng}/5 | 전환 편의성: ${cConv}/5\n`:''}\n━━━━━━━━━━━━━━━━━━━━━━━━\n3. AI별 순위 비교\n━━━━━━━━━━━━━━━━━━━━━━━━\n${hasGem?`[Gemini 순위]\n${[...gSites].sort((a,b)=>dtotal(b)-dtotal(a)).map((s,i)=>`  ${i+1}위. ${s.name} — ${dtotal(s)}/${maxS}점`).join('\n')}\n`:''}${hasCld?`[Claude 순위]\n${[...cSites].sort((a,b)=>dtotal(b)-dtotal(a)).map((s,i)=>`  ${i+1}위. ${s.name} — ${dtotal(s)}/${maxS}점`).join('\n')}\n`:''}\n━━━━━━━━━━━━━━━━━━━━━━━━\n4. 신규 항목 상세 비교\n━━━━━━━━━━━━━━━━━━━━━━━━\n${allNames.map(nm=>{
-  const gs=gSites.find(s=>s.name===nm),cs=cSites.find(s=>s.name===nm);
-  if(!gs&&!cs)return '';
-  return `■ ${nm}\n  AI 최적화: Gemini ${gs?gs.scores['ai_opt']||0:'—'}/5 | Claude ${cs?cs.scores['ai_opt']||0:'—'}/5\n  몰입도: Gemini ${gs?gs.scores['engage']||0:'—'}/5 | Claude ${cs?cs.scores['engage']||0:'—'}/5\n  전환 편의성: Gemini ${gs?gs.scores['convert']||0:'—'}/5 | Claude ${cs?cs.scores['convert']||0:'—'}/5`;
-}).filter(Boolean).join('\n\n')}\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n5. 종합 의견\n━━━━━━━━━━━━━━━━━━━━━━━━\n${gMe||cMe?`${myComp}은 두 AI 분석 기준으로 종합 경쟁력을 평가한 결과입니다.\nAI 최적화 평균 ${aiAvg('ai_opt')??'—'}/5, 몰입도 평균 ${aiAvg('engage')??'—'}/5, 전환 편의성 평균 ${aiAvg('convert')??'—'}/5.`:'분석 결과를 위 내용으로 참고해 주세요.'}\n\n이상 보고 드립니다. ${reporter} 드림`;
-  document.getElementById('report-txt').textContent=full;
-}
-
-function copyKakao(){navigator.clipboard.writeText(document.getElementById('kakao-txt').textContent).then(()=>{const t=document.getElementById('ct1');t.textContent='복사됨!';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
-function copyFull(){navigator.clipboard.writeText(document.getElementById('report-txt').textContent).then(()=>{const t=document.getElementById('ct2');t.textContent='복사됨!';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
-
-// ══════════════════════════════════════════
-// 저장 — outerHTML 내장 방식
-// ══════════════════════════════════════════
-
-// ══════════════════════════════════════════
-// 자동 분석 (Claude API)
-// ══════════════════════════════════════════
-
-// API 키 동기화
-function syncApiKey(src){
-  // 설정 탭 → 각 탭
-  const v=document.getElementById('cfg-api-key').value;
-  const g=document.getElementById('auto-api-key-gem');
-  const c=document.getElementById('auto-api-key-cld');
-  if(g) g.value=v;
-  if(c) c.value=v;
-}
-function syncApiKeyFromTab(ai){
-  // 각 탭 → 설정 탭 (설정 탭이 비어있을 때만)
-  const tabEl=document.getElementById('auto-api-key-'+ai);
-  const cfgEl=document.getElementById('cfg-api-key');
-  if(tabEl&&cfgEl&&tabEl.value&&!cfgEl.value) cfgEl.value=tabEl.value;
-}
-
-function getApiKey(ai){
-  // 설정탭 → 각 탭 순으로 확인
-  const cfg=document.getElementById('cfg-api-key');
-  if(cfg&&cfg.value.trim()) return cfg.value.trim();
-  const el=document.getElementById('auto-api-key-'+ai);
-  return el?el.value.trim():'';
-}
-
-// 행 추가/삭제
-function addBulkRow(ai){
-  const tb=document.getElementById('bulk-rows-'+ai);
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td><input type="text" placeholder="회사명"/></td>
-    <td><input type="text" placeholder="https://example.com"/></td>
-    <td><select><option value="me">우리 회사</option><option value="domestic" selected>국내 경쟁사</option><option value="foreign">해외 경쟁사</option></select></td>
-    <td><button class="del-row-btn" onclick="delBulkRow(this)">×</button></td>`;
-  tb.appendChild(tr);
-}
-function delBulkRow(btn){
-  const tb=btn.closest('tbody');
-  if(tb.rows.length<=1){alert('최소 1개는 남겨야 합니다');return;}
-  btn.closest('tr').remove();
-}
-
-// 전체 자동 분석 실행
-async function runBulkAnalysis(ai){
-  const apiKey=getApiKey(ai);
-  if(!apiKey){
-    alert('Claude API 키를 입력해주세요.\n(설정 탭 또는 자동분석 폼 상단)');
-    return;
-  }
-  const tb=document.getElementById('bulk-rows-'+ai);
-  const rows=[...tb.rows].map(tr=>{
-    const inputs=tr.querySelectorAll('input,select');
-    return {name:inputs[0].value.trim(), url:inputs[1].value.trim(), type:inputs[2].value};
-  }).filter(r=>r.name);
-
-  if(!rows.length){alert('분석할 업체를 입력하세요');return;}
-
-  const runBtn=document.getElementById('bulk-run-'+ai);
-  runBtn.disabled=true; runBtn.textContent='분석 중...';
-  const progEl=document.getElementById('bulk-progress-'+ai);
-  progEl.innerHTML='';
-
-  for(let i=0;i<rows.length;i++){
-    const r=rows[i];
-    // 진행 표시
-    const item=document.createElement('div');
-    item.className='progress-item';
-    item.id='prog-item-'+ai+'-'+i;
-    item.innerHTML=`<div class="prog-spin"></div><span>${r.name} (${r.url||'URL없음'}) 분석 중...</span>`;
-    progEl.appendChild(item);
-
-    try{
-      const result=await analyzeWithClaude(r.name, r.url, r.type, apiKey);
-      // 기존 사이트 있으면 업데이트, 없으면 추가
-      const exist=DB[ai].sites.find(s=>s.name===r.name);
-      if(exist){
-        exist.scores=result.scores;
-        exist.checks=result.checks;
-        exist.note=result.note;
-        exist.url=r.url||exist.url;
-        exist.type=r.type;
-      } else {
-        const site=newSite(r.name, r.url, r.type, ai);
-        site.scores=result.scores;
-        site.checks=result.checks;
-        site.note=result.note;
-        DB[ai].sites.push(site);
-      }
-      // ★ 이력 저장
-      const totalScore=Object.values(result.scores).reduce((a,b)=>a+b,0);
-      const histEntry={
-        id: Date.now()+Math.random(),
-        ai, date: new Date().toLocaleDateString('ko-KR'),
-        dateISO: new Date().toISOString(),
-        name: r.name, url: r.url, type: r.type,
-        scores: {...result.scores},
-        checks: {...result.checks},
-        note: result.note,
-        totalScore
-      };
-      HISTORY.push(histEntry);
-      item.innerHTML=`<span class="prog-done">✓</span><span style="color:var(--green)">${r.name} 분석 완료 — 총점 ${totalScore}/45점 (이력 저장됨)</span>`;
-    }catch(err){
-      item.innerHTML=`<span class="prog-err">✗</span><span style="color:var(--red)">${r.name} 실패: ${err.message}</span>`;
-    }
-  }
-
-  renderGrid(ai);
-  runBtn.disabled=false;
-  runBtn.textContent='🤖 전체 자동 분석 시작';
-  progEl.innerHTML+='<div style="margin-top:8px;font-size:12px;color:var(--green);font-weight:600">✓ 전체 분석 완료! 💾 저장 버튼으로 백업하세요.</div>';
-}
-
-// Claude API 호출 및 결과 파싱
-async function analyzeWithClaude(name, url, type, apiKey){
-  const typeLabel=type==='me'?'우리 회사(슈어엠과 동일 업종)':type==='foreign'?'해외 경쟁사':'국내 경쟁사';
-  const dcatList=DCATS.map(c=>`${c.lb}(${c.desc})`).join(', ');
-  const fitemList=FITEMS.map(f=>f.lb).join(', ');
-
-  const prompt=`당신은 웹사이트 UX/디자인 전문 분석가입니다.
-아래 기업의 홈페이지를 분석하여 JSON 형식으로 평가해주세요.
-
-기업명: ${name}
-홈페이지 URL: ${url}
-구분: ${typeLabel}
-
-【디자인 평가 항목 — 각 0.5~5점 (0.5 단위)】
-${dcatList}
-
-【기능 체크리스트 — 각 true/false】
-${fitemList}
-
-응답은 반드시 아래 JSON 형식만 출력하세요 (마크다운, 설명 없이):
-{
-  "scores": {
-    "visual": 4,
-    "layout": 4.5,
-    "mobile": 4,
-    "speed": 3.5,
-    "brand": 4,
-    "ux": 4.5,
-    "ai_opt": 3.5,
-    "engage": 3,
-    "convert": 4
-  },
-  "checks": {
-    "f_service": true,
-    "f_price": false,
-    "f_docs": true,
-    "f_faq": true,
-    "f_case": true,
-    "f_blog": true,
-    "f_chat": false,
-    "f_demo": false,
-    "f_login": true,
-    "f_search": true,
-    "f_multi": false,
-    "f_ssl": true,
-    "f_sns": true,
-    "f_video": false
-  },
-  "note": "한 줄 종합 평가 (50자 이내)"
-}`;
-
-  const resp=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':apiKey,
-      'anthropic-version':'2023-06-01'
-    },
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:800,
-      messages:[{role:'user',content:prompt}]
-    })
-  });
-
-  if(!resp.ok){
-    const err=await resp.json().catch(()=>({}));
-    throw new Error(err.error?.message||'API 오류 ('+resp.status+')');
-  }
-
-  const data=await resp.json();
-  const text=data.content?.[0]?.text||'{}';
-  // JSON 파싱 (마크다운 펜스 제거)
-  const clean=text.replace(/```json|```/gi,'').trim();
-  const parsed=JSON.parse(clean);
-
-  // 스코어 범위 보정 (0.5~5)
-  const scores={};
-  DCATS.forEach(c=>{
-    const v=parseFloat(parsed.scores?.[c.k]||0);
-    scores[c.k]=Math.min(5,Math.max(0,Math.round(v*2)/2));
-  });
-  const checks={};
-  FITEMS.forEach(f=>{
-    checks[f.k]=!!parsed.checks?.[f.k];
-  });
-  const note=parsed.note||'';
-  return {scores,checks,note};
-}
-
-
-// ══════════════════════════════════════════
-// 이력 관리
-// ══════════════════════════════════════════
-
-// 수동 입력(addSite) 시에도 이력 저장
-function saveToHistory(ai, site){
-  const totalScore=Object.values(site.scores).reduce((a,b)=>a+b,0);
-  HISTORY.push({
-    id: Date.now()+Math.random(),
-    ai, date: new Date().toLocaleDateString('ko-KR'),
-    dateISO: new Date().toISOString(),
-    name: site.name, url: site.url, type: site.type,
-    scores: {...site.scores},
-    checks: {...site.checks},
-    note: site.note||'',
-    totalScore
-  });
-}
-
-// 이력 렌더링
-function renderHistory(){
-  const el=document.getElementById('hist-list');
-  if(!el) return;
-  const search=(document.getElementById('hist-search')?.value||'').toLowerCase();
-  const aiF=document.getElementById('hist-ai-filter')?.value||'all';
-  const typeF=document.getElementById('hist-type-filter')?.value||'all';
-
-  // 필터
-  let list=[...HISTORY].filter(h=>{
-    if(search&&!h.name.toLowerCase().includes(search)) return false;
-    if(aiF!=='all'&&h.ai!==aiF) return false;
-    if(typeF!=='all'&&h.type!==typeF) return false;
-    return true;
-  });
-
-  if(!list.length){
-    el.innerHTML='<div class="hist-empty">분석 이력이 없습니다.<br/>자동 분석 또는 업체 추가 시 자동으로 저장됩니다.</div>';
-    updateCompareBar();
-    return;
-  }
-
-  // 업체별 그룹핑
-  const groups={};
-  list.forEach(h=>{
-    if(!groups[h.name]) groups[h.name]=[];
-    groups[h.name].push(h);
-  });
-  // 각 그룹을 최신순 정렬
-  Object.keys(groups).forEach(nm=>{
-    groups[nm].sort((a,b)=>new Date(b.dateISO)-new Date(a.dateISO));
-  });
-  // 그룹을 최신 분석 날짜 기준 정렬
-  const sortedNames=Object.keys(groups).sort((a,b)=>
-    new Date(groups[b][0].dateISO)-new Date(groups[a][0].dateISO));
-
-  el.innerHTML=sortedNames.map(nm=>{
-    const recs=groups[nm];
-    const latest=recs[0];
-    const typeLabel=latest.type==='me'?'우리 회사':latest.type==='foreign'?'해외':'국내';
-    const typeClr=latest.type==='me'?'#d4541a':latest.type==='foreign'?'#1a6fc9':'#1a9e6e';
-
-    const rows=recs.map((h,idx)=>{
-      const prev=recs[idx+1];
-      const delta=prev?h.totalScore-prev.totalScore:null;
-      const deltaHtml=delta!==null
-        ?(delta>0?`<span class="hist-delta up">▲${delta.toFixed(1)}</span>`
-          :delta<0?`<span class="hist-delta dn">▼${Math.abs(delta).toFixed(1)}</span>`
-          :'<span class="hist-delta eq">=</span>')
-        :'<span class="hist-delta eq">—</span>';
-      const aiClr=h.ai==='gem'?'var(--gem)':'var(--cld)';
-      const isSelected=selectedHistIds.includes(h.id);
-      return `<div class="hist-record-row">
-        <div class="hist-date">${h.date}</div>
-        <span class="hist-ai-tag" style="background:${h.ai==='gem'?'rgba(66,133,244,.12)':'rgba(204,120,92,.12)'};color:${aiClr}">${h.ai==='gem'?'Gemini':'Claude'}</span>
-        <span class="hist-score">${h.totalScore.toFixed(1)}/45</span>
-        ${deltaHtml}
-        <span class="hist-note">${h.note||'—'}</span>
-        <input type="checkbox" style="accent-color:var(--purple);cursor:pointer"
-          ${isSelected?'checked':''} onchange="toggleHistSelect('${h.id}',this.checked)"
-          title="비교표에 불러올 이력 선택"/>
-        <button class="hist-load-btn" onclick="loadHistoryToCompare('${h.id}')">불러오기</button>
-        <button class="hist-del-btn" onclick="deleteHistory('${h.id}')">삭제</button>
-      </div>`;
-    }).join('');
-
-    return `<div class="hist-company-block">
-      <div class="hist-company-hd" onclick="toggleHistBlock(this)">
-        <span class="hist-company-name">${nm}</span>
-        <span style="font-size:10px;padding:1px 5px;border-radius:5px;background:${typeClr}22;color:${typeClr};font-weight:600">${typeLabel}</span>
-        <span class="hist-company-meta">${recs.length}회 분석 · 최근 ${latest.date}</span>
-        <span style="font-size:12px;color:var(--tx3);margin-left:4px">▼</span>
-      </div>
-      <div class="hist-company-body open">
-        ${rows}
-      </div>
-    </div>`;
-  }).join('');
-
-  updateCompareBar();
-}
-
-function toggleHistBlock(hd){
-  const body=hd.nextElementSibling;
-  const arrow=hd.querySelector('span:last-child');
-  body.classList.toggle('open');
-  arrow.textContent=body.classList.contains('open')?'▲':'▼';
-}
-
-// 단일 이력 → 현재 AI탭에 불러오기
-function loadHistoryToCompare(id){
-  const h=HISTORY.find(x=>x.id==id);
-  if(!h){alert('이력을 찾을 수 없습니다');return;}
-  const ai=h.ai;
-  const exist=DB[ai].sites.find(s=>s.name===h.name);
-  if(exist){
-    if(!confirm(`${h.name}(${h.date}) 이력을 현재 ${ai==='gem'?'Gemini':'Claude'} 탭에 덮어쓰겠습니까?`)) return;
-    exist.scores={...h.scores};exist.checks={...h.checks};exist.note=h.note;exist.url=h.url;
-  } else {
-    const site=newSite(h.name,h.url,h.type,ai);
-    site.scores={...h.scores};site.checks={...h.checks};site.note=h.note;
-    DB[ai].sites.push(site);
-  }
-  renderGrid(ai);
-  goMain(ai);
-  alert(`${h.name} (${h.date}) 이력을 ${ai==='gem'?'Gemini':'Claude'} 탭에 불러왔습니다!`);
-}
-
-// 체크박스 선택
-function toggleHistSelect(id, checked){
-  id=String(id);
-  if(checked){if(!selectedHistIds.includes(id)) selectedHistIds.push(id);}
-  else{selectedHistIds=selectedHistIds.filter(x=>x!==id);}
-  updateCompareBar();
-}
-
-// 선택 바 업데이트
-function updateCompareBar(){
-  const bar=document.getElementById('hist-compare-bar');
-  const list=document.getElementById('hist-selected-list');
-  if(!bar||!list) return;
-  if(!selectedHistIds.length){bar.style.display='none';return;}
-  bar.style.display='flex';
-  list.innerHTML=selectedHistIds.map(id=>{
-    const h=HISTORY.find(x=>String(x.id)===id);
-    if(!h) return '';
-    return `<span class="compare-sel-badge">${h.name} (${h.date}·${h.ai==='gem'?'G':'C'})</span>`;
-  }).join('');
-}
-
-// 선택된 이력들을 비교표로 불러오기
-function loadSelectedToCompare(){
-  if(!selectedHistIds.length){alert('이력을 선택하세요');return;}
-  const entries=selectedHistIds.map(id=>HISTORY.find(x=>String(x.id)===id)).filter(Boolean);
-  // AI별로 분류
-  const gemEntries=entries.filter(h=>h.ai==='gem');
-  const cldEntries=entries.filter(h=>h.ai==='cld');
-
-  function applyEntries(list, ai){
-    list.forEach(h=>{
-      const exist=DB[ai].sites.find(s=>s.name===h.name);
-      if(exist){exist.scores={...h.scores};exist.checks={...h.checks};exist.note=h.note;exist.url=h.url;}
-      else{const site=newSite(h.name,h.url,h.type,ai);site.scores={...h.scores};site.checks={...h.checks};site.note=h.note;DB[ai].sites.push(site);}
-    });
-    if(list.length) renderGrid(ai);
-  }
-  applyEntries(gemEntries,'gem');
-  applyEntries(cldEntries,'cld');
-
-  selectedHistIds=[];
-  goMain('report');
-  setTimeout(renderReport,100);
-}
-
-function clearSelectedHistory(){
-  selectedHistIds=[];
-  renderHistory();
-}
-
-function deleteHistory(id){
-  if(!confirm('이 이력을 삭제하겠습니까?')) return;
-  HISTORY=HISTORY.filter(h=>String(h.id)!==String(id));
-  selectedHistIds=selectedHistIds.filter(x=>x!==String(id));
-  renderHistory();
-}
-
-function clearAllHistory(){
-  if(!confirm('전체 이력을 삭제하겠습니까?\n(되돌릴 수 없습니다)')) return;
-  HISTORY=[];selectedHistIds=[];
-  renderHistory();
-}
-
-function saveToFile(){
-  const data={
-    v:5,
-    gem:{sites:DB.gem.sites,colorIdx:DB.gem.colorIdx},
-    cld:{sites:DB.cld.sites,colorIdx:DB.cld.colorIdx},
-    history:HISTORY,
-    reporter:document.getElementById('cfg-reporter').value,
-    chairman:document.getElementById('cfg-chairman').value,
-    company:document.getElementById('cfg-company').value,
-    date:document.getElementById('cfg-date').value,
-    apiKey:document.getElementById('cfg-api-key').value||'',
-    savedAt:new Date().toLocaleString('ko-KR'),
-  };
-  const raw=document.documentElement.outerHTML;
-  const newHtml=raw.replace(/var __SD__\s*=\s*null\s*;/,'var __SD__ = '+JSON.stringify(data)+';');
-  const blob=new Blob([newHtml],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='homepage_compare_saved.html';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-  document.getElementById('save-info').textContent='저장됨: '+data.savedAt;
-  const t=document.getElementById('toast-save');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);
-}
-
-function exportCsv(){
-  const rows=[['AI','회사명','구분','URL',...DCATS.map(c=>c.lb+(c.isNew?'[신규]':'')),'전체합계',...FITEMS.map(f=>f.lb),'기능수','메모']];
-  ['gem','cld'].forEach(ai=>{
-    DB[ai].sites.forEach(s=>{
-      rows.push([ai==='gem'?'Gemini':'Claude',s.name,s.type==='me'?'기준':s.type==='foreign'?'해외':'국내',s.url||'',...DCATS.map(c=>s.scores[c.k]||0),dtotal(s),...FITEMS.map(f=>s.checks[f.k]?'O':'X'),ftotal(s),s.note||'']);
-    });
-  });
-  if(rows.length===1){alert('데이터 없음');return;}
-  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='홈페이지비교_통합_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-}
-
-function clearAll(){
-  if(!confirm('Gemini + Claude 데이터를 모두 삭제하겠습니까?'))return;
-  DB.gem={sites:[],colorIdx:0};DB.cld={sites:[],colorIdx:0};
-  renderGrid('gem');renderGrid('cld');
-  document.getElementById('save-info').textContent='저장된 데이터 없음';
-}
-
-// 초기 렌더
-renderGrid('gem');
-renderGrid('cld');
-
-  // 전역 노출
-  window.hpcRestoreState = hpcRestoreState;
-  window.goMain = goMain;
-  window.goSub = goSub;
-  window.dtotal = dtotal;
-  window.dBasic = dBasic;
-  window.dNew = dNew;
-  window.ftotal = ftotal;
-  window.newSite = newSite;
-  window.addSite = addSite;
-  window.delSite = delSite;
-  window.setScore = setScore;
-  window.hoverStar = hoverStar;
-  window.unhoverStar = unhoverStar;
-  window.updateStarDisplay = updateStarDisplay;
-  window.setCheck = setCheck;
-  window.setNote = setNote;
-  window.renderGrid = renderGrid;
-  window.onDrop = onDrop;
-  window.onTxtFile = onTxtFile;
-  window.parseTxt = parseTxt;
-  window.parseTxtData = parseTxtData;
-  window.renderSingle = renderSingle;
-  window.renderReport = renderReport;
-  window.renderSummaryCards = renderSummaryCards;
-  window.renderMergedTable = renderMergedTable;
-  window.diffBadge = diffBadge;
-  window.makeDoubleRow = makeDoubleRow;
-  window.sumDoubleRow = sumDoubleRow;
-  window.setTone = setTone;
-  window.makeReport = makeReport;
-  window.aiAvg = aiAvg;
-  window.copyKakao = copyKakao;
-  window.copyFull = copyFull;
-  window.syncApiKey = syncApiKey;
-  window.syncApiKeyFromTab = syncApiKeyFromTab;
-  window.getApiKey = getApiKey;
-  window.addBulkRow = addBulkRow;
-  window.delBulkRow = delBulkRow;
-  window.runBulkAnalysis = runBulkAnalysis;
-  window.analyzeWithClaude = analyzeWithClaude;
-  window.saveToHistory = saveToHistory;
-  window.renderHistory = renderHistory;
-  window.toggleHistBlock = toggleHistBlock;
-  window.loadHistoryToCompare = loadHistoryToCompare;
-  window.toggleHistSelect = toggleHistSelect;
-  window.updateCompareBar = updateCompareBar;
-  window.loadSelectedToCompare = loadSelectedToCompare;
-  window.applyEntries = applyEntries;
-  window.clearSelectedHistory = clearSelectedHistory;
-  window.deleteHistory = deleteHistory;
-  window.clearAllHistory = clearAllHistory;
-  window.saveToFile = saveToFile;
-  window.exportCsv = exportCsv;
-  window.clearAll = clearAll;
-}
-// === 홈페이지 비교 END ===
 </script>
 </body>
 </html>
