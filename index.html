@@ -1769,6 +1769,330 @@ tr:hover .td-act{opacity:1}
   </div>
 </div>
 
+
+
+<!-- MODALS -->
+<div class="mbg" id="modalLead"><div class="modal">
+  <h3 id="leadModalTitle">리드 추가</h3>
+  <div class="r2"><div class="fl"><label>회사명 *</label><input id="lCompany"/></div><div class="fl"><label>담당자</label><input id="lContact"/></div></div>
+  <div class="r2"><div class="fl"><label>이메일</label><input id="lEmail"/></div><div class="fl"><label>전화번호</label><input id="lPhone"/></div></div>
+  <div class="r2">
+    <div class="fl"><label>상태</label><select id="lStatus"><option>잠재</option><option>접촉</option><option>제안</option><option>협상</option><option>완료</option><option>실패</option></select></div>
+    <div class="fl"><label>딜 금액 (만원)</label><input id="lValue" type="number" placeholder="0"/></div>
+  </div>
+  <div class="fl"><label>담당 팀원</label><select id="lAssignee"><option value="">미배정</option></select></div>
+  <div class="fl"><label>메모</label><textarea id="lNote"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalLead')">취소</button><button class="btn btn-primary" onclick="saveLead()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalAct"><div class="modal">
+  <h3>활동 기록</h3>
+  <div class="r2">
+    <div class="fl"><label>유형</label><select id="aType"><option>전화</option><option>미팅</option><option>메일</option><option>기타</option></select></div>
+    <div class="fl"><label>관련 리드</label><select id="aLead"><option value="">없음</option></select></div>
+  </div>
+  <div class="fl"><label>제목 *</label><input id="aTitle"/></div>
+  <div class="fl"><label>일시</label><input id="aDate" type="datetime-local"/></div>
+  <div class="fl"><label>메모</label><textarea id="aMemo"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalAct')">취소</button><button class="btn btn-primary" onclick="saveAct()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalTarget"><div class="modal">
+  <h3>목표 입력</h3>
+  <div class="fl"><label>연월</label><input id="tMonth" type="month"/></div>
+  <div class="fl"><label>목표 금액 (만원)</label><input id="tTarget" type="number" placeholder="0"/></div>
+  <div class="fl"><label>실적 금액 (만원)</label><input id="tActual" type="number" placeholder="0"/></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalTarget')">취소</button><button class="btn btn-primary" onclick="saveTarget()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalCamp"><div class="modal">
+  <h3 id="campModalTitle">캠페인 생성</h3>
+  <div class="fl"><label>캠페인명 *</label><input id="cName"/></div>
+  <div class="fl"><label>설명</label><textarea id="cDesc"></textarea></div>
+  <div class="fl"><label>상태</label><select id="cStatus"><option>진행중</option><option>완료</option><option>일시정지</option></select></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalCamp')">취소</button><button class="btn btn-primary" onclick="saveCamp()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalOutbound"><div class="modal">
+  <h3 id="obModalTitle">업체 추가</h3>
+  <div class="r2"><div class="fl"><label>업체명 *</label><input id="obCompany"/></div><div class="fl"><label>전화번호</label><input id="obPhone"/></div></div>
+  <div class="fl"><label>주소</label><input id="obAddress"/></div>
+  <div class="fl"><label>URL</label><input id="obUrl" placeholder="https://"/></div>
+  <div class="r2">
+    <div class="fl"><label>캠페인</label><select id="obCamp"><option value="">없음</option></select></div>
+    <div class="fl"><label>반응</label><select id="obResponse"><option>미응답</option><option>긍정</option><option>부정</option><option>콜백요청</option><option>완료</option></select></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>담당 팀원</label><select id="obAssignee"><option value="">미배정</option></select></div>
+    <div class="fl"><label>접촉 일시</label><input id="obDate" type="datetime-local"/></div>
+  </div>
+  <div class="fl"><label>메모</label><textarea id="obMemo"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalOutbound')">취소</button><button class="btn btn-primary" onclick="saveOutbound()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalUpload"><div class="modal" style="max-width:560px">
+  <h3>엑셀 / CSV 업로드</h3>
+  <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.7">
+    엑셀(.xlsx) 또는 CSV 파일을 업로드하세요.<br>
+    컬럼 순서: <b>순번, 업체명, 전화번호, 주소, URL</b><br>
+    <span style="color:var(--text3)">첫 번째 행은 헤더로 자동 인식됩니다.</span>
+  </div>
+  <div class="fl">
+    <label>캠페인 지정 (선택)</label>
+    <select id="uploadCamp"><option value="">없음</option></select>
+  </div>
+  <div style="border:0.5px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;background:var(--bg2);margin-bottom:10px" onclick="document.getElementById('uploadFileInput').click()">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:4px">클릭하여 파일 선택</div>
+    <div style="font-size:11px;color:var(--text3)">.xlsx, .xls, .csv 지원</div>
+    <input type="file" id="uploadFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="onUploadFile(this)"/>
+  </div>
+  <div id="uploadPreview" style="display:none">
+    <div style="font-size:12px;font-weight:500;margin-bottom:8px" id="uploadPreviewTitle"></div>
+    <div style="max-height:200px;overflow-y:auto;border:0.5px solid var(--bd);border-radius:var(--r)">
+      <table class="ltbl" id="uploadPreviewTable" style="font-size:11px">
+        <thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>URL</th></tr></thead>
+        <tbody id="uploadPreviewBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalUpload')">취소</button>
+    <button class="btn btn-primary" id="uploadConfirmBtn" onclick="confirmUpload()" style="display:none">업로드 확인</button>
+  </div>
+</div></div>
+
+<div class="mbg" id="modalImprove"><div class="modal">
+  <h3 id="impModalTitle">개선사항 추가</h3>
+  <div class="r2"><div class="fl"><label>업체명 *</label><input id="impCompany"/></div><div class="fl"><label>우선순위</label><select id="impPriority"><option>긴급</option><option>높음</option><option>보통</option><option>낮음</option></select></div></div>
+  <div class="fl"><label>개선사항 *</label><input id="impIssue"/></div>
+  <div class="r2">
+    <div class="fl"><label>상태</label><select id="impStatus"><option>접수</option><option>처리중</option><option>완료</option><option>보류</option></select></div>
+    <div class="fl"><label>담당 팀원</label><select id="impAssignee"><option value="">미배정</option></select></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>마감일</label><input id="impDue" type="date"/></div>
+    <div class="fl"><label>비고</label><input id="impNote"/></div>
+  </div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalImprove')">취소</button><button class="btn btn-primary" onclick="saveImprove()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalTdl"><div class="modal">
+  <h3 id="tdlModalTitle">할 일 추가</h3>
+  <div class="fl"><label>할 일 *</label><input id="tdlTitle" placeholder="오늘 할 일을 입력하세요"/></div>
+  <div class="r2">
+    <div class="fl"><label>우선순위</label><select id="tdlPriority"><option>긴급</option><option>높음</option><option selected>보통</option><option>낮음</option></select></div>
+    <div class="fl"><label>날짜</label><input id="tdlItemDate" type="date"/></div>
+  </div>
+  <div class="fl"><label>메모</label><textarea id="tdlMemo" style="min-height:50px"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalTdl')">취소</button><button class="btn btn-primary" onclick="saveTdl()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalRnr"><div class="modal">
+  <h3>내 R&amp;R 수정</h3>
+  <div class="fl"><label>직책 / 역할명</label><input id="rnrTitle" placeholder="예) 마케팅 팀장, 콘텐츠 담당"/></div>
+  <div class="fl"><label>담당 업무 상세</label><textarea id="rnrDesc" style="min-height:120px" placeholder="예) SNS 채널 운영, 캠페인 기획, 주간 리포트 작성 등"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalRnr')">취소</button><button class="btn btn-primary" onclick="saveRnr()">저장</button></div>
+</div></div>
+
+<div class="mbg" id="modalDoc"><div class="modal">
+  <h3 id="docModalTitle">문서 추가</h3>
+  <div class="fl"><label>문서명 *</label><input id="docName" placeholder="예) RCS 제안서 v2.0"/></div>
+  <div class="fl"><label>상태</label>
+    <select id="docStatus"><option>사용 가능</option><option>제작 중</option></select>
+  </div>
+  <div class="fl"><label>최종 업데이트 일자</label><input id="docDate" type="date"/></div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalDoc')">취소</button>
+    <button class="btn btn-primary" onclick="saveDoc()">노션에 저장</button>
+  </div>
+</div></div>
+
+<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:540px">
+  <h3 id="meetingModalTitle">미팅 추가</h3>
+  <div class="r2">
+    <div class="fl"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
+    <div class="fl"><label>업체명</label><input id="mtCompany" placeholder="예) (주)볼보코리아"/></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>날짜/시간 *</label><input id="mtDatetime" type="datetime-local"/></div>
+    <div class="fl"><label>유형</label>
+      <select id="mtType">
+        <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
+      </select>
+    </div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
+    <div class="fl"><label>출발지</label><input id="mtOrigin" placeholder="예) 슈어엠 본사" oninput="updateNaverLink()"/></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>장소 (목적지)</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="mtLocation" placeholder="예) 강남구청" style="flex:1" oninput="updateNaverLink()"/>
+        <a id="mtNaverLink" href="#" target="_blank" style="font-size:11px;color:var(--blue);white-space:nowrap;display:none">🗺 길찾기</a>
+      </div>
+    </div>
+    <div class="fl"><label>거리 (km)</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="mtKm" type="number" step="0.1" min="0" placeholder="0.0" style="width:80px"/>
+        <span style="font-size:11px;color:var(--text3)">네이버 지도 확인 후 입력</span>
+      </div>
+    </div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>통행/주차료 (원)</label><input id="mtToll" type="number" step="1" min="0" placeholder="0"/></div>
+    <div class="fl"><label>메모</label><input id="mtMemo" placeholder="업무내용 기재"/></div>
+  </div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalMeeting')">취소</button>
+    <button class="btn btn-primary" onclick="saveMeeting()">저장</button>
+  </div>
+</div></div>
+
+<div class="mbg" id="modalMeetingExcel"><div class="modal" style="max-width:460px">
+  <h3>차량유지비 산출내역서 다운로드</h3>
+  <div style="font-size:12px;color:var(--text3);margin-bottom:14px">미팅캘린더에 저장된 데이터로 엑셀을 생성합니다</div>
+  <div class="r2">
+    <div class="fl"><label>시작일</label><input type="date" id="excelFrom"/></div>
+    <div class="fl"><label>종료일</label><input type="date" id="excelTo"/></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>담당자 이름</label><input id="excelName" placeholder="예) 이원영"/></div>
+    <div class="fl"><label>차량번호</label><input id="excelCarNo" placeholder="예) 155호7944"/></div>
+  </div>
+  <div class="fl"><label>Km당 금액 (원, 선택)</label>
+    <input id="excelRate" type="number" placeholder="비워두면 빈칸으로 생성" style="width:180px"/>
+  </div>
+  <div id="excelPreview" style="margin-top:12px;font-size:12px;color:var(--text2)"></div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalMeetingExcel')">취소</button>
+    <button class="btn btn-primary" onclick="downloadMeetingExcel()">📥 엑셀 다운로드</button>
+  </div>
+</div></div>
+
+<div class="mbg" id="modalNew"><div class="modal">
+  <h3>새 템플릿</h3>
+  <div class="fl"><label>이름 *</label><input id="nName"/></div>
+  <div class="fl"><label>카테고리</label><select id="nCat"><option value="">카테고리 없음</option></select></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalNew')">취소</button><button class="btn btn-primary" onclick="confirmNew()">만들기</button></div>
+</div></div>
+
+<div class="mbg" id="modalMove"><div class="modal"><h3 id="moveTitle">이동</h3>
+  <div class="fl"><label>카테고리</label><select id="moveCat"><option value="">없음</option></select></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalMove')">취소</button><button class="btn btn-primary" onclick="confirmMove()">이동</button></div>
+</div></div>
+
+<div class="mbg" id="modalCopy"><div class="modal"><h3 id="copyTitle">복사</h3>
+  <div class="fl"><label>복사본 이름</label><input id="copyName"/></div>
+  <div class="fl"><label>카테고리</label><select id="copyCat"><option value="">없음</option></select></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalCopy')">취소</button><button class="btn btn-primary" onclick="confirmCopy()">복사</button></div>
+</div></div>
+
+<div class="ctx-menu" id="ctxMenu" style="display:none">
+  <div class="ctx-item" onclick="ctxEdit()">편집</div>
+  <div class="ctx-item" onclick="ctxMove()">이동</div>
+  <div class="ctx-item" onclick="ctxCopy()">복사</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" onclick="ctxDelete()">삭제</div>
+</div>
+<input type="file" id="fileInput" multiple style="display:none" onchange="onFiles(this)"/>
+
+
+
+  <!-- 친숙자료 추가 모달 -->
+  <div class="mbg" id="modalChinsuk"><div class="modal" style="max-width:560px">
+    <h3 id="chinsukModalTitle">친숙자료 추가</h3>
+    <div class="r2">
+      <div class="fl"><label>행사명 *</label><input id="chEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+      <div class="fl"><label>업체명 *</label><input id="chCompany" placeholder="예) 컴잇_꼬끼오"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>담당자</label><input id="chContact" placeholder="예) 이원영"/></div>
+      <div class="fl"><label>전화번호</label><input id="chPhone" placeholder="010-0000-0000"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>등급</label>
+        <select id="chGrade"><option value="">선택</option><option>A</option><option>B</option><option>C</option></select>
+      </div>
+      <div class="fl"><label>전달방법</label>
+        <select id="chMethod"><option value="">선택</option><option>직접전달</option><option>배송</option><option>거절</option></select>
+      </div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>선물</label><input id="chGift" placeholder="예) 세트 1 - 동원참치"/></div>
+      <div class="fl"><label>전달/배송일</label><input id="chDeliveryAt" type="date"/></div>
+    </div>
+    <div class="fl"><label>대상자 (수령인)</label><input id="chAddress2" placeholder="예) 유광현 차장"/></div>
+    <div class="fl"><label>배송 주소</label><input id="chAddress" placeholder="예) 경기도 고양시..."/></div>
+    <div class="r2">
+      <div class="fl"><label>담당 팀원</label><select id="chAssignee"><option value="">미배정</option></select></div>
+      <div class="fl"><label>비고</label><input id="chNote" placeholder="메모"/></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalChinsuk')">취소</button>
+      <button class="btn btn-primary" onclick="saveChinsuk()">저장</button>
+    </div>
+  </div></div>
+
+  <!-- 엑셀 업로드 모달 -->
+  <div class="mbg" id="modalChinsukExcel"><div class="modal" style="max-width:560px">
+    <h3>리스트 업로드</h3>
+    <div class="fl"><label>행사명 *</label><input id="chUploadEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <input type="file" id="chinsukFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleChinsukUpload(event)"/>
+      <button class="btn btn-primary" onclick="document.getElementById('chinsukFileInput').click()">📂 파일 선택</button>
+      <div style="display:flex;align-items:center;gap:5px">
+        <label style="font-size:12px;color:var(--text2)">헤더 행:</label>
+        <input id="chHeaderRow" type="number" value="1" min="1" max="30" style="width:50px;font-size:12px;padding:4px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="rebuildUpload()"/>
+        <span style="font-size:11px;color:var(--text3)">행</span>
+      </div>
+      <span id="chUploadStatus" style="font-size:12px;color:var(--text3)"></span>
+    </div>
+    <!-- 컬럼 매핑 UI (파일 선택 후 표시) -->
+    <div id="chColMapWrap" style="display:none;margin-top:14px">
+      <div style="font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px">컬럼 매핑 <span style="color:var(--text3);font-weight:400">(자동 감지됨 — 필요 시 수정)</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="chColMapGrid"></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text3)" id="chUploadPreview"></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalChinsukExcel')">취소</button>
+      <button class="btn btn-primary" id="chUploadSaveBtn" onclick="saveChinsukUpload()" style="display:none">💾 저장</button>
+    </div>
+  </div></div>
+
+  <!-- 선물 추가 모달 -->
+  <div class="mbg" id="modalGift"><div class="modal" style="max-width:460px">
+    <h3 id="giftModalTitle">선물 추가</h3>
+    <div class="fl"><label>행사명 *</label><input id="giftEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+    <div class="r2">
+      <div class="fl"><label>선물명 *</label><input id="giftName" placeholder="예) 세트 1 - 동원참치"/></div>
+      <div class="fl"><label>온라인판매가 (원)</label><input id="giftPrice" type="number" placeholder="47920"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>구매여부</label>
+        <select id="giftBuyMethod">
+          <option value="">선택</option><option>별도구매</option><option>코아구매</option><option>기보유함</option><option>미정</option>
+        </select>
+      </div>
+      <div class="fl"><label>확보수량</label><input id="giftQty" type="number" placeholder="0"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>현재 확보 여부</label>
+        <select id="giftSecured">
+          <option value="">미확보</option><option value="true">확보</option>
+        </select>
+      </div>
+      <div class="fl"><label>비고</label><input id="giftNote" placeholder="메모"/></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalGift')">취소</button>
+      <button class="btn btn-primary" onclick="saveGift()">저장</button>
+    </div>
+  </div></div>
+
+</body>
+</html>
+
 <script>
 
 const SUPABASE_URL = 'https://mathhyygiyvczzcemepm.supabase.co'
@@ -5480,325 +5804,6 @@ window.selectVocFile = selectVocFile;
 
 
 </script>
-
-<!-- MODALS -->
-<div class="mbg" id="modalLead"><div class="modal">
-  <h3 id="leadModalTitle">리드 추가</h3>
-  <div class="r2"><div class="fl"><label>회사명 *</label><input id="lCompany"/></div><div class="fl"><label>담당자</label><input id="lContact"/></div></div>
-  <div class="r2"><div class="fl"><label>이메일</label><input id="lEmail"/></div><div class="fl"><label>전화번호</label><input id="lPhone"/></div></div>
-  <div class="r2">
-    <div class="fl"><label>상태</label><select id="lStatus"><option>잠재</option><option>접촉</option><option>제안</option><option>협상</option><option>완료</option><option>실패</option></select></div>
-    <div class="fl"><label>딜 금액 (만원)</label><input id="lValue" type="number" placeholder="0"/></div>
-  </div>
-  <div class="fl"><label>담당 팀원</label><select id="lAssignee"><option value="">미배정</option></select></div>
-  <div class="fl"><label>메모</label><textarea id="lNote"></textarea></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalLead')">취소</button><button class="btn btn-primary" onclick="saveLead()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalAct"><div class="modal">
-  <h3>활동 기록</h3>
-  <div class="r2">
-    <div class="fl"><label>유형</label><select id="aType"><option>전화</option><option>미팅</option><option>메일</option><option>기타</option></select></div>
-    <div class="fl"><label>관련 리드</label><select id="aLead"><option value="">없음</option></select></div>
-  </div>
-  <div class="fl"><label>제목 *</label><input id="aTitle"/></div>
-  <div class="fl"><label>일시</label><input id="aDate" type="datetime-local"/></div>
-  <div class="fl"><label>메모</label><textarea id="aMemo"></textarea></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalAct')">취소</button><button class="btn btn-primary" onclick="saveAct()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalTarget"><div class="modal">
-  <h3>목표 입력</h3>
-  <div class="fl"><label>연월</label><input id="tMonth" type="month"/></div>
-  <div class="fl"><label>목표 금액 (만원)</label><input id="tTarget" type="number" placeholder="0"/></div>
-  <div class="fl"><label>실적 금액 (만원)</label><input id="tActual" type="number" placeholder="0"/></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalTarget')">취소</button><button class="btn btn-primary" onclick="saveTarget()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalCamp"><div class="modal">
-  <h3 id="campModalTitle">캠페인 생성</h3>
-  <div class="fl"><label>캠페인명 *</label><input id="cName"/></div>
-  <div class="fl"><label>설명</label><textarea id="cDesc"></textarea></div>
-  <div class="fl"><label>상태</label><select id="cStatus"><option>진행중</option><option>완료</option><option>일시정지</option></select></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalCamp')">취소</button><button class="btn btn-primary" onclick="saveCamp()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalOutbound"><div class="modal">
-  <h3 id="obModalTitle">업체 추가</h3>
-  <div class="r2"><div class="fl"><label>업체명 *</label><input id="obCompany"/></div><div class="fl"><label>전화번호</label><input id="obPhone"/></div></div>
-  <div class="fl"><label>주소</label><input id="obAddress"/></div>
-  <div class="fl"><label>URL</label><input id="obUrl" placeholder="https://"/></div>
-  <div class="r2">
-    <div class="fl"><label>캠페인</label><select id="obCamp"><option value="">없음</option></select></div>
-    <div class="fl"><label>반응</label><select id="obResponse"><option>미응답</option><option>긍정</option><option>부정</option><option>콜백요청</option><option>완료</option></select></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>담당 팀원</label><select id="obAssignee"><option value="">미배정</option></select></div>
-    <div class="fl"><label>접촉 일시</label><input id="obDate" type="datetime-local"/></div>
-  </div>
-  <div class="fl"><label>메모</label><textarea id="obMemo"></textarea></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalOutbound')">취소</button><button class="btn btn-primary" onclick="saveOutbound()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalUpload"><div class="modal" style="max-width:560px">
-  <h3>엑셀 / CSV 업로드</h3>
-  <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.7">
-    엑셀(.xlsx) 또는 CSV 파일을 업로드하세요.<br>
-    컬럼 순서: <b>순번, 업체명, 전화번호, 주소, URL</b><br>
-    <span style="color:var(--text3)">첫 번째 행은 헤더로 자동 인식됩니다.</span>
-  </div>
-  <div class="fl">
-    <label>캠페인 지정 (선택)</label>
-    <select id="uploadCamp"><option value="">없음</option></select>
-  </div>
-  <div style="border:0.5px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;background:var(--bg2);margin-bottom:10px" onclick="document.getElementById('uploadFileInput').click()">
-    <div style="font-size:13px;color:var(--text2);margin-bottom:4px">클릭하여 파일 선택</div>
-    <div style="font-size:11px;color:var(--text3)">.xlsx, .xls, .csv 지원</div>
-    <input type="file" id="uploadFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="onUploadFile(this)"/>
-  </div>
-  <div id="uploadPreview" style="display:none">
-    <div style="font-size:12px;font-weight:500;margin-bottom:8px" id="uploadPreviewTitle"></div>
-    <div style="max-height:200px;overflow-y:auto;border:0.5px solid var(--bd);border-radius:var(--r)">
-      <table class="ltbl" id="uploadPreviewTable" style="font-size:11px">
-        <thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>URL</th></tr></thead>
-        <tbody id="uploadPreviewBody"></tbody>
-      </table>
-    </div>
-  </div>
-  <div class="mbtns">
-    <button class="btn" onclick="closeModal('modalUpload')">취소</button>
-    <button class="btn btn-primary" id="uploadConfirmBtn" onclick="confirmUpload()" style="display:none">업로드 확인</button>
-  </div>
-</div></div>
-
-<div class="mbg" id="modalImprove"><div class="modal">
-  <h3 id="impModalTitle">개선사항 추가</h3>
-  <div class="r2"><div class="fl"><label>업체명 *</label><input id="impCompany"/></div><div class="fl"><label>우선순위</label><select id="impPriority"><option>긴급</option><option>높음</option><option>보통</option><option>낮음</option></select></div></div>
-  <div class="fl"><label>개선사항 *</label><input id="impIssue"/></div>
-  <div class="r2">
-    <div class="fl"><label>상태</label><select id="impStatus"><option>접수</option><option>처리중</option><option>완료</option><option>보류</option></select></div>
-    <div class="fl"><label>담당 팀원</label><select id="impAssignee"><option value="">미배정</option></select></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>마감일</label><input id="impDue" type="date"/></div>
-    <div class="fl"><label>비고</label><input id="impNote"/></div>
-  </div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalImprove')">취소</button><button class="btn btn-primary" onclick="saveImprove()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalTdl"><div class="modal">
-  <h3 id="tdlModalTitle">할 일 추가</h3>
-  <div class="fl"><label>할 일 *</label><input id="tdlTitle" placeholder="오늘 할 일을 입력하세요"/></div>
-  <div class="r2">
-    <div class="fl"><label>우선순위</label><select id="tdlPriority"><option>긴급</option><option>높음</option><option selected>보통</option><option>낮음</option></select></div>
-    <div class="fl"><label>날짜</label><input id="tdlItemDate" type="date"/></div>
-  </div>
-  <div class="fl"><label>메모</label><textarea id="tdlMemo" style="min-height:50px"></textarea></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalTdl')">취소</button><button class="btn btn-primary" onclick="saveTdl()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalRnr"><div class="modal">
-  <h3>내 R&amp;R 수정</h3>
-  <div class="fl"><label>직책 / 역할명</label><input id="rnrTitle" placeholder="예) 마케팅 팀장, 콘텐츠 담당"/></div>
-  <div class="fl"><label>담당 업무 상세</label><textarea id="rnrDesc" style="min-height:120px" placeholder="예) SNS 채널 운영, 캠페인 기획, 주간 리포트 작성 등"></textarea></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalRnr')">취소</button><button class="btn btn-primary" onclick="saveRnr()">저장</button></div>
-</div></div>
-
-<div class="mbg" id="modalDoc"><div class="modal">
-  <h3 id="docModalTitle">문서 추가</h3>
-  <div class="fl"><label>문서명 *</label><input id="docName" placeholder="예) RCS 제안서 v2.0"/></div>
-  <div class="fl"><label>상태</label>
-    <select id="docStatus"><option>사용 가능</option><option>제작 중</option></select>
-  </div>
-  <div class="fl"><label>최종 업데이트 일자</label><input id="docDate" type="date"/></div>
-  <div class="mbtns">
-    <button class="btn" onclick="closeModal('modalDoc')">취소</button>
-    <button class="btn btn-primary" onclick="saveDoc()">노션에 저장</button>
-  </div>
-</div></div>
-
-<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:540px">
-  <h3 id="meetingModalTitle">미팅 추가</h3>
-  <div class="r2">
-    <div class="fl"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
-    <div class="fl"><label>업체명</label><input id="mtCompany" placeholder="예) (주)볼보코리아"/></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>날짜/시간 *</label><input id="mtDatetime" type="datetime-local"/></div>
-    <div class="fl"><label>유형</label>
-      <select id="mtType">
-        <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
-      </select>
-    </div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
-    <div class="fl"><label>출발지</label><input id="mtOrigin" placeholder="예) 슈어엠 본사" oninput="updateNaverLink()"/></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>장소 (목적지)</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <input id="mtLocation" placeholder="예) 강남구청" style="flex:1" oninput="updateNaverLink()"/>
-        <a id="mtNaverLink" href="#" target="_blank" style="font-size:11px;color:var(--blue);white-space:nowrap;display:none">🗺 길찾기</a>
-      </div>
-    </div>
-    <div class="fl"><label>거리 (km)</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <input id="mtKm" type="number" step="0.1" min="0" placeholder="0.0" style="width:80px"/>
-        <span style="font-size:11px;color:var(--text3)">네이버 지도 확인 후 입력</span>
-      </div>
-    </div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>통행/주차료 (원)</label><input id="mtToll" type="number" step="1" min="0" placeholder="0"/></div>
-    <div class="fl"><label>메모</label><input id="mtMemo" placeholder="업무내용 기재"/></div>
-  </div>
-  <div class="mbtns">
-    <button class="btn" onclick="closeModal('modalMeeting')">취소</button>
-    <button class="btn btn-primary" onclick="saveMeeting()">저장</button>
-  </div>
-</div></div>
-
-<div class="mbg" id="modalMeetingExcel"><div class="modal" style="max-width:460px">
-  <h3>차량유지비 산출내역서 다운로드</h3>
-  <div style="font-size:12px;color:var(--text3);margin-bottom:14px">미팅캘린더에 저장된 데이터로 엑셀을 생성합니다</div>
-  <div class="r2">
-    <div class="fl"><label>시작일</label><input type="date" id="excelFrom"/></div>
-    <div class="fl"><label>종료일</label><input type="date" id="excelTo"/></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>담당자 이름</label><input id="excelName" placeholder="예) 이원영"/></div>
-    <div class="fl"><label>차량번호</label><input id="excelCarNo" placeholder="예) 155호7944"/></div>
-  </div>
-  <div class="fl"><label>Km당 금액 (원, 선택)</label>
-    <input id="excelRate" type="number" placeholder="비워두면 빈칸으로 생성" style="width:180px"/>
-  </div>
-  <div id="excelPreview" style="margin-top:12px;font-size:12px;color:var(--text2)"></div>
-  <div class="mbtns">
-    <button class="btn" onclick="closeModal('modalMeetingExcel')">취소</button>
-    <button class="btn btn-primary" onclick="downloadMeetingExcel()">📥 엑셀 다운로드</button>
-  </div>
-</div></div>
-
-<div class="mbg" id="modalNew"><div class="modal">
-  <h3>새 템플릿</h3>
-  <div class="fl"><label>이름 *</label><input id="nName"/></div>
-  <div class="fl"><label>카테고리</label><select id="nCat"><option value="">카테고리 없음</option></select></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalNew')">취소</button><button class="btn btn-primary" onclick="confirmNew()">만들기</button></div>
-</div></div>
-
-<div class="mbg" id="modalMove"><div class="modal"><h3 id="moveTitle">이동</h3>
-  <div class="fl"><label>카테고리</label><select id="moveCat"><option value="">없음</option></select></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalMove')">취소</button><button class="btn btn-primary" onclick="confirmMove()">이동</button></div>
-</div></div>
-
-<div class="mbg" id="modalCopy"><div class="modal"><h3 id="copyTitle">복사</h3>
-  <div class="fl"><label>복사본 이름</label><input id="copyName"/></div>
-  <div class="fl"><label>카테고리</label><select id="copyCat"><option value="">없음</option></select></div>
-  <div class="mbtns"><button class="btn" onclick="closeModal('modalCopy')">취소</button><button class="btn btn-primary" onclick="confirmCopy()">복사</button></div>
-</div></div>
-
-<div class="ctx-menu" id="ctxMenu" style="display:none">
-  <div class="ctx-item" onclick="ctxEdit()">편집</div>
-  <div class="ctx-item" onclick="ctxMove()">이동</div>
-  <div class="ctx-item" onclick="ctxCopy()">복사</div>
-  <div class="ctx-sep"></div>
-  <div class="ctx-item danger" onclick="ctxDelete()">삭제</div>
-</div>
-<input type="file" id="fileInput" multiple style="display:none" onchange="onFiles(this)"/>
-
-
-
-  <!-- 친숙자료 추가 모달 -->
-  <div class="mbg" id="modalChinsuk"><div class="modal" style="max-width:560px">
-    <h3 id="chinsukModalTitle">친숙자료 추가</h3>
-    <div class="r2">
-      <div class="fl"><label>행사명 *</label><input id="chEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
-      <div class="fl"><label>업체명 *</label><input id="chCompany" placeholder="예) 컴잇_꼬끼오"/></div>
-    </div>
-    <div class="r2">
-      <div class="fl"><label>담당자</label><input id="chContact" placeholder="예) 이원영"/></div>
-      <div class="fl"><label>전화번호</label><input id="chPhone" placeholder="010-0000-0000"/></div>
-    </div>
-    <div class="r2">
-      <div class="fl"><label>등급</label>
-        <select id="chGrade"><option value="">선택</option><option>A</option><option>B</option><option>C</option></select>
-      </div>
-      <div class="fl"><label>전달방법</label>
-        <select id="chMethod"><option value="">선택</option><option>직접전달</option><option>배송</option><option>거절</option></select>
-      </div>
-    </div>
-    <div class="r2">
-      <div class="fl"><label>선물</label><input id="chGift" placeholder="예) 세트 1 - 동원참치"/></div>
-      <div class="fl"><label>전달/배송일</label><input id="chDeliveryAt" type="date"/></div>
-    </div>
-    <div class="fl"><label>대상자 (수령인)</label><input id="chAddress2" placeholder="예) 유광현 차장"/></div>
-    <div class="fl"><label>배송 주소</label><input id="chAddress" placeholder="예) 경기도 고양시..."/></div>
-    <div class="r2">
-      <div class="fl"><label>담당 팀원</label><select id="chAssignee"><option value="">미배정</option></select></div>
-      <div class="fl"><label>비고</label><input id="chNote" placeholder="메모"/></div>
-    </div>
-    <div class="mbtns">
-      <button class="btn" onclick="closeModal('modalChinsuk')">취소</button>
-      <button class="btn btn-primary" onclick="saveChinsuk()">저장</button>
-    </div>
-  </div></div>
-
-  <!-- 엑셀 업로드 모달 -->
-  <div class="mbg" id="modalChinsukExcel"><div class="modal" style="max-width:560px">
-    <h3>리스트 업로드</h3>
-    <div class="fl"><label>행사명 *</label><input id="chUploadEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
-    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
-      <input type="file" id="chinsukFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleChinsukUpload(event)"/>
-      <button class="btn btn-primary" onclick="document.getElementById('chinsukFileInput').click()">📂 파일 선택</button>
-      <div style="display:flex;align-items:center;gap:5px">
-        <label style="font-size:12px;color:var(--text2)">헤더 행:</label>
-        <input id="chHeaderRow" type="number" value="1" min="1" max="30" style="width:50px;font-size:12px;padding:4px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="rebuildUpload()"/>
-        <span style="font-size:11px;color:var(--text3)">행</span>
-      </div>
-      <span id="chUploadStatus" style="font-size:12px;color:var(--text3)"></span>
-    </div>
-    <!-- 컬럼 매핑 UI (파일 선택 후 표시) -->
-    <div id="chColMapWrap" style="display:none;margin-top:14px">
-      <div style="font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px">컬럼 매핑 <span style="color:var(--text3);font-weight:400">(자동 감지됨 — 필요 시 수정)</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="chColMapGrid"></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text3)" id="chUploadPreview"></div>
-    </div>
-    <div class="mbtns">
-      <button class="btn" onclick="closeModal('modalChinsukExcel')">취소</button>
-      <button class="btn btn-primary" id="chUploadSaveBtn" onclick="saveChinsukUpload()" style="display:none">💾 저장</button>
-    </div>
-  </div></div>
-
-  <!-- 선물 추가 모달 -->
-  <div class="mbg" id="modalGift"><div class="modal" style="max-width:460px">
-    <h3 id="giftModalTitle">선물 추가</h3>
-    <div class="fl"><label>행사명 *</label><input id="giftEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
-    <div class="r2">
-      <div class="fl"><label>선물명 *</label><input id="giftName" placeholder="예) 세트 1 - 동원참치"/></div>
-      <div class="fl"><label>온라인판매가 (원)</label><input id="giftPrice" type="number" placeholder="47920"/></div>
-    </div>
-    <div class="r2">
-      <div class="fl"><label>구매여부</label>
-        <select id="giftBuyMethod">
-          <option value="">선택</option><option>별도구매</option><option>코아구매</option><option>기보유함</option><option>미정</option>
-        </select>
-      </div>
-      <div class="fl"><label>확보수량</label><input id="giftQty" type="number" placeholder="0"/></div>
-    </div>
-    <div class="r2">
-      <div class="fl"><label>현재 확보 여부</label>
-        <select id="giftSecured">
-          <option value="">미확보</option><option value="true">확보</option>
-        </select>
-      </div>
-      <div class="fl"><label>비고</label><input id="giftNote" placeholder="메모"/></div>
-    </div>
-    <div class="mbtns">
-      <button class="btn" onclick="closeModal('modalGift')">취소</button>
-      <button class="btn btn-primary" onclick="saveGift()">저장</button>
-    </div>
-  </div></div>
 
 </body>
 </html>
