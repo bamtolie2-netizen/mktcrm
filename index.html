@@ -1614,6 +1614,8 @@ tr:hover .td-act{opacity:1}
   <div class="page" id="page-chinsuk">
     <div class="inner-tabs">
       <div class="inner-tab on" id="chtab-list"   onclick="showChinsukTab('list')">배포 리스트</div>
+      <div class="inner-tab"   id="chtab-gifts"   onclick="showChinsukTab('gifts')">선물 리스트</div>
+      <div class="inner-tab"   id="chtab-bumi"    onclick="showChinsukTab('bumi')">품의서</div>
       <div class="inner-tab"   id="chtab-summary" onclick="showChinsukTab('summary')">현황 요약</div>
     </div>
 
@@ -1656,6 +1658,57 @@ tr:hover .td-act{opacity:1}
     <!-- 현황 요약 -->
     <div id="chview-summary" class="pscroll" style="display:none">
       <div class="grid3" id="chinsukSummaryCards"></div>
+    </div>
+
+    <!-- 선물 리스트 -->
+    <div id="chview-gifts" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">선물 리스트</span>
+          <div style="display:flex;gap:7px;align-items:center">
+            <select id="chGiftEventFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="loadChinsukGifts()">
+              <option value="">행사 선택</option>
+            </select>
+            <button class="btn btn-sm btn-primary" onclick="openGiftModal()">+ 선물 추가</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="ltbl">
+            <thead><tr>
+              <th>no.</th><th>선물명</th><th>온라인판매가</th><th>구매여부</th>
+              <th>확보수량</th><th>현재확보</th><th>비고</th><th>소계</th><th></th>
+            </tr></thead>
+            <tbody id="giftsTbody"></tbody>
+            <tfoot id="giftsFoot"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 품의서 -->
+    <div id="chview-bumi" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">품의서 생성</span>
+          <button class="btn btn-sm btn-primary" onclick="downloadBumi()">📤 품의서 엑셀 다운</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="fl"><label>행사명 *</label>
+            <select id="bumiEventSel" style="font-size:13px;padding:7px 9px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%" onchange="loadBumiPreview()">
+              <option value="">행사 선택</option>
+            </select>
+          </div>
+          <div class="fl"><label>기안일</label><input id="bumiDate" type="date"/></div>
+          <div class="fl"><label>구매처</label><input id="bumiVendor" placeholder="예) 롯데마트"/></div>
+          <div class="fl"><label>결제방법</label><input id="bumiPayment" placeholder="예) 카드결제"/></div>
+          <div class="fl" style="grid-column:1/-1"><label>구매목적</label><input id="bumiPurpose" placeholder="예) 고객사 전달용 추석 선물 구매"/></div>
+        </div>
+        <!-- 미리보기 -->
+        <div style="border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden">
+          <div style="padding:10px 14px;background:var(--bg2);font-size:12px;font-weight:600;color:var(--text2)">품의서 미리보기</div>
+          <div id="bumiPreview" style="padding:14px;font-size:13px;line-height:2"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1710,6 +1763,36 @@ tr:hover .td-act{opacity:1}
     <div class="mbtns">
       <button class="btn" onclick="closeModal('modalChinsukExcel')">취소</button>
       <button class="btn btn-primary" id="chUploadSaveBtn" onclick="saveChinsukUpload()" style="display:none">💾 저장</button>
+    </div>
+  </div></div>
+
+  <!-- 선물 추가 모달 -->
+  <div class="mbg" id="modalGift"><div class="modal" style="max-width:460px">
+    <h3 id="giftModalTitle">선물 추가</h3>
+    <div class="fl"><label>행사명 *</label><input id="giftEvent" placeholder="예) 2026년 구정 친숙자료"/></div>
+    <div class="r2">
+      <div class="fl"><label>선물명 *</label><input id="giftName" placeholder="예) 세트 1 - 동원참치"/></div>
+      <div class="fl"><label>온라인판매가 (원)</label><input id="giftPrice" type="number" placeholder="47920"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>구매여부</label>
+        <select id="giftBuyMethod">
+          <option value="">선택</option><option>별도구매</option><option>코아구매</option><option>기보유함</option><option>미정</option>
+        </select>
+      </div>
+      <div class="fl"><label>확보수량</label><input id="giftQty" type="number" placeholder="0"/></div>
+    </div>
+    <div class="r2">
+      <div class="fl"><label>현재 확보 여부</label>
+        <select id="giftSecured">
+          <option value="">미확보</option><option value="true">확보</option>
+        </select>
+      </div>
+      <div class="fl"><label>비고</label><input id="giftNote" placeholder="메모"/></div>
+    </div>
+    <div class="mbtns">
+      <button class="btn" onclick="closeModal('modalGift')">취소</button>
+      <button class="btn btn-primary" onclick="saveGift()">저장</button>
     </div>
   </div></div>
 
@@ -3327,10 +3410,12 @@ async function refreshChinsukEvents() {
 }
 
 function showChinsukTab(t) {
-  ['list','summary'].forEach(id => {
+  ['list','gifts','bumi','summary'].forEach(id => {
     document.getElementById('chview-'+id).style.display = id===t ? 'flex' : 'none'
     document.getElementById('chtab-'+id).classList.toggle('on', id===t)
   })
+  if (t==='gifts')   loadChinsukGifts()
+  if (t==='bumi')    initBumi()
   if (t==='summary') renderChinsukSummary()
 }
 
@@ -3571,6 +3656,265 @@ function downloadChinsukExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), '배포리스트')
   const event = document.getElementById('chEventFilter')?.value
   XLSX.writeFile(wb, '친숙자료_'+(event||'전체')+'_'+new Date().toISOString().slice(0,10)+'.xlsx')
+}
+
+// -- 선물 리스트 --
+let chinsukGifts = []
+let editingGiftId = null
+
+async function loadChinsukGifts() {
+  // 행사 목록 동기화
+  await refreshChinsukEvents()
+  const giftSel = document.getElementById('chGiftEventFilter')
+  if (giftSel) {
+    const events = [...document.getElementById('chEventFilter').options].map(o=>o.value).filter(Boolean)
+    const cur = giftSel.value
+    giftSel.innerHTML = '<option value="">행사 선택</option>' + events.map(ev=>`<option value="${e(ev)}"${cur===ev?' selected':''}>${e(ev)}</option>`).join('')
+  }
+  const event = giftSel?.value
+  let q = sb.from('chinsuk_gifts').select('*').order('created_at', { ascending: true })
+  if (event) q = q.eq('event_name', event)
+  const { data } = await q
+  chinsukGifts = data || []
+  renderChinsukGifts()
+}
+
+function renderChinsukGifts() {
+  const tbody = document.getElementById('giftsTbody')
+  const tfoot = document.getElementById('giftsFoot')
+  if (!tbody) return
+
+  let totalQty = 0, totalAmt = 0
+
+  tbody.innerHTML = chinsukGifts.map((g, i) => {
+    const subtotal = (g.price||0) * (g.qty||0)
+    totalQty += (g.qty||0)
+    totalAmt += subtotal
+    return `<tr>
+      <td style="color:var(--text3);font-size:12px">${i+1}</td>
+      <td style="font-weight:500">${e(g.name)}</td>
+      <td style="text-align:right;font-size:12px">${(g.price||0).toLocaleString()}원</td>
+      <td style="font-size:12px">${e(g.buy_method||'-')}</td>
+      <td style="text-align:right;font-size:12px">${g.qty||0}</td>
+      <td style="text-align:center">
+        <input type="checkbox" ${g.secured?'checked':''} onchange="toggleGiftSecured('${g.id}',this.checked)" style="cursor:pointer"/>
+      </td>
+      <td style="font-size:11px;color:var(--text2)">${e(g.note||'')}</td>
+      <td style="text-align:right;font-size:12px;font-weight:500">${subtotal?subtotal.toLocaleString()+' 원':'-'}</td>
+      <td><div class="td-act">
+        <button class="btn btn-xs" onclick="openGiftModal('${g.id}')">수정</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteGift('${g.id}')">삭제</button>
+      </div></td>
+    </tr>`
+  }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:16px">선물이 없어요</td></tr>'
+
+  if (tfoot) tfoot.innerHTML = `<tr style="font-weight:700;background:var(--bg2)">
+    <td colspan="4">합계</td>
+    <td style="text-align:right">${totalQty}</td>
+    <td></td><td></td>
+    <td style="text-align:right">${totalAmt.toLocaleString()} 원</td>
+    <td></td>
+  </tr>`
+}
+
+function openGiftModal(id) {
+  editingGiftId = id || null
+  document.getElementById('giftModalTitle').textContent = id ? '선물 수정' : '선물 추가'
+  const event = document.getElementById('chGiftEventFilter')?.value
+  if (id) {
+    const g = chinsukGifts.find(x=>x.id===id); if(!g) return
+    document.getElementById('giftEvent').value = g.event_name||''
+    document.getElementById('giftName').value = g.name||''
+    document.getElementById('giftPrice').value = g.price||''
+    document.getElementById('giftBuyMethod').value = g.buy_method||''
+    document.getElementById('giftQty').value = g.qty||''
+    document.getElementById('giftSecured').value = g.secured ? 'true' : ''
+    document.getElementById('giftNote').value = g.note||''
+  } else {
+    document.getElementById('giftEvent').value = event||''
+    document.getElementById('giftName').value = ''
+    document.getElementById('giftPrice').value = ''
+    document.getElementById('giftBuyMethod').value = ''
+    document.getElementById('giftQty').value = ''
+    document.getElementById('giftSecured').value = ''
+    document.getElementById('giftNote').value = ''
+  }
+  openModal('modalGift')
+}
+
+async function saveGift() {
+  const event = document.getElementById('giftEvent').value.trim()
+  const name  = document.getElementById('giftName').value.trim()
+  if (!event||!name) { alert('행사명과 선물명을 입력하세요'); return }
+  const p = {
+    event_name: event,
+    name,
+    price:      parseInt(document.getElementById('giftPrice').value)||0,
+    buy_method: document.getElementById('giftBuyMethod').value,
+    qty:        parseInt(document.getElementById('giftQty').value)||0,
+    secured:    document.getElementById('giftSecured').value === 'true',
+    note:       document.getElementById('giftNote').value.trim()
+  }
+  if (editingGiftId) {
+    await sb.from('chinsuk_gifts').update(p).eq('id', editingGiftId)
+    const i = chinsukGifts.findIndex(x=>x.id===editingGiftId); if(i>=0) chinsukGifts[i]={...chinsukGifts[i],...p}
+  } else {
+    const { data } = await sb.from('chinsuk_gifts').insert(p).select().single()
+    if (data) chinsukGifts.push(data)
+  }
+  closeModal('modalGift'); renderChinsukGifts()
+}
+
+async function toggleGiftSecured(id, secured) {
+  await sb.from('chinsuk_gifts').update({ secured }).eq('id', id)
+  const g = chinsukGifts.find(x=>x.id===id); if(g) g.secured = secured
+}
+
+async function deleteGift(id) {
+  if (!confirm('삭제할까요?')) return
+  await sb.from('chinsuk_gifts').delete().eq('id', id)
+  chinsukGifts = chinsukGifts.filter(x=>x.id!==id)
+  renderChinsukGifts()
+}
+
+// -- 품의서 --
+async function initBumi() {
+  // 행사 목록
+  const sel = document.getElementById('bumiEventSel')
+  if (!sel) return
+  const events = [...document.getElementById('chEventFilter').options].map(o=>o.value).filter(Boolean)
+  const cur = sel.value
+  sel.innerHTML = '<option value="">행사 선택</option>' + events.map(ev=>`<option value="${e(ev)}"${cur===ev?' selected':''}>${e(ev)}</option>`).join('')
+  // 기본값
+  if (!document.getElementById('bumiDate').value)
+    document.getElementById('bumiDate').value = new Date().toISOString().slice(0,10)
+  loadBumiPreview()
+}
+
+async function loadBumiPreview() {
+  const event = document.getElementById('bumiEventSel')?.value
+  const vendor  = document.getElementById('bumiVendor')?.value || '구매처 미입력'
+  const payment = document.getElementById('bumiPayment')?.value || '카드결제'
+  const purpose = document.getElementById('bumiPurpose')?.value || '고객사 전달용 명절 선물 구매'
+  const dateVal = document.getElementById('bumiDate')?.value || new Date().toISOString().slice(0,10)
+  const [y,m,d] = dateVal.split('-')
+  const dateStr = `${y} 年 - ${m}月 - ${d}日`
+
+  let giftsHtml = '<div style="color:var(--text3);font-size:12px">행사를 선택하면 선물 내역이 표시됩니다</div>'
+  let totalAmt = 0
+
+  if (event) {
+    const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event)
+    if (gifts && gifts.length) {
+      const rows = gifts.map((g,i) => {
+        const sub = (g.price||0)*(g.qty||0)
+        totalAmt += sub
+        return `<tr>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${vendor}</td>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${e(g.name)}</td>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right">${(g.price||0).toLocaleString()}</td>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right">${g.qty||0}</td>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right;font-weight:600">${sub.toLocaleString()}</td>
+          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${e(g.note||'')}</td>
+        </tr>`
+      }).join('')
+      giftsHtml = `<table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:var(--bg2)">
+          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:left">구매처</th>
+          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:left">제품명</th>
+          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">단가</th>
+          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">수량</th>
+          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">소계</th>
+          <th style="padding:6px 8px;border:0.5px solid var(--bd)">비고</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr style="background:var(--bg2);font-weight:700">
+          <td colspan="3" style="padding:6px 8px;border:0.5px solid var(--bd)">합계</td>
+          <td style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">${gifts.reduce((s,g)=>s+(g.qty||0),0)}</td>
+          <td style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">${totalAmt.toLocaleString()}</td>
+          <td style="padding:6px 8px;border:0.5px solid var(--bd)">${payment}</td>
+        </tr></tfoot>
+      </table>`
+    }
+  }
+
+  document.getElementById('bumiPreview').innerHTML = `
+    <div style="font-size:13px;line-height:2.2">
+      <b>起案日字:</b> ${dateStr}<br>
+      <b>題 目:</b> ${e(event||'행사명 미입력')} 선물 구매의 件<br>
+      <br>아래와 같이 품의드리오니 재가하여주시기 바랍니다.<br><br>
+      <b>1. 구매처:</b> ${e(vendor)}<br>
+      <b>2. 구매금액:</b> ${totalAmt.toLocaleString()} 원 (${e(payment)})<br>
+      <b>3. 구매목적:</b> ${e(purpose)}<br>
+      <b>4. 구매 상세</b>
+    </div>
+    <div style="margin-top:10px">${giftsHtml}</div>`
+}
+
+async function downloadBumi() {
+  if (typeof XLSX === 'undefined') { alert('엑셀 라이브러리 로딩 중'); return }
+  const event   = document.getElementById('bumiEventSel')?.value
+  if (!event) { alert('행사를 선택하세요'); return }
+  const vendor  = document.getElementById('bumiVendor')?.value || '구매처'
+  const payment = document.getElementById('bumiPayment')?.value || '카드결제'
+  const purpose = document.getElementById('bumiPurpose')?.value || '고객사 전달용 명절 선물 구매'
+  const dateVal = document.getElementById('bumiDate')?.value || new Date().toISOString().slice(0,10)
+  const [y,m,d] = dateVal.split('-')
+
+  const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event)
+  if (!gifts?.length) { alert('선물 리스트가 없어요'); return }
+
+  const totalAmt = gifts.reduce((s,g)=>s+(g.price||0)*(g.qty||0), 0)
+  const totalQty = gifts.reduce((s,g)=>s+(g.qty||0), 0)
+
+  const wb = XLSX.utils.book_new()
+
+  // ── 품의서 시트
+  const rows = [
+    [null,null,null,null,null,null,null,'對外秘',null],
+    [null,null,null,null,null,null,null,null,'슈어엠'],
+    ['監査',null,null,null,null,'起案','確認','審査','決定'],
+    [null,null,null,null,null,null,null,null,null],
+    ['起案日字', `${y} 年 - ${m}月 - ${d}日`],
+    ['保存期限', '5年'],
+    ['合 意'],
+    ['題 目', `${event} 선물 구매의 件`],
+    [],
+    ['아래와 같이 품의드리오니 재가하여주시기 바랍니다.'],
+    [],
+    ['- 아 래 -'],
+    [],
+    [`1. 구매처 : ${vendor}`],
+    [`2. 구매금액 : ${totalAmt.toLocaleString()} 원 (${payment})`],
+    [`3. 구매목적 : ${purpose}`],
+    ['4. 구매 상세'],
+    ['업체','제품명',null,'가격','구매수량','소계','비고'],
+    ...gifts.map(g=>[vendor, g.name, null, g.price||0, g.qty||0, (g.price||0)*(g.qty||0), g.note||'']),
+    ['합계',null,null,null,totalQty,totalAmt,payment],
+    [],
+    [],
+    [],
+    ['- 이 상 -']
+  ]
+
+  const ws1 = XLSX.utils.aoa_to_sheet(rows)
+  ws1['!cols'] = [{wch:12},{wch:20},{wch:4},{wch:10},{wch:8},{wch:12},{wch:12},{wch:6},{wch:6}]
+  XLSX.utils.book_append_sheet(wb, ws1, '품의서')
+
+  // ── 선물리스트 시트
+  const giftRows = [
+    ['선물 구매 리스트 온라인 가격표'],
+    [],
+    ['no.','선물 명','온라인판매가(원)','구매여부','확보수량','현재 확보여부','비고',null,'소계'],
+    ...gifts.map((g,i)=>[i+1, g.name, g.price||0, g.buy_method||'', g.qty||0, g.secured?'확보':'', g.note||'', null, (g.price||0)*(g.qty||0)]),
+    [],
+    ['합계',null,null,null,totalQty,null,null,null,totalAmt]
+  ]
+  const ws2 = XLSX.utils.aoa_to_sheet(giftRows)
+  ws2['!cols'] = [{wch:4},{wch:22},{wch:14},{wch:10},{wch:8},{wch:10},{wch:16},{wch:4},{wch:12}]
+  XLSX.utils.book_append_sheet(wb, ws2, '선물리스트')
+
+  XLSX.writeFile(wb, `품의서_${event}_${dateVal}.xlsx`)
 }
 
 // -- SETTINGS --
