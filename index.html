@@ -55,7 +55,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .btn-sm{font-size:12px;padding:5px 12px}
 .btn-xs{font-size:11px;padding:3px 9px}
 .btn-full{width:100%}
-.app{display:none;height:100vh;flex-direction:column;overflow:clip}
+.app{display:none;height:100vh;flex-direction:column;overflow:hidden}
 .top-nav{display:flex;align-items:center;border-bottom:0.5px solid var(--bd);background:var(--bg);flex-shrink:0;padding:0 12px;gap:0;overflow-x:auto}
 .nav-logo{font-size:14px;font-weight:700;margin-right:16px;color:var(--text);white-space:nowrap}
 .nav-tab{font-size:12px;padding:13px 12px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
@@ -65,7 +65,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .user-chip{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border-radius:20px;border:0.5px solid var(--bd);cursor:pointer;background:var(--bg2);white-space:nowrap}
 .user-chip:hover{background:var(--bg3)}
 .av{width:24px;height:24px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.page{display:none;flex:1;overflow:clip}
+.page{display:none;flex:1;overflow:hidden}
 .page.on{display:flex;flex-direction:column}
 .pscroll{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
 .card{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);padding:14px}
@@ -1798,6 +1798,9 @@ const ACT_ICON = {전화:'T',미팅:'M',메일:'E',기타:'O'}
 const ACT_BG   = {전화:'#E6F1FB',미팅:'#E1F5EE',메일:'#FAEEDA',기타:'#EEEDFE'}
 
 async function init() {
+  // 모든 모달 초기 상태 확보
+  document.querySelectorAll('.mbg').forEach(m => m.classList.remove('open'))
+
   const ym = new Date().toISOString().slice(0,7)
   document.getElementById('inputMonth').value = ym
   document.getElementById('historyMonth').value = ym
@@ -1867,6 +1870,8 @@ function switchUser() {
 }
 
 function showPage(p) {
+  // 열린 모달 전부 닫기
+  document.querySelectorAll('.mbg.open').forEach(m => m.classList.remove('open'))
   ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings'].forEach(id => {
     document.getElementById('page-'+id).classList.toggle('on', id===p)
     document.getElementById('nav-'+id).classList.toggle('on', id===p)
