@@ -2194,11 +2194,13 @@ function switchUser() {
 }
 
 function showPage(p) {
-  // 열린 모달 전부 닫기
-  document.querySelectorAll('.mbg.open').forEach(m => m.classList.remove('open'))
-  ;['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings'].forEach(id => {
-    document.getElementById('page-'+id).classList.toggle('on', id===p)
-    document.getElementById('nav-'+id).classList.toggle('on', id===p)
+  document.querySelectorAll('.mbg.open').forEach(function(m){ m.classList.remove('open') })
+  var pages = ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings']
+  pages.forEach(function(id) {
+    var pg = document.getElementById('page-'+id)
+    var nv = document.getElementById('nav-'+id)
+    if (pg) pg.classList.toggle('on', id===p)
+    if (nv) nv.classList.toggle('on', id===p)
   })
   if (p==='dash') renderDashboard()
   if (p==='outbound') { renderCampTable(); renderOutboundList() }
