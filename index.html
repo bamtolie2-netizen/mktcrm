@@ -2196,7 +2196,7 @@ function switchUser() {
 function showPage(p) {
   // 열린 모달 전부 닫기
   document.querySelectorAll('.mbg.open').forEach(m => m.classList.remove('open'))
-  ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings'].forEach(id => {
+  ;['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings'].forEach(id => {
     document.getElementById('page-'+id).classList.toggle('on', id===p)
     document.getElementById('nav-'+id).classList.toggle('on', id===p)
   })
