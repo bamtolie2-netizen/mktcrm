@@ -1622,57 +1622,67 @@ tr:hover .td-act{opacity:1}
     <!-- 배포 리스트 -->
     <div id="chview-list" class="pscroll">
       <div class="card">
-        <div class="sec-hd">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span class="sec-title">친숙자료 배포 관리</span>
-            <span style="font-size:11px;color:var(--text3)" id="chinsukEventLabel"></span>
-            <!-- 입력 모드 토글 -->
-            <div style="display:flex;border:0.5px solid var(--bd2);border-radius:var(--r);overflow:hidden;font-size:11px">
-              <button id="chModeView" onclick="setChinsukMode('view')" style="padding:3px 10px;background:var(--text);color:var(--bg);border:none;cursor:pointer">조회</button>
-              <button id="chModeEdit" onclick="setChinsukMode('edit')" style="padding:3px 10px;background:transparent;color:var(--text2);border:none;cursor:pointer">등급·선물 선택</button>
-            </div>
+        <!-- 상단 필터 바 -->
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+          <div style="display:flex;gap:4px;align-items:center">
+            <select id="chEventFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;max-width:180px" onchange="loadChinsuk()">
+              <option value="">행사 선택</option>
+            </select>
+            <button class="btn btn-xs btn-danger" onclick="deleteChinsukEvent()" title="행사 삭제">🗑</button>
           </div>
-          <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
-            <div style="display:flex;gap:4px;align-items:center">
-              <select id="chEventFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="loadChinsuk()">
-                <option value="">행사 선택</option>
-              </select>
-              <button class="btn btn-xs btn-danger" onclick="deleteChinsukEvent()" title="행사 전체 삭제">🗑</button>
-            </div>
-            <select id="chMemberFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
-              <option value="">전체 담당자</option>
-            </select>
-            <select id="chMethodFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
-              <option value="">전체</option><option>직접전달</option><option>배송</option><option>거절</option>
-            </select>
-            <select id="chGradeFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
-              <option value="">전체등급</option><option>A</option><option>B</option><option>C</option>
-            </select>
-            <button class="btn btn-sm btn-primary" onclick="openChinsukModal()">+ 추가</button>
-            <button class="btn btn-sm" onclick="openChinsukExcelModal()">📥 엑셀 업로드</button>
-            <button class="btn btn-sm" onclick="downloadChinsukExcel()">📤 엑셀 다운</button>
+          <!-- 통합 검색 -->
+          <input id="chSearchInput" placeholder="🔍 업체명 / 담당자 검색" oninput="renderChinsuk()"
+            style="font-size:12px;padding:4px 10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:160px"/>
+          <!-- 필터 드롭다운들 -->
+          <select id="chMemberFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+            <option value="">전체 담당자</option>
+          </select>
+          <select id="chMethodFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+            <option value="">전달방법 전체</option><option>직접전달</option><option>배송</option><option>거절</option>
+          </select>
+          <select id="chGradeFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+            <option value="">전체등급</option><option>A</option><option>B</option><option>C</option>
+          </select>
+          <select id="chDoneFilter" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderChinsuk()">
+            <option value="">완료여부 전체</option><option value="done">완료만</option><option value="undone">미완료만</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+            <span id="chSelectedCount" style="font-size:11px;color:var(--text3)"></span>
             <button class="btn btn-sm btn-danger" onclick="deleteChinsukSelected()">선택 삭제</button>
             <button class="btn btn-sm btn-danger" onclick="deleteChinsukAll()" style="opacity:.7">전체 삭제</button>
-            <span id="chSelectedCount" style="font-size:11px;color:var(--text3)"></span>
+            <button class="btn btn-sm" onclick="openChinsukExcelModal()">📥 업로드</button>
+            <button class="btn btn-sm" onclick="downloadChinsukExcel()">📤 다운</button>
+            <button class="btn btn-sm btn-primary" onclick="addChinsukRow()">+ 행 추가</button>
           </div>
         </div>
+        <!-- 테이블 -->
         <div class="tbl-wrap">
           <table class="ltbl" id="chinsukTable">
-            <thead id="chinsukThead"><tr>
-              <th style="width:32px"></th>
-              <th>업체명</th><th>담당자</th><th>전화번호</th>
-              <th>등급</th><th>전달방법</th><th>선물</th><th>비고</th>
-              <th>전달일</th><th>대상자</th><th>주소</th><th>담당</th>
-              <th>완료</th><th></th>
-            </tr></thead>
+            <thead id="chinsukThead">
+              <tr>
+                <th style="width:28px"><input type="checkbox" id="chSelectAll" onchange="toggleChinsukSelectAll(this.checked)" style="cursor:pointer"/></th>
+                <th class="ch-sort" data-col="company" style="cursor:pointer">업체명 <span class="sort-ic"></span></th>
+                <th class="ch-sort" data-col="contact_name" style="cursor:pointer">담당자 <span class="sort-ic"></span></th>
+                <th>전화번호</th>
+                <th class="ch-sort" data-col="grade" style="cursor:pointer">등급 <span class="sort-ic"></span></th>
+                <th class="ch-sort" data-col="method" style="cursor:pointer">전달방법 <span class="sort-ic"></span></th>
+                <th>선물</th>
+                <th>비고(대상자)</th>
+                <th class="ch-sort" data-col="delivery_at" style="cursor:pointer">전달일 <span class="sort-ic"></span></th>
+                <th>주소</th>
+                <th>담당</th>
+                <th style="width:40px">완료</th>
+                <th style="width:40px"></th>
+              </tr>
+            </thead>
             <tbody id="chinsukTbody"></tbody>
           </table>
         </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px" id="chinsukCount"></div>
       </div>
     </div>
 
-    <!-- 현황 요약 -->
-    <div id="chview-summary" class="pscroll" style="display:none">
+<div id="chview-summary" class="pscroll" style="display:none">
       <div class="grid3" id="chinsukSummaryCards"></div>
     </div>
 
@@ -3436,6 +3446,7 @@ async function loadChinsuk() {
   // 행사 목록 갱신
   await refreshChinsukEvents()
   renderChinsuk()
+  bindChinsukSort()
   renderChinsukSummary()
 }
 
@@ -3462,8 +3473,11 @@ async function deleteChinsukEvent() {
   renderChinsukSummary()
 }
 
+// 정렬 상태
+var chSortCol = '', chSortDir = 1
+
 function renderChinsuk() {
-  // 담당자 필터 셀렉트 갱신
+  // 담당자 필터 갱신
   const memberSel = document.getElementById('chMemberFilter')
   if (memberSel) {
     const cur = memberSel.value
@@ -3475,114 +3489,151 @@ function renderChinsuk() {
       }).join('')
   }
 
-  const method = document.getElementById('chMethodFilter')?.value
-  const grade  = document.getElementById('chGradeFilter')?.value
-  const member = document.getElementById('chMemberFilter')?.value
+  // 필터
+  const method  = document.getElementById('chMethodFilter')?.value || ''
+  const grade   = document.getElementById('chGradeFilter')?.value || ''
+  const member  = document.getElementById('chMemberFilter')?.value || ''
+  const search  = (document.getElementById('chSearchInput')?.value || '').toLowerCase()
+  const doneF   = document.getElementById('chDoneFilter')?.value || ''
+
   let list = chinsukData
-  if (method) list = list.filter(r=>r.method===method)
-  if (grade)  list = list.filter(r=>r.grade===grade)
-  if (member) list = list.filter(r=>r.assignee_id===member)
+  if (method) list = list.filter(r => r.method === method)
+  if (grade)  list = list.filter(r => r.grade === grade)
+  if (member) list = list.filter(r => r.assignee_id === member)
+  if (doneF === 'done')   list = list.filter(r => r.done)
+  if (doneF === 'undone') list = list.filter(r => !r.done)
+  if (search) list = list.filter(r =>
+    (r.company||'').toLowerCase().includes(search) ||
+    (r.contact_name||'').toLowerCase().includes(search)
+  )
 
-  const GRADE_COLOR  = {A:'b-blue',B:'b-green',C:'b-amber'}
-  const METHOD_COLOR = {직접전달:'b-purple',배송:'b-blue',거절:'b-red'}
-
-  if (chinsukMode === 'edit') {
-    // 선물 목록 (행사에 등록된 것)
-    const giftOpts = chinsukGifts.length
-      ? chinsukGifts.map(g=>`<option value="${e(g.name)}">${e(g.name)}</option>`).join('')
-      : ''
-    const gradeOpts = ['','A','B','C'].map(g=>`<option value="${g}">${g||'미정'}</option>`).join('')
-    const methodOpts = ['','직접전달','배송','거절'].map(m=>`<option value="${m}">${m||'미정'}</option>`).join('')
-
-    document.getElementById('chinsukThead').innerHTML = `<tr>
-      <th style="width:32px"></th>
-      <th>업체명</th><th>담당자</th><th>등급</th><th>전달방법</th><th>선물</th><th>비고</th><th>대상자</th><th>주소</th><th>저장</th>
-    </tr>`
-
-    document.getElementById('chinsukTbody').innerHTML = list.map(r => `
-      <tr>
-        <td></td>
-        <td style="font-weight:500">${e(r.company||'-')}</td>
-        <td style="font-size:12px">${e(r.contact_name||'-')}</td>
-        <td>
-          <select data-id="${r.id}" data-field="grade" onchange="saveChinsukInline(this.dataset.id,'grade',this.value)"
-            style="font-size:12px;padding:3px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none">
-            ${gradeOpts.replace(`value="${e(r.grade||'')}"`, `value="${e(r.grade||'')}" selected`)}
-          </select>
-        </td>
-        <td>
-          <select data-id="${r.id}" data-field="method" onchange="saveChinsukInline(this.dataset.id,'method',this.value)"
-            style="font-size:12px;padding:3px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none">
-            ${methodOpts.replace(`value="${e(r.method||'')}"`, `value="${e(r.method||'')}" selected`)}
-          </select>
-        </td>
-        <td>
-          <select data-id="${r.id}" data-field="gift" onchange="saveChinsukInline(this.dataset.id,'gift',this.value)"
-            style="font-size:12px;padding:3px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;max-width:160px">
-            <option value="">미정</option>
-            ${giftOpts}
-            <option value="${e(r.gift||'')}"${!giftOpts||chinsukGifts.every(g=>g.name!==r.gift)?` selected`:``}>${r.gift?e(r.gift):'직접입력'}</option>
-          </select>
-        </td>
-        <td><input value="${e(r.note||'')}" onchange="saveChinsukInline('${r.id}','note',this.value)"
-          style="font-size:12px;padding:3px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100px"/></td>
-        <td><input value="${e(r.address||'')}" onchange="saveChinsukInline('${r.id}','address',this.value)"
-          style="font-size:12px;padding:3px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:140px"/></td>
-        <td><span style="font-size:10px;color:var(--green)">자동저장</span></td>
-      </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>'
-    return
+  // 정렬
+  if (chSortCol) {
+    list = [...list].sort((a, b) => {
+      const av = a[chSortCol] || '', bv = b[chSortCol] || ''
+      return av < bv ? -chSortDir : av > bv ? chSortDir : 0
+    })
   }
 
-  // 조회 모드
-  document.getElementById('chinsukThead').innerHTML = `<tr>
-    <th style="width:32px"><input type="checkbox" id="chSelectAll" onchange="toggleChinsukSelectAll(this.checked)" style="cursor:pointer"/></th>
-    <th>업체명</th><th>담당자</th><th>전화번호</th>
-    <th>등급</th><th>전달방법</th><th>선물</th><th>비고</th>
-    <th>전달일</th><th>대상자</th><th>주소</th><th>담당</th>
-    <th>완료</th><th></th>
-  </tr>`
+  // 정렬 아이콘 업데이트
+  document.querySelectorAll('.ch-sort .sort-ic').forEach(el => el.textContent = '')
+  if (chSortCol) {
+    const th = document.querySelector(`.ch-sort[data-col="${chSortCol}"] .sort-ic`)
+    if (th) th.textContent = chSortDir === 1 ? ' ▲' : ' ▼'
+  }
 
-  let chSelectedIds = window.chSelectedIds || new Set()
-  window.chSelectedIds = chSelectedIds
+  // 선물 옵션
+  const giftOpts = chinsukGifts.map(g => `<option value="${e(g.name)}">${e(g.name)}</option>`).join('')
+  const SEL_STYLE = 'font-size:11px;padding:2px 4px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%'
+  const INP_STYLE = 'font-size:11px;padding:2px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%'
 
-  document.getElementById('chinsukTbody').innerHTML = list.map(r => {
-    const u = allUsers.find(x=>x.id===r.assignee_id)
+  if (!window.chSelectedIds) window.chSelectedIds = new Set()
+  const chSelectedIds = window.chSelectedIds
+
+  document.getElementById('chinsukTbody').innerHTML = list.length ? list.map(r => {
+    const u = allUsers.find(x => x.id === r.assignee_id)
     const checked = chSelectedIds.has(r.id)
-    return `<tr class="${r.done?'row-done':''}">
-      <td><input type="checkbox" class="ch-sel-cb" data-id="${r.id}" ${checked?'checked':''} onchange="onChinsukSelect(this)" style="cursor:pointer"/></td>
-      <td style="font-weight:500">${e(r.company||'-')}</td>
-      <td style="font-size:12px">${e(r.contact_name||'-')}</td>
-      <td style="font-size:12px">${e(r.phone||'-')}</td>
-      <td><span class="badge ${GRADE_COLOR[r.grade]||'b-gray'}">${e(r.grade||'-')}</span></td>
-      <td><span class="badge ${METHOD_COLOR[r.method]||'b-gray'}">${e(r.method||'-')}</span></td>
-      <td style="font-size:12px">${e(r.gift||'-')}</td>
-      <td style="font-size:11px;color:var(--text2)">${e(r.note||'-')}</td>
-      <td style="font-size:12px;white-space:nowrap">${r.delivery_at||'-'}</td>
-      <td style="font-size:11px;color:var(--text2)">${e(r.note||'-')}</td>
-      <td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(r.address||'')}</td>
-      <td style="font-size:12px">${u?e(u.name):'-'}</td>
-      <td style="text-align:center"><input type="checkbox" ${r.done?'checked':''} onchange="toggleChinsukDone('${r.id}',this.checked)" style="cursor:pointer"/></td>
-      <td><div class="td-act">
-        <button class="btn btn-xs" onclick="openChinsukModal('${r.id}')">수정</button>
-      </div></td>
-    </tr>`
-  }).join('') || '<tr><td colspan="14" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>'
+    const gradeOpts = ['','A','B','C'].map(g =>
+      `<option value="${g}"${r.grade===g?' selected':''}>${g||'-'}</option>`).join('')
+    const methodOpts = ['','직접전달','배송','거절'].map(m =>
+      `<option value="${m}"${r.method===m?' selected':''}>${m||'-'}</option>`).join('')
+    const giftOptsFull = `<option value="">-</option>${giftOpts}` +
+      (r.gift && !chinsukGifts.find(g=>g.name===r.gift) ? `<option value="${e(r.gift)}" selected>${e(r.gift)}</option>` : '')
+    const assigneeOpts = `<option value="">-</option>` +
+      allUsers.map(u2 => `<option value="${u2.id}"${r.assignee_id===u2.id?' selected':''}>${e(u2.name)}</option>`).join('')
 
-  // 전체선택 체크박스 동기화
+    return `<tr class="${r.done?'row-done':''}" data-id="${r.id}">
+      <td><input type="checkbox" class="ch-sel-cb" data-id="${r.id}" ${checked?'checked':''} onchange="onChinsukSelect(this)" style="cursor:pointer"/></td>
+      <td><input value="${e(r.company||'')}" onchange="saveChinsukInline('${r.id}','company',this.value)" style="${INP_STYLE};font-weight:500"/></td>
+      <td><input value="${e(r.contact_name||'')}" onchange="saveChinsukInline('${r.id}','contact_name',this.value)" style="${INP_STYLE}"/></td>
+      <td><input value="${e(r.phone||'')}" onchange="saveChinsukInline('${r.id}','phone',this.value)" style="${INP_STYLE}"/></td>
+      <td><select onchange="saveChinsukInline('${r.id}','grade',this.value)" style="${SEL_STYLE}">${gradeOpts}</select></td>
+      <td><select onchange="saveChinsukInline('${r.id}','method',this.value)" style="${SEL_STYLE}">${methodOpts}</select></td>
+      <td><select onchange="saveChinsukInline('${r.id}','gift',this.value)" style="${SEL_STYLE};min-width:110px">${giftOptsFull.includes('selected') ? giftOptsFull : giftOptsFull.replace(`value="${e(r.gift||'')}"`,`value="${e(r.gift||'')}" selected`)}</select></td>
+      <td><input value="${e(r.note||'')}" onchange="saveChinsukInline('${r.id}','note',this.value)" style="${INP_STYLE}" placeholder="대상자"/></td>
+      <td><input type="date" value="${r.delivery_at||''}" onchange="saveChinsukInline('${r.id}','delivery_at',this.value)" style="${INP_STYLE}"/></td>
+      <td><input value="${e(r.address||'')}" onchange="saveChinsukInline('${r.id}','address',this.value)" style="${INP_STYLE};min-width:120px"/></td>
+      <td><select onchange="saveChinsukInline('${r.id}','assignee_id',this.value)" style="${SEL_STYLE}">${assigneeOpts}</select></td>
+      <td style="text-align:center"><input type="checkbox" ${r.done?'checked':''} onchange="toggleChinsukDone('${r.id}',this.checked)" style="cursor:pointer"/></td>
+      <td><button class="btn btn-xs btn-danger" onclick="deleteChinsuk('${r.id}')">✕</button></td>
+    </tr>`
+  }).join('') : '<tr><td colspan="13" style="text-align:center;color:var(--text3);padding:20px">데이터가 없어요</td></tr>'
+
+  // 전체선택 동기화
   const allSel = document.getElementById('chSelectAll')
   if (allSel) allSel.checked = list.length > 0 && list.every(r => chSelectedIds.has(r.id))
   updateChinsukSelCount()
+
+  // 건수 표시
+  const countEl = document.getElementById('chinsukCount')
+  if (countEl) countEl.textContent = `전체 ${chinsukData.length}건 중 ${list.length}건 표시`
+}
+
+// 헤더 정렬 이벤트 — loadChinsuk 후 바인딩
+function bindChinsukSort() {
+  document.querySelectorAll('#chinsukThead .ch-sort').forEach(th => {
+    th.onclick = function() {
+      const col = this.dataset.col
+      if (chSortCol === col) chSortDir *= -1
+      else { chSortCol = col; chSortDir = 1 }
+      renderChinsuk()
+    }
+  })
+}
+
+// 빈 행 추가
+function addChinsukRow() {
+  const event = document.getElementById('chEventFilter')?.value
+  if (!event) { alert('먼저 행사를 선택하세요'); return }
+  const newRow = {
+    id: 'new_' + Date.now(),
+    event_name: event,
+    company: '', contact_name: '', phone: '', grade: '', method: '',
+    gift: '', note: '', address: '', delivery_at: null, done: false,
+    assignee_id: currentUser?.id || null,
+    _isNew: true
+  }
+  chinsukData.unshift(newRow)
+  renderChinsuk()
+  // 첫 번째 input 포커스
+  setTimeout(() => {
+    const firstInput = document.querySelector('#chinsukTbody tr:first-child input[type="text"], #chinsukTbody tr:first-child input:not([type])')
+    if (firstInput) firstInput.focus()
+  }, 50)
+}
+
+async function saveChinsukInline(id, field, value) {
+  const r = chinsukData.find(x => x.id === id)
+  if (!r) return
+  if (r._isNew) {
+    // 새 행 — 첫 저장 시 DB insert
+    r[field] = value
+    if (r.company) {
+      const { data } = await sb.from('chinsuk').insert({
+        event_name: r.event_name, company: r.company,
+        contact_name: r.contact_name, phone: r.phone,
+        grade: r.grade, method: r.method, gift: r.gift,
+        note: r.note, address: r.address, delivery_at: r.delivery_at,
+        assignee_id: r.assignee_id, done: r.done
+      }).select().single()
+      if (data) {
+        const idx = chinsukData.findIndex(x => x.id === id)
+        chinsukData[idx] = data
+      }
+    }
+  } else {
+    r[field] = value
+    await sb.from('chinsuk').update({ [field]: value }).eq('id', id)
+  }
 }
 
 function onChinsukSelect(cb) {
-  const id = cb.dataset.id
   if (!window.chSelectedIds) window.chSelectedIds = new Set()
-  cb.checked ? window.chSelectedIds.add(id) : window.chSelectedIds.delete(id)
+  cb.checked ? window.chSelectedIds.add(cb.dataset.id) : window.chSelectedIds.delete(cb.dataset.id)
   updateChinsukSelCount()
-  // 전체선택 동기화
   const allCbs = document.querySelectorAll('.ch-sel-cb')
   const allSel = document.getElementById('chSelectAll')
-  if (allSel) allSel.checked = allCbs.length > 0 && [...allCbs].every(c=>c.checked)
+  if (allSel) allSel.checked = allCbs.length > 0 && [...allCbs].every(c => c.checked)
 }
 
 function toggleChinsukSelectAll(checked) {
@@ -3597,14 +3648,15 @@ function toggleChinsukSelectAll(checked) {
 function updateChinsukSelCount() {
   const cnt = window.chSelectedIds ? window.chSelectedIds.size : 0
   const el = document.getElementById('chSelectedCount')
-  if (el) el.textContent = cnt > 0 ? cnt + '개 선택됨' : ''
+  if (el) el.textContent = cnt > 0 ? cnt + '개 선택' : ''
 }
 
 async function deleteChinsukSelected() {
   const ids = window.chSelectedIds ? [...window.chSelectedIds] : []
   if (!ids.length) { alert('선택된 항목이 없어요'); return }
   if (!confirm(`선택한 ${ids.length}개를 삭제할까요?`)) return
-  await sb.from('chinsuk').delete().in('id', ids)
+  const realIds = ids.filter(id => !String(id).startsWith('new_'))
+  if (realIds.length) await sb.from('chinsuk').delete().in('id', realIds)
   chinsukData = chinsukData.filter(r => !ids.includes(r.id))
   window.chSelectedIds = new Set()
   renderChinsuk(); renderChinsukSummary()
@@ -3612,18 +3664,17 @@ async function deleteChinsukSelected() {
 
 async function deleteChinsukAll() {
   const event = document.getElementById('chEventFilter')?.value
-  const msg = event ? `"${event}" 행사의 전체 데이터를 삭제할까요?` : '필터된 전체 데이터를 삭제할까요?'
-  if (!confirm(msg)) return
-  const ids = chinsukData.map(r=>r.id)
-  if (!ids.length) return
-  await sb.from('chinsuk').delete().in('id', ids)
+  if (!confirm((event ? `"${event}" 행사` : '현재 필터') + '의 전체 데이터를 삭제할까요?')) return
+  const ids = chinsukData.map(r => r.id).filter(id => !String(id).startsWith('new_'))
+  if (ids.length) await sb.from('chinsuk').delete().in('id', ids)
   chinsukData = []
   window.chSelectedIds = new Set()
   renderChinsuk(); renderChinsukSummary()
 }
 
 function showChinsukTab(t) {
-  ['list','gifts','bumi','summary'].forEach(id => {
+  var tabs = ['list','gifts','bumi','summary']
+  tabs.forEach(function(id) {
     document.getElementById('chview-'+id).style.display = id===t ? 'flex' : 'none'
     document.getElementById('chtab-'+id).classList.toggle('on', id===t)
   })
@@ -3632,6 +3683,7 @@ function showChinsukTab(t) {
   if (t==='summary') renderChinsukSummary()
 }
 
+function setChinsukMode(mode) {} // 호환성 유지용 빈 함수
 
 
 function renderChinsukSummary() {
