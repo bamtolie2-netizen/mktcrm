@@ -4234,22 +4234,6 @@ function printBumi() {
 
 
 
-  // ── 선물리스트 시트
-  const giftRows = [
-    ['선물 구매 리스트 온라인 가격표'],
-    [],
-    ['no.','선물 명','온라인판매가(원)','구매여부','확보수량','현재 확보여부','비고',null,'소계'],
-    ...gifts.map((g,i)=>[i+1, g.name, g.price||0, g.buy_method||'', g.qty||0, g.secured?'확보':'', g.note||'', null, (g.price||0)*(g.qty||0)]),
-    [],
-    ['합계',null,null,null,totalQty,null,null,null,totalAmt]
-  ]
-  const ws2 = XLSX.utils.aoa_to_sheet(giftRows)
-  ws2['!cols'] = [{wch:4},{wch:22},{wch:14},{wch:10},{wch:8},{wch:10},{wch:16},{wch:4},{wch:12}]
-  XLSX.utils.book_append_sheet(wb, ws2, '선물리스트')
-
-  XLSX.writeFile(wb, `품의서_${event}_${dateVal}.xlsx`)
-}
-
 // -- SETTINGS --
 const API_KEY_STORAGE = 'crm_anthropic_key'
 
