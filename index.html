@@ -1713,29 +1713,37 @@ tr:hover .td-act{opacity:1}
 
     <!-- 품의서 -->
     <div id="chview-bumi" class="pscroll" style="display:none">
-      <div class="card">
-        <div class="sec-hd">
-          <span class="sec-title">품의서 생성</span>
-          <button class="btn btn-sm btn-primary" onclick="downloadBumi()">📤 품의서 엑셀 다운</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="fl"><label>행사명 *</label>
-            <select id="bumiEventSel" style="font-size:13px;padding:7px 9px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%" onchange="loadBumiPreview()">
-              <option value="">행사 선택</option>
-            </select>
+      <!-- 좌측: 입력 패널 -->
+      <div style="display:flex;gap:16px;align-items:flex-start;flex:1">
+        <div style="width:260px;flex-shrink:0">
+          <div class="card" style="position:sticky;top:0">
+            <div class="sec-title" style="margin-bottom:12px">품의서 정보</div>
+            <div class="fl"><label>행사명 *</label>
+              <select id="bumiEventSel" style="font-size:12px;padding:6px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%" onchange="loadBumiPreview()">
+                <option value="">행사 선택</option>
+              </select>
+            </div>
+            <div class="fl"><label>기안일</label><input id="bumiDate" type="date" oninput="loadBumiPreview()"/></div>
+            <div class="fl"><label>기안자</label><input id="bumiAuthor" placeholder="예) 이원영" oninput="loadBumiPreview()"/></div>
+            <div class="fl"><label>부서</label><input id="bumiDept" placeholder="예) 마케팅팀" oninput="loadBumiPreview()"/></div>
+            <div class="fl"><label>구매처</label><input id="bumiVendor" placeholder="예) 롯데마트" oninput="loadBumiPreview()"/></div>
+            <div class="fl"><label>결제방법</label><input id="bumiPayment" placeholder="예) 법인카드" oninput="loadBumiPreview()"/></div>
+            <div class="fl"><label>구매목적</label><textarea id="bumiPurpose" placeholder="예) 고객사 전달용 명절 선물 구매" oninput="loadBumiPreview()" style="min-height:56px;resize:vertical"></textarea></div>
+            <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="printBumi()">🖨️ 인쇄 / PDF 저장</button>
           </div>
-          <div class="fl"><label>기안일</label><input id="bumiDate" type="date"/></div>
-          <div class="fl"><label>구매처</label><input id="bumiVendor" placeholder="예) 롯데마트"/></div>
-          <div class="fl"><label>결제방법</label><input id="bumiPayment" placeholder="예) 카드결제"/></div>
-          <div class="fl" style="grid-column:1/-1"><label>구매목적</label><input id="bumiPurpose" placeholder="예) 고객사 전달용 추석 선물 구매"/></div>
         </div>
-        <!-- 미리보기 -->
-        <div style="border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden">
-          <div style="padding:10px 14px;background:var(--bg2);font-size:12px;font-weight:600;color:var(--text2)">품의서 미리보기</div>
-          <div id="bumiPreview" style="padding:14px;font-size:13px;line-height:2"></div>
+
+        <!-- 우측: 품의서 본문 -->
+        <div style="flex:1;min-width:0">
+          <div id="bumiDoc" style="background:#fff;border:1px solid #ccc;border-radius:4px;padding:48px 52px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;color:#111;min-height:600px;box-shadow:0 2px 12px rgba(0,0,0,.08)">
+            <div id="bumiPreview" style="font-size:13px">
+              <div style="text-align:center;color:#aaa;margin-top:80px">행사를 선택하면 품의서가 생성됩니다</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <!-- SETTINGS -->
@@ -4086,114 +4094,145 @@ async function initBumi() {
 }
 
 async function loadBumiPreview() {
-  const event = document.getElementById('bumiEventSel')?.value
-  const vendor  = document.getElementById('bumiVendor')?.value || '구매처 미입력'
-  const payment = document.getElementById('bumiPayment')?.value || '카드결제'
-  const purpose = document.getElementById('bumiPurpose')?.value || '고객사 전달용 명절 선물 구매'
+  const event   = document.getElementById('bumiEventSel')?.value
+  const vendor  = document.getElementById('bumiVendor')?.value || ''
+  const payment = document.getElementById('bumiPayment')?.value || ''
+  const purpose = document.getElementById('bumiPurpose')?.value || ''
+  const author  = document.getElementById('bumiAuthor')?.value || ''
+  const dept    = document.getElementById('bumiDept')?.value || ''
   const dateVal = document.getElementById('bumiDate')?.value || new Date().toISOString().slice(0,10)
   const [y,m,d] = dateVal.split('-')
-  const dateStr = `${y} 年 - ${m}月 - ${d}日`
 
-  let giftsHtml = '<div style="color:var(--text3);font-size:12px">행사를 선택하면 선물 내역이 표시됩니다</div>'
-  let totalAmt = 0
-
-  if (event) {
-    const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event)
-    if (gifts && gifts.length) {
-      const rows = gifts.map((g,i) => {
-        const sub = (g.price||0)*(g.qty||0)
-        totalAmt += sub
-        return `<tr>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${vendor}</td>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${e(g.name)}</td>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right">${(g.price||0).toLocaleString()}</td>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right">${g.qty||0}</td>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd);text-align:right;font-weight:600">${sub.toLocaleString()}</td>
-          <td style="padding:4px 8px;border:0.5px solid var(--bd)">${e(g.note||'')}</td>
-        </tr>`
-      }).join('')
-      giftsHtml = `<table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead><tr style="background:var(--bg2)">
-          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:left">구매처</th>
-          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:left">제품명</th>
-          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">단가</th>
-          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">수량</th>
-          <th style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">소계</th>
-          <th style="padding:6px 8px;border:0.5px solid var(--bd)">비고</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-        <tfoot><tr style="background:var(--bg2);font-weight:700">
-          <td colspan="3" style="padding:6px 8px;border:0.5px solid var(--bd)">합계</td>
-          <td style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">${gifts.reduce((s,g)=>s+(g.qty||0),0)}</td>
-          <td style="padding:6px 8px;border:0.5px solid var(--bd);text-align:right">${totalAmt.toLocaleString()}</td>
-          <td style="padding:6px 8px;border:0.5px solid var(--bd)">${payment}</td>
-        </tr></tfoot>
-      </table>`
-    }
+  if (!event) {
+    document.getElementById('bumiPreview').innerHTML =
+      '<div style="text-align:center;color:#aaa;margin-top:80px;font-size:13px">행사를 선택하면 품의서가 생성됩니다</div>'
+    return
   }
 
+  const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event).order('created_at')
+  const totalAmt = (gifts||[]).reduce((s,g)=>s+(g.price||0)*(g.qty||0), 0)
+  const totalQty = (gifts||[]).reduce((s,g)=>s+(g.qty||0), 0)
+
+  const giftRows = (gifts||[]).map((g,i) => {
+    const sub = (g.price||0)*(g.qty||0)
+    return `<tr>
+      <td style="text-align:center">${i+1}</td>
+      <td>${e(vendor||g.buy_method||'')}</td>
+      <td>${e(g.name)}</td>
+      <td style="text-align:right">${(g.price||0).toLocaleString()}</td>
+      <td style="text-align:center">${g.qty||0}</td>
+      <td style="text-align:right;font-weight:600">${sub.toLocaleString()}</td>
+      <td style="color:#666;font-size:11px">${e(g.note||'')}</td>
+    </tr>`
+  }).join('')
+
+  const TD = 'padding:7px 10px;border:1px solid #ccc'
+  const TH = `${TD};background:#f5f5f5;font-weight:600;text-align:center`
+
   document.getElementById('bumiPreview').innerHTML = `
-    <div style="font-size:13px;line-height:2.2">
-      <b>起案日字:</b> ${dateStr}<br>
-      <b>題 目:</b> ${e(event||'행사명 미입력')} 선물 구매의 件<br>
-      <br>아래와 같이 품의드리오니 재가하여주시기 바랍니다.<br><br>
-      <b>1. 구매처:</b> ${e(vendor)}<br>
-      <b>2. 구매금액:</b> ${totalAmt.toLocaleString()} 원 (${e(payment)})<br>
-      <b>3. 구매목적:</b> ${e(purpose)}<br>
-      <b>4. 구매 상세</b>
+  <div style="font-family:'Malgun Gothic','맑은 고딕',sans-serif;line-height:1.8;color:#111">
+
+    <!-- 결재란 -->
+    <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:12px">
+      <tr>
+        <td rowspan="2" style="${TD};width:60px;text-align:center;font-size:11px;color:#888">對外秘</td>
+        <td rowspan="2" style="${TD};text-align:right;font-weight:700;font-size:15px;letter-spacing:2px" colspan="4">슈 어 엠</td>
+      </tr>
+    </table>
+    <table style="width:240px;border-collapse:collapse;margin-bottom:24px;margin-left:auto;font-size:12px">
+      <tr>
+        <td style="${TH};width:60px">담당</td>
+        <td style="${TH};width:60px">팀장</td>
+        <td style="${TH};width:60px">본부장</td>
+        <td style="${TH};width:60px">대표</td>
+      </tr>
+      <tr>
+        <td style="${TD};height:44px;text-align:center;vertical-align:bottom;font-size:11px;color:#aaa">${e(author)}</td>
+        <td style="${TD};height:44px"></td>
+        <td style="${TD};height:44px"></td>
+        <td style="${TD};height:44px"></td>
+      </tr>
+    </table>
+
+    <!-- 제목 -->
+    <div style="text-align:center;font-size:20px;font-weight:700;letter-spacing:4px;margin-bottom:24px;border-bottom:2px solid #111;padding-bottom:12px">
+      품 의 서
     </div>
-    <div style="margin-top:10px">${giftsHtml}</div>`
+
+    <!-- 기본 정보 -->
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px">
+      <tr>
+        <td style="${TH};width:100px">기 안 일</td>
+        <td style="${TD}">${y}년 ${m}월 ${d}일</td>
+        <td style="${TH};width:100px">기 안 자</td>
+        <td style="${TD}">${e(dept)} ${e(author)}</td>
+      </tr>
+      <tr>
+        <td style="${TH}">보존기간</td>
+        <td style="${TD}">5년</td>
+        <td style="${TH}">제 목</td>
+        <td style="${TD};font-weight:600">${e(event)} 선물 구매의 件</td>
+      </tr>
+    </table>
+
+    <!-- 본문 -->
+    <div style="font-size:13px;line-height:2;margin-bottom:20px">
+      아래와 같이 품의드리오니 재가하여 주시기 바랍니다.
+    </div>
+
+    <div style="text-align:center;font-weight:700;margin-bottom:16px;font-size:14px">― 아 래 ―</div>
+
+    <div style="font-size:13px;line-height:2.4;margin-bottom:20px">
+      <span style="display:inline-block;width:140px;font-weight:600">1. 구 매 처</span>: ${e(vendor||'-')}<br>
+      <span style="display:inline-block;width:140px;font-weight:600">2. 구매금액</span>: ${totalAmt.toLocaleString()} 원 (${e(payment||'-')})<br>
+      <span style="display:inline-block;width:140px;font-weight:600">3. 구매목적</span>: ${e(purpose||'-')}<br>
+      <span style="display:inline-block;width:140px;font-weight:600">4. 구매상세</span>: 아래 표 참조
+    </div>
+
+    <!-- 선물 목록 -->
+    <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:24px">
+      <thead>
+        <tr>
+          <th style="${TH};width:32px">No.</th>
+          <th style="${TH}">구매처</th>
+          <th style="${TH}">제 품 명</th>
+          <th style="${TH};width:80px">단가(원)</th>
+          <th style="${TH};width:60px">수량</th>
+          <th style="${TH};width:90px">소계(원)</th>
+          <th style="${TH}">비고</th>
+        </tr>
+      </thead>
+      <tbody>${giftRows || '<tr><td colspan="7" style="'+TD+';text-align:center;color:#aaa">선물 리스트가 없어요</td></tr>'}</tbody>
+      <tfoot>
+        <tr style="font-weight:700;background:#f5f5f5">
+          <td colspan="4" style="${TD};text-align:center">합 계</td>
+          <td style="${TD};text-align:center">${totalQty}</td>
+          <td style="${TD};text-align:right">${totalAmt.toLocaleString()}</td>
+          <td style="${TD};font-size:11px">${e(payment||'')}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div style="text-align:center;font-size:14px;font-weight:700;margin-top:32px">― 이 상 ―</div>
+  </div>`
 }
 
-async function downloadBumi() {
-  if (typeof XLSX === 'undefined') { alert('엑셀 라이브러리 로딩 중'); return }
-  const event   = document.getElementById('bumiEventSel')?.value
-  if (!event) { alert('행사를 선택하세요'); return }
-  const vendor  = document.getElementById('bumiVendor')?.value || '구매처'
-  const payment = document.getElementById('bumiPayment')?.value || '카드결제'
-  const purpose = document.getElementById('bumiPurpose')?.value || '고객사 전달용 명절 선물 구매'
-  const dateVal = document.getElementById('bumiDate')?.value || new Date().toISOString().slice(0,10)
-  const [y,m,d] = dateVal.split('-')
+function printBumi() {
+  const doc = document.getElementById('bumiDoc')
+  if (!doc) return
+  const w = window.open('', '_blank', 'width=800,height:1000')
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>품의서</title>
+    <style>
+      body { margin: 40px; font-family: 'Malgun Gothic','맑은 고딕',sans-serif; color:#111; }
+      @media print { body { margin: 20px; } }
+    </style>
+  </head><body>${doc.innerHTML}</body></html>`)
+  w.document.close()
+  setTimeout(() => { w.focus(); w.print() }, 300)
+}
 
-  const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event)
-  if (!gifts?.length) { alert('선물 리스트가 없어요'); return }
 
-  const totalAmt = gifts.reduce((s,g)=>s+(g.price||0)*(g.qty||0), 0)
-  const totalQty = gifts.reduce((s,g)=>s+(g.qty||0), 0)
-
-  const wb = XLSX.utils.book_new()
-
-  // ── 품의서 시트
-  const rows = [
-    [null,null,null,null,null,null,null,'對外秘',null],
-    [null,null,null,null,null,null,null,null,'슈어엠'],
-    ['監査',null,null,null,null,'起案','確認','審査','決定'],
-    [null,null,null,null,null,null,null,null,null],
-    ['起案日字', `${y} 年 - ${m}月 - ${d}日`],
-    ['保存期限', '5年'],
-    ['合 意'],
-    ['題 目', `${event} 선물 구매의 件`],
-    [],
-    ['아래와 같이 품의드리오니 재가하여주시기 바랍니다.'],
-    [],
-    ['- 아 래 -'],
-    [],
-    [`1. 구매처 : ${vendor}`],
-    [`2. 구매금액 : ${totalAmt.toLocaleString()} 원 (${payment})`],
-    [`3. 구매목적 : ${purpose}`],
-    ['4. 구매 상세'],
-    ['업체','제품명',null,'가격','구매수량','소계','비고'],
-    ...gifts.map(g=>[vendor, g.name, null, g.price||0, g.qty||0, (g.price||0)*(g.qty||0), g.note||'']),
-    ['합계',null,null,null,totalQty,totalAmt,payment],
-    [],
-    [],
-    [],
-    ['- 이 상 -']
-  ]
-
-  const ws1 = XLSX.utils.aoa_to_sheet(rows)
-  ws1['!cols'] = [{wch:12},{wch:20},{wch:4},{wch:10},{wch:8},{wch:12},{wch:12},{wch:6},{wch:6}]
-  XLSX.utils.book_append_sheet(wb, ws1, '품의서')
 
   // ── 선물리스트 시트
   const giftRows = [
