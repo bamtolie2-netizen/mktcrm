@@ -3451,7 +3451,15 @@ async function loadChinsuk() {
   if (event) q = q.eq('event_name', event)
   const { data } = await q
   chinsukData = data || []
-  // 행사 목록 갱신
+
+  // 행사에 맞는 선물 리스트도 함께 로드
+  if (event) {
+    const { data: gifts } = await sb.from('chinsuk_gifts').select('*').eq('event_name', event).order('created_at')
+    chinsukGifts = gifts || []
+  } else {
+    chinsukGifts = []
+  }
+
   await refreshChinsukEvents()
   renderChinsuk()
   bindChinsukSort()
@@ -3479,6 +3487,20 @@ async function deleteChinsukEvent() {
   await refreshChinsukEvents()
   renderChinsuk()
   renderChinsukSummary()
+}
+
+function makeGiftCell(r, SEL_STYLE, INP_STYLE) {
+  if (!chinsukGifts.length) {
+    return `<input value="${e(r.gift||'')}" onchange="saveChinsukInline('${r.id}','gift',this.value)" style="${INP_STYLE};min-width:100px" placeholder="직접 입력"/>`
+  }
+  const opts = chinsukGifts.map(g =>
+    `<option value="${e(g.name)}"${r.gift===g.name?' selected':''}>${e(g.name)}</option>`
+  ).join('')
+  const extraOpt = r.gift && !chinsukGifts.find(g=>g.name===r.gift)
+    ? `<option value="${e(r.gift)}" selected>${e(r.gift)}</option>` : ''
+  return `<select onchange="saveChinsukInline('${r.id}','gift',this.value)" style="${SEL_STYLE};min-width:110px">
+    <option value="">-</option>${opts}${extraOpt}
+  </select>`
 }
 
 // 정렬 상태
@@ -3531,7 +3553,9 @@ function renderChinsuk() {
   }
 
   // 선물 옵션
-  const giftOpts = chinsukGifts.map(g => `<option value="${e(g.name)}">${e(g.name)}</option>`).join('')
+  const giftOpts = chinsukGifts.length
+    ? chinsukGifts.map(g => `<option value="${e(g.name)}">${e(g.name)}</option>`).join('')
+    : ''
   const SEL_STYLE = 'font-size:11px;padding:2px 4px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%'
   const INP_STYLE = 'font-size:11px;padding:2px 6px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none;width:100%'
 
@@ -3545,8 +3569,6 @@ function renderChinsuk() {
       `<option value="${g}"${r.grade===g?' selected':''}>${g||'-'}</option>`).join('')
     const methodOpts = ['','직접전달','배송','거절'].map(m =>
       `<option value="${m}"${r.method===m?' selected':''}>${m||'-'}</option>`).join('')
-    const giftOptsFull = `<option value="">-</option>${giftOpts}` +
-      (r.gift && !chinsukGifts.find(g=>g.name===r.gift) ? `<option value="${e(r.gift)}" selected>${e(r.gift)}</option>` : '')
     const assigneeOpts = `<option value="">-</option>` +
       allUsers.map(u2 => `<option value="${u2.id}"${r.assignee_id===u2.id?' selected':''}>${e(u2.name)}</option>`).join('')
 
@@ -3557,7 +3579,7 @@ function renderChinsuk() {
       <td><input value="${e(r.phone||'')}" onchange="saveChinsukInline('${r.id}','phone',this.value)" style="${INP_STYLE}"/></td>
       <td><select onchange="saveChinsukInline('${r.id}','grade',this.value)" style="${SEL_STYLE}">${gradeOpts}</select></td>
       <td><select onchange="saveChinsukInline('${r.id}','method',this.value)" style="${SEL_STYLE}">${methodOpts}</select></td>
-      <td><select onchange="saveChinsukInline('${r.id}','gift',this.value)" style="${SEL_STYLE};min-width:110px">${giftOptsFull.includes('selected') ? giftOptsFull : giftOptsFull.replace(`value="${e(r.gift||'')}"`,`value="${e(r.gift||'')}" selected`)}</select></td>
+      <td>${makeGiftCell(r, SEL_STYLE, INP_STYLE)}</td>
       <td><input value="${e(r.note||'')}" onchange="saveChinsukInline('${r.id}','note',this.value)" style="${INP_STYLE}" placeholder="대상자"/></td>
       <td><input type="date" value="${r.delivery_at||''}" onchange="saveChinsukInline('${r.id}','delivery_at',this.value)" style="${INP_STYLE}"/></td>
       <td><input value="${e(r.address||'')}" onchange="saveChinsukInline('${r.id}','address',this.value)" style="${INP_STYLE};min-width:120px"/></td>
