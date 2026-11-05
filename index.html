@@ -1266,43 +1266,53 @@ tr:hover .td-act{opacity:1}
   </div>
 </div></div>
 
-<div class="mbg" id="modalMeeting"><div class="modal" style="max-width:540px">
-  <h3 id="meetingModalTitle">미팅 추가</h3>
-  <div class="r2">
-    <div class="fl"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
-    <div class="fl"><label>업체명</label><input id="mtCompany" placeholder="예) (주)볼보코리아"/></div>
+<div class="mbg" id="modalMeeting"><div class="modal" style="width:min(720px,96vw)">
+  <div class="modal-hd">
+    <span class="modal-title" id="meetingModalTitle">미팅 추가</span>
+    <button class="modal-close" onclick="closeModal('modalMeeting')">✕</button>
   </div>
-  <div class="r2">
-    <div class="fl"><label>날짜/시간 *</label><input id="mtDatetime" type="datetime-local"/></div>
-    <div class="fl"><label>유형</label>
-      <select id="mtType">
-        <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
-      </select>
+  <div class="modal-body" style="display:flex;flex-direction:column;gap:0">
+    <!-- Row 1: 제목 + 업체명 -->
+    <div class="r2" style="margin-bottom:18px">
+      <div class="fl" style="margin-bottom:0"><label>제목 *</label><input id="mtTitle" placeholder="예) 볼보 DW 계약 미팅"/></div>
+      <div class="fl" style="margin-bottom:0"><label>업체명</label><input id="mtCompany" placeholder="예) (주)볼보코리아"/></div>
     </div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
-    <div class="fl"><label>출발지</label><input id="mtOrigin" placeholder="예) 슈어엠 본사" oninput="updateNaverLink()"/></div>
-  </div>
-  <div class="r2">
-    <div class="fl"><label>장소 (목적지)</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <input id="mtLocation" placeholder="예) 강남구청" style="flex:1" oninput="updateNaverLink()"/>
-        <a id="mtNaverLink" href="#" target="_blank" style="font-size:11px;color:var(--blue);white-space:nowrap;display:none">🗺 길찾기</a>
+    <!-- Row 2: 날짜 + 유형 -->
+    <div class="r2" style="margin-bottom:18px">
+      <div class="fl" style="margin-bottom:0"><label>날짜 / 시간 *</label><input id="mtDatetime" type="datetime-local"/></div>
+      <div class="fl" style="margin-bottom:0"><label>유형</label>
+        <select id="mtType">
+          <option>고객사</option><option>신규</option><option>내부</option><option>회의</option><option>경쟁사</option>
+        </select>
       </div>
     </div>
-    <div class="fl"><label>거리 (km)</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <input id="mtKm" type="number" step="0.1" min="0" placeholder="0.0" style="width:80px"/>
-        <span style="font-size:11px;color:var(--text3)">네이버 지도 확인 후 입력</span>
+    <!-- Row 3: 담당 팀원 + 출발지 -->
+    <div class="r2" style="margin-bottom:18px">
+      <div class="fl" style="margin-bottom:0"><label>담당 팀원</label><select id="mtAssignee"><option value="">미배정</option></select></div>
+      <div class="fl" style="margin-bottom:0"><label>출발지</label><input id="mtOrigin" placeholder="예) 슈어엠 본사" oninput="updateNaverLink()"/></div>
+    </div>
+    <!-- Row 4: 장소 + 거리 -->
+    <div class="r2" style="margin-bottom:18px">
+      <div class="fl" style="margin-bottom:0"><label>장소 (목적지)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="mtLocation" placeholder="예) 강남구청" style="flex:1" oninput="updateNaverLink()"/>
+          <a id="mtNaverLink" href="#" target="_blank" style="font-size:12px;color:var(--green);white-space:nowrap;display:none;font-weight:600">🗺 길찾기</a>
+        </div>
+      </div>
+      <div class="fl" style="margin-bottom:0"><label>거리 (km)</label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input id="mtKm" type="number" step="0.1" min="0" placeholder="0.0" style="width:100px"/>
+          <span style="font-size:12px;color:var(--text3)">네이버 지도 확인 후 입력</span>
+        </div>
       </div>
     </div>
+    <!-- Row 5: 통행료 + 메모 -->
+    <div class="r2" style="margin-bottom:0">
+      <div class="fl" style="margin-bottom:0"><label>통행 / 주차료 (원)</label><input id="mtToll" type="number" step="1" min="0" placeholder="0"/></div>
+      <div class="fl" style="margin-bottom:0"><label>메모</label><input id="mtMemo" placeholder="업무 내용을 간략히 기재하세요"/></div>
+    </div>
   </div>
-  <div class="r2">
-    <div class="fl"><label>통행/주차료 (원)</label><input id="mtToll" type="number" step="1" min="0" placeholder="0"/></div>
-    <div class="fl"><label>메모</label><input id="mtMemo" placeholder="업무내용 기재"/></div>
-  </div>
-  <div class="mbtns">
+  <div class="modal-ft">
     <button class="btn" onclick="closeModal('modalMeeting')">취소</button>
     <button class="btn btn-primary" onclick="saveMeeting()">저장</button>
   </div>
@@ -2098,7 +2108,7 @@ function renderMeetings(){
   else renderMeetingList(list)
 }
 
-const TYPE_COLOR={고객사:'#185FA5',신규:'#1D9E75',내부:'#854F0B',회의:'#534AB7',경쟁사:'#d04040'}
+const TYPE_COLOR={고객사:'#185FA5',신규:'#1D9E75',내부:'#854F0B',회의:'#534AB7',경쟁사:'#d04040',태스크:'#7C3AED'}
 const TYPE_BADGE={고객사:'b-blue',신규:'b-green',내부:'b-amber',회의:'b-purple',경쟁사:'b-red'}
 
 function renderCalendar(list){
@@ -3541,11 +3551,37 @@ async function weeklyStep4() {
     var due_date = r.querySelector('.task-due').value || null
     var status = r.querySelector('.task-status').value
     if(!title) continue
-    if(r.dataset.taskId) {
-      await sb.from('weekly_tasks').update({title,owner_name,due_date,status,current_meeting_id:currentWeeklyMeeting.id}).eq('id',r.dataset.taskId)
+    var taskId = r.dataset.taskId || null
+    if(taskId) {
+      await sb.from('weekly_tasks').update({title,owner_name,due_date,status,current_meeting_id:currentWeeklyMeeting.id}).eq('id',taskId)
+      // 캘린더 항목도 동기화
+      if(due_date) {
+        var user = (allUsers||[]).find(function(u){return u.name===owner_name})
+        var calMemo = '[주간태스크] task_id:'+taskId
+        // 기존 캘린더 항목 있으면 업데이트
+        var {data:exist} = await sb.from('meetings').select('id').ilike('memo','%task_id:'+taskId+'%').maybeSingle()
+        if(exist) {
+          await sb.from('meetings').update({title:'[태스크] '+title, meeting_at:due_date+'T09:00:00', user_id:user?user.id:null, memo:calMemo}).eq('id',exist.id)
+        } else {
+          await sb.from('meetings').insert({title:'[태스크] '+title, meeting_at:due_date+'T09:00:00', type:'태스크', user_id:user?user.id:null, memo:calMemo})
+        }
+      }
     } else {
       var {data:td} = await sb.from('weekly_tasks').insert({meeting_id:currentWeeklyMeeting.id,current_meeting_id:currentWeeklyMeeting.id,title,owner_name,due_date,status}).select().single()
-      if(td) r.dataset.taskId = td.id
+      if(td) {
+        r.dataset.taskId = td.id
+        // 캘린더에 자동 등록 (마감일 있을 때)
+        if(due_date) {
+          var user2 = (allUsers||[]).find(function(u){return u.name===owner_name})
+          await sb.from('meetings').insert({
+            title:'[태스크] '+title,
+            meeting_at:due_date+'T09:00:00',
+            type:'태스크',
+            user_id:user2?user2.id:null,
+            memo:'[주간태스크] task_id:'+td.id
+          })
+        }
+      }
     }
   }
   closeModal('modal-weekly-s3')
