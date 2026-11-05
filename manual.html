@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주간회의 사용 매뉴얼 — SureM CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-light: #E8F7F2;
+    --text: #1A1A1A;
+    --text2: #555;
+    --text3: #888;
+    --bd: #E5E7EB;
+    --bg: #F8FAFB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    .page-break { page-break-after: always; }
+    .card { box-shadow: none !important; border: 1px solid var(--bd) !important; }
+  }
+
+  /* ── 헤더 ── */
+  .header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    color: #fff;
+    padding: 40px 48px 36px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    margin-bottom: 14px;
+  }
+  .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .header p  { font-size: 14px; opacity: .82; max-width: 480px; }
+  .header-meta {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    opacity: .7;
+  }
+
+  /* ── 레이아웃 ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: #fff;
+    border: 1px solid var(--bd);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .toc-title { font-size: 12px; font-weight: 700; color: var(--text3); letter-spacing: .8px; margin-bottom: 10px; }
+  .toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .toc a {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .toc a:hover { background: var(--green); color: #fff; }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: 36px; }
+  .sec-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .sec-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: #fff;
+    border: 1px solid var(--bd);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    margin-bottom: 16px;
+  }
+
+  /* ── 스텝 ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--bd);
+  }
+  .step:last-child { border-bottom: none; padding-bottom: 0; }
+  .step-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    margin-top: 2px;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .step-desc  { font-size: 13px; color: var(--text2); line-height: 1.65; }
+  .step-desc li { margin-left: 16px; margin-top: 3px; }
+
+  /* ── 팁 박스 ── */
+  .tip {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--green-dark);
+    margin-top: 10px;
+  }
+  .tip strong { font-weight: 700; }
+
+  /* ── 그리드 ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ── 필드 설명표 ── */
+  .field-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .field-table th {
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 700;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--bd);
+  }
+  .field-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--bd);
+    vertical-align: top;
+  }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table tr:hover td { background: var(--bg); }
+  .badge {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ── 플로우 ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .flow-item {
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    font-size: 16px;
+    color: var(--text3);
+    margin: 0 6px;
+  }
+
+  /* ── 인쇄/다운로드 버튼 ── */
+  .btn-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 20px 24px 12px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+  }
+  .btn-green  { background: var(--green); color: #fff; }
+  .btn-outline { background: #fff; color: var(--text2); border: 1px solid var(--bd); }
+  .btn:hover { opacity: .88; }
+
+  /* ── FAQ ── */
+  .faq-item { border-bottom: 1px solid var(--bd); padding: 14px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 5px; }
+  .faq-a { font-size: 13px; color: var(--text2); }
+
+  /* ── 푸터 ── */
+  .footer {
+    text-align: center;
+    color: var(--text3);
+    font-size: 12px;
+    padding: 24px;
+    border-top: 1px solid var(--bd);
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- 인쇄/다운로드 버튼 -->
+<div class="btn-bar no-print">
+  <button class="btn btn-outline" onclick="window.close()">✕ 닫기</button>
+  <button class="btn btn-green" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+</div>
+
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-badge">SureM CRM · 사용 매뉴얼</div>
+  <h1>주간회의 사용법</h1>
+  <p>팀 주간회의를 CRM에서 기록하고, 태스크와 일정을 관리하는 방법을 단계별로 안내합니다.</p>
+  <div class="header-meta">
+    <span>📄 버전 1.0</span>
+    <span>🗓️ 2024년 기준</span>
+    <span>👥 SureM 마케팅팀</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 목차 -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ul>
+      <li><a href="#overview">개요</a></li>
+      <li><a href="#step1">1단계 · 회의 열기</a></li>
+      <li><a href="#step2">2단계 · 회의 내용 입력</a></li>
+      <li><a href="#step3">3단계 · 태스크 관리</a></li>
+      <li><a href="#step4">4단계 · 대시보드 확인</a></li>
+      <li><a href="#fields">필드 설명</a></li>
+      <li><a href="#faq">자주 묻는 질문</a></li>
+    </ul>
+  </div>
+
+  <!-- 개요 -->
+  <div class="section" id="overview">
+    <div class="sec-label">OVERVIEW</div>
+    <div class="sec-title">주간회의란?</div>
+    <div class="card">
+      <p style="color:var(--text2);font-size:13px;line-height:1.75;margin-bottom:14px">
+        SureM CRM의 <strong>주간회의</strong> 기능은 매주 팀 미팅을 CRM 안에서 기록하고, 도출된 태스크와 일정을 한 곳에서 관리하는 도구입니다.
+        회의 내용을 체계적으로 남기면 대시보드에 자동으로 반영되어 팀의 진행 상황을 한눈에 파악할 수 있습니다.
+      </p>
+      <div class="flow">
+        <div class="flow-item">📋 회의 열기</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">✏️ 내용 입력</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">✅ 태스크 등록</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">📅 일정 추가</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">📊 대시보드 확인</div>
+      </div>
+      <div class="tip">
+        <strong>💡 핵심 포인트:</strong> 주간회의에서 도출된 태스크는 대시보드에 자동으로 집계되어 팀원별 진행률과 지연 여부를 실시간으로 확인할 수 있습니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 1단계 -->
+  <div class="section" id="step1">
+    <div class="sec-label">STEP 01</div>
+    <div class="sec-title">회의 열기</div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">좌측 메뉴에서 <strong>주간회의</strong> 탭 클릭</div>
+            <div class="step-desc">
+              하단 네비게이션 또는 좌측 사이드바에서 <strong>주간회의</strong>를 선택합니다.<br>
+              대시보드 상단 초록색 배너의 <strong>[회의 시작]</strong> 버튼으로도 바로 이동할 수 있습니다.
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">화면 상단 <strong>[+ 새 회의]</strong> 버튼 클릭</div>
+            <div class="step-desc">
+              이번 주 회의 일정, 제목, 참석자를 입력하는 폼이 열립니다.<br>
+              이미 회의가 등록된 경우에는 목록에서 해당 회의를 클릭해 내용을 추가합니다.
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">기본 정보 입력 후 <strong>[저장]</strong></div>
+            <div class="step-desc">
+              <ul>
+                <li>회의 날짜: 오늘 날짜가 자동 설정됩니다</li>
+                <li>회의 제목: 예) "2024년 1월 3주차 주간회의"</li>
+                <li>참석자: 팀원 이름을 입력합니다 (쉼표로 구분)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계 -->
+  <div class="section" id="step2">
+    <div class="sec-label">STEP 02</div>
+    <div class="sec-title">회의 내용 입력</div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">지난 주 결과 복기</div>
+            <div class="step-desc">
+              지난 회의의 태스크 완료 현황을 확인하고, 완료된 항목은 ✅ 완료 처리합니다.<br>
+              미완료 태스크는 이번 주로 이월하거나 담당자를 재배정합니다.
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">이번 주 주요 안건 · 결정 사항 기록</div>
+            <div class="step-desc">
+              회의 중 논의된 내용, 결정 사항, 공유 사항을 <strong>회의록</strong> 텍스트 필드에 입력합니다.<br>
+              간략한 메모 형태로도 충분합니다.
+              <div class="tip" style="margin-top:8px">
+                <strong>💡 TIP:</strong> 결정 사항은 "→ [담당자] [기한]" 형식으로 작성하면 태스크 등록 시 편리합니다.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">특이사항 및 공유 내용 추가</div>
+            <div class="step-desc">
+              영업 진행 현황, 클라이언트 이슈, 팀 공지 등 공유가 필요한 내용을 추가합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계 -->
+  <div class="section" id="step3">
+    <div class="sec-label">STEP 03</div>
+    <div class="sec-title">태스크 관리</div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">회의에서 도출된 태스크 등록</div>
+            <div class="step-desc">
+              태스크 섹션에서 <strong>[+ 태스크 추가]</strong>를 클릭하고 아래 항목을 입력합니다.
+              <ul>
+                <li><strong>내용:</strong> 해야 할 일을 구체적으로 작성 (예: "A사 제안서 작성")</li>
+                <li><strong>담당자:</strong> 팀원 이름 선택</li>
+                <li><strong>기한:</strong> 완료 목표일 (날짜 선택)</li>
+                <li><strong>우선순위:</strong> 높음 / 보통 / 낮음</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">태스크 진행 상태 업데이트</div>
+            <div class="step-desc">
+              다음 회의 전 또는 완료 시 태스크 목록에서 상태를 변경합니다.
+              <ul>
+                <li><span class="badge">대기</span> → 아직 시작 안 함</li>
+                <li><span class="badge">진행중</span> → 작업 중</li>
+                <li><span class="badge">완료</span> → 완료 처리 (대시보드 집계에서 제외)</li>
+              </ul>
+              <div class="tip" style="margin-top:8px">
+                <strong>⚠️ 주의:</strong> 기한이 지난 미완료 태스크는 대시보드에서 <span style="color:#E53935">빨간색</span>으로 표시됩니다.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">다음 주 일정 등록</div>
+            <div class="step-desc">
+              일정 섹션에서 다음 주에 예정된 미팅, 발표, 마감일 등을 등록합니다.<br>
+              일정은 회의 기록에 종속되어 함께 관리됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4단계 -->
+  <div class="section" id="step4">
+    <div class="sec-label">STEP 04</div>
+    <div class="sec-title">대시보드에서 현황 확인</div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">대시보드 이동</div>
+            <div class="step-desc">
+              홈(대시보드) 탭을 클릭하면 주간회의 기반의 현황이 자동으로 집계됩니다.
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">KPI 카드 확인</div>
+            <div class="step-desc">
+              화면 상단 4개의 카드에서 주요 지표를 한눈에 확인합니다.
+              <ul>
+                <li><strong>미완료 태스크:</strong> 전체 미완료 태스크 수</li>
+                <li><strong>지연 태스크:</strong> 기한이 지난 미완료 태스크 수</li>
+                <li><strong>영업 리드:</strong> 진행 중인 영업 리드 수</li>
+                <li><strong>아웃바운드:</strong> 팔로업이 필요한 업체 수</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">팀원별 태스크 현황 및 최근 회의 확인</div>
+            <div class="step-desc">
+              팀원별 태스크 완료율이 프로그레스 바로 표시되며, 지연된 태스크 목록을 바로 확인할 수 있습니다.<br>
+              최근 회의 히스토리 카드에서 지난 4주 회의를 빠르게 조회합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:4px">
+        <strong>🔄 자동 반영:</strong> 태스크를 완료 처리하면 대시보드 KPI가 자동으로 업데이트됩니다. 별도의 새로고침이 필요 없습니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 필드 설명 -->
+  <div class="section" id="fields">
+    <div class="sec-label">REFERENCE</div>
+    <div class="sec-title">필드 설명</div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 20px;background:var(--green-light);border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;color:var(--green-dark)">📋 주간회의 (weekly_meetings)</div>
+      <table class="field-table">
+        <thead>
+          <tr><th>필드명</th><th>설명</th><th>예시</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>회의 제목</strong></td><td>회의 이름 또는 주제</td><td>1월 3주차 주간회의</td></tr>
+          <tr><td><strong>회의 날짜</strong></td><td>회의가 열린 날짜</td><td>2024-01-15</td></tr>
+          <tr><td><strong>참석자</strong></td><td>참석한 팀원 목록</td><td>이원영, 김민준, 박지수</td></tr>
+          <tr><td><strong>회의록</strong></td><td>논의 내용, 결정 사항</td><td>자유 텍스트</td></tr>
+          <tr><td><strong>특이사항</strong></td><td>공유 사항, 주의사항</td><td>다음 주 클라이언트 방문 예정</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-top:14px">
+      <div style="padding:16px 20px;background:var(--green-light);border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;color:var(--green-dark)">✅ 태스크 (weekly_tasks)</div>
+      <table class="field-table">
+        <thead>
+          <tr><th>필드명</th><th>설명</th><th>값</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>내용</strong></td><td>태스크 내용 (구체적으로)</td><td>자유 텍스트</td></tr>
+          <tr><td><strong>담당자</strong></td><td>태스크를 맡은 팀원</td><td>팀원 이름</td></tr>
+          <tr><td><strong>기한</strong></td><td>완료 목표 날짜</td><td>YYYY-MM-DD</td></tr>
+          <tr><td><strong>상태</strong></td><td>진행 상태</td><td>대기 / 진행중 / 완료</td></tr>
+          <tr><td><strong>우선순위</strong></td><td>중요도</td><td>높음 / 보통 / 낮음</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-top:14px">
+      <div style="padding:16px 20px;background:var(--green-light);border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;color:var(--green-dark)">📅 일정 (weekly_schedules)</div>
+      <table class="field-table">
+        <thead>
+          <tr><th>필드명</th><th>설명</th><th>예시</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>일정 제목</strong></td><td>일정 이름</td><td>A사 제안 발표</td></tr>
+          <tr><td><strong>일정 날짜</strong></td><td>예정 날짜</td><td>2024-01-18</td></tr>
+          <tr><td><strong>담당자</strong></td><td>담당 팀원</td><td>이원영</td></tr>
+          <tr><td><strong>메모</strong></td><td>추가 정보</td><td>장소: 본사 2층 회의실</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <div class="sec-label">FAQ</div>
+    <div class="sec-title">자주 묻는 질문</div>
+    <div class="card">
+      <div class="faq-item">
+        <div class="faq-q">Q. 태스크를 완료했는데 대시보드에 아직 보여요.</div>
+        <div class="faq-a">태스크 목록에서 상태를 <strong>완료</strong>로 변경해야 대시보드에서 제외됩니다. 체크 버튼을 눌러주세요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q. 지연 태스크가 빨갛게 표시되는 기준은?</div>
+        <div class="faq-a">태스크의 <strong>기한(due_date)</strong>이 오늘 날짜보다 이전이고, 상태가 완료가 아닌 경우 지연으로 표시됩니다.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q. 지난 주 회의는 어디서 확인하나요?</div>
+        <div class="faq-a">주간회의 탭 하단 <strong>히스토리</strong> 섹션에서 날짜별로 지난 회의를 확인할 수 있습니다. 대시보드 최근 회의 카드에서도 최근 4건을 빠르게 조회할 수 있습니다.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q. 팀원이 여러 명인데, 담당자 선택 시 목록에 안 보여요.</div>
+        <div class="faq-a"><strong>설정</strong> 탭에서 팀원을 먼저 등록하면 자동으로 담당자 선택 목록에 나타납니다.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Q. 태스크가 Supabase에 저장되지 않아요.</div>
+        <div class="faq-a">Supabase에 <code>weekly_tasks</code>, <code>weekly_meetings</code>, <code>weekly_schedules</code> 테이블이 생성되어 있어야 합니다. 관리자에게 Supabase SQL 실행을 요청하세요.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 푸터 -->
+<div class="footer">
+  <strong>SureM CRM</strong> · 주간회의 사용 매뉴얼 v1.0 · 문의: 관리자에게 연락하세요
+</div>
+
+</body>
+</html>
