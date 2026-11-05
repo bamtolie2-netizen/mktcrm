@@ -1,4 +1,5 @@
-<!-- v1793866874 --><!DOCTYPE html>
+<!-- v1776066511 -->
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
@@ -3437,7 +3438,7 @@ async function loadMyTasks() {
         +'<div style="flex:1"><div style="font-size:12px;font-weight:500">'+e(t.title)+'</div>'
         +'<div style="font-size:11px;color:var(--text3)">'+weekStr+(t.due_date?' · '+t.due_date:'')+'</div></div>'
         +'<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:'+statusColor+';color:'+statusTextColor+'">'+statusLabel+'</span>'
-        +'<button class="btn btn-xs btn-primary" onclick="markTaskDone(''+t.id+'')">완료</button>'
+        +'<button class="btn btn-xs btn-primary" onclick="markTaskDone(\''+t.id+'\')">완료</button>'
         +'</div>'
     }).join('')
   } catch(err) {
