@@ -687,6 +687,455 @@ tr:hover .td-act{opacity:1}
   .error-popup-btn:hover { opacity: 0.9; }
 
 
+/* === VOC v1.1 ===*/
+
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
+
+  .voc-wrap {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f3f6;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent2: #1a7f37;
+    --accent3: #cf222e;
+    --accent4: #8250df;
+    --accent5: #bf8700;
+    --text: #1f2328;
+    --text2: #656d76;
+    --text3: #8c959f;
+    --pill-blue-bg: #ddf4ff;
+    --pill-green-bg: #dafbe1;
+    --pill-orange-bg: #fff8c5;
+    --chart-grid: #e1e4e8;
+    --chart-tick: #57606a;
+    --chart-label: #24292f;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f3f6 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+  .header-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .header-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 6px var(--accent2);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    padding: 16px 28px 0;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    background: transparent;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active {
+    color: var(--accent);
+    background: var(--bg);
+    border-color: var(--border);
+    border-bottom-color: var(--bg);
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 24px 28px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: border-color 0.15s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--text); }
+  .stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .stat-card.blue .stat-value { color: var(--accent); }
+  .stat-card.green .stat-value { color: var(--accent2); }
+  .stat-card.red .stat-value { color: var(--accent3); }
+  .stat-card.purple .stat-value { color: var(--accent4); }
+  .stat-card.orange .stat-value { color: var(--accent5); }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-full { margin-bottom: 16px; }
+
+  @media (max-width: 900px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* CHART CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title span { font-size: 15px; }
+  .chart-wrap { position: relative; }
+
+  /* RANKING LIST */
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+  .rank-num.top1 { background: var(--pill-orange-bg); color: var(--accent5); }
+  .rank-num.top2 { background: var(--pill-blue-bg); color: var(--accent); }
+  .rank-num.top3 { background: var(--pill-green-bg); color: var(--accent2); }
+  .rank-label { flex: 1; font-size: 13px; color: var(--text); }
+  .rank-bar-wrap { width: 100px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .rank-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .rank-count { font-size: 13px; font-weight: 600; color: var(--text2); min-width: 30px; text-align: right; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .section-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* SELECT */
+  select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+  }
+  select:focus { border-color: var(--accent); }
+
+  /* TOGGLE */
+  .toggle-group {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .toggle-btn {
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+  .toggle-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* BEFORE/AFTER 15 */
+  .split-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .split-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .split-half {
+    padding: 16px 20px;
+  }
+  .split-half:first-child { border-right: 1px solid var(--border); }
+  .split-half-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill {
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .pill-blue { background: var(--pill-blue-bg); color: var(--accent); }
+  .pill-orange { background: var(--pill-orange-bg); color: var(--accent5); }
+
+  /* ACCOUNT TABLE */
+  .account-table { width: 100%; border-collapse: collapse; }
+  .account-table th {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .account-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .account-table tr:last-child td { border-bottom: none; }
+  .account-table tr:hover td { background: var(--surface2); }
+  .id-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: monospace;
+    color: var(--text2);
+  }
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 22px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .count-high { background: var(--pill-orange-bg); color: var(--accent5); }
+  .count-mid { background: var(--pill-blue-bg); color: var(--accent); }
+  .count-low { background: var(--surface2); color: var(--text2); }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(88,166,255,0.04); }
+  .upload-icon { font-size: 36px; margin-bottom: 12px; }
+  .upload-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .upload-desc { font-size: 12px; color: var(--text2); }
+  #fileInput { display: none; }
+
+  /* CHANNEL DOTS */
+  .channel-bar {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .ch-seg {
+    height: 8px;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .no-data { color: var(--text3); font-size: 13px; text-align: center; padding: 30px; }
+
+  /* DETAIL TABLE */
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table th {
+    text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600;
+    color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .detail-table td {
+    padding: 10px 12px; font-size: 13px; color: var(--text);
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  .detail-table tr:last-child td { border-bottom: none; }
+  .detail-table tr:hover td { background: var(--surface2); }
+  .detail-content {
+    max-height: 60px; overflow: hidden; cursor: pointer;
+    transition: max-height 0.3s ease; line-height: 1.5; white-space: pre-wrap; word-break: break-all;
+  }
+  .detail-content.expanded { max-height: none; }
+  .detail-expand-btn {
+    color: var(--accent); font-size: 11px; cursor: pointer; margin-top: 4px;
+    display: inline-block; user-select: none;
+  }
+  .page-btn {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 4px 10px; color: var(--text2); font-size: 12px; cursor: pointer;
+  }
+  .page-btn:hover { border-color: var(--accent); color: var(--text); }
+  .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .status-pill {
+    padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  }
+  .status-pill.done { background: var(--pill-green-bg); color: var(--accent2); }
+  .status-pill.ing { background: var(--pill-blue-bg); color: var(--accent); }
+  .status-pill.hold { background: var(--pill-orange-bg); color: var(--accent5); }
+
+  /* Upload button */
+  .upload-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .upload-btn:hover { border-color: var(--accent); color: var(--text); }
+  /* Drop overlay */
+  .drop-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .drop-overlay.show { display: flex; }
+  .drop-overlay-inner {
+    border: 3px dashed var(--accent);
+    border-radius: 20px;
+    padding: 60px 80px;
+    text-align: center;
+    background: var(--surface);
+  }
+  .drop-overlay-inner .drop-icon { font-size: 48px; margin-bottom: 12px; }
+  .drop-overlay-inner .drop-text { font-size: 18px; font-weight: 700; color: var(--text); }
+  .drop-overlay-inner .drop-sub { font-size: 13px; color: var(--text2); margin-top: 6px; }
+
+  /* Error popup */
+  .error-popup-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 10000; display: none; align-items: center; justify-content: center;
+  }
+  .error-popup-overlay.show { display: flex; }
+  .error-popup {
+    background: var(--surface); border: 1px solid var(--accent3);
+    border-radius: 14px; padding: 32px 36px; max-width: 400px; width: 90%;
+    text-align: center; animation: fadeIn 0.2s ease;
+  }
+  .error-popup-icon { font-size: 40px; margin-bottom: 14px; }
+  .error-popup-title { font-size: 16px; font-weight: 700; color: var(--accent3); margin-bottom: 8px; }
+  .error-popup-msg { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+  .error-popup-file { font-size: 12px; color: var(--text3); background: var(--surface2); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 16px; word-break: break-all; }
+  .error-popup-btn {
+    padding: 8px 28px; border-radius: 8px; border: none;
+    background: var(--accent3); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .error-popup-btn:hover { opacity: 0.9; }
+
+
+
 </style>
 </head>
 <body>
@@ -710,11 +1159,15 @@ tr:hover .td-act{opacity:1}
   <div class="top-nav">
     <span class="nav-logo">마케팅 CRM</span>
     <div class="nav-tab on"  id="nav-dash"     onclick="showPage('dash')">대시보드</div>
+    <div class="nav-tab"     id="nav-msg"      onclick="showPage('msg')">메시지</div>
     <div class="nav-tab"     id="nav-sales"    onclick="showPage('sales')">영업관리</div>
     <div class="nav-tab"     id="nav-outbound" onclick="showPage('outbound')">아웃바운드</div>
+    <div class="nav-tab"     id="nav-improve"  onclick="showPage('improve')">고객개선</div>
+    <div class="nav-tab"     id="nav-tdl"      onclick="showPage('tdl')">TDL</div>
+    <div class="nav-tab"     id="nav-rnr"      onclick="showPage('rnr')">R&amp;R</div>
     <div class="nav-tab"     id="nav-notion"   onclick="showPage('notion')">미팅캘린더</div>
+    <div class="nav-tab"     id="nav-mail"     onclick="showPage('mail')">메일초안</div>
     <div class="nav-tab"     id="nav-chinsuk"  onclick="showPage('chinsuk')">친숙자료</div>
-    <div class="nav-tab"     id="nav-weekly"   onclick="showPage('weekly')">주간회의</div>
     <div class="nav-tab"     id="nav-settings" onclick="showPage('settings')">설정</div>
     <div class="nav-right">
       <div class="user-chip" onclick="switchUser()">
@@ -737,6 +1190,13 @@ tr:hover .td-act{opacity:1}
         <div class="metric-grid" id="dashMsgMetrics"></div>
       </div>
       <!-- 건수 특이사항 -->
+      <div class="card" id="dashNoteCard" style="display:none">
+        <div class="sec-hd">
+          <span class="sec-title">📋 건수 특이사항</span>
+          <span style="font-size:11px;color:var(--text3)" id="dashNoteMonth"></span>
+        </div>
+        <div id="dashNoteList" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
       <!-- 메시지 차트 -->
       <div class="card">
         <div class="sec-hd">
@@ -777,6 +1237,81 @@ tr:hover .td-act{opacity:1}
   </div>
 
   <!-- MESSAGE -->
+  <div class="page" id="page-msg">
+    <div class="inner-tabs">
+      <div class="inner-tab on" id="msgtab-input"   onclick="showMsgTab('input')">일별 입력</div>
+      <div class="inner-tab"   id="msgtab-history" onclick="showMsgTab('history')">전체 내역</div>
+      <div class="inner-tab"   id="msgtab-note"    onclick="showMsgTab('note')">건수 특이사항</div>
+    </div>
+    <div id="msgview-input" class="pscroll">
+      <div class="card">
+        <div class="sec-hd">
+          <div><span class="sec-title">일별 발송 건수 입력</span><div style="font-size:11px;color:var(--text3);margin-top:2px">입력 후 전체 저장을 눌러주세요</div></div>
+          <div style="display:flex;gap:7px;align-items:center">
+            <input type="month" id="inputMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgInputTable()"/>
+            <button class="btn btn-sm btn-primary" onclick="saveMsgBatch()">전체 저장</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="msg-input-table">
+            <thead><tr>
+              <th>날짜</th>
+              <th><span class="mtype mt-sms">SMS</span></th>
+              <th><span class="mtype mt-lms">LMS</span></th>
+              <th><span class="mtype mt-mms">MMS</span></th>
+              <th><span class="mtype mt-ali">알림톡</span></th>
+              <th><span class="mtype mt-brand">브랜드</span></th>
+              <th><span class="mtype mt-rcs">RCS</span></th>
+              <th>합계</th>
+            </tr></thead>
+            <tbody id="msgInputBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="msgview-history" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd"><span class="sec-title">발송 내역</span>
+          <div style="display:flex;gap:7px;align-items:center">
+            <input type="month" id="historyMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgHistory()"/>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="htbl">
+            <thead><tr><th style="text-align:left">날짜</th><th>SMS</th><th>LMS</th><th>MMS</th><th>알림톡</th><th>브랜드</th><th>RCS</th><th>합계</th><th></th></tr></thead>
+            <tbody id="historyBody"></tbody>
+            <tfoot id="historyFoot"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 건수 특이사항 -->
+    <div id="msgview-note" class="pscroll" style="display:none">
+      <div class="card">
+        <div class="sec-hd">
+          <div>
+            <span class="sec-title">건수 특이사항</span>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">대시보드 하단에 표시됩니다</div>
+          </div>
+          <input type="month" id="noteMonth" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderMsgNotes()"/>
+        </div>
+        <!-- 작성 영역 -->
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:6px">새 특이사항 작성</div>
+          <textarea id="noteInput" placeholder="예) 04-03 알림톡 급증 사유: A사 이벤트 발송&#10;04-11 SMS 감소: 공휴일(식목일)&#10;..." style="width:100%;min-height:100px;font-size:13px;padding:10px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);font-family:inherit;line-height:1.7;resize:vertical;outline:none"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:8px">
+            <button class="btn btn-primary" onclick="saveMsgNote()">저장</button>
+          </div>
+        </div>
+        <!-- 저장된 목록 -->
+        <div style="border-top:0.5px solid var(--bd);padding-top:14px">
+          <div style="font-size:11px;color:var(--text2);font-weight:500;margin-bottom:10px">저장된 특이사항</div>
+          <div id="noteList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- SALES -->
   <div class="page" id="page-sales">
@@ -850,11 +1385,139 @@ tr:hover .td-act{opacity:1}
   </div>
 
   <!-- IMPROVE -->
+    <div class="page" id="page-improve">
+    <div class="voc-wrap" id="voc-wrap" style="height:100%;overflow-y:auto">
+<div class="error-popup-overlay" id="errorPopup">
+  <div class="error-popup">
+    <div class="error-popup-icon">⚠️</div>
+    <div class="error-popup-title">업로드 실패</div>
+    <div class="error-popup-msg" id="errorPopupMsg"></div>
+    <div class="error-popup-file" id="errorPopupFile" style="display:none"></div>
+    <div><button class="error-popup-btn" id="errorPopupBtn">확인</button></div>
+  </div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay">
+  <div class="drop-overlay-inner">
+    <div class="drop-icon">📁</div>
+    <div class="drop-text">CSV 파일을 놓으세요</div>
+    <div class="drop-sub">파일을 드롭하면 자동으로 업로드됩니다</div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">📊</div>
+    <div>
+      <div class="header-title">VOC 전일 접수 현황</div>
+      <div class="header-sub" id="vocLastSaved">저장된 데이터 없음</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <!-- 업로드 -->
+    <button onclick="document.getElementById('vocFileInput').click()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;font-weight:500">
+      📂 파일 업로드
+    </button>
+    <!-- 저장 (업로드 후 표시) -->
+    <button id="vocSaveBtn" onclick="saveVocToDB()" style="display:none;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:none;background:#238636;color:#fff;font-size:12px;cursor:pointer;font-weight:600">
+      💾 DB 저장
+    </button>
+    <!-- 파일명 배지 -->
+    <div id="fileNameBadge" style="display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--text2);">
+      <span style="color:var(--accent)">📄</span>
+      <span id="fileName" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    </div>
+    <!-- 상태 배지 -->
+    <div class="header-badge">
+      <div class="badge-dot"></div>
+      <span id="dataInfo">불러오는 중...</span>
+    </div>
+  </div>
+</div>
+
+<!-- 저장된 파일 목록 바 -->
+<div id="vocSavedBar" style="display:none;padding:10px 28px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+  <span style="font-size:12px;color:var(--text3);font-weight:500">저장된 데이터:</span>
+  <div id="vocSavedList" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+</div>
+
+<div class="content" style="padding-top:24px;">
+
+  <!-- OVERVIEW -->
+  <div id="panel-overview" class="panel active fade-in">
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span>📂</span> 대분류별 문의 현황 <span id="catDateLabel" style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0"></span></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="catChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📞</span> 인입 채널 현황 <span id="chDateLabel" style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0"></span></div>
+        <div class="chart-wrap" style="height:220px"><canvas id="channelChart"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span>🏷️</span> 전일 문의유형 Top 5</div>
+        <div id="dailyTopList" class="rank-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📈</span> <span id="trendTitle">최근 7일 인입 추이</span></div>
+        <div class="chart-wrap" style="height:230px"><canvas id="weeklyTrendChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="vocFileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleUpload(event)">
+  <div id="uploadStatus" style="display:none;margin-bottom:16px;" class="card">
+    <div id="uploadMsg" style="font-size:13px; color:var(--text2);"></div>
+  </div>
+
+
+</div>
+    </div>
+  </div>
 
 
   <!-- TDL -->
+  <div class="page" id="page-tdl">
+    <div class="pscroll">
+      <div class="card">
+        <div class="sec-hd">
+          <div>
+            <span class="sec-title">오늘의 할 일</span>
+            <span style="font-size:11px;color:var(--text3);margin-left:8px" id="tdlDateLabel"></span>
+          </div>
+          <div style="display:flex;gap:7px;align-items:center">
+            <input type="date" id="tdlDate" style="font-size:12px;padding:4px 8px;border-radius:var(--r);border:0.5px solid var(--bd2);background:var(--bg2);color:var(--text);outline:none" onchange="renderTdl()"/>
+            <button class="btn btn-sm btn-primary" onclick="openTdlModal()">+ 추가</button>
+          </div>
+        </div>
+        <!-- 미완료 이월 안내 -->
+        <div id="carryOverBanner" style="display:none;background:var(--amber-bg);border-radius:var(--r);padding:8px 12px;margin-bottom:12px;font-size:12px;color:var(--amber);display:flex;align-items:center;justify-content:space-between">
+          <span id="carryOverMsg"></span>
+          <button class="btn btn-xs" onclick="doCarryOver()" style="color:var(--amber);border-color:var(--amber)">이월 처리</button>
+        </div>
+        <!-- 진행률 -->
+        <div id="tdlProgress" style="margin-bottom:12px"></div>
+        <!-- 목록 -->
+        <div id="tdlList"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- R&R -->
+  <div class="page" id="page-rnr">
+    <div class="pscroll">
+      <div class="card">
+        <div class="sec-hd">
+          <span class="sec-title">팀원별 R&amp;R</span>
+          <button class="btn btn-sm btn-primary" onclick="openRnrEdit()">내 R&amp;R 수정</button>
+        </div>
+        <div id="rnrList"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- MAIL -->
   <div class="page" id="page-notion">
@@ -917,34 +1580,37 @@ tr:hover .td-act{opacity:1}
 
 
   <!-- MAIL -->
-
-  <!-- 친숙자료 -->
-<div class="page" id="page-weekly">
-  <div class="pscroll" id="weekly-scroll">
-    <div style="display:flex;gap:8px;padding-bottom:4px;border-bottom:0.5px solid var(--bd);margin-bottom:4px">
-      <button class="btn btn-sm" id="wtab-meeting" onclick="showWeeklyTab('meeting')" style="font-weight:600">회의모드</button>
-      <button class="btn btn-sm" id="wtab-tasks" onclick="showWeeklyTab('tasks')">내 태스크</button>
-      <button class="btn btn-sm" id="wtab-history" onclick="showWeeklyTab('history')">히스토리</button>
-    </div>
-    <div id="wpanel-meeting" class="card" style="display:block">
-      <div id="weekly-meeting-content">
-        <div style="text-align:center;padding:40px;color:var(--text2)">
-          <div style="font-size:15px;font-weight:600;margin-bottom:12px">주간회의</div>
-          <button class="btn btn-primary" onclick="startWeeklyMeeting()">이번 주 회의 시작</button>
-          <div style="margin-top:12px;font-size:12px;color:var(--text3)" id="weekly-last-info"></div>
+  <div class="page" id="page-mail">
+    <div class="mail-layout">
+      <div class="sidebar">
+        <div class="sel-bar" id="selBar">
+          <span style="font-size:12px;color:var(--text2);flex:1" id="selCount">0개 선택</span>
+          <button class="btn btn-sm" onclick="moveSelected()">이동</button>
+          <button class="btn btn-sm" onclick="copySelected()">복사</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteSelected()">삭제</button>
+          <button class="btn btn-sm" onclick="clearSelection()">취소</button>
+        </div>
+        <div class="sb-acts">
+          <button class="btn btn-sm btn-primary" style="flex:1" onclick="openNewTpl()">+ 새 템플릿</button>
+          <button class="btn btn-sm" id="btnSelMode" onclick="toggleSelectMode()">선택</button>
+          <button class="btn btn-sm" onclick="deleteAllConfirm()">전체삭제</button>
+        </div>
+        <div class="sb-scroll" id="sbScroll"><div style="font-size:12px;color:var(--text3);padding:7px 8px"><span class="spin"></span>불러오는 중...</div></div>
+      </div>
+      <div class="mail-content">
+        <div class="empty-panel" id="emptyPanel">템플릿을 선택하거나 새로 만들어 보세요</div>
+        <div style="display:none;flex-direction:column;height:100%" id="editArea">
+          <div class="mode-bar">
+            <div class="mtab on" id="tabEdit" onclick="switchMode('edit')">편집</div>
+            <div class="mtab" id="tabUse" onclick="switchMode('use')">작성 미리보기</div>
+          </div>
+          <div class="panel" id="panel"></div>
         </div>
       </div>
     </div>
-    <div id="wpanel-tasks" class="card" style="display:none">
-      <div class="sec-hd"><span class="sec-title">내 태스크</span></div>
-      <div id="my-tasks-list"><div style="color:var(--text3);font-size:12px">로딩 중...</div></div>
-    </div>
-    <div id="wpanel-history" class="card" style="display:none">
-      <div class="sec-hd"><span class="sec-title">회의 히스토리</span></div>
-      <div id="weekly-history-list"><div style="color:var(--text3);font-size:12px">로딩 중...</div></div>
-    </div>
   </div>
-</div>
+
+  <!-- 친숙자료 -->
   <div class="page" id="page-chinsuk">
     <div class="inner-tabs">
       <div class="inner-tab on" id="chtab-list"   onclick="showChinsukTab('list')">배포 리스트</div>
@@ -1182,9 +1848,69 @@ tr:hover .td-act{opacity:1}
   <div class="mbtns"><button class="btn" onclick="closeModal('modalOutbound')">취소</button><button class="btn btn-primary" onclick="saveOutbound()">저장</button></div>
 </div></div>
 
+<div class="mbg" id="modalUpload"><div class="modal" style="max-width:560px">
+  <h3>엑셀 / CSV 업로드</h3>
+  <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.7">
+    엑셀(.xlsx) 또는 CSV 파일을 업로드하세요.<br>
+    컬럼 순서: <b>순번, 업체명, 전화번호, 주소, URL</b><br>
+    <span style="color:var(--text3)">첫 번째 행은 헤더로 자동 인식됩니다.</span>
+  </div>
+  <div class="fl">
+    <label>캠페인 지정 (선택)</label>
+    <select id="uploadCamp"><option value="">없음</option></select>
+  </div>
+  <div style="border:0.5px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;background:var(--bg2);margin-bottom:10px" onclick="document.getElementById('uploadFileInput').click()">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:4px">클릭하여 파일 선택</div>
+    <div style="font-size:11px;color:var(--text3)">.xlsx, .xls, .csv 지원</div>
+    <input type="file" id="uploadFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="onUploadFile(this)"/>
+  </div>
+  <div id="uploadPreview" style="display:none">
+    <div style="font-size:12px;font-weight:500;margin-bottom:8px" id="uploadPreviewTitle"></div>
+    <div style="max-height:200px;overflow-y:auto;border:0.5px solid var(--bd);border-radius:var(--r)">
+      <table class="ltbl" id="uploadPreviewTable" style="font-size:11px">
+        <thead><tr><th>업체명</th><th>전화번호</th><th>주소</th><th>URL</th></tr></thead>
+        <tbody id="uploadPreviewBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mbtns">
+    <button class="btn" onclick="closeModal('modalUpload')">취소</button>
+    <button class="btn btn-primary" id="uploadConfirmBtn" onclick="confirmUpload()" style="display:none">업로드 확인</button>
+  </div>
+</div></div>
 
+<div class="mbg" id="modalImprove"><div class="modal">
+  <h3 id="impModalTitle">개선사항 추가</h3>
+  <div class="r2"><div class="fl"><label>업체명 *</label><input id="impCompany"/></div><div class="fl"><label>우선순위</label><select id="impPriority"><option>긴급</option><option>높음</option><option>보통</option><option>낮음</option></select></div></div>
+  <div class="fl"><label>개선사항 *</label><input id="impIssue"/></div>
+  <div class="r2">
+    <div class="fl"><label>상태</label><select id="impStatus"><option>접수</option><option>처리중</option><option>완료</option><option>보류</option></select></div>
+    <div class="fl"><label>담당 팀원</label><select id="impAssignee"><option value="">미배정</option></select></div>
+  </div>
+  <div class="r2">
+    <div class="fl"><label>마감일</label><input id="impDue" type="date"/></div>
+    <div class="fl"><label>비고</label><input id="impNote"/></div>
+  </div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalImprove')">취소</button><button class="btn btn-primary" onclick="saveImprove()">저장</button></div>
+</div></div>
 
+<div class="mbg" id="modalTdl"><div class="modal">
+  <h3 id="tdlModalTitle">할 일 추가</h3>
+  <div class="fl"><label>할 일 *</label><input id="tdlTitle" placeholder="오늘 할 일을 입력하세요"/></div>
+  <div class="r2">
+    <div class="fl"><label>우선순위</label><select id="tdlPriority"><option>긴급</option><option>높음</option><option selected>보통</option><option>낮음</option></select></div>
+    <div class="fl"><label>날짜</label><input id="tdlItemDate" type="date"/></div>
+  </div>
+  <div class="fl"><label>메모</label><textarea id="tdlMemo" style="min-height:50px"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalTdl')">취소</button><button class="btn btn-primary" onclick="saveTdl()">저장</button></div>
+</div></div>
 
+<div class="mbg" id="modalRnr"><div class="modal">
+  <h3>내 R&amp;R 수정</h3>
+  <div class="fl"><label>직책 / 역할명</label><input id="rnrTitle" placeholder="예) 마케팅 팀장, 콘텐츠 담당"/></div>
+  <div class="fl"><label>담당 업무 상세</label><textarea id="rnrDesc" style="min-height:120px" placeholder="예) SNS 채널 운영, 캠페인 기획, 주간 리포트 작성 등"></textarea></div>
+  <div class="mbtns"><button class="btn" onclick="closeModal('modalRnr')">취소</button><button class="btn btn-primary" onclick="saveRnr()">저장</button></div>
+</div></div>
 
 <div class="mbg" id="modalDoc"><div class="modal">
   <h3 id="docModalTitle">문서 추가</h3>
@@ -1382,43 +2108,6 @@ tr:hover .td-act{opacity:1}
     </div>
   </div></div>
 
-
-<div class="mbg" id="modal-weekly-s1"><div class="modal" style="max-width:480px">
-  <div class="modal-hd"><span class="modal-title">📋 Step 1 / 4 — 출석 확인</span><button class="modal-close" onclick="closeModal('modal-weekly-s1')">✕</button></div>
-  <div class="modal-body">
-    <div class="fl"><label>회의 주차</label><input type="text" id="ws1-week" placeholder="예: 2026-W45" readonly style="background:var(--bg3)"/></div>
-    <div class="fl"><label>참석자 체크</label><div id="ws1-attendees" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0"></div></div>
-    <div class="fl"><label>영업 특이사항</label><textarea id="ws1-sales" rows="3" placeholder="이번 주 영업 주요 이슈..."></textarea></div>
-  </div>
-  <div class="modal-ft"><button class="btn" onclick="closeModal('modal-weekly-s1')">취소</button><button class="btn btn-primary" onclick="weeklyStep2()">다음 →</button></div>
-</div></div>
-
-<div class="mbg" id="modal-weekly-s2"><div class="modal" style="max-width:560px">
-  <div class="modal-hd"><span class="modal-title">📅 Step 2 / 4 — 이번 주 일정</span><button class="modal-close" onclick="closeModal('modal-weekly-s2')">✕</button></div>
-  <div class="modal-body">
-    <div id="ws2-schedules" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
-    <button class="btn btn-sm" onclick="addWeeklyScheduleRow()">+ 일정 추가</button>
-  </div>
-  <div class="modal-ft"><button class="btn" onclick="weeklyBackTo1()">← 이전</button><button class="btn btn-primary" onclick="weeklyStep3()">다음 →</button></div>
-</div></div>
-
-<div class="mbg" id="modal-weekly-s3"><div class="modal" style="max-width:600px">
-  <div class="modal-hd"><span class="modal-title">✅ Step 3 / 4 — 태스크 점검</span><button class="modal-close" onclick="closeModal('modal-weekly-s3')">✕</button></div>
-  <div class="modal-body">
-    <div id="ws3-tasks" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
-    <button class="btn btn-sm" onclick="addWeeklyTaskRow()">+ 신규 태스크</button>
-  </div>
-  <div class="modal-ft"><button class="btn" onclick="weeklyBackTo2()">← 이전</button><button class="btn btn-primary" onclick="weeklyStep4()">다음 →</button></div>
-</div></div>
-
-<div class="mbg" id="modal-weekly-s4"><div class="modal" style="max-width:480px">
-  <div class="modal-hd"><span class="modal-title">📝 Step 4 / 4 — 회의 마무리</span><button class="modal-close" onclick="closeModal('modal-weekly-s4')">✕</button></div>
-  <div class="modal-body">
-    <div class="fl"><label>회의 요약 / 결정사항</label><textarea id="ws4-summary" rows="5" placeholder="오늘 회의에서 결정된 사항..."></textarea></div>
-  </div>
-  <div class="modal-ft"><button class="btn" onclick="weeklyBackTo3()">← 이전</button><button class="btn btn-primary" onclick="closeWeeklyMeeting()">회의 종료 ✓</button></div>
-</div></div>
-
 </body>
 </html>
 
@@ -1429,11 +2118,13 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let currentUser=null, allUsers=[]
-let tpls=[], cats=[], leads=[], activities=[], targets=[]
-let campaigns=[], outbounds=[]
+let tpls=[], cats=[], leads=[], activities=[], targets=[], msgLogs=[]
+let campaigns=[], outbounds=[], improvements=[]
+let todos=[], rnrData=[]
+let editingTdlId=null
 let sel=null, tplMode='edit', openCats={}, dragSrc=null, vals={}, files=[]
 let selectMode=false, selectedIds=new Set(), ctxTargetId=null, moveTargetIds=[]
-let editingLeadId=null, editingCampId=null, editingObId=null
+let editingLeadId=null, editingCampId=null, editingObId=null, editingImpId=null
 let dashChart1=null, dashChart2=null
 let chartMode='daily', chartShape='line'
 
@@ -1453,10 +2144,8 @@ async function init() {
   document.querySelectorAll('.mbg').forEach(m => m.classList.remove('open'))
 
   const ym = new Date().toISOString().slice(0,7)
-  const inputMonthEl = document.getElementById('inputMonth')
-  const historyMonthEl = document.getElementById('historyMonth')
-  if(inputMonthEl) inputMonthEl.value = ym
-  if(historyMonthEl) historyMonthEl.value = ym
+  document.getElementById('inputMonth').value = ym
+  document.getElementById('historyMonth').value = ym
 
   // 1. 캐시된 팀원 목록 즉시 표시
   const cached = localStorage.getItem('crm_users')
@@ -1507,12 +2196,12 @@ async function selectUser(id) {
 
   // 화면 먼저 표시 후 데이터 병렬 로딩
   renderDashboard()
-  Promise.all([loadSalesData(), loadOutbound(), loadMeetings()])
+  Promise.all([loadSalesData(), loadMsgLogs(), loadMsgNotes(), loadTemplates(), loadOutbound(), loadImprovements(), loadTodos(), loadRnr(), loadMeetings()])
     .then(() => { renderDashboard(); renderCatTags(); renderMemberManage() })
 }
 
 function switchUser() {
-  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];campaigns=[];outbounds=[];meetings=[]
+  currentUser=null; tpls=[];cats=[];leads=[];activities=[];targets=[];msgLogs=[];campaigns=[];outbounds=[];improvements=[];todos=[];rnrData=[];meetings=[];msgNotes=[]
   sel=null;vals={};files=[];selectMode=false;selectedIds=new Set()
   if(dashChart1){dashChart1.destroy();dashChart1=null}
   if(dashChart2){dashChart2.destroy();dashChart2=null}
@@ -1524,7 +2213,7 @@ function switchUser() {
 
 function showPage(p) {
   document.querySelectorAll('.mbg.open').forEach(function(m){ m.classList.remove('open') })
-  var pages = ['dash','sales','outbound','notion','chinsuk','weekly','settings']
+  var pages = ['dash','msg','sales','outbound','improve','tdl','rnr','notion','mail','chinsuk','settings']
   pages.forEach(function(id) {
     var pg = document.getElementById('page-'+id)
     var nv = document.getElementById('nav-'+id)
@@ -1533,9 +2222,12 @@ function showPage(p) {
   })
   if (p==='dash') renderDashboard()
   if (p==='outbound') { renderCampTable(); renderOutboundList() }
+  if (p==='improve') { setTimeout(()=>{ if(typeof renderOverview==='function') renderOverview(); if(typeof vocAutoLoad==='function') vocAutoLoad(); },50) }
+  if (p==='msg') { showMsgTab('input') }
+  if (p==='tdl') renderTdl()
+  if (p==='rnr') renderRnr()
   if (p==='notion') { loadMeetings() }
   if (p==='chinsuk') { loadChinsuk() }
-  if (p==='weekly') loadWeekly()
   if (p==='settings') { renderCatTags(); renderMemberManage(); renderApiKeySetting() }
 }
 
@@ -1706,6 +2398,151 @@ function renderDashboard() {
     </div>`
   }).join('') || '<div style="font-size:12px;color:var(--text3)">팀원 없음</div>'
 
+  // 건수 특이사항
+  renderDashNotes(ym)
+}
+
+// -- MSG --
+let msgNotes = []
+
+async function loadMsgLogs() { const{data}=await sb.from('message_logs').select('*').order('log_date',{ascending:false}); msgLogs=data||[] }
+async function loadMsgNotes() { const{data}=await sb.from('msg_notes').select('*').order('created_at',{ascending:false}); msgNotes=data||[] }
+
+function renderMsgNotes() {
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  if (document.getElementById('noteMonth')) document.getElementById('noteMonth').value = ym
+  if (document.getElementById('noteInput') && !document.getElementById('noteInput').value) {}
+  const list = msgNotes.filter(n => n.year_month === ym)
+  const el = document.getElementById('noteList')
+  if (!el) return
+  if (!list.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 0">이번달 특이사항이 없어요</div>'; return }
+  el.innerHTML = list.map(n => {
+    const u = allUsers.find(x => x.id === n.user_id)
+    const dt = n.updated_at ? n.updated_at.slice(0,16).replace('T',' ') : ''
+    return `<div style="border:0.5px solid var(--bd);border-radius:var(--r);padding:12px 14px;position:relative">
+      <div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+        <span>${e(u?.name||'-')} <span style="color:var(--text3);font-weight:400">${dt}</span></span>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-xs" onclick="editMsgNote('${n.id}')">수정</button>
+          <button class="btn btn-xs btn-danger" onclick="deleteMsgNote('${n.id}')">삭제</button>
+        </div>
+      </div>
+      <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text)">${e(n.note)}</div>
+    </div>`
+  }).join('')
+}
+
+async function saveMsgNote() {
+  const noteInput = document.getElementById('noteInput')
+  const note = noteInput?.value.trim()
+  if (!note) { alert('내용을 입력하세요'); return }
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  const { data } = await sb.from('msg_notes').insert({ user_id: currentUser.id, year_month: ym, note }).select().single()
+  if (data) msgNotes.unshift(data)
+  noteInput.value = ''
+  renderMsgNotes()
+  renderDashNotes(ym)
+}
+
+async function deleteMsgNote(id) {
+  if (!confirm('삭제할까요?')) return
+  await sb.from('msg_notes').delete().eq('id', id)
+  msgNotes = msgNotes.filter(n => n.id !== id)
+  const ym = document.getElementById('noteMonth')?.value || new Date().toISOString().slice(0,7)
+  renderMsgNotes()
+  renderDashNotes(ym)
+}
+
+function editMsgNote(id) {
+  const n = msgNotes.find(x => x.id === id); if (!n) return
+  const newNote = prompt('특이사항 수정', n.note)
+  if (newNote === null) return
+  sb.from('msg_notes').update({ note: newNote, updated_at: new Date().toISOString() }).eq('id', id)
+    .then(() => { n.note = newNote; n.updated_at = new Date().toISOString(); renderMsgNotes(); renderDashNotes(n.year_month) })
+}
+
+function renderDashNotes(ym) {
+  const notes = msgNotes.filter(n => n.year_month === ym)
+  const card = document.getElementById('dashNoteCard')
+  const list = document.getElementById('dashNoteList')
+  const monthEl = document.getElementById('dashNoteMonth')
+  if (!card || !list) return
+  if (!notes.length) { card.style.display = 'none'; return }
+  card.style.display = 'block'
+  if (monthEl) monthEl.textContent = ym
+  list.innerHTML = notes.map(n => {
+    const u = allUsers.find(x => x.id === n.user_id)
+    const dt = n.updated_at ? n.updated_at.slice(0,10) : ''
+    return `<div style="padding:10px 14px;border-radius:var(--r);background:var(--bg2);border-left:3px solid var(--blue)">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:5px">${e(u?.name||'')} · ${dt}</div>
+      <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text)">${e(n.note)}</div>
+    </div>`
+  }).join('')
+}
+function getDaysInMonth(ym){
+  const[y,m]=ym.split('-').map(Number),days=[]
+  const daysInMonth=new Date(y,m,0).getDate()
+  for(let i=1;i<=daysInMonth;i++){
+    days.push(y+'-'+String(m).padStart(2,'0')+'-'+String(i).padStart(2,'0'))
+  }
+  return days
+}
+function getMsgLogs(ym,uid){return msgLogs.filter(l=>l.log_date&&l.log_date.startsWith(ym)&&(uid?l.user_id===uid:true))}
+
+function renderMsgInputTable(){
+  const ym=document.getElementById('inputMonth').value||new Date().toISOString().slice(0,7)
+  const days=getDaysInMonth(ym)
+  document.getElementById('msgInputBody').innerHTML=days.map(d=>{
+    // 날짜별 전체 합산
+    const dayLogs=msgLogs.filter(l=>l.log_date===d)
+    const ex={}; MSG_TYPES.forEach(t=>ex[t]=dayLogs.reduce((s,l)=>s+(l[t]||0),0))
+    const tot=MSG_TYPES.reduce((s,t)=>s+(ex[t]||0),0)
+    return'<tr><td style="font-weight:500;text-align:left;white-space:nowrap">'+d.slice(5)+'</td>'+
+      MSG_TYPES.map(t=>'<td><input type="number" min="0" id="inp-'+d+'-'+t+'" value="'+(ex[t]||'')+'" placeholder="0" oninput="updateRowTotal(\''+d+'\')"/></td>').join('')+
+      '<td class="row-total" id="rowtotal-'+d+'">'+(tot>0?tot.toLocaleString():'-')+'</td></tr>'
+  }).join('')
+}
+
+function updateRowTotal(d){let t=0;MSG_TYPES.forEach(tp=>{t+=parseInt(document.getElementById('inp-'+d+'-'+tp)?.value)||0});document.getElementById('rowtotal-'+d).textContent=t>0?t.toLocaleString():'-'}
+
+async function saveMsgBatch(){
+  if(!currentUser)return
+  const ym=document.getElementById('inputMonth').value||new Date().toISOString().slice(0,7)
+  const days=getDaysInMonth(ym); let saved=0
+  for(const d of days){
+    const rv={};let has=false
+    MSG_TYPES.forEach(t=>{const v=parseInt(document.getElementById('inp-'+d+'-'+t)?.value)||0;rv[t]=v;if(v>0)has=true})
+    if(!has)continue
+    // 날짜 기존 row: 현재 사용자 row 우선, 없으면 아무 row
+    let ex=msgLogs.find(l=>l.log_date===d&&l.user_id===currentUser.id)
+    if(!ex)ex=msgLogs.find(l=>l.log_date===d)
+    if(ex){await sb.from('message_logs').update(rv).eq('id',ex.id);Object.assign(ex,rv)}
+    else{const{data}=await sb.from('message_logs').insert({user_id:currentUser.id,log_date:d,...rv}).select().single();if(data)msgLogs.push(data)}
+    saved++
+  }
+  alert(saved+'일치 저장됐어요!'); renderMsgHistory(); renderDashboard()
+}
+
+function renderMsgHistory(){
+  const ym=document.getElementById('historyMonth').value||new Date().toISOString().slice(0,7)
+  const logs=getMsgLogs(ym,'')
+  const byDate={}
+  logs.forEach(l=>{const d=l.log_date;if(!byDate[d]){byDate[d]={log_date:d};MSG_TYPES.forEach(t=>byDate[d][t]=0)}MSG_TYPES.forEach(t=>byDate[d][t]+=(l[t]||0))})
+  const rows=Object.values(byDate).sort((a,b)=>a.log_date>b.log_date?-1:1)
+  const tbody=document.getElementById('historyBody'),tfoot=document.getElementById('historyFoot')
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>';tfoot.innerHTML='';return}
+  tbody.innerHTML=rows.map(r=>{const tot=MSG_TYPES.reduce((s,t)=>s+(r[t]||0),0);return'<tr><td>'+r.log_date+'</td>'+MSG_TYPES.map(t=>'<td>'+(r[t]||0).toLocaleString()+'</td>').join('')+'<td style="font-weight:700">'+tot.toLocaleString()+'</td><td><button class="btn btn-xs btn-danger" onclick="deleteMsgByDate(\''+r.log_date+'\')">삭제</button></td></tr>'}).join('')
+  const foot={};let fTot=0;MSG_TYPES.forEach(t=>{foot[t]=rows.reduce((s,r)=>s+(r[t]||0),0);fTot+=foot[t]})
+  tfoot.innerHTML='<tr><td>합계</td>'+MSG_TYPES.map(t=>'<td>'+foot[t].toLocaleString()+'</td>').join('')+'<td>'+fTot.toLocaleString()+'</td><td></td></tr>'
+}
+
+async function deleteMsgByDate(date){
+  if(!confirm(date+' 데이터를 삭제할까요?'))return
+  const ids=msgLogs.filter(l=>l.log_date===date).map(l=>l.id)
+  if(!ids.length)return
+  await sb.from('message_logs').delete().in('id',ids)
+  msgLogs=msgLogs.filter(l=>l.log_date!==date)
+  renderMsgHistory();renderDashboard()
 }
 
 // -- SALES --
@@ -1951,6 +2788,240 @@ async function confirmUpload(){
   closeModal('modalUpload')
   renderOutboundList();renderCampTable();renderDashboard()
   alert(success+'개 업체가 업로드됐어요!')
+}
+
+// -- IMPROVEMENTS --
+async function loadImprovements(){const{data}=await sb.from('improvements').select('*').order('created_at',{ascending:false});improvements=data||[];renderImproveTable()}
+
+function renderImproveTable(){
+  const sf=document.getElementById('filterImpStatus')?.value,pf=document.getElementById('filterImpPriority')?.value
+  let list=improvements
+  if(sf)list=list.filter(i=>i.status===sf)
+  if(pf)list=list.filter(i=>i.priority===pf)
+  const counts={접수:0,처리중:0,완료:0,보류:0};improvements.forEach(i=>{if(counts[i.status]!==undefined)counts[i.status]++})
+  const mEl=document.getElementById('improveMetrics')
+  if(mEl)mEl.innerHTML=`<div class="metric"><div class="metric-label">전체</div><div class="metric-value">${improvements.length}</div></div>${Object.entries(counts).map(([s,c])=>`<div class="metric"><div class="metric-label">${s}</div><div class="metric-value" style="font-size:18px">${c}</div></div>`).join('')}<div class="metric" style="background:#FCEBEB"><div class="metric-label" style="color:#A32D2D">긴급 미처리</div><div class="metric-value" style="font-size:18px;color:#d04040">${improvements.filter(i=>i.priority==='긴급'&&i.status!=='완료').length}</div></div>`
+  const tbody=document.getElementById('improveTbody');if(!tbody)return
+  tbody.innerHTML=list.map(i=>{const u=allUsers.find(x=>x.id===i.assignee_id)
+    return`<tr><td style="font-weight:500">${e(i.company)}</td><td>${e(i.issue)}</td><td><span class="badge ${P_COLOR[i.priority]||'b-gray'}">${i.priority}</span></td><td><span class="badge ${I_COLOR[i.status]||'b-gray'}">${i.status}</span></td><td>${u?e(u.name):'-'}</td><td style="font-size:11px;color:var(--text2)">${i.due_date||'-'}</td><td style="font-size:11px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e(i.note||'')}</td><td><div class="td-act"><button class="btn btn-xs" onclick="openImproveModal('${i.id}')">편집</button><button class="btn btn-xs btn-danger" onclick="deleteImprove('${i.id}')">삭제</button></div></td></tr>`
+  }).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:16px">데이터가 없어요</td></tr>'
+}
+
+function openImproveModal(id){
+  editingImpId=id||null
+  document.getElementById('impModalTitle').textContent=id?'개선사항 수정':'개선사항 추가'
+  document.getElementById('impAssignee').innerHTML='<option value="">미배정</option>'+allUsers.map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')
+  if(id){const i=improvements.find(x=>x.id===id);if(i){document.getElementById('impCompany').value=i.company||'';document.getElementById('impIssue').value=i.issue||'';document.getElementById('impPriority').value=i.priority||'보통';document.getElementById('impStatus').value=i.status||'접수';document.getElementById('impAssignee').value=i.assignee_id||'';document.getElementById('impDue').value=i.due_date||'';document.getElementById('impNote').value=i.note||''}}
+  else{['impCompany','impIssue','impDue','impNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('impPriority').value='보통';document.getElementById('impStatus').value='접수'}
+  openModal('modalImprove')
+}
+async function saveImprove(){
+  const company=document.getElementById('impCompany').value.trim(),issue=document.getElementById('impIssue').value.trim()
+  if(!company||!issue){alert('업체명과 개선사항을 입력하세요');return}
+  const p={company,issue,priority:document.getElementById('impPriority').value,status:document.getElementById('impStatus').value,assignee_id:document.getElementById('impAssignee').value||null,due_date:document.getElementById('impDue').value||null,note:document.getElementById('impNote').value.trim()}
+  if(editingImpId){await sb.from('improvements').update(p).eq('id',editingImpId);const i=improvements.findIndex(x=>x.id===editingImpId);if(i>=0)improvements[i]={...improvements[i],...p}}
+  else{const{data}=await sb.from('improvements').insert(p).select().single();if(data)improvements.unshift(data)}
+  closeModal('modalImprove');renderImproveTable();renderDashboard()
+}
+async function deleteImprove(id){if(!confirm('삭제할까요?'))return;await sb.from('improvements').delete().eq('id',id);improvements=improvements.filter(i=>i.id!==id);renderImproveTable();renderDashboard()}
+
+// -- TEMPLATES --
+async function loadTemplates(){const{data}=await sb.from('templates').select('*').eq('user_id',currentUser.id).order('sort_order');tpls=(data||[]).map(t=>({...t,vars:Array.isArray(t.vars)?t.vars:JSON.parse(t.vars||'[]')}));renderSb()}
+async function dbCreate(t){const{data,error}=await sb.from('templates').insert({...t,user_id:currentUser.id}).select().single();if(error)throw error;return{...data,vars:Array.isArray(data.vars)?data.vars:JSON.parse(data.vars||'[]')}}
+async function dbUpdate(id,ch){await sb.from('templates').update(ch).eq('id',id)}
+async function dbDelete(ids){await sb.from('templates').delete().in('id',ids)}
+async function dbSaveOrder(ids){await Promise.all(ids.map((id,i)=>sb.from('templates').update({sort_order:i}).eq('id',id)))}
+function groupByCat(){const m={},order=[...cats,'미분류'];tpls.forEach(t=>{const c=t.category||'미분류';if(!m[c])m[c]=[];m[c].push(t)});const r=[];order.forEach(c=>{if(m[c])r.push([c,m[c]])});Object.keys(m).forEach(c=>{if(!order.includes(c))r.push([c,m[c]])});return r}
+function renderSb(){
+  const el=document.getElementById('sbScroll');el.innerHTML=''
+  const groups=groupByCat()
+  if(!groups.length){el.innerHTML='<div style="font-size:11px;color:var(--text3);padding:7px 8px">템플릿이 없어요</div>';return}
+  groups.forEach(([cat,items])=>{
+    if(openCats[cat]===undefined)openCats[cat]=true
+    const open=openCats[cat],ch=document.createElement('div');ch.className='cat-head'
+    ch.innerHTML=`<span class="cat-arr ${open?'o':''}">\u25B6</span><span class="cat-lbl">${e(cat)}</span><span class="cat-n">${items.length}</span>`
+    ch.onclick=()=>{openCats[cat]=!openCats[cat];renderSb()};el.appendChild(ch)
+    if(open){const ci=document.createElement('div');items.forEach(t=>{
+      const row=document.createElement('div'),checked=selectedIds.has(t.id)
+      row.className='tpl-item'+(sel===t.id?' sel':'')+(checked?' checked':'');row.draggable=!selectMode
+      row.innerHTML=`${selectMode?`<input type="checkbox" class="tpl-cb" ${checked?'checked':''} onclick="toggleCheck(event,'${t.id}')"/>`:`<span class="dh">\u283F</span>`}<span class="tn">${e(t.name)}</span>${!selectMode?`<span class="tpl-menu-btn" onclick="openCtx(event,'${t.id}')">...</span>`:''}`
+      row.onclick=ev=>{if(ev.target.classList.contains('tpl-cb')||ev.target.classList.contains('tpl-menu-btn'))return;if(selectMode){toggleCheck(ev,t.id);return}selT(t.id)}
+      if(!selectMode){row.ondragstart=()=>{dragSrc=t.id;row.classList.add('dragging')};row.ondragend=()=>{row.classList.remove('dragging');document.querySelectorAll('.tpl-item').forEach(r=>r.classList.remove('drag-over'))};row.ondragover=ev=>{ev.preventDefault();row.classList.add('drag-over')};row.ondragleave=()=>row.classList.remove('drag-over');row.ondrop=async ev=>{ev.preventDefault();row.classList.remove('drag-over');if(dragSrc&&dragSrc!==t.id){const fi=tpls.findIndex(x=>x.id===dragSrc),ti=tpls.findIndex(x=>x.id===t.id);if(fi>=0&&ti>=0){const[item]=tpls.splice(fi,1);tpls.splice(ti,0,item);renderSb();await dbSaveOrder(tpls.map(x=>x.id))}}}}
+      ci.appendChild(row)
+    });el.appendChild(ci)}
+  })
+}
+function toggleSelectMode(){selectMode=!selectMode;selectedIds=new Set();document.getElementById('btnSelMode').textContent=selectMode?'끄기':'선택';document.getElementById('selBar').classList.toggle('show',selectMode);updateSelCount();renderSb()}
+function toggleCheck(ev,id){if(typeof ev!=='string')ev.stopPropagation();const tid=typeof ev==='string'?ev:id;if(selectedIds.has(tid))selectedIds.delete(tid);else selectedIds.add(tid);updateSelCount();renderSb()}
+function updateSelCount(){document.getElementById('selCount').textContent=selectedIds.size+'개 선택'}
+function clearSelection(){selectMode=false;selectedIds=new Set();document.getElementById('btnSelMode').textContent='선택';document.getElementById('selBar').classList.remove('show');renderSb()}
+async function deleteSelected(){if(!selectedIds.size)return;if(!confirm(selectedIds.size+'개 삭제?'))return;const ids=[...selectedIds];await dbDelete(ids);tpls=tpls.filter(t=>!ids.includes(t.id));if(ids.includes(sel)){sel=null;showEmpty()}clearSelection()}
+async function deleteAllConfirm(){if(!tpls.length)return;if(!confirm('모든 템플릿 삭제?'))return;await dbDelete(tpls.map(t=>t.id));tpls=[];sel=null;showEmpty();renderSb()}
+async function ctxDelete(){hideCtx();if(!ctxTargetId)return;if(!confirm('삭제?'))return;await dbDelete([ctxTargetId]);tpls=tpls.filter(t=>t.id!==ctxTargetId);if(sel===ctxTargetId){sel=null;showEmpty()}renderSb()}
+function fillCatSel(sid,cur){const el=document.getElementById(sid);el.innerHTML='<option value="">없음</option>'+cats.map(c=>`<option value="${e(c)}" ${cur===c?'selected':''}>${e(c)}</option>`).join('')}
+function moveSelected(){if(!selectedIds.size)return;moveTargetIds=[...selectedIds];document.getElementById('moveTitle').textContent=moveTargetIds.length+'개 이동';fillCatSel('moveCat','');openModal('modalMove')}
+async function confirmMove(){const cat=document.getElementById('moveCat').value;for(const id of moveTargetIds){const t=tpls.find(x=>x.id===id);if(!t)continue;t.category=cat;await dbUpdate(id,{category:cat})}closeModal('modalMove');clearSelection()}
+function copySelected(){if(!selectedIds.size)return;moveTargetIds=[...selectedIds];document.getElementById('copyTitle').textContent=moveTargetIds.length+'개 복사';document.getElementById('copyName').value=moveTargetIds.length===1?(tpls.find(t=>t.id===moveTargetIds[0])?.name||'')+' (복사)':'';fillCatSel('copyCat','');openModal('modalCopy')}
+async function confirmCopy(){const cat=document.getElementById('copyCat').value,no=document.getElementById('copyName').value.trim();for(const id of moveTargetIds){const t=tpls.find(x=>x.id===id);if(!t)continue;const nn=moveTargetIds.length===1?(no||t.name+' (복사)'):t.name+' (복사)';const cr=await dbCreate({name:nn,category:cat||t.category,subject:t.subject,vars:t.vars,body:t.body,sort_order:tpls.length});tpls.push(cr)}closeModal('modalCopy');clearSelection()}
+function openCtx(ev,id){ev.stopPropagation();ctxTargetId=id;const m=document.getElementById('ctxMenu');m.style.display='block';m.style.left=Math.min(ev.clientX,window.innerWidth-160)+'px';m.style.top=Math.min(ev.clientY,window.innerHeight-140)+'px'}
+function hideCtx(){document.getElementById('ctxMenu').style.display='none'}
+document.addEventListener('click',hideCtx)
+function ctxEdit(){hideCtx();if(ctxTargetId)selT(ctxTargetId)}
+function ctxMove(){hideCtx();if(!ctxTargetId)return;moveTargetIds=[ctxTargetId];document.getElementById('moveTitle').textContent='이동';fillCatSel('moveCat',tpls.find(x=>x.id===ctxTargetId)?.category||'');openModal('modalMove')}
+function ctxCopy(){hideCtx();if(!ctxTargetId)return;moveTargetIds=[ctxTargetId];const t=tpls.find(x=>x.id===ctxTargetId);document.getElementById('copyTitle').textContent='복사';document.getElementById('copyName').value=(t?.name||'')+' (복사)';fillCatSel('copyCat',t?.category||'');openModal('modalCopy')}
+function selT(id){sel=id;vals={};files=[];tplMode='edit';renderSb();showEditArea();renderPanel()}
+function showEmpty(){document.getElementById('emptyPanel').style.display='flex';document.getElementById('editArea').style.display='none';renderSb()}
+function showEditArea(){document.getElementById('emptyPanel').style.display='none';document.getElementById('editArea').style.display='flex'}
+function switchMode(m){tplMode=m;document.getElementById('tabEdit').className='mtab'+(m==='edit'?' on':'');document.getElementById('tabUse').className='mtab'+(m==='use'?' on':'');renderPanel()}
+function renderPanel(){
+  if(!sel)return;const t=tpls.find(x=>x.id===sel);if(!t)return;const p=document.getElementById('panel')
+  if(tplMode==='edit'){
+    p.innerHTML=`<div class="r2"><div class="fl"><label>이름</label><input id="fN" value="${e(t.name)}" oninput="pL('name',this.value)"/></div><div class="fl"><label>카테고리</label><select id="fCat" onchange="pL('category',this.value)"><option value="">없음</option>${cats.map(c=>`<option value="${e(c)}" ${t.category===c?'selected':''}>${e(c)}</option>`).join('')}</select></div></div>
+    <div class="fl"><label>제목 ({변수})</label><input id="fS" value="${e(t.subject)}" oninput="pL('subject',this.value)"/></div>
+    <div class="fl"><label>변수</label><div class="vtags" id="vtags"></div><div class="vadd"><input id="vi" placeholder="변수명 후 추가" onkeydown="if(event.key==='Enter')addV()"/><button class="btn btn-sm" onclick="addV()">+추가</button></div><span class="hint">본문에서 {변수명} 사용</span></div>
+    <div class="fl"><label>본문</label><textarea id="fB" oninput="pL('body',this.value)">${e(t.body)}</textarea></div>
+    <div style="display:flex;align-items:center;gap:8px"><button class="btn btn-primary" onclick="saveT()">저장</button><span class="ok" id="okMsg" style="display:none">저장됐어요</span></div>`
+    renderVtags(t)
+  }else{
+    p.innerHTML=`<div class="r2">${t.vars.map(v=>`<div class="fl"><label>{${e(v)}}</label><input placeholder="${e(v)}" value="${e(vals[v]||'')}" oninput="setVal('${e(v)}',this.value)"/></div>`).join('')}</div>
+    <div class="fl"><label>파일 첨부</label><div class="file-zone" onclick="document.getElementById('fileInput').click()"><div style="font-size:12px;color:var(--text2)">클릭하여 파일 선택</div></div><div id="flist"></div></div>
+    <div class="psubj">제목: <b id="pSubj"></b></div><div class="pbody" id="pBody"></div>
+    <div id="pFiles" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
+    <button class="btn" id="btnCopy" onclick="copyAll()" style="align-self:flex-start;margin-top:4px">복사하기</button>`
+    renderFlist();updatePreview(t)
+  }
+}
+function pL(k,v){const t=tpls.find(x=>x.id===sel);if(!t)return;t[k]=v;if(k==='name'||k==='category')renderSb()}
+async function saveT(){const t=tpls.find(x=>x.id===sel);if(!t)return;t.name=document.getElementById('fN').value;t.category=document.getElementById('fCat').value;t.subject=document.getElementById('fS').value;t.body=document.getElementById('fB').value;await dbUpdate(t.id,{name:t.name,category:t.category,subject:t.subject,body:t.body,vars:t.vars});renderSb();const m=document.getElementById('okMsg');m.style.display='inline';setTimeout(()=>m.style.display='none',2000)}
+function renderVtags(t){const el=document.getElementById('vtags');if(!el)return;el.innerHTML=t.vars.map(v=>`<span class="vtag">{${e(v)}}<span class="vx" onclick="rmV('${e(v)}')">x</span></span>`).join('')}
+function addV(){const inp=document.getElementById('vi'),v=inp.value.trim().replace(/[{}]/g,'');if(!v)return;const t=tpls.find(x=>x.id===sel);if(!t||t.vars.includes(v)){inp.value='';return}t.vars.push(v);inp.value='';renderVtags(t)}
+function rmV(v){const t=tpls.find(x=>x.id===sel);if(!t)return;t.vars=t.vars.filter(x=>x!==v);renderVtags(t)}
+function setVal(k,v){vals[k]=v;const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function updatePreview(t){let s=t.subject,b=t.body;t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||'{'+v+'}');b=b.replace(rx,vals[v]||'{'+v+'}')});const ps=document.getElementById('pSubj'),pb=document.getElementById('pBody'),pf=document.getElementById('pFiles');if(ps)ps.textContent=s;if(pb)pb.innerHTML=b.replace(/\{[^}]+\}/g,m=>'<span class="hi">'+m+'</span>').replace(/\n/g,'<br>');if(pf)pf.innerHTML=files.map(f=>'<span style="display:inline-flex;align-items:center;gap:4px;background:var(--bg2);border:0.5px solid var(--bd);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--text2)">'+e(f.name)+'</span>').join('')}
+function onFiles(inp){Array.from(inp.files).forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size))files.push(f)});inp.value='';renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function renderFlist(){const el=document.getElementById('flist');if(!el)return;el.innerHTML=files.map((f,i)=>'<div class="fchip"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+e(f.name)+'</span><span style="font-size:10px;color:var(--text3);white-space:nowrap">'+fmt(f.size)+'</span><span style="cursor:pointer;color:var(--text3);font-size:11px" onclick="rmFile('+i+')">x</span></div>').join('')}
+function rmFile(i){files.splice(i,1);renderFlist();const t=tpls.find(x=>x.id===sel);if(t)updatePreview(t)}
+function fmt(b){if(b<1024)return b+'B';if(b<1048576)return Math.round(b/1024)+'KB';return(b/1048576).toFixed(1)+'MB'}
+function copyAll(){const t=tpls.find(x=>x.id===sel);if(!t)return;let s=t.subject,b=t.body;t.vars.forEach(v=>{const rx=new RegExp('\\{'+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\}','g');s=s.replace(rx,vals[v]||'{'+v+'}');b=b.replace(rx,vals[v]||'{'+v+'}')});if(files.length)b+='\n\n첨부파일: '+files.map(f=>f.name).join(', ');navigator.clipboard.writeText('제목: '+s+'\n\n'+b).then(()=>{const btn=document.getElementById('btnCopy');btn.textContent='복사 완료!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent='복사하기';btn.style.color=''},2000)})}
+function openNewTpl(){document.getElementById('nName').value='';const s=document.getElementById('nCat');s.innerHTML='<option value="">없음</option>'+cats.map(c=>`<option value="${e(c)}">${e(c)}</option>`).join('');openModal('modalNew')}
+async function confirmNew(){const name=document.getElementById('nName').value.trim();if(!name){alert('이름을 입력하세요');return}const cat=document.getElementById('nCat').value;try{const cr=await dbCreate({name,category:cat,subject:'['+name+'] {주제}',vars:['수신자','발신자','주제'],body:'안녕하세요, {수신자}님.\n\n{발신자}입니다.\n\n{주제} 관련하여 연락드립니다.\n\n감사합니다.\n{발신자} 드림',sort_order:tpls.length});tpls.push(cr);closeModal('modalNew');renderSb();selT(cr.id)}catch(err){alert('생성 실패: '+err.message)}}
+
+// -- TDL --
+async function loadTodos(){
+  const{data}=await sb.from('todos').select('*').eq('user_id',currentUser.id).order('todo_date').order('created_at')
+  todos=data||[]
+}
+
+function renderTdl(){
+  if(!currentUser)return
+  const today=new Date().toISOString().slice(0,10)
+  const tdlDate=document.getElementById('tdlDate')
+  if(!tdlDate.value)tdlDate.value=today
+  const d=tdlDate.value
+  document.getElementById('tdlDateLabel').textContent=d===today?'(오늘)':d<today?'(이전)':'(예정)'
+
+  // 이월 체크: 어제 미완료 항목
+  const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10)
+  const pendingYest=todos.filter(t=>t.todo_date===yesterday&&t.status==='미완료'&&!t.carried)
+  const banner=document.getElementById('carryOverBanner')
+  if(pendingYest.length>0&&d===today){
+    banner.style.display='flex'
+    document.getElementById('carryOverMsg').textContent='어제 미완료 '+pendingYest.length+'개를 오늘로 이월할까요?'
+  }else{banner.style.display='none'}
+
+  // 진행률
+  const dayTodos=todos.filter(t=>t.todo_date===d)
+  const done=dayTodos.filter(t=>t.status==='완료').length
+  const total=dayTodos.length
+  const pct=total>0?Math.round(done/total*100):0
+  document.getElementById('tdlProgress').innerHTML=total>0?`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="flex:1;background:var(--bg3);border-radius:20px;height:8px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${pct===100?'var(--green)':'var(--blue)'};border-radius:20px;transition:width .4s"></div>
+      </div>
+      <span style="font-size:12px;font-weight:600;color:${pct===100?'var(--green)':'var(--text)'}">${done}/${total} (${pct}%)</span>
+    </div>`:''
+
+  // 목록: 우선순위 순 정렬
+  const pOrder={긴급:0,높음:1,보통:2,낮음:3}
+  const sorted=[...dayTodos].sort((a,b)=>(pOrder[a.priority]||2)-(pOrder[b.priority]||2))
+  const list=document.getElementById('tdlList')
+  if(!sorted.length){list.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0;text-align:center">할 일이 없어요. + 추가로 등록하세요</div>';return}
+  list.innerHTML=sorted.map(t=>`
+    <div class="tdl-item ${t.status==='완료'?'done':''}">
+      <input type="checkbox" class="tdl-cb2" ${t.status==='완료'?'checked':''} onchange="toggleTdl('${t.id}',this.checked)"/>
+      <div class="tdl-body">
+        <div class="tdl-title">${e(t.title)}${t.carried?'<span class="carry-badge">이월</span>':''}</div>
+        <div class="tdl-meta">
+          <span class="badge ${P_COLOR[t.priority]||'b-gray'}">${t.priority}</span>
+          ${t.memo?`<span style="margin-left:6px">${e(t.memo)}</span>`:''}
+        </div>
+      </div>
+      <div class="tdl-actions">
+        <button class="btn btn-xs" onclick="openTdlModal('${t.id}')">수정</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteTdl('${t.id}')">삭제</button>
+      </div>
+    </div>`).join('')
+}
+
+async function toggleTdl(id,checked){
+  const t=todos.find(x=>x.id===id);if(!t)return
+  t.status=checked?'완료':'미완료'
+  await sb.from('todos').update({status:t.status}).eq('id',id)
+  renderTdl()
+}
+
+async function doCarryOver(){
+  const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10)
+  const today=new Date().toISOString().slice(0,10)
+  const pending=todos.filter(t=>t.todo_date===yesterday&&t.status==='미완료'&&!t.carried)
+  for(const t of pending){
+    const{data}=await sb.from('todos').insert({user_id:currentUser.id,title:t.title,memo:t.memo,priority:t.priority,status:'미완료',todo_date:today,carried:true}).select().single()
+    if(data)todos.push(data)
+    await sb.from('todos').update({carried:true}).eq('id',t.id)
+    t.carried=true
+  }
+  document.getElementById('carryOverBanner').style.display='none'
+  renderTdl()
+}
+
+function openTdlModal(id){
+  editingTdlId=id||null
+  document.getElementById('tdlModalTitle').textContent=id?'할 일 수정':'할 일 추가'
+  const today=new Date().toISOString().slice(0,10)
+  const d=document.getElementById('tdlDate').value||today
+  if(id){
+    const t=todos.find(x=>x.id===id);if(!t)return
+    document.getElementById('tdlTitle').value=t.title||''
+    document.getElementById('tdlPriority').value=t.priority||'보통'
+    document.getElementById('tdlItemDate').value=t.todo_date||d
+    document.getElementById('tdlMemo').value=t.memo||''
+  }else{
+    document.getElementById('tdlTitle').value=''
+    document.getElementById('tdlPriority').value='보통'
+    document.getElementById('tdlItemDate').value=d
+    document.getElementById('tdlMemo').value=''
+  }
+  openModal('modalTdl')
+}
+
+async function saveTdl(){
+  const title=document.getElementById('tdlTitle').value.trim();if(!title){alert('할 일을 입력하세요');return}
+  const p={title,priority:document.getElementById('tdlPriority').value,todo_date:document.getElementById('tdlItemDate').value||new Date().toISOString().slice(0,10),memo:document.getElementById('tdlMemo').value.trim(),user_id:currentUser.id}
+  if(editingTdlId){
+    await sb.from('todos').update(p).eq('id',editingTdlId)
+    const i=todos.findIndex(t=>t.id===editingTdlId);if(i>=0)todos[i]={...todos[i],...p}
+  }else{
+    const{data}=await sb.from('todos').insert({...p,status:'미완료',carried:false}).select().single()
+    if(data)todos.push(data)
+  }
+  closeModal('modalTdl');renderTdl()
+}
+
+async function deleteTdl(id){
+  if(!confirm('삭제할까요?'))return
+  await sb.from('todos').delete().eq('id',id)
+  todos=todos.filter(t=>t.id!==id);renderTdl()
 }
 
 // -- 미팅 캘린더 --
@@ -2322,6 +3393,51 @@ async function downloadMeetingExcel(){
   const fileName = '차량유지비_산출내역서_'+from.slice(0,7)+'.xlsx'
   XLSX.writeFile(wb, fileName)
   closeModal('modalMeetingExcel')
+}
+
+// -- RNR --
+async function loadRnr(){
+  const{data}=await sb.from('rnr').select('*')
+  rnrData=data||[]
+}
+
+function renderRnr(){
+  const el=document.getElementById('rnrList');if(!el)return
+  el.innerHTML=allUsers.map(u=>{
+    const r=rnrData.find(x=>x.user_id===u.id)
+    const isMe=u.id===currentUser.id
+    return`<div class="rnr-card">
+      <div class="rnr-header">
+        <div class="rnr-av">${u.name.slice(0,2)}</div>
+        <div>
+          <div class="rnr-name">${e(u.name)}${isMe?'<span style="font-size:10px;color:var(--blue);margin-left:6px">(나)</span>':''}</div>
+          ${r?.role_title?`<div class="rnr-role">${e(r.role_title)}</div>`:''}
+        </div>
+      </div>
+      ${r?.description?`<div class="rnr-desc">${e(r.description)}</div>`:'<div class="rnr-empty">아직 R&R이 등록되지 않았어요</div>'}
+    </div>`
+  }).join('')||'<div style="font-size:12px;color:var(--text3)">팀원이 없어요</div>'
+}
+
+function openRnrEdit(){
+  const r=rnrData.find(x=>x.user_id===currentUser.id)
+  document.getElementById('rnrTitle').value=r?.role_title||''
+  document.getElementById('rnrDesc').value=r?.description||''
+  openModal('modalRnr')
+}
+
+async function saveRnr(){
+  const role_title=document.getElementById('rnrTitle').value.trim()
+  const description=document.getElementById('rnrDesc').value.trim()
+  const existing=rnrData.find(x=>x.user_id===currentUser.id)
+  if(existing){
+    await sb.from('rnr').update({role_title,description,updated_at:new Date().toISOString()}).eq('id',existing.id)
+    existing.role_title=role_title;existing.description=description
+  }else{
+    const{data}=await sb.from('rnr').insert({user_id:currentUser.id,role_title,description}).select().single()
+    if(data)rnrData.push(data)
+  }
+  closeModal('modalRnr');renderRnr()
 }
 
 // -- 친숙자료 --
@@ -3204,282 +4320,1587 @@ function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/
 
 init()
 
+// === VOC v1.1 START ===
 
+// ======= EMBEDDED DATA =======
+const EMBEDDED = {"total":1408,"by_category":{"마케팅":658,"지원":336,"기술":303,"기타":106},"by_subcategory":{"영업관련":330,"계정정보":210,"결제":160,"청구서":102,"연동":100,"슈어비즈":98,"발신번호":96,"발송":90,"닷컴":76,"세금계산서":74,"카카오":21,"기타":20,"에러코드":15,"코아레스":8},"by_subdetail":{"신규":92,"계약(단가)":80,"전용계좌안내":67,"담당자정보변경":64,"영업 기타":51,"PW요청":50,"알림톡템플릿":45,"청구금액확인":45,"결과조회(실패)":42,"청구서 기타":38,"등록":36,"제출서류":34,"발행":34,"닷컴 기타":32,"연동/DB":30,"발송 기타":30,"슈어비즈 기타":29,"채권확보":28,"계정정보 기타":27,"연동/API":26},"by_channel":{"전화":1187,"메일":151,"1:1상담":61,"채널톡":9},"by_status":{"완료":1402,"진행중":4,"보류":2},"monthly_count":{"2026-01":530,"2026-02":412,"2026-03":466},"weekly_top":{"2025-12-29/2026-01-04":{"슈어비즈 기타":4,"담당자정보변경":3,"사업자정보변경":2,"연동 기타":2,"발송 기타":2,"알림톡템플릿":2,"계약(단가)":2,"전용계좌안내":2,"연동/DB":1,"결과조회/에러코드":1},"2026-01-05/2026-01-11":{"담당자정보변경":16,"계약(단가)":12,"PW요청":8,"전용계좌안내":8,"결과조회(실패)":6,"발송 기타":6,"신규":6,"스팸등록+autokisa(665)":5,"슈어비즈 기타":5,"등록":5},"2026-01-12/2026-01-18":{"신규":7,"영업 기타":7,"PW요청":5,"해지":4,"재발송":4,"계약(단가)":4,"채권확보":4,"전용계좌안내":4,"연동/DB":4,"스팸등록+autokisa(665)":3},"2026-01-19/2026-01-25":{"영업 기타":10,"계약(단가)":7,"신규":5,"담당자정보변경":5,"닷컴 기타":5,"전용계좌안내":5,"등록":5,"발송 기타":5,"발행":4,"알림톡템플릿":4},"2026-01-26/2026-02-01":{"계약(단가)":7,"영업 기타":7,"신규":7,"알림톡템플릿":6,"PW요청":5,"080수신거부":5,"발행":5,"양수양도":3,"환불요청":3,"결제 기타":3},"2026-02-02/2026-02-08":{"청구금액확인":17,"청구서 기타":9,"계약(단가)":8,"담당자정보변경":8,"전용계좌안내":6,"신규":6,"해지":5,"영업 기타":5,"계정정보 기타":5,"결과조회(실패)":4},"2026-02-09/2026-02-15":{"신규":11,"계약(단가)":8,"청구서 기타":7,"전용계좌안내":7,"충전내역":7,"담당자정보변경":6,"연동 기타":6,"발행":6,"문자발송":5,"채권확보":5},"2026-02-16/2026-02-22":{"PW요청":6,"결과조회(실패)":4,"전용계좌안내":4,"기타":3,"담당자정보변경":3,"연동 기타":3,"계정정보 기타":2,"IP등록":2,"청구금액확인":2,"슈어비즈 기타":2},"2026-02-23/2026-03-01":{"계약(단가)":9,"신규":7,"전용계좌안내":7,"알림톡템플릿":6,"제출서류":5,"PW요청":5,"해지":4,"연동/API":3,"연동/DB":3,"잔액이관":3},"2026-03-02/2026-03-08":{"신규":9,"청구서 기타":7,"충전내역":7,"전용계좌안내":6,"영업 기타":5,"청구금액확인":5,"제출서류":5,"닷컴 기타":5,"담당자정보변경":4,"알림톡템플릿":4},"2026-03-09/2026-03-15":{"신규":9,"연동/DB":6,"등록":6,"전용계좌안내":5,"연동/API":5,"청구금액확인":5,"계약(단가)":4,"발행":4,"슈어비즈 기타":3,"성공&미수신":3},"2026-03-16/2026-03-22":{"신규":13,"결과조회(실패)":8,"닷컴 기타":7,"담당자정보변경":7,"계약(단가)":7,"제출서류":5,"슈어비즈 기타":5,"전용계좌안내":5,"IP등록":5,"발행":3},"2026-03-23/2026-03-29":{"신규":8,"계약(단가)":7,"알림톡템플릿":6,"결과조회(실패)":6,"제출서류":5,"발신프로필":4,"PW요청":4,"재발행":4,"계정정보 확인 요청":3,"청구서 기타":3},"2026-03-30/2026-04-05":{"영업 기타":3,"전용계좌안내":3,"신규":3,"견적서":2,"채권확보":2,"닷컴 기타":2,"PW요청":2,"기타":2,"계약(단가)":2,"해지":1}},"monthly_top":{"2026-01":{"계약(단가)":32,"담당자정보변경":28,"영업 기타":27,"신규":25,"전용계좌안내":22,"PW요청":19,"알림톡템플릿":17,"발송 기타":17,"발행":15,"등록":15},"2026-02":{"계약(단가)":25,"신규":25,"전용계좌안내":24,"청구금액확인":21,"청구서 기타":20,"담당자정보변경":19,"PW요청":17,"알림톡템플릿":15,"결과조회(실패)":14,"제출서류":12},"2026-03":{"신규":42,"계약(단가)":23,"전용계좌안내":21,"결과조회(실패)":18,"제출서류":18,"닷컴 기타":17,"담당자정보변경":17,"영업 기타":14,"PW요청":14,"알림톡템플릿":13}},"monthly_15":{"2026-01":{"before":{"영업관련":58,"계정정보":56,"결제":27,"발송":25,"슈어비즈":24,"연동":18,"발신번호":18,"닷컴":16,"세금계산서":13,"청구서":13},"after":{"영업관련":72,"계정정보":36,"결제":30,"발신번호":18,"슈어비즈":16,"연동":16,"세금계산서":14,"닷컴":13,"청구서":12,"발송":11}},"2026-02":{"before":{"영업관련":59,"청구서":40,"계정정보":40,"결제":30,"연동":17,"슈어비즈":16,"발신번호":16,"발송":16,"세금계산서":15,"닷컴":12},"after":{"영업관련":30,"계정정보":25,"결제":20,"연동":13,"슈어비즈":12,"발신번호":9,"청구서":7,"닷컴":6,"세금계산서":5,"발송":5}},"2026-03":{"before":{"영업관련":50,"결제":31,"청구서":23,"발신번호":22,"계정정보":19,"연동":17,"세금계산서":12,"슈어비즈":11,"발송":11,"닷컴":10},"after":{"영업관련":61,"계정정보":34,"발송":22,"결제":22,"연동":19,"슈어비즈":19,"닷컴":19,"세금계산서":15,"발신번호":13,"카카오":8}}},"top_accounts":[{"업체아이디":"biztogether","업체명":"경매 인사이트","count":8},{"업체아이디":"elicompany","업체명":"BM_엘리컴퍼니","count":7},{"업체아이디":"kytti","업체명":"K3_경기교통연수","count":6},{"업체아이디":"gkrtk1234!","업체명":"gu_교무처학사","count":5},{"업체아이디":"learnpia24","업체명":"런피아주식회사","count":5},{"업체아이디":"kidsadmin","업체명":"한국의약품안전관리원","count":5},{"업체아이디":"hyundaem","업체명":"현대해상화재보험","count":5},{"업체아이디":"khra100","업체명":"한국해양조사협회","count":4},{"업체아이디":"keisepsEN","업체명":"BM_KEEPS_EN","count":4},{"업체아이디":"dirhfmwl11","업체명":"새롬세탁소","count":4},{"업체아이디":"seoilac","업체명":"서일대학","count":4},{"업체아이디":"skccmet","업체명":"sk-met","count":4},{"업체아이디":"mfhan","업체명":"메디필드한강병원","count":4},{"업체아이디":"sphh100","업체명":"서대문구역사관팀","count":4},{"업체아이디":"seoulbohun","업체명":"중앙보훈병원","count":4},{"업체아이디":"webphdhch","업체명":"포항대흥교회","count":4},{"업체아이디":"hcinfo","업체명":"(주)에이치씨인포","count":4},{"업체아이디":"workF1100","업체명":"WK_동대문여성","count":4},{"업체아이디":"pnu7153","업체명":"pnu_나노바이오","count":3},{"업체아이디":"vincheon","업체명":"인천보훈병원","count":3}],"monthly_accounts":{"2026-01":[{"업체아이디":"hyundaem","업체명":"현대해상화재보험","count":5},{"업체아이디":"webphdhch","업체명":"포항대흥교회","count":4},{"업체아이디":"khra100","업체명":"한국해양조사협회","count":4},{"업체아이디":"sphh100","업체명":"서대문구역사관팀","count":4},{"업체아이디":"kytti","업체명":"K3_경기교통연수","count":4},{"업체아이디":"learnpia24","업체명":"런피아주식회사","count":4},{"업체아이디":"seoulbohun","업체명":"중앙보훈병원","count":3},{"업체아이디":"seoilac","업체명":"서일대학","count":3},{"업체아이디":"itsmnotice","업체명":"갤럭시아컴즈_5","count":3},{"업체아이디":"fowi","업체명":"한국산림복지진흥원","count":3}],"2026-02":[{"업체아이디":"biztogether","업체명":"경매 인사이트","count":5},{"업체아이디":"goodpeople","업체명":"BM_좋은사람들","count":3},{"업체아이디":"kbs1101","업체명":"혜화당한의원","count":3},{"업체아이디":"earthact01","업체명":"지구시민연합","count":3},{"업체아이디":"sisul01","업체명":"서울시설공단_01","count":2},{"업체아이디":"anycarsms","업체명":"애니카랜드(후불)","count":2},{"업체아이디":"toyoko0208","업체명":"서울동대문","count":2},{"업체아이디":"sisakakaojpn","업체명":"시사일본어알림톡","count":2},{"업체아이디":"workF1100","업체명":"WK_동대문여성","count":2},{"업체아이디":"workF1122","업체명":"WK_천안여성인력","count":2}],"2026-03":[{"업체아이디":"elicompany","업체명":"BM_엘리컴퍼니","count":7},{"업체아이디":"kidsadmin","업체명":"한국의약품안전관리원","count":5},{"업체아이디":"gkrtk1234!","업체명":"gu_교무처학사","count":4},{"업체아이디":"dirhfmwl11","업체명":"새롬세탁소","count":4},{"업체아이디":"bpfc3115","업체명":"사단법인 부산항","count":3},{"업체아이디":"nayng2005","업체명":"명선한의원","count":3},{"업체아이디":"onppark","업체명":"(주)프린파크","count":3},{"업체아이디":"kflame55","업체명":"제일엠앤이(주)","count":3},{"업체아이디":"2000jifa","업체명":"이미경","count":3},{"업체아이디":"ktcqna","업체명":"TW_한국기계전기전자시험연구원","count":3}]},"monthly_channel":{"2026-01":{"전화":452,"메일":58,"1:1상담":19,"채널톡":1},"2026-02":{"전화":349,"메일":44,"1:1상담":16,"채널톡":3},"2026-03":{"전화":386,"메일":49,"1:1상담":26,"채널톡":5}}};
 
+EMBEDDED._rows = EMBEDDED._rows || [];
+EMBEDDED._cols = EMBEDDED._cols || {};
+let DATA = EMBEDDED;
+let charts = {};
 
+// EMBEDDED 데이터에 계정별 채널 정보 초기화
+(function initAccountChannels() {
+  const chRatio = [['전화',0.84],['메일',0.11],['1:1상담',0.04],['채널톡',0.01]];
+  function addCh(accounts) {
+    accounts.forEach(a => {
+      if (a.channels) return;
+      a.channels = {};
+      let rem = a.count;
+      chRatio.forEach(([ch, r], i) => {
+        if (i === chRatio.length - 1) { if (rem > 0) a.channels[ch] = rem; }
+        else { const n = Math.max(0, Math.round(a.count * r)); a.channels[ch] = Math.min(n, rem); rem -= a.channels[ch]; }
+      });
+      Object.keys(a.channels).forEach(k => { if (!a.channels[k]) delete a.channels[k]; });
+    });
+  }
+  addCh(DATA.top_accounts);
+  Object.values(DATA.monthly_accounts).forEach(addCh);
+})();
 
+// EMBEDDED 담당자·시간대 목업 데이터
+(function initExtraData() {
+  if (!DATA.by_agent_channel) {
+    DATA.by_agent_channel = {
+      '김민수': {'전화':128,'메일':16,'1:1상담':6},
+      '이지현': {'전화':118,'메일':20,'1:1상담':8,'채널톡':2},
+      '박서준': {'전화':112,'메일':14,'1:1상담':7},
+      '최유진': {'전화':106,'메일':17,'1:1상담':7,'채널톡':2},
+      '정하늘': {'전화':100,'메일':13,'1:1상담':5,'채널톡':1},
+      '한소희': {'전화':95,'메일':12,'1:1상담':5},
+      '윤도현': {'전화':90,'메일':11,'1:1상담':5},
+      '강예린': {'전화':84,'메일':10,'1:1상담':4,'채널톡':2},
+      '오승우': {'전화':80,'메일':9,'1:1상담':4},
+      '임수정': {'전화':74,'메일':8,'1:1상담':3,'채널톡':1}
+    };
+  }
+  if (!DATA.hourly) {
+    DATA.hourly = {'08':42,'09':168,'10':201,'11':189,'12':85,'13':145,'14':178,'15':162,'16':132,'17':82,'18':24};
+  }
+  if (!DATA.monthly_hourly_15) {
+    DATA.monthly_hourly_15 = {
+      '2026-01': {
+        before:{'08':8,'09':32,'10':39,'11':36,'12':16,'13':28,'14':34,'15':31,'16':25,'17':15,'18':4},
+        after: {'08':6,'09':28,'10':34,'11':32,'12':14,'13':24,'14':30,'15':27,'16':22,'17':14,'18':5}
+      },
+      '2026-02': {
+        before:{'08':7,'09':31,'10':37,'11':35,'12':16,'13':27,'14':33,'15':30,'16':24,'17':14,'18':4},
+        after: {'08':4,'09':16,'10':20,'11':18,'12':8,'13':14,'14':17,'15':16,'16':13,'17':8,'18':3}
+      },
+      '2026-03': {
+        before:{'08':5,'09':24,'10':29,'11':27,'12':12,'13':20,'14':25,'15':23,'16':19,'17':11,'18':4},
+        after: {'08':7,'09':30,'10':35,'11':33,'12':15,'13':25,'14':31,'15':28,'16':23,'17':14,'18':5}
+      }
+    };
+  }
+  if (!DATA.monthly_15_detail) {
+    DATA.monthly_15_detail = {
+      '2026-01': {
+        before: {'영업관련 > 계약(단가)':18,'영업관련 > 신규':14,'계정정보 > 담당자정보변경':13,'영업관련 > 영업 기타':12,'결제 > 전용계좌안내':10,'계정정보 > PW요청':9,'발신번호 > 알림톡템플릿':8,'발송 > 발송 기타':8,'슈어비즈 > 슈어비즈 기타':7,'발신번호 > 등록':6},
+        after: {'영업관련 > 계약(단가)':14,'영업관련 > 영업 기타':15,'영업관련 > 신규':11,'계정정보 > 담당자정보변경':10,'결제 > 전용계좌안내':12,'계정정보 > PW요청':10,'발신번호 > 알림톡템플릿':9,'세금계산서 > 발행':8,'연동 > 연동/DB':6,'영업관련 > 채권확보':5}
+      },
+      '2026-02': {
+        before: {'청구서 > 청구금액확인':17,'영업관련 > 계약(단가)':16,'영업관련 > 신규':15,'계정정보 > 담당자정보변경':12,'결제 > 전용계좌안내':11,'청구서 > 청구서 기타':10,'계정정보 > PW요청':9,'결제 > 충전내역':7,'발신번호 > 알림톡템플릿':7,'세금계산서 > 발행':6},
+        after: {'영업관련 > 계약(단가)':9,'영업관련 > 신규':10,'결제 > 전용계좌안내':7,'계정정보 > PW요청':8,'계정정보 > 담당자정보변경':7,'연동 > 연동 기타':5,'슈어비즈 > 슈어비즈 기타':4,'닷컴 > 닷컴 기타':4,'발송 > 결과조회(실패)':4,'영업관련 > 해지':4}
+      },
+      '2026-03': {
+        before: {'영업관련 > 신규':14,'영업관련 > 계약(단가)':10,'결제 > 전용계좌안내':9,'청구서 > 청구금액확인':8,'발신번호 > 등록':7,'연동 > 연동/DB':6,'연동 > 연동/API':5,'세금계산서 > 제출서류':5,'발신번호 > 알림톡템플릿':5,'슈어비즈 > 슈어비즈 기타':4},
+        after: {'영업관련 > 신규':28,'영업관련 > 계약(단가)':13,'계정정보 > 담당자정보변경':11,'발송 > 결과조회(실패)':10,'닷컴 > 닷컴 기타':9,'슈어비즈 > 슈어비즈 기타':8,'결제 > 전용계좌안내':7,'세금계산서 > 제출서류':7,'영업관련 > 영업 기타':6,'연동 > 연동/API':5}
+      }
+    };
+  }
+  if (!DATA.daily_latest) {
+    DATA.daily_latest = {
+      date: '2026-03-31',
+      total: 18,
+      completed: 16,
+      channels: {'전화':14,'메일':2,'1:1상담':1,'채널톡':1},
+      by_type: {'마케팅 > 신규':3,'마케팅 > 계약(단가)':3,'지원 > PW요청':2,'기술 > 결과조회(실패)':2,'마케팅 > 전용계좌안내':2,'지원 > 담당자정보변경':2,'기술 > 연동/DB':1,'기타 > 기타':1},
+      type_accounts: {
+        '마케팅 > 신규': ['경매 인사이트','런피아주식회사','새롬세탁소'],
+        '마케팅 > 계약(단가)': ['BM_엘리컴퍼니','한국의약품안전관리원','현대해상화재보험'],
+        '지원 > PW요청': ['중앙보훈병원','서일대학'],
+        '기술 > 결과조회(실패)': ['K3_경기교통연수','한국해양조사협회'],
+        '마케팅 > 전용계좌안내': ['포항대흥교회','서대문구역사관팀'],
+        '지원 > 담당자정보변경': ['(주)에이치씨인포','메디필드한강병원'],
+        '기술 > 연동/DB': ['인천보훈병원'],
+        '기타 > 기타': ['sk-met']
+      }
+    };
+  }
+  if (!DATA.daily_trend) {
+    DATA.daily_trend = [
+      {date:'2026-03-25', count:15},
+      {date:'2026-03-26', count:19},
+      {date:'2026-03-27', count:22},
+      {date:'2026-03-28', count:17},
+      {date:'2026-03-29', count:12},
+      {date:'2026-03-30', count:14},
+      {date:'2026-03-31', count:18}
+    ];
+  }
+  if (!DATA.top_slow) {
+    DATA.top_slow = [
+      {cat3:'연동/DB', acctNm:'경매 인사이트', date:'2026-01-15 09:30', closeDate:'2026-01-22 14:50', duration:10160, content:'DB 연동 시 데이터 동기화 오류 발생, 특정 테이블 조회 불가 현상 지속'},
+      {cat3:'결과조회(실패)', acctNm:'BM_엘리컴퍼니', date:'2026-02-03 10:15', closeDate:'2026-02-09 16:30', duration:9015, content:'발송 결과 조회 시 실패 건만 반복 노출, 성공 건 확인 불가'},
+      {cat3:'연동/API', acctNm:'K3_경기교통연수', date:'2026-03-05 11:00', closeDate:'2026-03-10 14:20', duration:7400, content:'API 인증 토큰 만료 후 재발급 절차 문의 및 연동 테스트 요청'},
+      {cat3:'슈어비즈 기타', acctNm:'런피아주식회사', date:'2026-01-20 14:30', closeDate:'2026-01-24 20:10', duration:6220, content:'슈어비즈 관리자 페이지 접속 불가, 권한 설정 변경 요청'},
+      {cat3:'계약(단가)', acctNm:'한국의약품안전관리원', date:'2026-02-12 09:00', closeDate:'2026-02-15 21:30', duration:5310, content:'계약 단가 변경 요청 건, 기존 단가표 대비 신규 단가 적용 문의'},
+      {cat3:'발송 기타', acctNm:'현대해상화재보험', date:'2026-03-18 10:20', closeDate:'2026-03-21 12:50', duration:4350, content:'대량 발송 예약 건이 예정 시간에 발송되지 않는 현상 문의'},
+      {cat3:'알림톡템플릿', acctNm:'한국해양조사협회', date:'2026-01-08 15:00', closeDate:'2026-01-11 09:15', duration:3855, content:'알림톡 템플릿 검수 반려 사유 확인 및 재등록 요청'},
+      {cat3:'청구금액확인', acctNm:'새롬세탁소', date:'2026-02-24 08:45', closeDate:'2026-02-26 13:20', duration:3155, content:'2월 청구 금액이 예상보다 높음, 사용량 상세 내역 확인 요청'},
+      {cat3:'닷컴 기타', acctNm:'서일대학', date:'2026-03-10 13:00', closeDate:'2026-03-12 03:30', duration:2310, content:'닷컴 페이지 내 발송 현황 통계 수치 불일치 문의'},
+      {cat3:'PW요청', acctNm:'중앙보훈병원', date:'2026-01-27 09:00', closeDate:'2026-01-28 12:15', duration:1635, content:'관리자 계정 비밀번호 초기화 요청'}
+    ];
+  }
+  if (!DATA.monthly_slow) {
+    const ms = {};
+    (DATA.top_slow||[]).forEach(e => { const m = e.date.substring(0,7); if(!ms[m]) ms[m]=[]; ms[m].push(e); });
+    DATA.monthly_slow = ms;
+  }
+  if (!DATA.weekly_slow) {
+    const ws = {};
+    (DATA.top_slow||[]).forEach(e => {
+      const d = new Date(e.date);
+      const wS = new Date(d); wS.setDate(d.getDate()-((d.getDay()+6)%7));
+      const wE = new Date(wS); wE.setDate(wS.getDate()+6);
+      const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+      const wk = `${fmt(wS)}/${fmt(wE)}`;
+      if(!ws[wk]) ws[wk]=[]; ws[wk].push(e);
+    });
+    DATA.weekly_slow = ws;
+  }
+})();
 
+const COLORS = ['#58a6ff','#3fb950','#f78166','#d2a8ff','#ffa657','#39d353','#ff7b72','#79c0ff','#56d364','#e3b341'];
 
-// ===== WEEKLY MEETING =====
-var currentWeeklyMeeting = null
-
-function showWeeklyTab(tab) {
-  ['meeting','tasks','history'].forEach(function(t) {
-    var el = document.getElementById('wpanel-'+t)
-    if(el) el.style.display = t===tab ? 'block' : 'none'
-    var btn = document.getElementById('wtab-'+t)
-    if(btn) btn.style.fontWeight = t===tab ? '600' : 'normal'
-  })
-  if(tab==='tasks') loadMyTasks()
-  if(tab==='history') loadWeeklyHistory()
+// 테마 감지 헬퍼
+function tc() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    grid: s.getPropertyValue('--chart-grid').trim(),
+    tick: s.getPropertyValue('--chart-tick').trim(),
+    label: s.getPropertyValue('--chart-label').trim(),
+    surface: s.getPropertyValue('--surface').trim(),
+  };
 }
 
-function loadWeekly() {
-  loadWeeklyInfo()
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
 }
 
-async function loadWeeklyInfo() {
-  try {
-    var {data} = await sb.from('weekly_meetings').select('*').order('created_at',{ascending:false}).limit(1)
-    var el = document.getElementById('weekly-last-info')
-    if(data && data.length) {
-      var last = data[0]
-      if(el) el.textContent = '최근 회의: '+last.week_start+' ('+last.status+')'
-      if(last.status==='open') {
-        currentWeeklyMeeting = last
-        showOpenMeetingUI(last)
+function makeChart(id, config) {
+  destroyChart(id);
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, config);
+  return charts[id];
+}
+
+// ========= HELPERS =========
+function formatDuration(mins) {
+  if (mins == null || mins < 0) return '-';
+  if (mins < 60) return `${mins}분`;
+  if (mins < 1440) return `${Math.floor(mins/60)}시간 ${mins%60}분`;
+  const days = Math.floor(mins / 1440);
+  const hours = Math.floor((mins % 1440) / 60);
+  return `${days}일 ${hours}시간`;
+}
+
+function renderSlowTable(containerId, list, limit) {
+  const items = (list || []).slice(0, limit || 10);
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = '<tr><td class="no-data" colspan="7">처리일 데이터가 필요합니다</td></tr>';
+    return;
+  }
+  el.innerHTML = `
+    <thead><tr><th>#</th><th>소분류</th><th>업체명</th><th>문의 내용</th><th>등록일</th><th>처리일</th><th>소요시간</th></tr></thead>
+    <tbody>${items.map((e, i) => {
+      const dur = e.duration;
+      const durClass = dur >= 4320 ? 'count-high' : dur >= 1440 ? 'count-mid' : 'count-low';
+      const content = (e.content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const shortContent = content.length > 40 ? content.substring(0, 40) + '…' : content;
+      return `<tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td><span class="pill pill-blue">${e.cat3||'-'}</span></td>
+        <td style="white-space:nowrap">${e.acctNm||'-'}</td>
+        <td style="max-width:280px" title="${content}">${shortContent||'-'}</td>
+        <td style="white-space:nowrap">${e.date||'-'}</td>
+        <td style="white-space:nowrap">${e.closeDate||'-'}</td>
+        <td><span class="count-badge ${durClass}">${formatDuration(dur)}</span></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+
+// ========= OVERVIEW =========
+function renderOverview() {
+  const d = DATA;
+  document.getElementById('dataInfo').textContent = `총 ${d.total.toLocaleString()}건 · ${Object.keys(d.monthly_count).join(', ')}`;
+
+  // Stat cards
+  const monthKeys = Object.keys(d.monthly_count);
+  const latestMonth = monthKeys[monthKeys.length - 1];
+  const latestCount = d.monthly_count[latestMonth];
+  const completionRate = Math.round((d.by_status['완료'] || 0) / d.total * 100);
+  const phoneRate = Math.round((d.by_channel['전화'] || 0) / d.total * 100);
+
+  // 전일 기준 데이터
+  const daily = d.daily_latest || {};
+  const dailyChStr = Object.entries(daily.channels||{}).map(([ch,cnt]) => `${ch} ${cnt}건`).join(' · ') || '-';
+
+  const dailyPending = (daily.total||0) - (daily.completed||0);
+
+  document.getElementById('statGrid').innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">전일 인입 건수</div><div class="stat-value">${(daily.total||0).toLocaleString()}</div><div class="stat-sub">${daily.date||'-'}</div></div>
+    <div class="stat-card green"><div class="stat-label">전일 처리 건수</div><div class="stat-value">${(daily.completed||0).toLocaleString()}</div><div class="stat-sub">${daily.total ? Math.round(daily.completed/daily.total*100)+'% 처리' : '-'}</div></div>
+    <div class="stat-card red"><div class="stat-label">전일 미처리 건수</div><div class="stat-value">${dailyPending.toLocaleString()}</div><div class="stat-sub">${dailyPending > 0 ? '확인 필요' : '전건 처리 완료'}</div><div style="font-size:10px;color:var(--text3);margin-top:6px">진행중·보류 상태의 문의건</div></div>
+  `;
+
+  const dateLabel = daily.date && daily.date !== '-' ? `(${daily.date} 기준)` : '';
+  document.getElementById('catDateLabel').textContent = dateLabel;
+  document.getElementById('chDateLabel').textContent = dateLabel;
+
+  // Category donut (전일 기준)
+  const cats = Object.entries(daily.by_type || daily.by_category || {}).reduce((acc, [key, cnt]) => {
+    const cat = key.includes(' > ') ? key.split(' > ')[0] : key;
+    acc[cat] = (acc[cat]||0) + cnt;
+    return acc;
+  }, {});
+  const catEntries = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  const catTotal = catEntries.reduce((s, c) => s + c[1], 0);
+  makeChart('catChart', {
+    type: 'doughnut',
+    data: {
+      labels: catEntries.map(c => c[0]),
+      datasets: [{ data: catEntries.map(c => c[1]), backgroundColor: COLORS, borderColor: tc().surface, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: tc().tick, font: { size: 12 }, padding: 12,
+            generateLabels: function(chart) {
+              const data = chart.data;
+              const labelColor = tc().tick;
+              return data.labels.map((label, i) => {
+                const val = data.datasets[0].data[i];
+                const pct = Math.round(val / catTotal * 100);
+                return {
+                  text: `${label}  ${val.toLocaleString()}건 (${pct}%)`,
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  fontColor: labelColor,
+                  hidden: false, index: i
+                };
+              });
+            }
+          }
+        }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // Channel donut (전일 기준)
+  const chs = Object.entries(daily.channels || {}).sort((a,b) => b[1]-a[1]);
+  const chTotal = chs.reduce((s, c) => s + c[1], 0);
+  const chColors = ['#58a6ff','#3fb950','#d2a8ff','#ffa657'];
+  makeChart('channelChart', {
+    type: 'doughnut',
+    data: {
+      labels: chs.map(c => c[0]),
+      datasets: [{ data: chs.map(c => c[1]), backgroundColor: chColors, borderColor: tc().surface, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: tc().tick, font: { size: 12 }, padding: 12,
+            generateLabels: function(chart) {
+              const data = chart.data;
+              const labelColor = tc().tick;
+              return data.labels.map((label, i) => {
+                const val = data.datasets[0].data[i];
+                const pct = Math.round(val / chTotal * 100);
+                return {
+                  text: `${label}  ${val.toLocaleString()}건 (${pct}%)`,
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  fontColor: labelColor,
+                  hidden: false, index: i
+                };
+              });
+            }
+          }
+        }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // 전일 문의유형 Top 5
+  const dailyTypes = Object.entries(daily.by_type || {}).sort((a,b) => b[1]-a[1]).slice(0, 5);
+  const maxDT = dailyTypes[0]?.[1] || 1;
+  const typeAccounts = daily.type_accounts || {};
+  document.getElementById('dailyTopList').innerHTML = dailyTypes.length
+    ? dailyTypes.map((e, i) => {
+      const parts = e[0].split(' > ');
+      const label = parts.length > 1
+        ? `<span style="color:var(--text3)">${parts[0]}</span> <span style="color:var(--text3);margin:0 2px">›</span> ${parts[1]}`
+        : e[0];
+      const accounts = typeAccounts[e[0]] || [];
+      const acctHtml = accounts.length
+        ? accounts.map(a => `<span style="display:inline-block;padding:2px 8px;margin:2px 4px 2px 0;border-radius:4px;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)">${a}</span>`).join('')
+        : '<span style="font-size:11px;color:var(--text3)">업체 정보 없음</span>';
+      return `<div>
+        <div class="rank-item daily-toggle" style="cursor:pointer">
+          <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+          <div class="rank-label" style="white-space:nowrap">${label}</div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxDT*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+          <div class="rank-count">${e[1]}건</div>
+          <div style="color:var(--text3);font-size:10px;margin-left:4px">▼</div>
+        </div>
+        <div style="display:none;padding:6px 0 10px 32px;line-height:1.8">${acctHtml}</div>
+      </div>`;
+    }).join('')
+    : '<div class="no-data">전일 데이터 없음</div>';
+
+  // 최근 N일 인입 추이
+  const trend = d.daily_trend || [];
+  document.getElementById('trendTitle').textContent = `최근 ${trend.length}일 인입 추이`;
+  if (trend.length) {
+    makeChart('weeklyTrendChart', {
+      type: 'line',
+      data: {
+        labels: trend.map(t => t.date.substring(5)),
+        datasets: [{
+          label: '인입 건수',
+          data: trend.map(t => t.count),
+          borderColor: '#58a6ff',
+          backgroundColor: '#58a6ff22',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#58a6ff',
+          clip: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        clip: false,
+        scales: {
+          x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+          y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid }, beginAtZero: true, grace: '20%' }
+        },
+        layout: { padding: { top: 20 } },
+        animation: {
+          onComplete: function() {
+            const ctx = this.ctx;
+            ctx.font = '600 12px Pretendard';
+            ctx.fillStyle = tc().label;
+            ctx.textAlign = 'center';
+            this.data.datasets[0].data.forEach((val, i) => {
+              const meta = this.getDatasetMeta(0).data[i];
+              ctx.fillText(val + '건', meta.x, meta.y - 12);
+            });
+          }
+        }
+      }
+    });
+  }
+}
+
+// ========= WEEKLY =========
+function renderWeekly() {
+  const sel = document.getElementById('weekSelect');
+  const week = sel.value;
+  const top = DATA.weekly_top[week];
+  if (!top) return;
+  const entries = Object.entries(top);
+  if (!entries.length) return;
+  const max = entries[0][1] || 1;
+
+  document.getElementById('weekRankList').innerHTML = entries.map((e, i) => `
+    <div class="rank-item">
+      <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="rank-label">${e[0]}</div>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <div class="rank-count">${e[1]}</div>
+    </div>
+  `).join('');
+
+  makeChart('weekChart', {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: COLORS.map(c => c+'cc'), borderColor: COLORS, borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
       }
     }
+  });
+
+  // 소요시간 Top 5
+  renderSlowTable('weekSlowTable', (DATA.weekly_slow||{})[week], 5);
+}
+
+function initWeekly() {
+  const sel = document.getElementById('weekSelect');
+  const weeks = Object.keys(DATA.weekly_top).reverse();
+  sel.innerHTML = weeks.map(w => `<option value="${w}">${w}</option>`).join('');
+  renderWeekly();
+}
+
+// ========= MONTHLY =========
+function renderMonthly() {
+  const month = document.getElementById('monthSelect').value;
+  const top = DATA.monthly_top[month];
+  if (!top) return;
+  const entries = Object.entries(top);
+  if (!entries.length) return;
+  const max = entries[0][1] || 1;
+
+  document.getElementById('monthRankList').innerHTML = entries.map((e, i) => `
+    <div class="rank-item">
+      <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="rank-label">${e[0]}</div>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <div class="rank-count">${e[1]}</div>
+    </div>
+  `).join('');
+
+  makeChart('monthChart', {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: COLORS.map(c => c+'cc'), borderColor: COLORS, borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Channel monthly chart
+  const chData = DATA.monthly_channel;
+  const mKeys = Object.keys(chData);
+  const chTypes = [...new Set(Object.values(chData).flatMap(v => Object.keys(v)))];
+  const chColors = ['#58a6ff','#3fb950','#d2a8ff','#ffa657'];
+  makeChart('channelMonthChart', {
+    type: 'bar',
+    data: {
+      labels: mKeys,
+      datasets: chTypes.map((ch, i) => ({
+        label: ch,
+        data: mKeys.map(m => chData[m][ch] || 0),
+        backgroundColor: chColors[i % chColors.length] + 'cc',
+        borderColor: chColors[i % chColors.length],
+        borderWidth: 1, borderRadius: 4
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().tick }, grid: { color: tc().grid } }
+      }
+    }
+  });
+
+  // 소요시간 Top 5
+  renderSlowTable('monthSlowTable', (DATA.monthly_slow||{})[month], 5);
+
+  // ===== 전월 대비 변동 분석 =====
+  const allMonths = Object.keys(DATA.monthly_top).sort();
+  const mIdx = allMonths.indexOf(month);
+  const prevMonth = mIdx > 0 ? allMonths[mIdx - 1] : null;
+  const prevTop = prevMonth ? DATA.monthly_top[prevMonth] : null;
+
+  if (!prevTop) {
+    document.getElementById('monthIncreaseList').innerHTML = '<div class="no-data">이전 월 데이터 없음</div>';
+    document.getElementById('monthDecreaseList').innerHTML = '<div class="no-data">이전 월 데이터 없음</div>';
+    document.getElementById('monthChangeInsight').innerHTML = '<span style="color:var(--text3)">비교할 이전 월 데이터가 없습니다.</span>';
+    return;
+  }
+
+  const curTop = DATA.monthly_top[month];
+  const allCats = [...new Set([...Object.keys(curTop), ...Object.keys(prevTop)])];
+  const changes = allCats.map(cat => ({
+    name: cat,
+    cur: curTop[cat] || 0,
+    prev: prevTop[cat] || 0,
+    diff: (curTop[cat] || 0) - (prevTop[cat] || 0)
+  }));
+
+  const increased = changes.filter(c => c.diff > 0).sort((a, b) => b.diff - a.diff);
+  const decreased = changes.filter(c => c.diff < 0).sort((a, b) => a.diff - b.diff);
+
+  function renderChangeList(items, color, arrow) {
+    if (!items.length) return '<div class="no-data">변동 없음</div>';
+    const max = Math.abs(items[0].diff) || 1;
+    return items.slice(0, 7).map((c, i) => `
+      <div class="rank-item">
+        <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+        <div class="rank-label" style="white-space:nowrap">${c.name}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(Math.abs(c.diff)/max*100)}%;background:${color}"></div></div>
+        <div style="font-size:12px;font-weight:700;color:${color};min-width:50px;text-align:right">${arrow}${Math.abs(c.diff)} <span style="font-weight:400;color:var(--text3);font-size:10px">(${c.prev}→${c.cur})</span></div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('monthIncreaseList').innerHTML = renderChangeList(increased, '#f78166', '+');
+  document.getElementById('monthDecreaseList').innerHTML = renderChangeList(decreased, '#58a6ff', '-');
+
+  // 변동 인사이트
+  const curTotal = Object.values(curTop).reduce((s, v) => s + v, 0);
+  const prevTotal = Object.values(prevTop).reduce((s, v) => s + v, 0);
+  const totalDiff = curTotal - prevTotal;
+  const topInc = increased[0];
+  const topDec = decreased[0];
+
+  // Top10 순위 변동
+  const prevRank = Object.keys(prevTop);
+  const curRank = Object.keys(curTop);
+  const newEntries = curRank.filter(c => !prevRank.includes(c));
+  const droppedEntries = prevRank.filter(c => !curRank.includes(c));
+
+  let ins = `<strong style="color:var(--text)">${prevMonth} → ${month} 변동</strong><br><br>`;
+  ins += `📌 Top10 합계: <strong style="color:${totalDiff>=0?'#f78166':'#58a6ff'}">${totalDiff>=0?'+':''}${totalDiff}건</strong> (${prevTotal}→${curTotal})<br><br>`;
+
+  if (topInc) ins += `🔴 최대 증가: <strong style="color:#f78166">${topInc.name}</strong> (+${topInc.diff}건, ${topInc.prev}→${topInc.cur})<br>`;
+  if (topDec) ins += `🔵 최대 감소: <strong style="color:#58a6ff">${topDec.name}</strong> (${topDec.diff}건, ${topDec.prev}→${topDec.cur})<br>`;
+
+  if (newEntries.length) ins += `<br>🆕 신규 진입: <strong>${newEntries.join(', ')}</strong>`;
+  if (droppedEntries.length) ins += `<br>⬇️ Top10 이탈: <strong style="color:var(--text3)">${droppedEntries.join(', ')}</strong>`;
+
+  document.getElementById('monthChangeInsight').innerHTML = ins;
+}
+
+function initMonthly() {
+  const sel = document.getElementById('monthSelect');
+  const months = Object.keys(DATA.monthly_top).reverse();
+  sel.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+  renderMonthly();
+}
+
+// ========= ACCOUNTS =========
+let currentAcctView = 'all';
+function switchAcctView(view, btn) {
+  currentAcctView = view;
+  document.querySelectorAll('#panel-accounts .toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAccounts();
+}
+
+function renderAccounts() {
+  const list = currentAcctView === 'all'
+    ? DATA.top_accounts
+    : DATA.monthly_accounts[currentAcctView] || [];
+
+  const CH_COLORS = { '전화': '#58a6ff', '메일': '#3fb950', '1:1상담': '#d2a8ff', '채널톡': '#ffa657' };
+  const allChannels = [...new Set(list.flatMap(a => Object.keys(a.channels || {})))];
+  if (!allChannels.length) allChannels.push('전화','메일','1:1상담','채널톡');
+
+  // Stacked horizontal bar chart - channel breakdown per account
+  const top10 = list.slice(0, 10).reverse(); // reverse for bottom-to-top display
+  makeChart('acctChart', {
+    type: 'bar',
+    data: {
+      labels: top10.map(a => a['업체명'] || a['업체아이디']),
+      datasets: allChannels.map(ch => ({
+        label: ch,
+        data: top10.map(a => (a.channels || {})[ch] || 0),
+        backgroundColor: (CH_COLORS[ch] || '#6e7681') + 'cc',
+        borderColor: CH_COLORS[ch] || '#6e7681',
+        borderWidth: 1,
+        borderRadius: 3
+      }))
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: tc().tick, font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: {
+          callbacks: {
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              const acct = top10[idx];
+              return `총 ${acct.count}건`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick, font: { size: 11 }, stepSize: 1 }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().label, font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Table with channel breakdown
+  function channelBar(channels, total) {
+    if (!channels || !total) return '<span style="color:var(--text3)">-</span>';
+    return `<div style="display:flex;gap:2px;align-items:center;min-width:120px">` +
+      Object.entries(channels).map(([ch, cnt]) => {
+        const pct = Math.max(8, Math.round(cnt / total * 100));
+        const color = CH_COLORS[ch] || '#6e7681';
+        return `<div title="${ch}: ${cnt}건" style="width:${pct}%;height:20px;background:${color}cc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600;min-width:20px;cursor:default">${cnt}</div>`;
+      }).join('') + `</div>`;
+  }
+
+  function channelTags(channels) {
+    if (!channels) return '-';
+    return Object.entries(channels).map(([ch, cnt]) => {
+      const color = CH_COLORS[ch] || '#6e7681';
+      return `<span style="display:inline-flex;align-items:center;gap:4px;margin:2px 4px 2px 0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:${color}22;color:${color}">${ch} ${cnt}</span>`;
+    }).join('');
+  }
+
+  document.getElementById('acctTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>업체명</th><th>계정 ID</th><th>문의 건수</th><th>채널 분포</th><th>주요 채널</th>
+    </tr></thead>
+    <tbody>${list.map((a, i) => {
+      const chs = a.channels || {};
+      const topCh = Object.entries(chs).sort((x,y) => y[1]-x[1])[0];
+      const topChName = topCh ? topCh[0] : '-';
+      const topChColor = CH_COLORS[topChName] || '#6e7681';
+      return `<tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td>${a['업체명'] || '-'}</td>
+        <td><span class="id-badge">${a['업체아이디'] || '-'}</span></td>
+        <td><span class="count-badge ${a.count >= 6 ? 'count-high' : a.count >= 4 ? 'count-mid' : 'count-low'}">${a.count}</span></td>
+        <td>${channelBar(chs, a.count)}</td>
+        <td><span style="color:${topChColor};font-weight:600;font-size:12px">${topChName}</span></td>
+      </tr>`;
+    }).join('')}</tbody>
+  `;
+}
+
+// ========= 15TH =========
+function renderFifteenth() {
+  const month = document.getElementById('fifthMonthSelect').value;
+  const d = DATA.monthly_15[month];
+  if (!d) return;
+
+  const before = Object.entries(d.before || {});
+  const after = Object.entries(d.after || {});
+  if (!before.length && !after.length) return;
+
+  // 데이터 범위 안내
+  const noticeEl = document.getElementById('fifthDataNotice');
+  const bCnt = d.beforeCount != null ? d.beforeCount : before.reduce((s,e)=>s+e[1],0);
+  const aCnt = d.afterCount != null ? d.afterCount : after.reduce((s,e)=>s+e[1],0);
+  const minD = d.minDay;
+  const maxD = d.maxDay;
+
+  if (minD != null && maxD != null) {
+    let noticeHtml = '';
+    let noticeType = '';
+
+    if (bCnt === 0 && aCnt > 0) {
+      noticeType = 'warn';
+      noticeHtml = `⚠️ 이 월의 데이터는 <strong>${minD}일~${maxD}일</strong>만 존재합니다. 전반부(1~15일) 데이터가 없어 비교 분석이 불가합니다.`;
+    } else if (aCnt === 0 && bCnt > 0) {
+      noticeType = 'warn';
+      noticeHtml = `⚠️ 이 월의 데이터는 <strong>${minD}일~${maxD}일</strong>만 존재합니다. 후반부(16일~말일) 데이터가 없어 비교 분석이 불가합니다.`;
+    } else if (minD > 5) {
+      noticeType = 'info';
+      noticeHtml = `ℹ️ 데이터 범위: <strong>${minD}일~${maxD}일</strong> (전반부 ${bCnt}건, 후반부 ${aCnt}건) — 월 초반 데이터가 부족할 수 있습니다.`;
+    } else if (maxD < 25) {
+      noticeType = 'info';
+      noticeHtml = `ℹ️ 데이터 범위: <strong>${minD}일~${maxD}일</strong> (전반부 ${bCnt}건, 후반부 ${aCnt}건) — 월 후반 데이터가 부족할 수 있습니다.`;
+    } else {
+      noticeType = '';
+      noticeHtml = '';
+    }
+
+    if (noticeHtml) {
+      const bgColor = noticeType === 'warn' ? 'var(--pill-orange-bg)' : 'var(--pill-blue-bg)';
+      const borderColor = noticeType === 'warn' ? 'var(--accent5)' : 'var(--accent)';
+      noticeEl.style.display = 'block';
+      noticeEl.innerHTML = `<div style="padding:12px 18px;border-radius:8px;background:${bgColor};border:1px solid ${borderColor}33;font-size:13px;color:var(--text);line-height:1.5">${noticeHtml}</div>`;
+    } else {
+      noticeEl.style.display = 'none';
+    }
+  } else {
+    noticeEl.style.display = 'none';
+  }
+  const allKeys = [...new Set([...before.map(e=>e[0]), ...after.map(e=>e[0])])];
+
+  // Grouped bar chart
+  makeChart('fifthChart', {
+    type: 'bar',
+    data: {
+      labels: allKeys,
+      datasets: [
+        {
+          label: '1~15일 (전반부)',
+          data: allKeys.map(k => d.before[k] || 0),
+          backgroundColor: '#58a6ff99',
+          borderColor: '#58a6ff',
+          borderWidth: 1, borderRadius: 4
+        },
+        {
+          label: '16일~말일 (후반부)',
+          data: allKeys.map(k => d.after[k] || 0),
+          backgroundColor: '#ffa65799',
+          borderColor: '#ffa657',
+          borderWidth: 1, borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+      scales: {
+        x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+        y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } }
+      }
+    }
+  });
+
+  const maxB = before[0]?.[1] || 1;
+  const maxA = after[0]?.[1] || 1;
+
+  // 중분류 > 소분류 상세 랭킹
+  const detail = (DATA.monthly_15_detail || {})[month] || {};
+  const detailBefore = Object.entries(detail.before || {});
+  const detailAfter = Object.entries(detail.after || {});
+  const maxDB = detailBefore[0]?.[1] || 1;
+  const maxDA = detailAfter[0]?.[1] || 1;
+
+  function renderDetailRank(entries, max, color) {
+    return entries.map((e, i) => {
+      const parts = e[0].split(' > ');
+      const label = parts.length > 1
+        ? `<span style="color:var(--text3)">${parts[0]}</span> <span style="color:var(--text3);margin:0 2px">›</span> ${parts[1]}`
+        : e[0];
+      return `<div class="rank-item">
+        <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+        <div class="rank-label" style="white-space:nowrap">${label}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/max*100)}%;background:${color}"></div></div>
+        <div class="rank-count">${e[1]}</div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('before15List').innerHTML = detailBefore.length
+    ? renderDetailRank(detailBefore, maxDB, '#58a6ff')
+    : before.map((e, i) => `<div class="rank-item"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-label">${e[0]}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxB*100)}%;background:#58a6ff"></div></div><div class="rank-count">${e[1]}</div></div>`).join('');
+
+  document.getElementById('after15List').innerHTML = detailAfter.length
+    ? renderDetailRank(detailAfter, maxDA, '#ffa657')
+    : after.map((e, i) => `<div class="rank-item"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-label">${e[0]}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(e[1]/maxA*100)}%;background:#ffa657"></div></div><div class="rank-count">${e[1]}</div></div>`).join('');
+
+  // Insight
+  const totalB = before.reduce((s,e)=>s+e[1],0);
+  const totalA = after.reduce((s,e)=>s+e[1],0);
+  const topB = before[0] || ['없음', 0];
+  const topA = after[0] || ['없음', 0];
+
+  // Find differences
+  const onlyBefore = before.filter(e => !(d.after||{})[e[0]]).map(e=>e[0]).slice(0,2);
+  const onlyAfter = after.filter(e => !(d.before||{})[e[0]]).map(e=>e[0]).slice(0,2);
+
+  let insight = `<strong style="color:var(--text)">${month} 분석 결과</strong><br><br>`;
+  insight += `📌 전반부(1~15일) 총 <strong style="color:#58a6ff">${totalB}건</strong>, 후반부(16~말일) 총 <strong style="color:#ffa657">${totalA}건</strong> 접수되었습니다.<br><br>`;
+  insight += `🔵 전반부 1위: <strong style="color:#58a6ff">${topB[0]}</strong> (${topB[1]}건)<br>`;
+  insight += `🟠 후반부 1위: <strong style="color:#ffa657">${topA[0]}</strong> (${topA[1]}건)<br><br>`;
+
+  const billB = (d.before || {})['청구서'] || 0;
+  const billA = (d.after || {})['청구서'] || 0;
+  if (billB > billA * 1.5) {
+    insight += `📋 <strong>청구서</strong> 문의가 전반부(${billB}건)에 집중 → 월초 청구 관련 선제 안내 고려<br>`;
+  }
+
+  if (onlyBefore.length) insight += `<br>⬅ 전반부에만 나타나는 유형: ${onlyBefore.join(', ')}`;
+  if (onlyAfter.length) insight += `<br>➡ 후반부에만 나타나는 유형: ${onlyAfter.join(', ')}`;
+
+  document.getElementById('fifthInsight').innerHTML = insight;
+
+  // 시간대별 문의 분포
+  const hData = DATA.monthly_hourly_15[month];
+  if (hData) {
+    const allHours = [...new Set([...Object.keys(hData.before||{}), ...Object.keys(hData.after||{})])].sort();
+    makeChart('hourlyChart', {
+      type: 'bar',
+      data: {
+        labels: allHours.map(h => h + '시'),
+        datasets: [
+          {
+            label: '1~15일 (전반부)',
+            data: allHours.map(h => (hData.before||{})[h] || 0),
+            backgroundColor: '#58a6ff99',
+            borderColor: '#58a6ff',
+            borderWidth: 1, borderRadius: 4
+          },
+          {
+            label: '16일~말일 (후반부)',
+            data: allHours.map(h => (hData.after||{})[h] || 0),
+            backgroundColor: '#ffa65799',
+            borderColor: '#ffa657',
+            borderWidth: 1, borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: tc().tick, font: { size: 12 } } } },
+        scales: {
+          x: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } },
+          y: { ticks: { color: tc().tick, font: { size: 11 } }, grid: { color: tc().grid } }
+        }
+      }
+    });
+  }
+}
+
+function initFifteenth() {
+  const sel = document.getElementById('fifthMonthSelect');
+  const months = Object.keys(DATA.monthly_15).reverse();
+  sel.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+  renderFifteenth();
+}
+
+// ========= AGENT =========
+function renderAgent() {
+  const agentData = DATA.by_agent_channel || {};
+  const agents = Object.entries(agentData).map(([name, chs]) => ({
+    name, channels: chs, total: Object.values(chs).reduce((s,v)=>s+v, 0)
+  })).sort((a,b) => b.total - a.total);
+
+  const CH_COLORS = {'전화':'#58a6ff','메일':'#3fb950','1:1상담':'#d2a8ff','채널톡':'#ffa657'};
+
+  // Stat cards
+  const totalAgents = agents.length;
+  const totalHandled = agents.reduce((s,a)=>s+a.total, 0);
+  const avgPerAgent = totalAgents ? Math.round(totalHandled / totalAgents) : 0;
+  const topAgent = agents[0] || {name:'-', total:0};
+  const allCh = [...new Set(agents.flatMap(a => Object.keys(a.channels)))];
+
+  document.getElementById('agentStatGrid').innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">작성자 수</div><div class="stat-value">${totalAgents}</div><div class="stat-sub">명</div></div>
+    <div class="stat-card green"><div class="stat-label">총 접수 건수</div><div class="stat-value">${totalHandled.toLocaleString()}</div><div class="stat-sub">전체 기간</div></div>
+    <div class="stat-card orange"><div class="stat-label">1인당 평균</div><div class="stat-value">${avgPerAgent}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card purple"><div class="stat-label">최다 접수</div><div class="stat-value" style="font-size:18px">${topAgent.name}</div><div class="stat-sub">${topAgent.total}건</div></div>
+  `;
+
+  if (!agents.length) {
+    document.getElementById('agentChart').parentElement.parentElement.querySelector('.chart-wrap').innerHTML =
+      '<div class="no-data">작성자 데이터가 없습니다. CSV에 작성자 컬럼이 포함되어야 합니다.</div>';
+    document.getElementById('agentTable').innerHTML = '';
+    return;
+  }
+
+  // Stacked bar chart
+  makeChart('agentChart', {
+    type: 'bar',
+    data: {
+      labels: agents.map(a => a.name),
+      datasets: allCh.map(ch => ({
+        label: ch,
+        data: agents.map(a => a.channels[ch] || 0),
+        backgroundColor: (CH_COLORS[ch]||'#6e7681') + 'cc',
+        borderColor: CH_COLORS[ch]||'#6e7681',
+        borderWidth: 1, borderRadius: 3
+      }))
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: tc().tick, font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: { callbacks: { afterBody: (items) => { const a = agents[items[0].dataIndex]; return `총 ${a.total}건`; } } }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: tc().tick, font: { size: 11 }, stepSize: 1 }, grid: { color: tc().grid } },
+        y: { stacked: true, ticks: { color: tc().label, font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Table
+  function chBar(channels, total) {
+    if (!channels || !total) return '<span style="color:var(--text3)">-</span>';
+    return '<div style="display:flex;gap:2px;align-items:center;min-width:140px">' +
+      Object.entries(channels).map(([ch, cnt]) => {
+        const pct = Math.max(10, Math.round(cnt / total * 100));
+        const color = CH_COLORS[ch] || '#6e7681';
+        return `<div title="${ch}: ${cnt}건 (${Math.round(cnt/total*100)}%)" style="width:${pct}%;height:22px;background:${color}cc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600;min-width:24px;cursor:default">${cnt}</div>`;
+      }).join('') + '</div>';
+  }
+
+  document.getElementById('agentTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>작성자</th><th>총 건수</th>${allCh.map(ch => `<th>${ch}</th>`).join('')}<th>채널 분포</th>
+    </tr></thead>
+    <tbody>${agents.map((a, i) => `
+      <tr>
+        <td style="color:var(--text3)">${i+1}</td>
+        <td style="font-weight:600">${a.name}</td>
+        <td><span class="count-badge ${a.total >= 130 ? 'count-high' : a.total >= 100 ? 'count-mid' : 'count-low'}">${a.total}</span></td>
+        ${allCh.map(ch => {
+          const cnt = a.channels[ch] || 0;
+          const color = CH_COLORS[ch] || '#6e7681';
+          return `<td><span style="color:${color};font-weight:600">${cnt || '-'}</span></td>`;
+        }).join('')}
+        <td>${chBar(a.channels, a.total)}</td>
+      </tr>
+    `).join('')}</tbody>
+  `;
+}
+
+// ========= UPLOAD =========
+// ── 컬럼 자동 매핑: 한국어 컬럼명 / 영문 컬럼명 모두 지원 ──
+function detectColumns(headers) {
+  // 부분 일치(포함) 검색으로 컬럼명 변형에 대응
+  const find = (...keywords) => headers.find(h => keywords.some(k => h.includes(k))) || null;
+  return {
+    date:    find('등록일', '날짜', 'date', '접수일', '생성일'),
+    channel: find('인입채널', '채널', 'channel', '유입'),
+    cat1:    find('대분류', 'category'),
+    cat2:    find('중분류', 'category_sub'),
+    cat3:    find('소분류', 'category_sub2', '유형'),
+    acctId:  find('업체아이디', 'usercode', '계정', 'ID', 'id'),
+    acctNm:  find('업체명', 'deptname', '회사', '고객명'),
+    status:  find('진행상태', '상태', 'status', '처리상태'),
+    agent:   find('작성자', 'writer', 'author'),
+    closeDate: find('처리일', '완료일', '종료일', '처리완료일', 'close_date', 'closed'),
+  };
+}
+
+function handleUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!file.name.endsWith('.csv')) {
+    showErrorPopup('CSV 파일만 업로드 가능합니다.', file.name);
+    return;
+  }
+
+  // CP949/EUC-KR 인코딩 자동 감지: 먼저 UTF-8 시도, 깨지면 CP949로 재시도
+  const tryParse = (encoding) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try { resolve(parseCSV(e.target.result)); }
+      catch(err) { reject(err); }
+    };
+    reader.onerror = () => reject(new Error('파일 읽기 실패'));
+    reader.readAsText(file, encoding);
+  });
+
+  const showStatus = (html) => {
+    document.getElementById('uploadStatus').style.display = 'block';
+    document.getElementById('uploadMsg').innerHTML = html;
+  };
+
+  tryParse('UTF-8')
+    .then(parsed => {
+      // UTF-8로 읽었을 때 데이터가 너무 적으면(깨진 경우) CP949 재시도
+      if (parsed.total < 1) throw new Error('empty');
+      return parsed;
+    })
+    .catch(() => tryParse('CP949'))
+    .then(parsed => {
+      showStatus(`✅ <strong>${file.name}</strong> 로드 완료 — <strong>${parsed.total.toLocaleString()}건</strong> 분석됨. 탭을 전환하여 결과를 확인하세요.`);
+      document.getElementById('fileNameBadge').style.display = 'flex';
+      document.getElementById('fileName').textContent = file.name;
+      DATA = parsed;
+      renderOverview();
+    })
+    .catch(err => {
+      showErrorPopup(`${err.message}\n\n컬럼명·구분자·인코딩을 확인해주세요.`, file.name);
+    });
+}
+
+function parseCSV(text) {
+  // RFC 4180 준수 CSV 파서: 따옴표 안의 줄바꿈·구분자를 올바르게 처리
+  function csvToRows(text, sep) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+    let i = 0;
+    while (i < text.length) {
+      const ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (i + 1 < text.length && text[i + 1] === '"') {
+            field += '"';
+            i += 2;
+          } else {
+            inQuotes = false;
+            i++;
+          }
+        } else {
+          field += ch;
+          i++;
+        }
+      } else {
+        if (ch === '"') {
+          inQuotes = true;
+          i++;
+        } else if (ch === sep) {
+          row.push(field.trim());
+          field = '';
+          i++;
+        } else if (ch === '\r' || ch === '\n') {
+          row.push(field.trim());
+          field = '';
+          if (ch === '\r' && i + 1 < text.length && text[i + 1] === '\n') i++;
+          i++;
+          if (row.some(v => v !== '')) rows.push(row);
+          row = [];
+        } else {
+          field += ch;
+          i++;
+        }
+      }
+    }
+    if (field || row.length > 0) {
+      row.push(field.trim());
+      if (row.some(v => v !== '')) rows.push(row);
+    }
+    return rows;
+  }
+
+  if (!text || !text.trim()) throw new Error('데이터가 없습니다');
+
+  // 구분자 자동 감지 (세미콜론 vs 쉼표) - 첫 줄 기준
+  const firstLine = text.split(/\r?\n/)[0];
+  const sep = (firstLine.split(';').length >= firstLine.split(',').length) ? ';' : ',';
+
+  const allRows = csvToRows(text, sep);
+  if (allRows.length < 2) throw new Error('데이터가 없습니다');
+
+  const rawHeaders = allRows[0].map(h => h.replace(/"/g,'').replace(/\uFEFF/g,'').trim());
+  const cols = detectColumns(rawHeaders);
+
+  const rows = [];
+  for (let i = 1; i < allRows.length; i++) {
+    const vals = allRows[i];
+    if (vals.length < 3) continue;
+    const row = {};
+    rawHeaders.forEach((h, j) => row[h] = (vals[j]||'').replace(/"/g,'').trim());
+    rows.push(row);
+  }
+
+  if (rows.length === 0) throw new Error('파싱된 행이 없습니다');
+  if (!cols.date) throw new Error(`날짜 컬럼을 찾을 수 없습니다. 헤더: ${rawHeaders.join(', ')}`);
+
+  function count(arr, key) {
+    return arr.reduce((acc, r) => {
+      const v = (key && r[key]) ? r[key] : '';
+      if (v) acc[v] = (acc[v]||0)+1;
+      return acc;
+    }, {});
+  }
+  function top(obj, n=10) {
+    return Object.fromEntries(Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n));
+  }
+
+  const byMonth = {}, byWeek = {};
+  rows.forEach(r => {
+    const raw = r[cols.date];
+    const d = new Date(raw);
+    if (isNaN(d)) return;
+    r._month = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    r._day = d.getDate();
+    r._hour = String(d.getHours()).padStart(2, '0');
+    if (cols.closeDate && r[cols.closeDate]) {
+      const cd = new Date(r[cols.closeDate]);
+      if (!isNaN(cd)) { r._closeDate = r[cols.closeDate]; r._duration = Math.round((cd - d) / 60000); }
+    }
+    const wStart = new Date(d); wStart.setDate(d.getDate() - ((d.getDay()+6)%7)); // 월요일 기준
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate() + 6);
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+    r._week = `${fmt(wStart)}/${fmt(wEnd)}`;
+    if (!byMonth[r._month]) byMonth[r._month] = [];
+    byMonth[r._month].push(r);
+    if (!byWeek[r._week]) byWeek[r._week] = [];
+    byWeek[r._week].push(r);
+  });
+
+  const weekly_top = {};
+  Object.entries(byWeek).sort((a,b)=>a[0]>b[0]?1:-1)
+    .forEach(([w,rs]) => weekly_top[w] = top(count(rs, cols.cat3)));
+
+  const monthly_top = {}, monthly_15 = {}, monthly_accounts = {}, monthly_channel = {}, monthly_hourly_15 = {};
+  let monthly_15_detail = {};
+  Object.entries(byMonth).sort((a,b)=>a[0]>b[0]?1:-1).forEach(([m,rs]) => {
+    monthly_top[m] = top(count(rs, cols.cat3));
+    const before = rs.filter(r => r._day <= 15);
+    const after  = rs.filter(r => r._day > 15);
+    const days = rs.map(r => r._day).sort((a,b) => a - b);
+    monthly_15[m] = {
+      before: top(count(before, cols.cat2)), after: top(count(after, cols.cat2)),
+      beforeCount: before.length, afterCount: after.length,
+      minDay: days[0], maxDay: days[days.length - 1]
+    };
+    // 중분류 > 소분류 상세
+    function countCombined(arr) {
+      return arr.reduce((acc, r) => {
+        const c2 = cols.cat2 ? r[cols.cat2] : '';
+        const c3 = cols.cat3 ? r[cols.cat3] : '';
+        if (c2) { const key = c3 ? `${c2} > ${c3}` : c2; acc[key] = (acc[key]||0)+1; }
+        return acc;
+      }, {});
+    }
+    if (!monthly_15_detail) monthly_15_detail = {};
+    monthly_15_detail[m] = { before: top(countCombined(before)), after: top(countCombined(after)) };
+    const hBefore = {}, hAfter = {};
+    before.forEach(r => { if (r._hour) hBefore[r._hour] = (hBefore[r._hour]||0)+1; });
+    after.forEach(r => { if (r._hour) hAfter[r._hour] = (hAfter[r._hour]||0)+1; });
+    monthly_hourly_15[m] = { before: hBefore, after: hAfter };
+    const acctMap = {};
+    rs.forEach(r => {
+      const k = cols.acctId ? r[cols.acctId] : '(없음)';
+      const nm = cols.acctNm ? r[cols.acctNm] : k;
+      const ch = cols.channel ? r[cols.channel] : '';
+      if (!k) return;
+      if (!acctMap[k]) acctMap[k] = { '업체아이디': k, '업체명': nm, count: 0, channels: {} };
+      acctMap[k].count++;
+      if (ch) acctMap[k].channels[ch] = (acctMap[k].channels[ch]||0) + 1;
+    });
+    monthly_accounts[m] = Object.values(acctMap).sort((a,b)=>b.count-a.count).slice(0,10);
+    monthly_channel[m] = count(rs, cols.channel);
+  });
+
+  const acctMap = {};
+  rows.forEach(r => {
+    const k = cols.acctId ? r[cols.acctId] : '(없음)';
+    const nm = cols.acctNm ? r[cols.acctNm] : k;
+    const ch = cols.channel ? r[cols.channel] : '';
+    if (!k) return;
+    if (!acctMap[k]) acctMap[k] = { '업체아이디': k, '업체명': nm, count: 0, channels: {} };
+    acctMap[k].count++;
+    if (ch) acctMap[k].channels[ch] = (acctMap[k].channels[ch]||0) + 1;
+  });
+  const top_accounts = Object.values(acctMap).sort((a,b)=>b.count-a.count).slice(0,20);
+
+  // 시간대별
+  const hourly = {};
+  rows.forEach(r => { if (r._hour) hourly[r._hour] = (hourly[r._hour]||0)+1; });
+
+  // 전일 기준 집계
+  const allDates = [...new Set(rows.map(r => r[cols.date]?.substring(0,10)).filter(Boolean))].sort();
+  const lastDate = allDates[allDates.length - 1];
+  const lastDayRows = lastDate ? rows.filter(r => (r[cols.date]||'').startsWith(lastDate)) : [];
+  const daily_latest = {
+    date: lastDate || '-',
+    total: lastDayRows.length,
+    completed: lastDayRows.filter(r => cols.status && (r[cols.status]||'').includes('완료')).length,
+    channels: {},
+    by_type: {},
+    type_accounts: {}
+  };
+  lastDayRows.forEach(r => {
+    const ch = cols.channel ? r[cols.channel] : '';
+    if (ch) daily_latest.channels[ch] = (daily_latest.channels[ch]||0) + 1;
+    const c1 = cols.cat1 ? r[cols.cat1] : '';
+    const c3 = cols.cat3 ? r[cols.cat3] : '';
+    if (c1) {
+      const key = c3 ? `${c1} > ${c3}` : c1;
+      daily_latest.by_type[key] = (daily_latest.by_type[key]||0) + 1;
+      const acctNm = cols.acctNm ? r[cols.acctNm] : '';
+      if (acctNm) {
+        if (!daily_latest.type_accounts[key]) daily_latest.type_accounts[key] = [];
+        if (!daily_latest.type_accounts[key].includes(acctNm)) daily_latest.type_accounts[key].push(acctNm);
+      }
+    }
+  });
+
+  // 최근 7일 추이
+  const dailyCountMap = {};
+  rows.forEach(r => {
+    const dt = r[cols.date]?.substring(0,10);
+    if (dt) dailyCountMap[dt] = (dailyCountMap[dt]||0) + 1;
+  });
+  const sortedDates = Object.keys(dailyCountMap).sort();
+  const daily_trend = sortedDates.slice(-7).map(dt => ({date: dt, count: dailyCountMap[dt]}));
+
+  // 담당자별 채널
+  const by_agent_channel = {};
+  if (cols.agent) {
+    rows.forEach(r => {
+      const ag = r[cols.agent];
+      const ch = cols.channel ? r[cols.channel] : '';
+      if (!ag) return;
+      if (!by_agent_channel[ag]) by_agent_channel[ag] = {};
+      if (ch) by_agent_channel[ag][ch] = (by_agent_channel[ag][ch]||0) + 1;
+    });
+  }
+
+  // 소요시간 Top
+  function makeSlowEntry(r) {
+    return { cat3: cols.cat3?r[cols.cat3]:'', acctNm: cols.acctNm?r[cols.acctNm]:'', date: r[cols.date]||'', closeDate: r._closeDate||'', duration: r._duration, content: r['문의내용']||r['문의제목']||'' };
+  }
+  const slowRows = rows.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration);
+  const top_slow = slowRows.slice(0, 20).map(makeSlowEntry);
+  const monthly_slow = {}, weekly_slow = {};
+  Object.entries(byMonth).forEach(([m, rs]) => {
+    monthly_slow[m] = rs.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration).slice(0, 10).map(makeSlowEntry);
+  });
+  Object.entries(byWeek).forEach(([w, rs]) => {
+    weekly_slow[w] = rs.filter(r => r._duration != null && r._duration > 0).sort((a,b) => b._duration - a._duration).slice(0, 10).map(makeSlowEntry);
+  });
+
+  return {
+    total: rows.length,
+    by_category:   top(count(rows, cols.cat1), 20),
+    by_subcategory: top(count(rows, cols.cat2), 15),
+    by_subdetail:  top(count(rows, cols.cat3), 20),
+    by_channel:    count(rows, cols.channel),
+    by_status:     count(rows, cols.status),
+    monthly_count: Object.fromEntries(Object.entries(byMonth).sort((a,b)=>a[0]>b[0]?1:-1).map(([m,rs])=>[m,rs.length])),
+    weekly_top, monthly_top, monthly_15, top_accounts, monthly_accounts, monthly_channel,
+    hourly, monthly_hourly_15, by_agent_channel, top_slow, monthly_slow, weekly_slow, monthly_15_detail, daily_latest, daily_trend,
+    _rows: rows, _cols: cols
+  };
+}
+
+// Error popup
+function showErrorPopup(msg, fileName) {
+  document.getElementById('errorPopupMsg').textContent = msg;
+  const fileEl = document.getElementById('errorPopupFile');
+  if (fileName) { fileEl.textContent = fileName; fileEl.style.display = 'inline-block'; }
+  else { fileEl.style.display = 'none'; }
+  document.getElementById('errorPopup').classList.add('show');
+}
+function closeErrorPopup() {
+  document.getElementById('errorPopup').classList.remove('show');
+}
+
+// Drop zone (전체 페이지)
+let dragCounter = 0;
+const overlay = document.getElementById('dropOverlay');
+document.getElementById('voc-wrap')?.addEventListener('dragenter', e => { e.preventDefault(); dragCounter++; overlay.classList.add('show'); });
+document.getElementById('voc-wrap')?.addEventListener('dragleave', e => { e.preventDefault(); dragCounter--; if (dragCounter <= 0) { dragCounter = 0; overlay.classList.remove('show'); } });
+document.getElementById('voc-wrap')?.addEventListener('dragover', e => e.preventDefault());
+document.getElementById('voc-wrap')?.addEventListener('drop', e => {
+  e.preventDefault(); dragCounter = 0; overlay.classList.remove('show');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    if (file.name.endsWith('.csv')) { handleUpload({target:{files:[file]}}); }
+    else { showErrorPopup('CSV 파일만 업로드 가능합니다.', file.name); }
+  }
+});
+
+// ========= DETAIL =========
+let detailPage = 1;
+const DETAIL_PAGE_SIZE = 20;
+
+function initDetail() {
+  const rows = DATA._rows || [];
+  const cols = DATA._cols || {};
+  const sel = document.getElementById('detailCatSelect');
+  if (!cols.cat3 || !rows.length) {
+    sel.innerHTML = '<option>데이터 없음</option>';
+    document.getElementById('detailTable').innerHTML = '<tr><td class="no-data">CSV를 업로드하면 문의 상세를 확인할 수 있습니다</td></tr>';
+    document.getElementById('detailCount').textContent = '';
+    document.getElementById('detailPaging').innerHTML = '';
+    return;
+  }
+  const cats = {};
+  rows.forEach(r => { const v = r[cols.cat3]; if (v) cats[v] = (cats[v]||0)+1; });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  sel.innerHTML = '<option value="">전체 소분류</option>' + sorted.map(([k,v]) => `<option value="${k}">${k} (${v}건)</option>`).join('');
+  detailPage = 1;
+  renderDetail();
+}
+
+function renderDetail() {
+  const rows = DATA._rows || [];
+  const cols = DATA._cols || {};
+  if (!rows.length) return;
+
+  const cat = document.getElementById('detailCatSelect').value;
+  const search = (document.getElementById('detailSearch').value || '').toLowerCase();
+  detailPage = 1;
+
+  const filtered = rows.filter(r => {
+    if (cat && r[cols.cat3] !== cat) return false;
+    if (search) {
+      const content = (r[cols.cat3]||'') + (r['문의제목']||'') + (r['문의내용']||'') + (r[cols.acctNm]||'');
+      if (!content.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  renderDetailPage(filtered);
+}
+
+function renderDetailPage(filtered) {
+  const cols = DATA._cols || {};
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / DETAIL_PAGE_SIZE));
+  if (detailPage > totalPages) detailPage = totalPages;
+
+  const start = (detailPage - 1) * DETAIL_PAGE_SIZE;
+  const pageRows = filtered.slice(start, start + DETAIL_PAGE_SIZE);
+
+  document.getElementById('detailCount').textContent = `— ${total}건`;
+
+  const statusClass = (s) => {
+    if (!s) return '';
+    if (s.includes('완료')) return 'done';
+    if (s.includes('진행')) return 'ing';
+    return 'hold';
+  };
+
+  document.getElementById('detailTable').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>등록일</th><th>소분류</th><th>업체명</th><th>문의제목</th><th>문의내용</th><th>상태</th><th>처리일</th><th>소요시간</th>
+    </tr></thead>
+    <tbody>${pageRows.length ? pageRows.map((r, i) => {
+      const content = (r['문의내용']||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const title = (r['문의제목']||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<tr>
+        <td style="color:var(--text3)">${start+i+1}</td>
+        <td style="white-space:nowrap">${r[cols.date]||'-'}</td>
+        <td><span class="pill pill-blue">${r[cols.cat3]||'-'}</span></td>
+        <td>${r[cols.acctNm]||'-'}</td>
+        <td style="max-width:180px">${title||'-'}</td>
+        <td style="max-width:350px">
+          <div class="detail-content detail-toggle">${content||'-'}</div>
+          ${content.length > 80 ? '<span class="detail-expand-btn">▼ 더보기</span>' : ''}
+        </td>
+        <td><span class="status-pill ${statusClass(r[cols.status])}">${r[cols.status]||'-'}</span></td>
+        <td style="white-space:nowrap">${r._closeDate||'-'}</td>
+        <td>${r._duration != null ? `<span class="count-badge ${r._duration>=4320?'count-high':r._duration>=1440?'count-mid':'count-low'}">${formatDuration(r._duration)}</span>` : '-'}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="9" class="no-data">검색 결과가 없습니다</td></tr>'}</tbody>
+  `;
+
+  // 페이징
+  let pagingHtml = '';
+  if (totalPages > 1) {
+    if (detailPage > 1) pagingHtml += `<button class="page-btn" data-page="${detailPage-1}">◀</button>`;
+    const startP = Math.max(1, detailPage - 3);
+    const endP = Math.min(totalPages, detailPage + 3);
+    for (let p = startP; p <= endP; p++) {
+      pagingHtml += `<button class="page-btn ${p===detailPage?'active':''}" data-page="${p}">${p}</button>`;
+    }
+    if (detailPage < totalPages) pagingHtml += `<button class="page-btn" data-page="${detailPage+1}">▶</button>`;
+  }
+  document.getElementById('detailPaging').innerHTML = pagingHtml;
+
+  // 페이지 이동 시 재사용할 수 있도록 filtered를 저장
+  window._detailFiltered = filtered;
+}
+
+function detailGoPage(p) {
+  detailPage = p;
+  renderDetailPage(window._detailFiltered || []);
+  document.getElementById('detailTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ========= TABS =========
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const tabs = ['overview','ranking','accounts','detail','upload'];
+  const idx = tabs.indexOf(name);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+
+  if (name === 'ranking') { setTimeout(() => { initWeekly(); initMonthly(); }, 50); }
+  if (name === 'accounts') { setTimeout(renderAccounts, 50); }
+  if (name === 'detail') { setTimeout(initDetail, 50); }
+}
+
+// ========= EVENT BINDINGS =========
+;(function() {
+  function safeOn(id, ev, fn) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener(ev, fn);
+  }
+  safeOn('uploadBtn', 'click', function() {
+    var fi = document.getElementById('vocFileInput');
+    if (fi) fi.click();
+  });
+  safeOn('errorPopup', 'click', function(e) { if (e.target === this) closeErrorPopup(); });
+  safeOn('errorPopupBtn', 'click', closeErrorPopup);
+  safeOn('vocFileInput', 'change', handleUpload);
+})();
+
+// 문의 상세 토글 (이벤트 위임)
+document.addEventListener('click', function(e) {
+  const dt = e.target.closest('.detail-toggle');
+  if (dt) {
+    dt.classList.toggle('expanded');
+    const btn = dt.nextElementSibling;
+    if (btn && btn.classList.contains('detail-expand-btn')) {
+      btn.textContent = dt.classList.contains('expanded') ? '▲ 접기' : '▼ 더보기';
+    }
+  }
+  const pb = e.target.closest('.page-btn[data-page]');
+  if (pb) {
+    detailGoPage(parseInt(pb.dataset.page));
+  }
+});
+
+// 전일 Top5 토글 (이벤트 위임)
+document.getElementById('dailyTopList').addEventListener('click', function(e) {
+  const item = e.target.closest('.daily-toggle');
+  if (item && item.nextElementSibling) {
+    item.nextElementSibling.style.display = item.nextElementSibling.style.display === 'none' ? 'block' : 'none';
+  }
+});
+
+// VOC init deferred
+
+
+// VOC 전역 노출
+window.handleUpload = handleUpload;
+
+// -- VOC DB 저장/불러오기 함수 --
+let vocCurrentFile = null
+let _vocFileList = []
+
+function vocApplyData(parsed, name, showSave) {
+  DATA = parsed
+  document.getElementById('fileNameBadge').style.display = 'flex'
+  document.getElementById('fileName').textContent = name
+  var saveBtn = document.getElementById('vocSaveBtn')
+  if (saveBtn) { saveBtn.style.display = showSave ? 'inline-flex' : 'none'; saveBtn.textContent = '💾 DB 저장'; saveBtn.disabled = false; saveBtn.style.background = '#238636' }
+  renderOverview()
+}
+
+async function saveVocToDB() {
+  if (!DATA || !DATA._rows || !DATA._rows.length) { alert('저장할 데이터가 없어요.'); return }
+  if (!currentUser) { alert('팀원을 선택한 후 저장해주세요.'); return }
+  var btn = document.getElementById('vocSaveBtn')
+  btn.textContent = '저장 중...'; btn.disabled = true
+  var fileName = vocCurrentFile ? vocCurrentFile.name : '업로드_' + new Date().toISOString().slice(0,10)
+  var rows = DATA._rows, batchSize = 100, saved = 0
+  try {
+    await sb.from('voc_data').delete().eq('upload_name', fileName).eq('uploaded_by', currentUser.id)
+    for (var i = 0; i < rows.length; i += batchSize) {
+      var batch = rows.slice(i, i+batchSize).map(function(r){ return { upload_name: fileName, uploaded_by: currentUser.id, row_data: r } })
+      var res = await sb.from('voc_data').insert(batch)
+      if (res.error) throw new Error(res.error.message)
+      saved += batch.length
+      btn.textContent = '저장 중... ' + Math.round(saved/rows.length*100) + '%'
+    }
+    btn.textContent = '✅ 저장됨'; btn.style.background = '#1D9E75'
+    setTimeout(function(){ btn.style.display = 'none' }, 2000)
+    var msg = document.getElementById('uploadMsg')
+    if (msg) msg.innerHTML += ' &nbsp;<span style="color:#3fb950;font-weight:600">✅ DB 저장 완료 (' + saved + '건)</span>'
+    vocRenderSavedList()
+  } catch(err) {
+    alert('저장 실패: ' + err.message)
+    btn.textContent = '💾 DB 저장'; btn.disabled = false
+  }
+}
+
+async function vocRenderSavedList() {
+  if (!sb) return
+  try {
+    var res = await sb.from('voc_data').select('upload_name, uploaded_by, uploaded_at').order('uploaded_at', { ascending: false })
+    var files = res.data || []
+    if (!files.length) { var bar=document.getElementById('vocSavedBar'); if(bar) bar.style.display='none'; return }
+    var unique = [], seen = new Set()
+    files.forEach(function(f){ var k=f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f)} })
+    _vocFileList = unique
+    var bar = document.getElementById('vocSavedBar'), list = document.getElementById('vocSavedList')
+    if (bar) bar.style.display = 'flex'
+    if (list) list.innerHTML = unique.map(function(f,i){
+      var u = allUsers ? allUsers.find(function(x){return x.id===f.uploaded_by}) : null
+      var dt = f.uploaded_at ? f.uploaded_at.slice(0,10) : ''
+      return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap">' + f.upload_name + '</button>'
+    }).join('')
+    var sub = document.getElementById('vocLastSaved')
+    if (sub && unique[0]) sub.textContent = '최근: ' + unique[0].upload_name + ' (' + (unique[0].uploaded_at||'').slice(0,10) + ')'
   } catch(e) {}
 }
 
-function showOpenMeetingUI(mtg) {
-  var el = document.getElementById('weekly-meeting-content')
-  if(!el) return
-  el.innerHTML = '<div style="padding:16px"><div style="font-size:13px;font-weight:600;margin-bottom:12px">🟢 진행 중: '+e(mtg.week_start)+'</div>'
-    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-    +'<button class="btn btn-sm" onclick="resumeWeeklyMeeting()">회의 계속하기</button>'
-    +'<button class="btn btn-sm btn-danger" onclick="forceCloseWeekly()">강제 종료</button>'
-    +'<button class="btn btn-sm" onclick="startWeeklyMeeting()">새 회의 시작</button>'
-    +'</div></div>'
-}
-
-function getWeekLabel() {
-  var now = new Date()
-  var jan1 = new Date(now.getFullYear(),0,1)
-  var week = Math.ceil(((now - jan1)/86400000 + jan1.getDay() + 1)/7)
-  return now.getFullYear()+'-W'+(week<10?'0':'')+week
-}
-
-async function startWeeklyMeeting() {
-  var weekLabel = getWeekLabel()
-  var el = document.getElementById('ws1-week')
-  if(el) el.value = weekLabel
-  var cont = document.getElementById('ws1-attendees')
-  if(cont) {
-    cont.innerHTML = ''
-    ;(allUsers||[]).forEach(function(u) {
-      var label = document.createElement('label')
-      label.style.cssText = 'display:flex;align-items:center;gap:5px;cursor:pointer;padding:5px 10px;border:0.5px solid var(--bd2);border-radius:6px;font-size:12px'
-      label.innerHTML = '<input type="checkbox" data-name="'+e(u.name)+'" checked/> '+e(u.name)
-      cont.appendChild(label)
-    })
-  }
-  var sEl = document.getElementById('ws1-sales')
-  if(sEl) sEl.value = currentWeeklyMeeting ? (currentWeeklyMeeting.sales_note||'') : ''
-  openModal('modal-weekly-s1')
-}
-
-function resumeWeeklyMeeting() {
-  if(currentWeeklyMeeting) weeklyStep2()
-  else startWeeklyMeeting()
-}
-
-async function weeklyStep2() {
-  var weekVal = document.getElementById('ws1-week').value
-  var salesVal = document.getElementById('ws1-sales').value
-  var checked = Array.from(document.querySelectorAll('#ws1-attendees input[type=checkbox]:checked')).map(function(c){return c.dataset.name})
-  if(!currentWeeklyMeeting) {
-    var {data,error} = await sb.from('weekly_meetings').insert({
-      week_start: weekVal, sales_note: salesVal, attendees: checked, status: 'open'
-    }).select().single()
-    if(error){alert('저장 오류: '+error.message);return}
-    currentWeeklyMeeting = data
-  } else {
-    await sb.from('weekly_meetings').update({sales_note:salesVal,attendees:checked}).eq('id',currentWeeklyMeeting.id)
-    currentWeeklyMeeting.sales_note = salesVal
-    currentWeeklyMeeting.attendees = checked
-  }
-  closeModal('modal-weekly-s1')
-  var cont = document.getElementById('ws2-schedules')
-  if(cont) {
-    var {data:scheds} = await sb.from('weekly_schedules').select('*').eq('meeting_id',currentWeeklyMeeting.id)
-    cont.innerHTML = ''
-    if(scheds && scheds.length) scheds.forEach(function(s){addWeeklyScheduleRow(s)})
-    else addWeeklyScheduleRow()
-  }
-  openModal('modal-weekly-s2')
-}
-
-function addWeeklyScheduleRow(sched) {
-  var cont = document.getElementById('ws2-schedules')
-  if(!cont) return
-  var row = document.createElement('div')
-  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr 2fr auto;gap:6px;align-items:center'
-  row.innerHTML = '<input class="sched-member" placeholder="담당자" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg2);color:var(--text)" value="'+(sched?e(sched.member_name||''):'')+'"/>'
-    +'<input type="date" class="sched-date" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg2);color:var(--text)" value="'+(sched?sched.date||'':'')+'"/>'
-    +'<input class="sched-type" placeholder="유형" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg2);color:var(--text)" value="'+(sched?e(sched.type||''):'')+'"/>'
-    +'<input class="sched-title" placeholder="내용" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg2);color:var(--text)" value="'+(sched?e(sched.title||''):'')+'"/>'
-    +'<button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 4px">✕</button>'
-  if(sched && sched.id) row.dataset.schedId = sched.id
-  cont.appendChild(row)
-}
-
-async function weeklyStep3() {
-  var rows = Array.from(document.querySelectorAll('#ws2-schedules > div'))
-  for(var i=0;i<rows.length;i++) {
-    var r = rows[i]
-    var member_name = r.querySelector('.sched-member').value
-    var date = r.querySelector('.sched-date').value || null
-    var type = r.querySelector('.sched-type').value
-    var title = r.querySelector('.sched-title').value
-    if(!title) continue
-    if(r.dataset.schedId) {
-      await sb.from('weekly_schedules').update({member_name,date,type,title}).eq('id',r.dataset.schedId)
-    } else {
-      var {data:sd} = await sb.from('weekly_schedules').insert({meeting_id:currentWeeklyMeeting.id,member_name,date,type,title}).select().single()
-      if(sd) r.dataset.schedId = sd.id
-    }
-  }
-  closeModal('modal-weekly-s2')
-  var cont = document.getElementById('ws3-tasks')
-  if(cont) {
-    var {data:tasks} = await sb.from('weekly_tasks').select('*').eq('current_meeting_id',currentWeeklyMeeting.id)
-    cont.innerHTML = ''
-    if(tasks && tasks.length) tasks.forEach(function(t){addWeeklyTaskRow(t)})
-    else addWeeklyTaskRow()
-  }
-  openModal('modal-weekly-s3')
-}
-
-function addWeeklyTaskRow(task) {
-  var cont = document.getElementById('ws3-tasks')
-  if(!cont) return
-  var row = document.createElement('div')
-  row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;align-items:center;padding:6px;background:var(--bg2);border-radius:6px'
-  var statusOpts = ['open','done','delayed'].map(function(s){
-    var label = {open:'진행중',done:'완료',delayed:'지연'}[s]
-    var sel = task&&task.status===s ? ' selected' : (!task&&s==='open' ? ' selected' : '')
-    return '<option value="'+s+'"'+sel+'>'+label+'</option>'
-  }).join('')
-  row.innerHTML = '<input class="task-title" placeholder="태스크명" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--text)" value="'+(task?e(task.title||''):'')+'"/>'
-    +'<input class="task-owner" placeholder="담당자" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--text)" value="'+(task?e(task.owner_name||''):'')+'"/>'
-    +'<input type="date" class="task-due" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--text)" value="'+(task?task.due_date||'':'')+'"/>'
-    +'<select class="task-status" style="font-size:12px;padding:5px 8px;border:0.5px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--text)">'+statusOpts+'</select>'
-    +'<button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0 4px">✕</button>'
-  if(task && task.id) row.dataset.taskId = task.id
-  cont.appendChild(row)
-}
-
-async function weeklyStep4() {
-  var rows = Array.from(document.querySelectorAll('#ws3-tasks > div'))
-  for(var i=0;i<rows.length;i++) {
-    var r = rows[i]
-    var title = r.querySelector('.task-title').value
-    var owner_name = r.querySelector('.task-owner').value
-    var due_date = r.querySelector('.task-due').value || null
-    var status = r.querySelector('.task-status').value
-    if(!title) continue
-    if(r.dataset.taskId) {
-      await sb.from('weekly_tasks').update({title,owner_name,due_date,status,current_meeting_id:currentWeeklyMeeting.id}).eq('id',r.dataset.taskId)
-    } else {
-      var {data:td} = await sb.from('weekly_tasks').insert({meeting_id:currentWeeklyMeeting.id,current_meeting_id:currentWeeklyMeeting.id,title,owner_name,due_date,status}).select().single()
-      if(td) r.dataset.taskId = td.id
-    }
-  }
-  closeModal('modal-weekly-s3')
-  var summEl = document.getElementById('ws4-summary')
-  if(summEl) summEl.value = currentWeeklyMeeting.summary || ''
-  openModal('modal-weekly-s4')
-}
-
-async function closeWeeklyMeeting() {
-  var summary = document.getElementById('ws4-summary').value
-  await sb.from('weekly_meetings').update({summary:summary,status:'closed',closed_at:new Date().toISOString()}).eq('id',currentWeeklyMeeting.id)
-  closeModal('modal-weekly-s4')
-  currentWeeklyMeeting = null
-  alert('회의가 종료되었습니다!')
-  var el = document.getElementById('weekly-meeting-content')
-  if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)"><div style="font-size:15px;font-weight:600;margin-bottom:12px">주간회의</div><button class="btn btn-primary" onclick="startWeeklyMeeting()">이번 주 회의 시작</button></div>'
-  loadWeeklyInfo()
-}
-
-async function forceCloseWeekly() {
-  if(!currentWeeklyMeeting) return
-  if(!confirm('진행 중인 회의를 강제 종료하시겠습니까?')) return
-  await sb.from('weekly_meetings').update({status:'closed',closed_at:new Date().toISOString()}).eq('id',currentWeeklyMeeting.id)
-  currentWeeklyMeeting = null
-  loadWeeklyInfo()
-  var el = document.getElementById('weekly-meeting-content')
-  if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)"><div style="font-size:15px;font-weight:600;margin-bottom:12px">주간회의</div><button class="btn btn-primary" onclick="startWeeklyMeeting()">이번 주 회의 시작</button></div>'
-}
-
-function weeklyBackTo1() { closeModal('modal-weekly-s2'); openModal('modal-weekly-s1') }
-function weeklyBackTo2() { closeModal('modal-weekly-s3'); openModal('modal-weekly-s2') }
-function weeklyBackTo3() { closeModal('modal-weekly-s4'); openModal('modal-weekly-s3') }
-
-async function loadMyTasks() {
-  var cont = document.getElementById('my-tasks-list')
-  if(!cont) return
-  if(!currentUser) {
-    cont.innerHTML = '<div style="color:var(--text3);font-size:12px">로그인 후 확인 가능합니다</div>'
-    return
-  }
+async function vocAutoLoad() {
+  if (!sb) return
   try {
-    var {data} = await sb.from('weekly_tasks').select('*,weekly_meetings(week_start)').eq('owner_name',currentUser.name).neq('status','done').order('due_date',{ascending:true})
-    if(!data || !data.length) {
-      cont.innerHTML = '<div style="color:var(--text3);font-size:12px">미완료 태스크가 없습니다 🎉</div>'
-      return
-    }
-    cont.innerHTML = data.map(function(t) {
-      var statusColor = t.status==='delayed' ? 'rgba(208,64,64,.1)' : 'var(--bg3)'
-      var statusTextColor = t.status==='delayed' ? 'var(--red)' : 'var(--text2)'
-      var statusLabel = {open:'진행',done:'완료',delayed:'지연'}[t.status] || t.status
-      var weekStr = t.weekly_meetings ? t.weekly_meetings.week_start : ''
-      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--bd)">'
-        +'<div style="flex:1"><div style="font-size:12px;font-weight:500">'+e(t.title)+'</div>'
-        +'<div style="font-size:11px;color:var(--text3)">'+weekStr+(t.due_date?' · '+t.due_date:'')+'</div></div>'
-        +'<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:'+statusColor+';color:'+statusTextColor+'">'+statusLabel+'</span>'
-        +'<button class="btn btn-xs btn-primary" onclick="markTaskDone(\''+t.id+'\')">완료</button>'
-        +'</div>'
+    var res = await sb.from('voc_data').select('upload_name, uploaded_by, uploaded_at').order('uploaded_at', { ascending: false })
+    var files = res.data || []
+    if (!files.length) { var di=document.getElementById('dataInfo'); if(di) di.textContent='저장된 데이터 없음'; return }
+    var unique = [], seen = new Set()
+    files.forEach(function(f){ var k=f.upload_name+'|'+f.uploaded_by; if(!seen.has(k)){seen.add(k);unique.push(f)} })
+    _vocFileList = unique
+    var bar=document.getElementById('vocSavedBar'), list=document.getElementById('vocSavedList')
+    if (bar) bar.style.display = 'flex'
+    if (list) list.innerHTML = unique.map(function(f,i){
+      return '<button onclick="selectVocFile('+i+')" style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);white-space:nowrap">' + f.upload_name + '</button>'
     }).join('')
-  } catch(err) {
-    cont.innerHTML = '<div style="color:var(--red);font-size:12px">오류: '+e(err.message||String(err))+'</div>'
-  }
+    var di = document.getElementById('dataInfo')
+    if (di) di.textContent = '자동 로드 중...'
+    await selectVocFile(0)
+  } catch(e) { var di=document.getElementById('dataInfo'); if(di) di.textContent='데이터 없음' }
 }
 
-async function markTaskDone(id) {
-  await sb.from('weekly_tasks').update({status:'done'}).eq('id',id)
-  loadMyTasks()
-}
-
-async function loadWeeklyHistory() {
-  var cont = document.getElementById('weekly-history-list')
-  if(!cont) return
+async function selectVocFile(idx) {
+  var file = _vocFileList[idx]
+  if (!file) return
+  var upStatus = document.getElementById('uploadStatus'), upMsg = document.getElementById('uploadMsg')
+  if (upStatus) upStatus.style.display = 'block'
+  if (upMsg) upMsg.innerHTML = '📥 <strong>' + file.upload_name + '</strong> 불러오는 중...'
   try {
-    var {data} = await sb.from('weekly_meetings').select('*').order('created_at',{ascending:false}).limit(20)
-    if(!data || !data.length) {
-      cont.innerHTML = '<div style="color:var(--text3);font-size:12px">회의 기록이 없습니다</div>'
-      return
-    }
-    cont.innerHTML = data.map(function(m) {
-      var statusBg = m.status==='open' ? 'rgba(29,158,117,.12)' : 'var(--bg3)'
-      var statusColor = m.status==='open' ? 'var(--green)' : 'var(--text2)'
-      var attendeesStr = Array.isArray(m.attendees) ? m.attendees.join(', ') : ''
-      return '<div style="padding:12px 0;border-bottom:0.5px solid var(--bd)">'
-        +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
-        +'<span style="font-size:12px;font-weight:600">'+e(m.week_start)+'</span>'
-        +'<span style="font-size:11px;padding:1px 7px;border-radius:20px;background:'+statusBg+';color:'+statusColor+'">'+m.status+'</span>'
-        +'</div>'
-        +(attendeesStr ? '<div style="font-size:11px;color:var(--text3);margin-bottom:4px">참석: '+e(attendeesStr)+'</div>' : '')
-        +(m.summary ? '<div style="font-size:12px;color:var(--text2)">'+e(m.summary)+'</div>' : '')
-        +'</div>'
-    }).join('')
+    var res = await sb.from('voc_data').select('row_data').eq('upload_name', file.upload_name).eq('uploaded_by', file.uploaded_by).order('id')
+    if (res.error) throw new Error(res.error.message)
+    var rows = (res.data||[]).map(function(d){ return d.row_data })
+    if (!rows.length) { alert('데이터가 없어요.'); return }
+    var headers = Object.keys(rows[0])
+    var csvText = [headers.join(',')].concat(rows.map(function(r){
+      return headers.map(function(h){
+        var v = String(r[h]||'')
+        return v.includes(',')||v.includes('"')||v.includes('\n') ? '"'+v.replace(/"/g,'""')+'"' : v
+      }).join(',')
+    })).join('\n')
+    var parsed = parseCSV(csvText)
+    var u = allUsers ? allUsers.find(function(x){return x.id===file.uploaded_by}) : null
+    var dt = file.uploaded_at ? file.uploaded_at.slice(0,10) : ''
+    vocApplyData(parsed, file.upload_name, false)
+    if (upMsg) upMsg.innerHTML = '✅ <strong>' + file.upload_name + '</strong> — <strong>' + parsed.total.toLocaleString() + '건</strong>' + (u?' · '+u.name:'') + (dt?' · '+dt:'')
+    var sub = document.getElementById('vocLastSaved')
+    if (sub) sub.textContent = '최근: ' + file.upload_name + ' (' + dt + ')'
   } catch(err) {
-    cont.innerHTML = '<div style="color:var(--red);font-size:12px">오류: '+e(err.message||String(err))+'</div>'
+    if (upMsg) upMsg.innerHTML = '❌ 불러오기 실패: ' + err.message
   }
 }
-// ===== END WEEKLY MEETING =====
+
+window.saveVocToDB = saveVocToDB;
+window.vocAutoLoad = vocAutoLoad;
+window.selectVocFile = selectVocFile;
+
+// ========= VOC 이벤트 바인딩 =========
+;(function() {
+  function bindVoc() {
+    const fi = document.getElementById('vocFileInput');
+    const eb = document.getElementById('errorPopupBtn');
+    const ep = document.getElementById('errorPopup');
+    if (fi) fi.addEventListener('change', window.handleUpload);
+    if (eb) eb.addEventListener('click', closeErrorPopup);
+    if (ep) ep.addEventListener('click', function(e){ if(e.target===this) closeErrorPopup(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindVoc);
+  else bindVoc();
+})();
+// === VOC v1.1 END ===
+
+
+
+
 
 </script>
 
