@@ -1453,8 +1453,10 @@ async function init() {
   document.querySelectorAll('.mbg').forEach(m => m.classList.remove('open'))
 
   const ym = new Date().toISOString().slice(0,7)
-  document.getElementById('inputMonth').value = ym
-  document.getElementById('historyMonth').value = ym
+  const inputMonthEl = document.getElementById('inputMonth')
+  const historyMonthEl = document.getElementById('historyMonth')
+  if(inputMonthEl) inputMonthEl.value = ym
+  if(historyMonthEl) historyMonthEl.value = ym
 
   // 1. 캐시된 팀원 목록 즉시 표시
   const cached = localStorage.getItem('crm_users')
