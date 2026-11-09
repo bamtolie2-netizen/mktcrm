@@ -3345,14 +3345,22 @@ function showWeeklyTab(tab, filter) {
     var el = document.getElementById('wpanel-'+t)
     if(el) el.style.display = t===tab ? 'block' : 'none'
     var btn = document.getElementById('wtab-'+t)
-    if(btn) btn.style.fontWeight = t===tab ? '600' : 'normal'
-  })
-  if(tab==='tasks') loadMyTasks().then(function(){
-    if(filter) {
-      var btn = document.querySelector('.task-filter-btn[data-filter="'+filter+'"]')
-      if(btn) filterMyTasks(btn, filter)
+    if(btn) {
+      btn.style.fontWeight = t===tab ? '700' : '500'
+      btn.style.color = t===tab ? 'var(--green-dk)' : 'var(--text2)'
+      btn.style.borderColor = t===tab ? 'var(--green)' : 'var(--bd2)'
+      btn.style.background = t===tab ? 'var(--green-lt)' : 'var(--bg)'
     }
   })
+  if(tab==='tasks') {
+    var p = loadMyTasks()
+    if(p && p.then) p.then(function(){
+      if(filter) {
+        var btn = document.querySelector('.task-filter-btn[data-filter="'+filter+'"]')
+        if(btn) filterMyTasks(btn, filter)
+      }
+    })
+  }
   if(tab==='history') loadWeeklyHistory()
 }
 
@@ -3628,9 +3636,24 @@ function weeklyBackTo3() { closeModal('modal-weekly-s4'); openModal('modal-weekl
 async function loadMyTasks() {
   var cont = document.getElementById('my-tasks-list')
   if(!cont) return
+  cont.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:20px 0">로딩 중...</div>'
   try {
-    // 전체 태스크 조회 (완료 포함, 최신순)
-    var {data} = await sb.from('weekly_tasks').select('*,weekly_meetings(week_start)').order('due_date',{ascending:true})
+    // 전체 태스크 조회 - 단순 쿼리로 안정성 확보
+    var resp = await sb.from('weekly_tasks').select('*').order('due_date',{ascending:true})
+    var data = resp.data
+    var qerr = resp.error
+    if(qerr) throw new Error(qerr.message)
+
+    // meeting_id로 week_start 별도 조회
+    var weekMap = {}
+    if(data && data.length) {
+      var meetingIds = [...new Set(data.filter(function(t){return t.meeting_id}).map(function(t){return t.meeting_id}))]
+      if(meetingIds.length) {
+        var mresp = await sb.from('weekly_meetings').select('id,week_start').in('id', meetingIds)
+        if(mresp.data) mresp.data.forEach(function(m){ weekMap[m.id] = m.week_start })
+      }
+    }
+
     if(!data || !data.length) {
       cont.innerHTML = '<div style="color:var(--text3);font-size:14px;padding:20px 0">등록된 태스크가 없습니다 🎉</div>'
       return
@@ -3648,13 +3671,13 @@ async function loadMyTasks() {
       var statusColor = isDelayed?'var(--red-lt)':isDone?'var(--green-lt)':'var(--bg3)'
       var statusTextColor = isDelayed?'var(--red)':isDone?'var(--green-dk)':'var(--text2)'
       var statusLabel = {open:'진행중',done:'완료',delayed:'지연'}[t.status]||t.status
-      var weekStr = t.weekly_meetings ? t.weekly_meetings.week_start : ''
+      var weekStr = t.meeting_id && weekMap[t.meeting_id] ? weekMap[t.meeting_id] : ''
       var dueTxt = t.due_date ? ' · 마감 '+t.due_date : ''
       var ownerTxt = t.owner_name ? t.owner_name : '미배정'
-      return '<div class="task-row" data-status="'+t.status+'" style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;border:1px solid var(--bd);margin-bottom:8px;background:var(--bg);'+(isDone?'opacity:.6':'')+'transition:box-shadow .15s" onmouseover="this.style.boxShadow=\'var(--shadow-md)\'" onmouseout="this.style.boxShadow=\'none\'">'
+      return '<div class="task-row" data-status="'+(t.status||'open')+'" style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;border:1px solid var(--bd);margin-bottom:8px;background:var(--bg);'+(isDone?'opacity:.6;':'')+'transition:box-shadow .15s" onmouseover="this.style.boxShadow=\'var(--shadow-md)\'" onmouseout="this.style.boxShadow=\'none\'">'
         +'<div style="flex:1;min-width:0">'
-        +'<div style="font-size:14px;font-weight:600;'+(isDone?'text-decoration:line-through;color:var(--text3)':'')+' margin-bottom:4px">'+e(t.title)+'</div>'
-        +'<div style="font-size:12px;color:var(--text3)">👤 '+e(ownerTxt)+' · '+e(weekStr)+e(dueTxt)+'</div>'
+        +'<div style="font-size:14px;font-weight:600;'+(isDone?'text-decoration:line-through;color:var(--text3);':'')+'margin-bottom:4px">'+e(t.title)+'</div>'
+        +'<div style="font-size:12px;color:var(--text3)">👤 '+e(ownerTxt)+(weekStr?' · '+e(weekStr):'')+e(dueTxt)+'</div>'
         +'</div>'
         +'<span style="font-size:12px;padding:4px 12px;border-radius:20px;background:'+statusColor+';color:'+statusTextColor+';font-weight:600;white-space:nowrap">'+statusLabel+'</span>'
         +'<select onchange="updateTaskStatus(\''+t.id+'\',this.value,this)" style="font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid var(--bd2);background:var(--bg2);color:var(--text);cursor:pointer;font-family:inherit">'
@@ -3666,7 +3689,7 @@ async function loadMyTasks() {
     }).join('')
     cont.innerHTML = filterHtml + '<div id="task-rows-wrap">'+rowsHtml+'</div>'
   } catch(err) {
-    cont.innerHTML = '<div style="color:var(--red);font-size:13px">오류: '+e(err.message||String(err))+'</div>'
+    cont.innerHTML = '<div style="color:var(--red);font-size:13px">오류: '+e(String(err.message||err))+'</div>'
   }
 }
 
